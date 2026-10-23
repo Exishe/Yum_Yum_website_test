@@ -63,17 +63,17 @@ cheap because the data comes from the cache.
 
 ## Sitemap
 
-| Public | Admin |
-| --- | --- |
+| Public                                                                                                                                 | Admin                                                                                                                                                                                               |
+| -------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Home · Menu & prices · Gifts · Our story · Shops · Contact · Privacy · Terms · Checkout · Order status · Newsletter confirmation · 404 | Dashboard · Orders (list, detail, print, CSV) · Products & prices · Categories · Shops · Delivery zones · Reviews · Site texts · Settings · Messages & subscribers · Users · Audit log · My account |
 
 ## Main components
 
-| Area | Components |
-| --- | --- |
-| Layout | `Header` (pills, mega-menu, phone panel), `LanguageSwitch`, `OrderButton`, `CartDrawer` (lazy), `StickyOrderBar`, `Footer`, `NewsletterForm`, `CookieConsent`, `Banner` |
-| Home | `Hero`, `PhotoStrip`, `Perks`, `Catalog` (home mode), `GiftsSection`, `StorySection`, `Ticker`, `Spotted`, `Reviews`, `ShopPicker` |
-| Catalogue | `Catalog` (tabs, filters, search, featured, menu board), `QuickView` (lazy) |
-| Gifts | `BoxBuilder`, `NameDonut`, `GiftGrid` |
-| Checkout | `CheckoutForm`, `Turnstile` |
-| Admin | `ui.tsx` kit, `ProductForm`, `OptionsEditor`, `SubmitButton` |
+| Area      | Components                                                                                                                                                              |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Layout    | `Header` (pills, mega-menu, phone panel), `LanguageSwitch`, `OrderButton`, `CartDrawer` (lazy), `StickyOrderBar`, `Footer`, `NewsletterForm`, `CookieConsent`, `Banner` |
+| Home      | `Hero`, `PhotoStrip`, `Perks`, `Catalog` (home mode), `GiftsSection`, `StorySection`, `Ticker`, `Spotted`, `Reviews`, `ShopPicker`                                      |
+| Catalogue | `Catalog` (tabs, filters, search, featured, menu board), `QuickView` (lazy)                                                                                             |
+| Gifts     | `BoxBuilder`, `NameDonut`, `GiftGrid`                                                                                                                                   |
+| Checkout  | `CheckoutForm`, `Turnstile`                                                                                                                                             |
+| Admin     | `ui.tsx` kit, `ProductForm`, `OptionsEditor`, `SubmitButton`                                                                                                            |

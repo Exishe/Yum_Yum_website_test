@@ -9,16 +9,16 @@ shop staff.
 - Everything is free-tier. See [docs/TECH-STACK.md](docs/TECH-STACK.md).
 - What the client still has to confirm: [docs/CLIENT-TODO.md](docs/CLIENT-TODO.md).
 
-| Page | Path (Armenian / Russian / English) |
-| --- | --- |
-| Home | `/hy` · `/ru` · `/en` |
-| Menu & prices | `/hy/menu` · `/ru/menu` · `/en/menu` |
-| Gifts (box builder, name donuts, bouquets) | `/hy/nverner` · `/ru/podarki` · `/en/gifts` |
-| Our story | `/hy/mer-masin` · `/ru/o-nas` · `/en/our-story` |
-| Shops | `/hy/khanutner` · `/ru/adresa` · `/en/shops` |
-| Checkout | `/hy/patver` · `/ru/oformlenie` · `/en/checkout` |
-| Order status | `/{lang}/order/{id}` |
-| Admin | `/admin` |
+| Page                                       | Path (Armenian / Russian / English)              |
+| ------------------------------------------ | ------------------------------------------------ |
+| Home                                       | `/hy` · `/ru` · `/en`                            |
+| Menu & prices                              | `/hy/menu` · `/ru/menu` · `/en/menu`             |
+| Gifts (box builder, name donuts, bouquets) | `/hy/nverner` · `/ru/podarki` · `/en/gifts`      |
+| Our story                                  | `/hy/mer-masin` · `/ru/o-nas` · `/en/our-story`  |
+| Shops                                      | `/hy/khanutner` · `/ru/adresa` · `/en/shops`     |
+| Checkout                                   | `/hy/patver` · `/ru/oformlenie` · `/en/checkout` |
+| Order status                               | `/{lang}/order/{id}`                             |
+| Admin                                      | `/admin`                                         |
 
 ---
 
@@ -92,11 +92,11 @@ open -e .env.local
 
 For local development you only need to set three values:
 
-| Variable | What it is | Where to get it |
-| --- | --- | --- |
-| `DATABASE_URL` | Address of the Postgres database | Leave the default if you use `docker compose` below |
-| `APP_SECRET` | Long random text used to hash IPs and sign tokens | Windows: `[Convert]::ToBase64String((1..48 \| % {Get-Random -Max 256}))` · macOS: `openssl rand -base64 48` |
-| `SEED_ADMIN_PASSWORD` | Password for the first admin account | Choose one (12+ characters) or leave empty to get a random one printed |
+| Variable              | What it is                                        | Where to get it                                                                                             |
+| --------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`        | Address of the Postgres database                  | Leave the default if you use `docker compose` below                                                         |
+| `APP_SECRET`          | Long random text used to hash IPs and sign tokens | Windows: `[Convert]::ToBase64String((1..48 \| % {Get-Random -Max 256}))` · macOS: `openssl rand -base64 48` |
+| `SEED_ADMIN_PASSWORD` | Password for the first admin account              | Choose one (12+ characters) or leave empty to get a random one printed                                      |
 
 Every other variable is explained inside [`.env.example`](.env.example). They switch on
 optional services (Turnstile, Telegram, email, photo uploads) and can stay empty locally.
@@ -117,7 +117,7 @@ macOS: `brew install postgresql@16 && brew services start postgresql@16`), creat
 called `yumyum`, and put its address in `DATABASE_URL`.
 
 **Using a Supabase project instead?** Put its connection string (Project settings → Database →
-Connection string → *Transaction pooler*, port 6543) in `DATABASE_URL` and run the same two
+Connection string → _Transaction pooler_, port 6543) in `DATABASE_URL` and run the same two
 commands. The Supabase CLI local stack also works (`supabase start`, then use the DB URL it prints).
 
 ## 5. Run the site
@@ -130,7 +130,7 @@ Open **http://localhost:3000/hy** (Armenian; `/ru` and `/en` for the others).
 The admin panel is at **http://localhost:3000/admin** — sign in with the seeded admin.
 On first sign-in with a temporary password you are asked to choose your own.
 
-Need another staff account? Use *Users* in the admin panel, or:
+Need another staff account? Use _Users_ in the admin panel, or:
 
 ```powershell
 pnpm admin:create staff@example.com "Ani" staff
@@ -160,8 +160,8 @@ Every push runs the same checks on GitHub Actions (`.github/workflows/ci.yml`).
 
 ### 7.1 Supabase (database and photo storage)
 
-1. Go to **supabase.com** → *New project*. Region: **Frankfurt (eu-central-1)** (closest to Yerevan). Save the database password.
-2. *Project settings → Database → Connection string → Transaction pooler*: copy the URI and replace `[YOUR-PASSWORD]`. This is `DATABASE_URL`.
+1. Go to **supabase.com** → _New project_. Region: **Frankfurt (eu-central-1)** (closest to Yerevan). Save the database password.
+2. _Project settings → Database → Connection string → Transaction pooler_: copy the URI and replace `[YOUR-PASSWORD]`. This is `DATABASE_URL`.
 3. On your computer, run migrations and the seed against it once:
 
    ```powershell
@@ -172,27 +172,27 @@ Every push runs the same checks on GitHub Actions (`.github/workflows/ci.yml`).
 
    macOS: `DATABASE_URL="…" SEED_ADMIN_EMAIL="owner@yumyum.am" pnpm db:migrate && pnpm db:seed`
 
-4. *Storage → New bucket* → name `product-images`, **Public bucket: on**.
-5. *Project settings → API*: copy the **Project URL** (`NEXT_PUBLIC_SUPABASE_URL`) and the **service_role** key (`SUPABASE_SERVICE_ROLE_KEY`, secret).
+4. _Storage → New bucket_ → name `product-images`, **Public bucket: on**.
+5. _Project settings → API_: copy the **Project URL** (`NEXT_PUBLIC_SUPABASE_URL`) and the **service_role** key (`SUPABASE_SERVICE_ROLE_KEY`, secret).
 
 ### 7.2 Cloudflare Turnstile (anti-spam)
 
-dash.cloudflare.com → *Turnstile* → *Add site* → your domain (and `*.vercel.app` while testing),
-widget mode *Managed*. Copy the site key and secret key.
+dash.cloudflare.com → _Turnstile_ → _Add site_ → your domain (and `*.vercel.app` while testing),
+widget mode _Managed_. Copy the site key and secret key.
 
 ### 7.3 Vercel (hosting)
 
-1. **vercel.com** → *Add New → Project* → import the GitHub repository.
+1. **vercel.com** → _Add New → Project_ → import the GitHub repository.
 2. Framework preset: Next.js (detected). Install command: `pnpm install`.
-3. *Environment Variables*: add everything from `.env.example` that you use. At minimum:
+3. _Environment Variables_: add everything from `.env.example` that you use. At minimum:
    `DATABASE_URL`, `NEXT_PUBLIC_SITE_URL` (e.g. `https://yumyum.am`), `APP_SECRET`,
    `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`, `CRON_SECRET`,
    `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and one notification channel.
-4. *Deploy*. The nightly privacy clean-up is scheduled by `vercel.json` and authenticated with `CRON_SECRET`.
+4. _Deploy_. The nightly privacy clean-up is scheduled by `vercel.json` and authenticated with `CRON_SECRET`.
 
 ### 7.4 Custom domain
 
-Vercel → Project → *Settings → Domains* → add `yumyum.am` and `www.yumyum.am`. At the domain
+Vercel → Project → _Settings → Domains_ → add `yumyum.am` and `www.yumyum.am`. At the domain
 registrar, add the DNS records Vercel shows (an `A` record `76.76.21.21` for the apex and a
 `CNAME` `cname.vercel-dns.com` for `www`). HTTPS is automatic. Then update
 `NEXT_PUBLIC_SITE_URL` and redeploy.
@@ -206,7 +206,7 @@ registrar, add the DNS records Vercel shows (an `A` record `76.76.21.21` for the
 3. Open `https://api.telegram.org/bot<TOKEN>/getUpdates` in a browser and find `"chat":{"id":-100…}` → `TELEGRAM_CHAT_ID`.
 4. `NOTIFY_CHANNELS=telegram`. Place a test order: the group receives it within seconds.
 
-**Email (Resend free tier):** resend.com → verify your domain → *API keys* → `RESEND_API_KEY`;
+**Email (Resend free tier):** resend.com → verify your domain → _API keys_ → `RESEND_API_KEY`;
 set `EMAIL_FROM` (an address on the verified domain) and `ORDER_EMAIL_TO`. Email is also used
 for newsletter confirmations.
 
@@ -216,17 +216,17 @@ Every notification attempt is listed on the admin dashboard, so a failing channe
 
 ## 8. Troubleshooting on Windows
 
-| Problem | Fix |
-| --- | --- |
-| `pnpm` is not recognised | Run `corepack enable` again, then reopen PowerShell. |
-| `running scripts is disabled on this system` | `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`, answer `Y`. |
-| `docker compose` fails, "cannot connect to the Docker daemon" | Start Docker Desktop and wait for "Engine running". If asked, enable WSL 2 (`wsl --install`) and restart Windows. |
-| Port 5432 already in use | Another Postgres is running. Stop it (Services → postgresql) or change the port in `docker-compose.yml` to `5433:5432` and in `DATABASE_URL`. |
-| Port 3000 in use | `pnpm dev -- -p 3001`, then open `http://localhost:3001/hy`. |
-| `sharp` install errors | `pnpm rebuild sharp`. Make sure Node is 64-bit (`node -p process.arch` → `x64`). |
-| Line-ending warnings from Git | `git config --global core.autocrlf true`. |
-| Armenian text shows as boxes in PowerShell output | Only the console font; the website is fine. Use Windows Terminal. |
-| Long path errors | `git config --global core.longpaths true`. |
+| Problem                                                       | Fix                                                                                                                                           |
+| ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm` is not recognised                                      | Run `corepack enable` again, then reopen PowerShell.                                                                                          |
+| `running scripts is disabled on this system`                  | `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`, answer `Y`.                                                                            |
+| `docker compose` fails, "cannot connect to the Docker daemon" | Start Docker Desktop and wait for "Engine running". If asked, enable WSL 2 (`wsl --install`) and restart Windows.                             |
+| Port 5432 already in use                                      | Another Postgres is running. Stop it (Services → postgresql) or change the port in `docker-compose.yml` to `5433:5432` and in `DATABASE_URL`. |
+| Port 3000 in use                                              | `pnpm dev -- -p 3001`, then open `http://localhost:3001/hy`.                                                                                  |
+| `sharp` install errors                                        | `pnpm rebuild sharp`. Make sure Node is 64-bit (`node -p process.arch` → `x64`).                                                              |
+| Line-ending warnings from Git                                 | `git config --global core.autocrlf true`.                                                                                                     |
+| Armenian text shows as boxes in PowerShell output             | Only the console font; the website is fine. Use Windows Terminal.                                                                             |
+| Long path errors                                              | `git config --global core.longpaths true`.                                                                                                    |
 
 ## 9. Where things are
 
