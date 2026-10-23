@@ -14,7 +14,7 @@ import { cart, cartSubtotal, useCart } from "@/lib/cart-store";
 import type { PublicShop, PublicZone } from "@/lib/catalog";
 import { cn } from "@/lib/cn";
 import { districts } from "@/lib/districts";
-import { formatAmd, formatDate } from "@/lib/format";
+import { formatAmd, formatDayChip } from "@/lib/format";
 import { t as pick } from "@/lib/localized";
 import { availableDays, type OrderingRules } from "@/lib/ordering";
 import { quoteDelivery } from "@/lib/pricing";
@@ -371,10 +371,7 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
                           ? t("today")
                           : d.dateKey === addDays(today, 1)
                             ? t("tomorrow")
-                            : formatDate(new Date(`${d.dateKey}T12:00:00+04:00`), locale, {
-                                weekday: "short",
-                                month: "short",
-                              });
+                            : formatDayChip(d.dateKey, locale);
                       return (
                         <label
                           key={d.dateKey}

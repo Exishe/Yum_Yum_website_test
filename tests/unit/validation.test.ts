@@ -62,3 +62,12 @@ describe("checkout schema", () => {
     expect(clean("A‮ni\u0000 ")).toBe("Ani");
   });
 });
+
+describe("day chips", () => {
+  it("names days without relying on the browser's locale data", async () => {
+    const { formatDayChip } = await import("@/lib/format");
+    expect(formatDayChip("2026-10-25", "hy")).toBe("Կիր, 25 հոկ");
+    expect(formatDayChip("2026-10-25", "ru")).toBe("вс, 25 окт");
+    expect(formatDayChip("2026-10-25", "en")).toBe("Sun 25 Oct");
+  });
+});

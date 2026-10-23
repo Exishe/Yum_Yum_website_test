@@ -41,3 +41,26 @@ export function formatDate(date: Date, locale: Locale, opts?: Intl.DateTimeForma
     ...opts,
   }).format(date);
 }
+
+const DAY_NAMES: Record<Locale, string[]> = {
+  hy: ["Կիր", "Երկ", "Երք", "Չրք", "Հնգ", "Ուրբ", "Շբթ"],
+  ru: ["вс", "пн", "вт", "ср", "чт", "пт", "сб"],
+  en: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+};
+const MONTH_NAMES: Record<Locale, string[]> = {
+  hy: ["հնվ", "փտվ", "մրտ", "ապր", "մյս", "հնս", "հլս", "օգս", "սեպ", "հոկ", "նոյ", "դեկ"],
+  ru: ["янв", "фев", "мар", "апр", "мая", "июн", "июл", "авг", "сен", "окт", "ноя", "дек"],
+  en: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+};
+
+/**
+ * Short day label for a "YYYY-MM-DD" key ("Կիր, 25 հոկ", "вс, 25 окт", "Sun 25 Oct").
+ * Uses fixed tables because some browsers ship without Armenian date names.
+ */
+export function formatDayChip(dateKey: string, locale: Locale): string {
+  const [y, m, d] = dateKey.split("-").map(Number);
+  const weekday = new Date(Date.UTC(y!, m! - 1, d!)).getUTCDay();
+  const day = DAY_NAMES[locale][weekday];
+  const month = MONTH_NAMES[locale][m! - 1];
+  return locale === "en" ? `${day} ${d} ${month}` : `${day}, ${d} ${month}`;
+}
