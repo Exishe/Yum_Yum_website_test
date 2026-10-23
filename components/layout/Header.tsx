@@ -67,10 +67,12 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
     if (returnFocus) buttonRef.current?.focus();
   }, []);
 
-  // Close on route change.
-  useEffect(() => {
+  // Close on route change (adjusting state during render, not in an effect).
+  const [lastPath, setLastPath] = useState(pathname);
+  if (lastPath !== pathname) {
+    setLastPath(pathname);
     setOpen(false);
-  }, [pathname]);
+  }
 
   useEffect(() => {
     if (!open) return;

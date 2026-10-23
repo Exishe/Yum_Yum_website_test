@@ -51,14 +51,12 @@ export async function createOrder(data: CheckoutData, ipHash: string): Promise<O
   let shopId: number | null = null;
   let zoneId: number | null = null;
   let deliveryFee = 0;
-  let shopName = "";
 
   if (data.fulfilment === "pickup") {
     if (!rules.pickupEnabled) return { ok: false, error: "generic" };
     const shop = shops.find((s) => s.id === data.shopId && s.pickupEnabled);
     if (!shop) return { ok: false, error: "shop", field: "shopId" };
     shopId = shop.id;
-    shopName = t(shop.name, "en");
   } else {
     if (!rules.deliveryEnabled) return { ok: false, error: "generic" };
     const quote = quoteDelivery(data.district, subtotal, zones);

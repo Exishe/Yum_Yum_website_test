@@ -10,7 +10,6 @@ import { normalizeArmenianPhone } from "./format";
 export function clean(value: string): string {
   return (
     value
-      // eslint-disable-next-line no-control-regex
       .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F​-‏‪-‮]/g, "")
       .replace(/[ \t]+/g, " ")
       .trim()
