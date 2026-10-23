@@ -38,7 +38,11 @@ export async function placeOrder(input: unknown): Promise<ActionResult<{ publicI
   if (data.website) return { ok: false, error: "spam" };
 
   const ip = await clientIp();
-  if (!(await rateLimit(`order:ip:${ip}`, 8, 3600)) || !(await rateLimit(`order:phone:${data.phone}`, 5, 3600))) {
+  const perHour = Number(process.env.ORDER_RATE_LIMIT_PER_HOUR ?? 8);
+  if (
+    !(await rateLimit(`order:ip:${ip}`, perHour, 3600)) ||
+    !(await rateLimit(`order:phone:${data.phone}`, Math.max(5, Math.ceil(perHour / 2)), 3600))
+  ) {
     return { ok: false, error: "rateLimit" };
   }
   if (!(await verifyTurnstile(data.turnstileToken, ip))) return { ok: false, error: "turnstile" };

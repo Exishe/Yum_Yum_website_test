@@ -74,11 +74,11 @@ export const checkoutSchema = z
   .object({
     items: z.array(cartItemSchema).min(1, { message: "emptyCart" }).max(40),
     fulfilment: z.enum(["pickup", "delivery"]),
-    shopId: z.number().int().positive().optional(),
+    shopId: z.number({ message: "shop" }).int().positive({ message: "shop" }).optional(),
     name: text(2, 60),
     phone: phoneSchema,
     address: addressSchema.optional(),
-    district: z.enum(districtKeys).optional(),
+    district: z.enum(districtKeys, { message: "district" }).optional(),
     date: dateKey,
     slot: slotValue,
     comment: optionalText(500),

@@ -186,6 +186,10 @@
   .on-dark:focus-visible {
     outline-color: var(--color-sun);
   }
+  /* Visually hidden inputs inside chip labels must stay inside their scroll row. */
+  label:has(> input.sr-only) {
+    position: relative;
+  }
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
