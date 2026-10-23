@@ -30,6 +30,8 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // PGlite (demo database) loads its WebAssembly files from node_modules at runtime.
+  serverExternalPackages: ["@electric-sql/pglite"],
   reactStrictMode: true,
   images: {
     formats: ["image/avif", "image/webp"],

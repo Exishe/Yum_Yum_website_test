@@ -3,6 +3,7 @@ import { createHash, createHmac, timingSafeEqual } from "node:crypto";
 import { sql } from "drizzle-orm";
 import { headers } from "next/headers";
 import { db } from "@/db";
+import { rowsOf } from "@/db/connect";
 import { env } from "./env";
 
 export async function clientIp(): Promise<string> {
@@ -37,7 +38,7 @@ export async function rateLimit(
   windowSeconds: number,
 ): Promise<boolean> {
   const id = hashValue(key);
-  const rows = await db.execute<{ count: number }>(sql`
+  const result = await db.execute(sql`
     INSERT INTO rate_limits (key, count, reset_at)
     VALUES (${id}, 1, now() + make_interval(secs => ${windowSeconds}))
     ON CONFLICT (key) DO UPDATE SET
@@ -46,7 +47,7 @@ export async function rateLimit(
         THEN now() + make_interval(secs => ${windowSeconds}) ELSE rate_limits.reset_at END
     RETURNING count
   `);
-  const count = Number(rows[0]?.count ?? 0);
+  const count = Number(rowsOf<{ count: number }>(result)[0]?.count ?? 0);
   return count <= limit;
 }
 

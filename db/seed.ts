@@ -20,9 +20,10 @@ import {
 
 const force = process.argv.includes("--force");
 
-async function main() {
-  const { db, sql } = scriptDb();
-
+export async function seedDatabase(
+  { db }: { db: ReturnType<typeof scriptDb>["db"] },
+  opts: { demoPassword?: string } = {},
+) {
   for (const c of seedCategories) {
     const q = db.insert(s.categories).values({ ...c });
     await (force
@@ -92,23 +93,28 @@ async function main() {
   const email = (process.env.SEED_ADMIN_EMAIL ?? "admin@yumyum.local").toLowerCase();
   const existing = await db.select().from(s.users).where(eq(s.users.email, email));
   if (existing.length === 0) {
-    const password = process.env.SEED_ADMIN_PASSWORD || randomBytes(12).toString("base64url");
+    const password =
+      process.env.SEED_ADMIN_PASSWORD || opts.demoPassword || randomBytes(12).toString("base64url");
     await db.insert(s.users).values({
       email,
       name: "Admin",
       role: "admin",
       passwordHash: await bcrypt.hash(password, 12),
-      mustChangePassword: !process.env.SEED_ADMIN_PASSWORD,
+      mustChangePassword: !process.env.SEED_ADMIN_PASSWORD && !opts.demoPassword,
     });
     console.log(`\nAdmin user created: ${email}`);
-    if (!process.env.SEED_ADMIN_PASSWORD) console.log(`Temporary password: ${password}\n`);
+    if (!process.env.SEED_ADMIN_PASSWORD) console.log(`Password: ${password}\n`);
   }
 
   console.log(`Seed done. ${inserted} products ${force ? "written" : "added"}.`);
-  await sql.end();
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+if (process.argv[1]?.includes("seed")) {
+  const conn = scriptDb();
+  seedDatabase(conn)
+    .then(() => conn.close())
+    .catch((err) => {
+      console.error(err);
+      process.exit(1);
+    });
+}

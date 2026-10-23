@@ -1,18 +1,13 @@
-// Database client for CLI scripts (migrate, seed). Not imported by the app.
+// Database connection for CLI scripts (migrate, seed, demo). Not imported by the app.
 import { config } from "dotenv";
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
-import * as schema from "./schema";
+import { openDatabase } from "./connect";
 
-config({ path: ".env.local" });
-config();
+config({ path: ".env.local", quiet: true });
+config({ quiet: true });
 
 export function scriptDb() {
-  const url = process.env.DATABASE_URL;
-  if (!url) {
-    console.error("DATABASE_URL is not set. Copy .env.example to .env.local first.");
-    process.exit(1);
-  }
-  const sql = postgres(url, { max: 1, prepare: !url.includes(":6543"), onnotice: () => {} });
-  return { sql, db: drizzle(sql, { schema }) };
+  const conn = openDatabase({ script: true });
+  if (conn.kind === "pglite")
+    console.log("No DATABASE_URL: using the built-in demo database in .pglocal/");
+  return conn;
 }

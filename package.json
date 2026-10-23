@@ -24,7 +24,9 @@
     "db:reset": "tsx db/reset.ts && pnpm db:migrate && pnpm db:seed",
     "admin:create": "tsx scripts/create-admin.ts",
     "images": "tsx scripts/prepare-images.ts",
-    "prepare": "husky"
+    "prepare": "husky",
+    "demo": "tsx scripts/demo.ts && next dev",
+    "demo:reset": "tsx db/reset.ts"
   },
   "lint-staged": {
     "*.{ts,tsx,js,mjs}": [
@@ -36,6 +38,7 @@
     ]
   },
   "dependencies": {
+    "@electric-sql/pglite": "0.5.8",
     "@hookform/resolvers": "6.0.0",
     "@phosphor-icons/react": "2.1.10",
     "bcryptjs": "3.0.3",

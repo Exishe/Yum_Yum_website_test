@@ -22,6 +22,28 @@ shop staff.
 
 ---
 
+## Quick look: run the website in 3 commands (no database to install)
+
+You need Node.js 22 and Git. In PowerShell (Windows) or Terminal (macOS):
+
+```powershell
+git clone -b claude/stoic-dijkstra-kmom5z https://github.com/Exishe/Yum_Yum_website_test.git
+cd Yum_Yum_website_test
+corepack enable
+pnpm install
+pnpm demo
+```
+
+Then open **http://localhost:3000/hy** (also `/ru` and `/en`). The first page takes about 10 seconds to appear while it compiles; after that it is fast.
+
+- Admin panel: **http://localhost:3000/admin** — `admin@yumyum.local` / `yumyum-demo-2026`
+- Everything works: menu, basket, checkout, order tracking, admin. Orders are saved in a built-in database in the `.pglocal` folder (PGlite: real PostgreSQL in WebAssembly), so there is nothing else to install.
+- Stop with `Ctrl+C`. Start again with `pnpm demo` (your test orders are kept). Start from scratch with `pnpm demo:reset`.
+
+Demo mode is used automatically whenever `DATABASE_URL` is not set, and only outside production. For the real setup with PostgreSQL, follow sections 1–7.
+
+---
+
 ## 1. Install the tools (once per computer)
 
 You need **Node.js 22 LTS**, **pnpm 10**, **Git**, and a **PostgreSQL 16** database

@@ -1,19 +1,21 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { migrate } from "drizzle-orm/postgres-js/migrator";
 import { scriptDb } from "./script-client";
 
-async function main() {
-  const { db, sql } = scriptDb();
+export async function migrateDatabase(conn: ReturnType<typeof scriptDb>) {
   console.log("Running migrations…");
-  await migrate(db, { migrationsFolder: join(process.cwd(), "db/migrations") });
+  await conn.migrate(join(process.cwd(), "db/migrations"));
   console.log("Applying row level security policies…");
-  await sql.unsafe(readFileSync(join(process.cwd(), "db/policies.sql"), "utf8"));
-  await sql.end();
-  console.log("Database is up to date.");
+  await conn.exec(readFileSync(join(process.cwd(), "db/policies.sql"), "utf8"));
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+if (process.argv[1]?.includes("migrate")) {
+  const conn = scriptDb();
+  migrateDatabase(conn)
+    .then(() => conn.close())
+    .then(() => console.log("Database is up to date."))
+    .catch((err) => {
+      console.error(err);
+      process.exit(1);
+    });
+}

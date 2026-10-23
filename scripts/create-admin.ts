@@ -11,7 +11,8 @@ async function main() {
     console.error('Usage: pnpm admin:create you@example.com "Your Name" admin|staff');
     process.exit(1);
   }
-  const { db, sql } = scriptDb();
+  const conn = scriptDb();
+  const { db } = conn;
   const password = randomBytes(12).toString("base64url");
   const passwordHash = await bcrypt.hash(password, 12);
   await db
@@ -35,7 +36,7 @@ async function main() {
     });
   console.log(`\n${email} can now sign in at /admin/login`);
   console.log(`Temporary password (change it after signing in): ${password}\n`);
-  await sql.end();
+  await conn.close();
 }
 
 main().catch((err) => {
