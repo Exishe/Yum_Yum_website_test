@@ -33,7 +33,7 @@ versions through `next/image`.
 ## Fonts
 
 Bagel Fat One, Rubik, Noto Sans Armenian, Onest, Pangolin — all SIL Open Font License 1.1,
-self-hosted through `next/font` (Google Fonts).
+self-hosted: Bagel, Onest (Latin) and Pangolin through `next/font`; Rubik (Cyrillic), Noto Sans Armenian and Onest (Cyrillic) as files in `public/fonts/`, downloaded from Google Fonts.
 
 ## Text and facts
 

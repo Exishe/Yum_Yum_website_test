@@ -12,12 +12,12 @@ import { cart, cartCount, cartSubtotal, useCart } from "@/lib/cart-store";
 import { formatAmd } from "@/lib/format";
 import { t as pick } from "@/lib/localized";
 
-export function CartDrawer() {
+export function CartDrawer({ defaultOpen = false }: { defaultOpen?: boolean }) {
   const t = useTranslations("cart");
   const tc = useTranslations("common");
   const locale = useLocale() as Locale;
   const state = useCart();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(defaultOpen);
 
   useEffect(() => {
     const onOpen = () => setOpen(true);

@@ -33,7 +33,7 @@ Everything below is open source or has a free tier that covers a shop of this si
 | drizzle-kit                           | 0.31.11       | MIT                |
 | tsx, dotenv                           | 4.23 / 18.0   | MIT / BSD-2-Clause |
 
-## Fonts (self-hosted through `next/font`, no requests to Google from visitors)
+## Fonts (all self-hosted: `next/font` or `public/fonts/`; no requests to Google from visitors)
 
 | Font               | Use                        | Licence     |
 | ------------------ | -------------------------- | ----------- |

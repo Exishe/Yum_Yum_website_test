@@ -50,3 +50,13 @@ test("delivery needs a district and shows the fee", async ({ page }) => {
   await page.waitForURL(/\/order\//);
   await expect(page.getByText("Delivery to Abovyan 25")).toBeVisible();
 });
+
+test("the order button opens the basket on the first tap", async ({ page }) => {
+  await page.goto("/en/menu?category=donuts");
+  await dismissCookies(page);
+  await page.reload();
+  await page.locator("#menu-panel li button[aria-label]").first().click();
+  await page.locator("header button[aria-label*='Your order']").click();
+  await expect(page.getByRole("dialog", { name: "Your order" })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Checkout/ })).toBeVisible();
+});

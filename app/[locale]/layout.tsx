@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import { headers } from "next/headers";
+import { preload } from "react-dom";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import "../globals.css";
@@ -61,6 +62,16 @@ export default async function LocaleLayout({
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
+
+  // Preload only the font files this language needs.
+  const fontFiles: Record<string, string[]> = {
+    hy: ["/fonts/noto-sans-armenian-v47.woff2"],
+    ru: ["/fonts/rubik-cyrillic-v31.woff2", "/fonts/onest-cyrillic-v11.woff2"],
+    en: [],
+  };
+  for (const href of fontFiles[locale] ?? []) {
+    preload(href, { as: "font", type: "font/woff2", crossOrigin: "anonymous" });
+  }
 
   const [menu, shops, settings, messages, h, tc] = await Promise.all([
     getMenu(),

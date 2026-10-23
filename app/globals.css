@@ -1,6 +1,36 @@
 @import "tailwindcss";
 
 /*
+ * Armenian and Cyrillic faces are self-hosted with stable URLs so each page can
+ * preload only what its language needs (see app/[locale]/layout.tsx).
+ * Source: Google Fonts, SIL Open Font License 1.1.
+ */
+@font-face {
+  font-family: "YY Armenian";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("/fonts/noto-sans-armenian-v47.woff2") format("woff2");
+  unicode-range: U+0308, U+0530-058F, U+2010, U+2024, U+25CC, U+FB13-FB17;
+}
+@font-face {
+  font-family: "YY Rubik";
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+  src: url("/fonts/rubik-cyrillic-v31.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "YY Onest";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/fonts/onest-cyrillic-v11.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+/*
  * YUM-YUM design tokens.
  * Magenta and yellow are sampled from the 1080 px logo (#DE1281, #FFEC01).
  * Text colours are checked against WCAG AA in docs/DESIGN.md.
@@ -24,12 +54,9 @@
   --color-mint: #6fd3a1;
   --color-orange: #ff9a3d;
 
-  --font-display:
-    var(--font-bagel), var(--font-rubik), var(--font-armenian), ui-rounded, system-ui, sans-serif;
-  --font-sans:
-    var(--font-onest), var(--font-onest-cyr), var(--font-armenian), ui-sans-serif, system-ui,
-    sans-serif;
-  --font-hand: var(--font-hand-face), var(--font-armenian), cursive;
+  --font-display: var(--font-bagel), "YY Rubik", "YY Armenian", ui-rounded, system-ui, sans-serif;
+  --font-sans: var(--font-onest), "YY Onest", "YY Armenian", ui-sans-serif, system-ui, sans-serif;
+  --font-hand: var(--font-hand-face), "YY Armenian", cursive;
 
   --radius-card: 1.25rem;
   --radius-xl2: 1.75rem;
