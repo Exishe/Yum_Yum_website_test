@@ -5,7 +5,15 @@ const config = [
   ...nextVitals,
   ...nextTs,
   {
-    ignores: [".next/**", "node_modules/**", "db/migrations/**", "playwright-report/**", "test-results/**", "next-env.d.ts", "lib/images.generated.ts"],
+    ignores: [
+      ".next/**",
+      "node_modules/**",
+      "db/migrations/**",
+      "playwright-report/**",
+      "test-results/**",
+      "next-env.d.ts",
+      "lib/images.generated.ts",
+    ],
   },
 ];
 

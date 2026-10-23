@@ -6,7 +6,9 @@ import { getSettings } from "@/lib/settings";
 export async function DeliveryLinks() {
   const t = await getTranslations("delivery");
   const tc = await getTranslations("common");
-  const links = (await getSettings()).externalDelivery.filter((d) => d.enabled && /^https:\/\//.test(d.url));
+  const links = (await getSettings()).externalDelivery.filter(
+    (d) => d.enabled && /^https:\/\//.test(d.url),
+  );
   if (!links.length) return null;
   return (
     <div className="mt-10 flex flex-col items-start gap-3 sm:flex-row sm:items-center">

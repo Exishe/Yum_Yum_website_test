@@ -25,28 +25,45 @@ export default async function ContactPage({ params }: Props) {
         <div>
           <h1 className="text-[clamp(2.6rem,7vw,4.5rem)] leading-none">{t("title")}</h1>
           <p className="mt-4 text-lg">{t("lead")}</p>
-          <h2 className="mt-8 font-sans text-sm font-bold tracking-[0.18em] text-magenta-ink uppercase">{t("phones")}</h2>
+          <h2 className="mt-8 font-sans text-sm font-bold tracking-[0.18em] text-magenta-ink uppercase">
+            {t("phones")}
+          </h2>
           <ul className="mt-2 space-y-1">
             {contact.phones.map((p) => (
               <li key={p}>
-                <a href={`tel:${p}`} className="inline-flex min-h-11 items-center font-display text-3xl hover:text-magenta-ink">
+                <a
+                  href={`tel:${p}`}
+                  className="inline-flex min-h-11 items-center font-display text-3xl hover:text-magenta-ink"
+                >
                   {formatPhone(p)}
                 </a>
               </li>
             ))}
           </ul>
-          <h2 className="mt-6 font-sans text-sm font-bold tracking-[0.18em] text-magenta-ink uppercase">{t("socials")}</h2>
+          <h2 className="mt-6 font-sans text-sm font-bold tracking-[0.18em] text-magenta-ink uppercase">
+            {t("socials")}
+          </h2>
           <ul className="mt-2 space-y-1 font-semibold">
             {contact.instagram ? (
               <li>
-                <a href={`https://www.instagram.com/${contact.instagram}/`} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center underline-offset-2 hover:underline">
+                <a
+                  href={`https://www.instagram.com/${contact.instagram}/`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-11 items-center underline-offset-2 hover:underline"
+                >
                   Instagram @{contact.instagram}
                 </a>
               </li>
             ) : null}
             {contact.facebook ? (
               <li>
-                <a href={`https://www.facebook.com/${contact.facebook}/`} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center underline-offset-2 hover:underline">
+                <a
+                  href={`https://www.facebook.com/${contact.facebook}/`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-11 items-center underline-offset-2 hover:underline"
+                >
                   facebook.com/{contact.facebook}
                 </a>
               </li>

@@ -31,7 +31,11 @@ export function safeEqual(a: string, b: string): boolean {
  * Fixed-window rate limiter stored in Postgres. Returns true while the caller
  * is under the limit. One atomic upsert per call, no extra service needed.
  */
-export async function rateLimit(key: string, limit: number, windowSeconds: number): Promise<boolean> {
+export async function rateLimit(
+  key: string,
+  limit: number,
+  windowSeconds: number,
+): Promise<boolean> {
   const id = hashValue(key);
   const rows = await db.execute<{ count: number }>(sql`
     INSERT INTO rate_limits (key, count, reset_at)

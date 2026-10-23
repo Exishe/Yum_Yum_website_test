@@ -1,5 +1,15 @@
 import { asc } from "drizzle-orm";
-import { Card, Check, Field, Flash, PageHeader, SubmitButton, inputCls, sp, type SearchParams } from "@/components/admin/ui";
+import {
+  Card,
+  Check,
+  Field,
+  Flash,
+  PageHeader,
+  SubmitButton,
+  inputCls,
+  sp,
+  type SearchParams,
+} from "@/components/admin/ui";
 import { db } from "@/db";
 import { reviews, type Review } from "@/db/schema";
 import { requireUser } from "@/lib/auth";
@@ -13,12 +23,36 @@ function ReviewForm({ r }: { r?: Review }) {
       <input type="hidden" name="id" value={r?.id ?? ""} />
       <label className="block text-sm font-semibold md:col-span-4">
         Quote, exactly as written
-        <textarea name="quote" rows={2} defaultValue={r?.quote} required className={`${inputCls} h-auto py-2`} />
+        <textarea
+          name="quote"
+          rows={2}
+          defaultValue={r?.quote}
+          required
+          className={`${inputCls} h-auto py-2`}
+        />
       </label>
-      <Field label="Author (as shown on the platform)" name="author" defaultValue={r?.author} required />
-      <Field label="Platform" name="platform" defaultValue={r?.platform} placeholder="Google, Tripadvisor…" required />
+      <Field
+        label="Author (as shown on the platform)"
+        name="author"
+        defaultValue={r?.author}
+        required
+      />
+      <Field
+        label="Platform"
+        name="platform"
+        defaultValue={r?.platform}
+        placeholder="Google, Tripadvisor…"
+        required
+      />
       <Field label="Link to the review" name="url" defaultValue={r?.url} />
-      <Field label="Stars (1–5)" name="rating" type="number" min={1} max={5} defaultValue={r?.rating ?? ""} />
+      <Field
+        label="Stars (1–5)"
+        name="rating"
+        type="number"
+        min={1}
+        max={5}
+        defaultValue={r?.rating ?? ""}
+      />
       <label className="text-sm font-semibold">
         Language of the quote
         <select name="quoteLocale" defaultValue={r?.quoteLocale ?? "en"} className={inputCls}>
@@ -46,7 +80,8 @@ export default async function ReviewsPage({ searchParams }: { searchParams: Sear
       <PageHeader title="Reviews" />
       <Flash ok={sp(q.ok)} error={sp(q.error)} />
       <p className="mb-4 max-w-2xl text-sm text-muted">
-        Only real reviews, copied word for word, with the reviewer’s name as the platform shows it. Never edit or invent a quote.
+        Only real reviews, copied word for word, with the reviewer’s name as the platform shows it.
+        Never edit or invent a quote.
       </p>
       <div className="flex flex-col gap-4">
         {rows.map((r) => (
@@ -54,7 +89,10 @@ export default async function ReviewsPage({ searchParams }: { searchParams: Sear
             <ReviewForm r={r} />
             <form action={deleteReviewAction} className="mt-2">
               <input type="hidden" name="id" value={r.id} />
-              <SubmitButton confirm="Delete this review?" className="h-9 bg-transparent px-0 text-magenta-ink underline hover:bg-transparent">
+              <SubmitButton
+                confirm="Delete this review?"
+                className="h-9 bg-transparent px-0 text-magenta-ink underline hover:bg-transparent"
+              >
                 Delete
               </SubmitButton>
             </form>

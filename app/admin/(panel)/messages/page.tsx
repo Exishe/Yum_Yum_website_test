@@ -1,5 +1,12 @@
 import { desc } from "drizzle-orm";
-import { Card, Flash, PageHeader, SubmitButton, sp, type SearchParams } from "@/components/admin/ui";
+import {
+  Card,
+  Flash,
+  PageHeader,
+  SubmitButton,
+  sp,
+  type SearchParams,
+} from "@/components/admin/ui";
 import { db } from "@/db";
 import { contactMessages, newsletterSubscribers } from "@/db/schema";
 import { requireUser } from "@/lib/auth";
@@ -12,9 +19,19 @@ export default async function MessagesPage({ searchParams }: { searchParams: Sea
   const q = await searchParams;
   const [msgs, subs] = await Promise.all([
     db.select().from(contactMessages).orderBy(desc(contactMessages.createdAt)).limit(100),
-    user.role === "admin" ? db.select().from(newsletterSubscribers).orderBy(desc(newsletterSubscribers.createdAt)).limit(500) : [],
+    user.role === "admin"
+      ? db
+          .select()
+          .from(newsletterSubscribers)
+          .orderBy(desc(newsletterSubscribers.createdAt))
+          .limit(500)
+      : [],
   ]);
-  const fmt = new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Yerevan", dateStyle: "medium", timeStyle: "short" });
+  const fmt = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Yerevan",
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
   return (
     <>
       <PageHeader title="Messages" />
@@ -43,8 +60,8 @@ export default async function MessagesPage({ searchParams }: { searchParams: Sea
         <>
           <h2 className="mt-10 mb-3 text-2xl">Newsletter subscribers</h2>
           <p className="mb-3 text-sm text-muted">
-            {subs.filter((s) => s.status === "confirmed").length} confirmed, {subs.filter((s) => s.status === "pending").length} waiting for
-            email confirmation.
+            {subs.filter((s) => s.status === "confirmed").length} confirmed,{" "}
+            {subs.filter((s) => s.status === "pending").length} waiting for email confirmation.
           </p>
           <Card className="p-0">
             <ul className="divide-y divide-line text-sm">

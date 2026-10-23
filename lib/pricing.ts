@@ -39,9 +39,11 @@ export function priceLine(
 
   const optionIds = [...new Set(input.optionIds ?? [])];
   const options = optionIds.map((id) => product.options.find((o) => o.id === id));
-  if (options.some((o) => !o || o.kind === "text")) return { code: "badOption", productId: product.id };
+  if (options.some((o) => !o || o.kind === "text"))
+    return { code: "badOption", productId: product.id };
   const chosen = options as MenuProduct["options"];
-  if (chosen.filter((o) => o.kind === "size").length > 1) return { code: "badOption", productId: product.id };
+  if (chosen.filter((o) => o.kind === "size").length > 1)
+    return { code: "badOption", productId: product.id };
 
   const textOption = product.options.find((o) => o.kind === "text");
   const messages = (input.messages ?? []).map((m) => m.trim()).filter(Boolean);

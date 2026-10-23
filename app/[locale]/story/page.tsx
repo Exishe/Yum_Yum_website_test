@@ -11,7 +11,11 @@ type Props = { params: Promise<{ locale: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta" });
-  return { title: t("storyTitle"), description: t("storyDescription"), alternates: alternates(locale as Locale, "/story") };
+  return {
+    title: t("storyTitle"),
+    description: t("storyDescription"),
+    alternates: alternates(locale as Locale, "/story"),
+  };
 }
 
 export default async function StoryPage({ params }: Props) {
@@ -43,7 +47,9 @@ export default async function StoryPage({ params }: Props) {
         <div className="flex flex-col gap-5 text-lg leading-relaxed text-plum/90 lg:pt-6">
           <p>{t("page.p1")}</p>
           <p>{t("page.p2")}</p>
-          <p className="rounded-2xl bg-sun-soft p-5 font-hand text-2xl leading-snug text-plum">{t("page.p3")}</p>
+          <p className="rounded-2xl bg-sun-soft p-5 font-hand text-2xl leading-snug text-plum">
+            {t("page.p3")}
+          </p>
           <p>{t("page.p4")}</p>
           <p className="text-sm text-muted">{t("page.source")}</p>
         </div>

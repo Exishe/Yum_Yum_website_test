@@ -34,12 +34,21 @@ export function useShopStatus(shop: PublicShop | undefined) {
   return status;
 }
 
-export function StatusLabel({ status, className }: { status: ShopStatus | null; className?: string }) {
+export function StatusLabel({
+  status,
+  className,
+}: {
+  status: ShopStatus | null;
+  className?: string;
+}) {
   const t = useTranslations("shops");
   if (!status || status.state === "unknown") return null;
   return (
     <span className={cn("inline-flex items-center gap-1.5", className)}>
-      <span aria-hidden className={cn("size-2 rounded-full", status.state === "open" ? "bg-mint" : "bg-orange")} />
+      <span
+        aria-hidden
+        className={cn("size-2 rounded-full", status.state === "open" ? "bg-mint" : "bg-orange")}
+      />
       {status.state === "open"
         ? t("openNow", { time: status.closesAt })
         : status.opensToday
@@ -49,11 +58,19 @@ export function StatusLabel({ status, className }: { status: ShopStatus | null; 
   );
 }
 
-export function ShopPicker({ shops, heading = "h2" }: { shops: PickerShop[]; heading?: "h1" | "h2" }) {
+export function ShopPicker({
+  shops,
+  heading = "h2",
+}: {
+  shops: PickerShop[];
+  heading?: "h1" | "h2";
+}) {
   const t = useTranslations("shops");
   const tc = useTranslations("common");
   const locale = useLocale() as Locale;
   const [selected, setSelected] = useState(0);
+  // Only photos someone has looked at are loaded.
+  const [seen, setSeen] = useState<Set<number>>(() => new Set([0]));
   const shop = shops[selected] ?? shops[0];
   const status = useShopStatus(shop);
   const H = heading;
@@ -61,7 +78,10 @@ export function ShopPicker({ shops, heading = "h2" }: { shops: PickerShop[]; hea
   const name = pick(shop.name, locale);
 
   return (
-    <section aria-labelledby="shops-title" className="on-dark rounded-[2rem] bg-magenta p-5 text-white sm:p-8 lg:p-10">
+    <section
+      aria-labelledby="shops-title"
+      className="on-dark rounded-[2rem] bg-magenta p-5 text-white sm:p-8 lg:p-10"
+    >
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[0.9fr_1.1fr]">
         <div>
           <H id="shops-title" className="text-[clamp(2.6rem,6vw,4.4rem)] leading-[0.95]">
@@ -76,15 +96,23 @@ export function ShopPicker({ shops, heading = "h2" }: { shops: PickerShop[]; hea
                   aria-pressed={i === selected}
                   onClick={() => {
                     setSelected(i);
+                    setSeen((prev) => new Set(prev).add(i));
                     if (s.pickupEnabled) cart.setShop(s.id);
                   }}
                   className={cn(
                     "flex min-h-12 w-full items-center justify-between gap-4 rounded-xl border-2 px-4 text-left text-sm font-semibold transition-colors",
-                    i === selected ? "border-white bg-white text-plum" : "border-white/45 hover:border-white hover:bg-white/10",
+                    i === selected
+                      ? "border-white bg-white text-plum"
+                      : "border-white/45 hover:border-white hover:bg-white/10",
                   )}
                 >
                   <span>{pick(s.name, locale)}</span>
-                  <span className={cn("shrink-0 font-medium", i === selected ? "text-muted" : "text-white/90")}>
+                  <span
+                    className={cn(
+                      "shrink-0 font-medium",
+                      i === selected ? "text-muted" : "text-white",
+                    )}
+                  >
                     {hoursText(s, t("mallHours"))}
                   </span>
                 </button>
@@ -94,7 +122,7 @@ export function ShopPicker({ shops, heading = "h2" }: { shops: PickerShop[]; hea
         </div>
         <div className="relative min-h-[360px] overflow-hidden rounded-[1.5rem] bg-plum-2">
           {shops.map((s, i) =>
-            s.img ? (
+            s.img && seen.has(i) ? (
               <Image
                 key={s.slug}
                 src={s.img.src}
@@ -102,8 +130,11 @@ export function ShopPicker({ shops, heading = "h2" }: { shops: PickerShop[]; hea
                 aria-hidden={i !== selected}
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
-                loading="lazy"
-                className={cn("object-cover transition-opacity duration-500", i === selected ? "opacity-100" : "opacity-0")}
+                priority={heading === "h1" && i === 0}
+                className={cn(
+                  "object-cover transition-opacity duration-500",
+                  i === selected ? "opacity-100" : "opacity-0",
+                )}
               />
             ) : null,
           )}
@@ -113,7 +144,11 @@ export function ShopPicker({ shops, heading = "h2" }: { shops: PickerShop[]; hea
                 <p className="font-bold">YUM YUM · {name}</p>
                 <p className="text-sm text-muted">{pick(shop.address, locale)}</p>
                 <p className="text-sm text-muted">
-                  {shop.hours ? <StatusLabel status={status} /> : pick(shop.hoursNote, locale) || tc("mallHours")}
+                  {shop.hours ? (
+                    <StatusLabel status={status} />
+                  ) : (
+                    pick(shop.hoursNote, locale) || tc("mallHours")
+                  )}
                 </p>
               </div>
               <div className="flex shrink-0 flex-wrap gap-2">
@@ -142,12 +177,22 @@ export function ShopPicker({ shops, heading = "h2" }: { shops: PickerShop[]; hea
             {shop.yandexMapsUrl || shop.twoGisUrl ? (
               <p className="mt-2 flex gap-4 text-xs font-semibold">
                 {shop.yandexMapsUrl ? (
-                  <a href={shop.yandexMapsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-6 items-center underline-offset-2 hover:underline">
+                  <a
+                    href={shop.yandexMapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex min-h-6 items-center underline-offset-2 hover:underline"
+                  >
                     {t("yandexMaps")}
                   </a>
                 ) : null}
                 {shop.twoGisUrl ? (
-                  <a href={shop.twoGisUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-6 items-center underline-offset-2 hover:underline">
+                  <a
+                    href={shop.twoGisUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex min-h-6 items-center underline-offset-2 hover:underline"
+                  >
                     {t("twoGis")}
                   </a>
                 ) : null}

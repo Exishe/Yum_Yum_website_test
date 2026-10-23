@@ -13,7 +13,10 @@ export const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
  * anything that is not a picture) and stores it. Uses Supabase Storage when
  * configured, otherwise public/uploads for local development.
  */
-export async function saveImage(file: File, folder: "products" | "shops" | "categories"): Promise<string> {
+export async function saveImage(
+  file: File,
+  folder: "products" | "shops" | "categories",
+): Promise<string> {
   if (!ALLOWED.has(file.type)) throw new Error("Use a JPEG, PNG, WebP or AVIF photo.");
   if (file.size > MAX_UPLOAD_BYTES) throw new Error("The photo is larger than 5 MB.");
   const input = Buffer.from(await file.arrayBuffer());
@@ -21,7 +24,8 @@ export async function saveImage(file: File, folder: "products" | "shops" | "cate
   let output: Buffer;
   try {
     const meta = await sharp(input).metadata();
-    if (!meta.width || !meta.height || meta.width * meta.height > 50_000_000) throw new Error("bad size");
+    if (!meta.width || !meta.height || meta.width * meta.height > 50_000_000)
+      throw new Error("bad size");
     output = await sharp(input)
       .rotate()
       .resize({ width: 1600, height: 1600, fit: "inside", withoutEnlargement: true })

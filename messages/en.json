@@ -239,7 +239,13 @@
       "tToday": "{count} shops across Yerevan, from Abovyan to the malls."
     }
   },
-  "ticker": ["Donut give up", "Glazed every morning", "Bouquets to order", "Iced coffee", "{count} shops"],
+  "ticker": [
+    "Donut give up",
+    "Glazed every morning",
+    "Bouquets to order",
+    "Iced coffee",
+    "{count} shops"
+  ],
   "spotted": {
     "titleA": "Spotted at",
     "titleB": "YUM YUM",
@@ -475,23 +481,68 @@
   "legal": {
     "updated": "Last updated: {date}",
     "privacy": [
-      { "h": "Who we are", "p": "YUM-YUM Donuts runs donut and coffee shops in Yerevan, Armenia. This policy explains what personal data this website collects and what we do with it. Company details: see the bottom of every page." },
-      { "h": "What we collect", "p": "When you place an order: your name, phone number, and for delivery, your address and district, plus any comment you write. When you subscribe to the newsletter: your email address. When you write to us: your name, contact and message. We also keep a one-way hash of your IP address to stop spam; we cannot turn it back into an address." },
-      { "h": "Why", "p": "Only to prepare and deliver your order, to contact you about it, and to send the newsletter you asked for. We do not sell or share your data for advertising." },
-      { "h": "Who else sees it", "p": "Our shop staff. Our hosting and database providers (Vercel, Supabase) store it on our behalf. Order notifications go to the shop through Telegram or email. Nobody else." },
-      { "h": "How long we keep it", "p": "Delivery addresses, phone numbers and names are removed from orders {days} days after the order. The order itself (items, totals) stays for our accounts. Newsletter emails stay until you unsubscribe." },
-      { "h": "Cookies", "p": "We use only essential cookies: your language, your basket (stored in your browser) and the staff sign-in. Anonymous analytics run only if you allow them in Cookie settings." },
-      { "h": "Your rights", "p": "You can ask us to show, correct or delete your data at any time. Call us or use the contact form. You can also complain to the Personal Data Protection Agency of Armenia." }
+      {
+        "h": "Who we are",
+        "p": "YUM-YUM Donuts runs donut and coffee shops in Yerevan, Armenia. This policy explains what personal data this website collects and what we do with it. Company details: see the bottom of every page."
+      },
+      {
+        "h": "What we collect",
+        "p": "When you place an order: your name, phone number, and for delivery, your address and district, plus any comment you write. When you subscribe to the newsletter: your email address. When you write to us: your name, contact and message. We also keep a one-way hash of your IP address to stop spam; we cannot turn it back into an address."
+      },
+      {
+        "h": "Why",
+        "p": "Only to prepare and deliver your order, to contact you about it, and to send the newsletter you asked for. We do not sell or share your data for advertising."
+      },
+      {
+        "h": "Who else sees it",
+        "p": "Our shop staff. Our hosting and database providers (Vercel, Supabase) store it on our behalf. Order notifications go to the shop through Telegram or email. Nobody else."
+      },
+      {
+        "h": "How long we keep it",
+        "p": "Delivery addresses, phone numbers and names are removed from orders {days} days after the order. The order itself (items, totals) stays for our accounts. Newsletter emails stay until you unsubscribe."
+      },
+      {
+        "h": "Cookies",
+        "p": "We use only essential cookies: your language, your basket (stored in your browser) and the staff sign-in. Anonymous analytics run only if you allow them in Cookie settings."
+      },
+      {
+        "h": "Your rights",
+        "p": "You can ask us to show, correct or delete your data at any time. Call us or use the contact form. You can also complain to the Personal Data Protection Agency of Armenia."
+      }
     ],
     "terms": [
-      { "h": "Orders", "p": "An order is accepted when the shop confirms it. If an item has sold out, we call you and offer a swap or remove it from the bill." },
-      { "h": "Prices", "p": "Prices are in Armenian dram and include VAT. The price you see when you order is the price you pay." },
-      { "h": "Pickup", "p": "Pick up your order at the shop and time you chose. We keep it for one hour after the end of your time slot." },
-      { "h": "Delivery", "p": "We deliver in Yerevan. The fee and minimum order depend on the district and are shown before you order. We aim to arrive within your time slot." },
-      { "h": "Made-to-order items", "p": "Bouquets, birthday stacks and name donuts are made for you, so we need at least one day’s notice. You can cancel free of charge until the day before." },
-      { "h": "Payment", "p": "Pay in cash or by card (Visa, MasterCard, ArCa) on delivery or at pickup." },
-      { "h": "Allergies", "p": "Our kitchen handles wheat, milk, eggs, nuts and soy. Please ask the shop before ordering if you have an allergy." },
-      { "h": "Questions and complaints", "p": "Call the shop or use the contact form. We answer every message." }
+      {
+        "h": "Orders",
+        "p": "An order is accepted when the shop confirms it. If an item has sold out, we call you and offer a swap or remove it from the bill."
+      },
+      {
+        "h": "Prices",
+        "p": "Prices are in Armenian dram and include VAT. The price you see when you order is the price you pay."
+      },
+      {
+        "h": "Pickup",
+        "p": "Pick up your order at the shop and time you chose. We keep it for one hour after the end of your time slot."
+      },
+      {
+        "h": "Delivery",
+        "p": "We deliver in Yerevan. The fee and minimum order depend on the district and are shown before you order. We aim to arrive within your time slot."
+      },
+      {
+        "h": "Made-to-order items",
+        "p": "Bouquets, birthday stacks and name donuts are made for you, so we need at least one day’s notice. You can cancel free of charge until the day before."
+      },
+      {
+        "h": "Payment",
+        "p": "Pay in cash or by card (Visa, MasterCard, ArCa) on delivery or at pickup."
+      },
+      {
+        "h": "Allergies",
+        "p": "Our kitchen handles wheat, milk, eggs, nuts and soy. Please ask the shop before ordering if you have an allergy."
+      },
+      {
+        "h": "Questions and complaints",
+        "p": "Call the shop or use the contact form. We answer every message."
+      }
     ]
   }
 }

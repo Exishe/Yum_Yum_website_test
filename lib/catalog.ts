@@ -68,7 +68,10 @@ export const getMenu = unstable_cache(
         .from(products)
         .where(eq(products.isPublished, true))
         .orderBy(asc(products.sortOrder), asc(products.id)),
-      db.select().from(productOptions).orderBy(asc(productOptions.sortOrder), asc(productOptions.id)),
+      db
+        .select()
+        .from(productOptions)
+        .orderBy(asc(productOptions.sortOrder), asc(productOptions.id)),
     ]);
     const optsByProduct = new Map<number, MenuOption[]>();
     for (const o of opts) {

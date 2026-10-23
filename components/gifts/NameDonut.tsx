@@ -20,7 +20,10 @@ export function NameDonut({ product }: { product: ClientProduct }) {
   const fontSize = shown.length > 9 ? 26 : shown.length > 6 ? 32 : 38;
 
   return (
-    <section aria-labelledby="name-title" className="grid grid-cols-1 items-center gap-8 rounded-[2rem] bg-magenta-soft p-5 sm:p-8 lg:grid-cols-[1fr_1fr]">
+    <section
+      aria-labelledby="name-title"
+      className="grid grid-cols-1 items-center gap-8 rounded-[2rem] bg-magenta-soft p-5 sm:p-8 lg:grid-cols-[1fr_1fr]"
+    >
       <div className="order-2 lg:order-1">
         <h2 id="name-title" className="text-[clamp(2rem,4.5vw,3.2rem)] leading-none">
           {t("title")}
@@ -66,7 +69,12 @@ export function NameDonut({ product }: { product: ClientProduct }) {
         <p className="mt-3 text-sm text-muted">{pick(product.description, locale)}</p>
       </div>
       <div className="order-1 mx-auto w-full max-w-[340px] lg:order-2">
-        <svg viewBox="0 0 300 300" role="img" aria-label={t("previewAlt", { text: shown })} className="w-full drop-shadow-xl">
+        <svg
+          viewBox="0 0 300 300"
+          role="img"
+          aria-label={t("previewAlt", { text: shown })}
+          className="w-full drop-shadow-xl"
+        >
           <defs>
             <path id={arcId} d="M 62 150 A 88 88 0 0 1 238 150" />
           </defs>
@@ -85,7 +93,16 @@ export function NameDonut({ product }: { product: ClientProduct }) {
             [60, 160, "#6fd3a1", -50],
             [110, 60, "#ffffff", 10],
           ].map(([x, y, c, r], i) => (
-            <rect key={i} x={x as number} y={y as number} width="16" height="5" rx="2.5" fill={c as string} transform={`rotate(${r} ${x} ${y})`} />
+            <rect
+              key={i}
+              x={x as number}
+              y={y as number}
+              width="16"
+              height="5"
+              rx="2.5"
+              fill={c as string}
+              transform={`rotate(${r} ${x} ${y})`}
+            />
           ))}
           <text
             fill="#ffffff"

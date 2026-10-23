@@ -31,7 +31,12 @@ export async function GiftsSection({
 
   return (
     <section aria-labelledby="gifts-title" className="relative mt-16 bg-sun">
-      <svg aria-hidden viewBox="0 0 1440 60" preserveAspectRatio="none" className="absolute -top-[59px] left-0 h-[60px] w-full fill-sun">
+      <svg
+        aria-hidden
+        viewBox="0 0 1440 60"
+        preserveAspectRatio="none"
+        className="absolute -top-[59px] left-0 h-[60px] w-full fill-sun"
+      >
         <path d="M0 40 C 240 0, 480 0, 720 26 S 1200 60, 1440 18 V60 H0Z" />
       </svg>
       <div className="mx-auto grid max-w-[1440px] gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1fr_1.1fr] lg:px-8 lg:py-20">
@@ -43,7 +48,10 @@ export async function GiftsSection({
           <p className="mt-5 max-w-lg text-lg">{t("lead")}</p>
           <ul className="mt-7 flex max-w-lg flex-col gap-3">
             {options.map((o) => (
-              <li key={o.title} className="flex items-center justify-between gap-4 rounded-2xl bg-white px-5 py-4 shadow-card">
+              <li
+                key={o.title}
+                className="flex items-center justify-between gap-4 rounded-2xl bg-white px-5 py-4 shadow-card"
+              >
                 <span>
                   <span className="block font-semibold">{o.title}</span>
                   <span className="block text-sm text-muted">{o.sub}</span>

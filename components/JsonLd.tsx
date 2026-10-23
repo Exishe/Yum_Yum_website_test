@@ -57,10 +57,22 @@ export function organizationJsonLd(shops: PublicShop[], settings: SiteSettings, 
           addressLocality: "Yerevan",
           addressCountry: "AM",
         },
-        geo: s.lat && s.lng ? { "@type": "GeoCoordinates", latitude: s.lat, longitude: s.lng } : undefined,
+        geo:
+          s.lat && s.lng
+            ? { "@type": "GeoCoordinates", latitude: s.lat, longitude: s.lng }
+            : undefined,
         openingHoursSpecification: s.hours
           ? s.hours.flatMap((h, i) =>
-              h ? [{ "@type": "OpeningHoursSpecification", dayOfWeek: DAYS[i], opens: h.open, closes: h.close }] : [],
+              h
+                ? [
+                    {
+                      "@type": "OpeningHoursSpecification",
+                      dayOfWeek: DAYS[i],
+                      opens: h.open,
+                      closes: h.close,
+                    },
+                  ]
+                : [],
             )
           : undefined,
       })),
@@ -86,7 +98,9 @@ export function menuJsonLd(menu: MenuCategory[], locale: Locale) {
           "@type": "Offer",
           price: p.priceAmd,
           priceCurrency: "AMD",
-          availability: p.isAvailable ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+          availability: p.isAvailable
+            ? "https://schema.org/InStock"
+            : "https://schema.org/OutOfStock",
         },
       })),
     })),

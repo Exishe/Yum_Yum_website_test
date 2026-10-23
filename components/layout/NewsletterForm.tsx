@@ -64,7 +64,14 @@ export function NewsletterForm() {
         </button>
       </div>
       {/* Honeypot */}
-      <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden className="hidden" />
+      <input
+        type="text"
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden
+        className="hidden"
+      />
       {error ? (
         <p id="nl-error" role="alert" className="mt-2 text-sm text-pink-glow">
           {error}

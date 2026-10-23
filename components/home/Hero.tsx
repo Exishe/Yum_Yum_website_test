@@ -3,7 +3,7 @@
 import { ArrowRight, Plus } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FreshDonutIcon } from "@/components/icons/brand";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
@@ -36,7 +36,12 @@ const SPRINKLES = [
   { c: "#5ec8f2", top: "60%", left: "95%", r: "-45deg", d: "-1s" },
 ];
 
-export function Hero({ choices, phone, phoneDisplay, shopsCount }: {
+export function Hero({
+  choices,
+  phone,
+  phoneDisplay,
+  shopsCount,
+}: {
   choices: HeroChoice[];
   phone: string;
   phoneDisplay: string;
@@ -46,6 +51,16 @@ export function Hero({ choices, phone, phoneDisplay, shopsCount }: {
   const tc = useTranslations("common");
   const locale = useLocale() as Locale;
   const [active, setActive] = useState<Craving>("glazed");
+  // Decorative motion starts after the page is interactive, so it never competes with loading.
+  const [lively, setLively] = useState(false);
+  useEffect(() => {
+    const w = window as Window & {
+      requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number;
+    };
+    const start = () => setLively(true);
+    if (w.requestIdleCallback) w.requestIdleCallback(start, { timeout: 2500 });
+    else window.setTimeout(start, 1500);
+  }, []);
   const choice = choices.find((c) => c.key === active) ?? choices[0]!;
   const pickProduct = choice.product;
   const tagline = t("tagline");
@@ -75,14 +90,26 @@ export function Hero({ choices, phone, phoneDisplay, shopsCount }: {
   return (
     <section aria-labelledby="hero-title" className="dot-grid relative overflow-hidden bg-cream">
       {/* Soft shapes that slowly change shape */}
-      <div aria-hidden className="pointer-events-none absolute inset-0">
+      <div
+        aria-hidden
+        className={cn(
+          "pointer-events-none absolute inset-0",
+          !lively && "[&_*]:[animation-play-state:paused]",
+        )}
+      >
         <div className="absolute -top-24 -right-24 size-[min(70vw,640px)] animate-blob bg-magenta-soft/90 lg:top-0 lg:right-[-6%]" />
         <div className="absolute top-[58%] -left-28 size-[min(48vw,360px)] animate-blob bg-sun-soft [animation-delay:-7s]" />
         {SPRINKLES.map((s, i) => (
           <span
             key={i}
             className="absolute block h-[6px] w-[18px] animate-drift rounded-full"
-            style={{ background: s.c, top: s.top, left: s.left, ["--r" as string]: s.r, animationDelay: s.d }}
+            style={{
+              background: s.c,
+              top: s.top,
+              left: s.left,
+              ["--r" as string]: s.r,
+              animationDelay: s.d,
+            }}
           />
         ))}
       </div>
@@ -95,7 +122,10 @@ export function Hero({ choices, phone, phoneDisplay, shopsCount }: {
             </span>
             {t("badge")}
           </p>
-          <h1 id="hero-title" className="hero-title mt-6 text-[clamp(3.4rem,10vw,7.5rem)] leading-[0.92]">
+          <h1
+            id="hero-title"
+            className="hero-title mt-6 text-[clamp(3.4rem,10vw,7.5rem)] leading-[0.92]"
+          >
             <span className="block">{t("titleA")}</span>
             <span className="block text-magenta">{t("titleB")}</span>
           </h1>
@@ -147,9 +177,17 @@ export function Hero({ choices, phone, phoneDisplay, shopsCount }: {
               <span key={active} className="animate-rise">
                 {t(`cta.${active}`)}
               </span>
-              <ArrowRight aria-hidden size={18} weight="bold" className="transition-transform group-hover:translate-x-1" />
+              <ArrowRight
+                aria-hidden
+                size={18}
+                weight="bold"
+                className="transition-transform group-hover:translate-x-1"
+              />
             </Link>
-            <a href={`tel:${phone}`} className="text-center text-sm font-semibold underline decoration-2 underline-offset-4 hover:text-magenta-ink">
+            <a
+              href={`tel:${phone}`}
+              className="text-center text-sm font-semibold underline decoration-2 underline-offset-4 hover:text-magenta-ink"
+            >
               {tc("orCall", { phone: phoneDisplay })}
             </a>
           </div>
@@ -160,7 +198,10 @@ export function Hero({ choices, phone, phoneDisplay, shopsCount }: {
           <svg
             aria-hidden
             viewBox="0 0 600 600"
-            className="absolute inset-0 size-full animate-spin-slow motion-reduce:animate-none"
+            className={cn(
+              "absolute inset-0 size-full motion-reduce:animate-none",
+              lively && "animate-spin-slow",
+            )}
           >
             <defs>
               <path id="ring" d="M300,300 m-262,0 a262,262 0 1,1 524,0 a262,262 0 1,1 -524,0" />
@@ -172,23 +213,26 @@ export function Hero({ choices, phone, phoneDisplay, shopsCount }: {
             </text>
           </svg>
           <div className="absolute inset-[13%] overflow-hidden rounded-full bg-magenta-soft shadow-lift">
-            {choices.map((c, i) => (
-              <Image
-                key={c.key}
-                src={c.image.src}
-                alt={c.key === active ? t(`photoAlt.${c.key}`) : ""}
-                aria-hidden={c.key !== active}
-                fill
-                priority={i === 0}
-                sizes="(min-width: 1024px) 460px, 74vw"
-                placeholder={c.image.blur ? "blur" : "empty"}
-                blurDataURL={c.image.blur}
-                className={cn(
-                  "object-cover transition-[opacity,transform] duration-700 ease-(--ease-out-soft)",
-                  c.key === active ? "scale-100 opacity-100" : "scale-110 opacity-0",
-                )}
-              />
-            ))}
+            {choices.map(
+              (c, i) =>
+                (i === 0 || lively || c.key === active) && (
+                  <Image
+                    key={c.key}
+                    src={c.image.src}
+                    alt={c.key === active ? t(`photoAlt.${c.key}`) : ""}
+                    aria-hidden={c.key !== active}
+                    fill
+                    priority={i === 0}
+                    sizes="(min-width: 1024px) 460px, 74vw"
+                    placeholder={c.image.blur ? "blur" : "empty"}
+                    blurDataURL={c.image.blur}
+                    className={cn(
+                      "object-cover transition-[opacity,transform] duration-700 ease-(--ease-out-soft)",
+                      c.key === active ? "scale-100 opacity-100" : "scale-110 opacity-0",
+                    )}
+                  />
+                ),
+            )}
           </div>
 
           <p className="absolute top-[6%] right-[2%] grid size-[clamp(6rem,18vw,8.5rem)] rotate-6 place-items-center rounded-full bg-sun text-center shadow-card">
@@ -208,16 +252,26 @@ export function Hero({ choices, phone, phoneDisplay, shopsCount }: {
             >
               <span className="relative size-14 shrink-0 overflow-hidden rounded-xl bg-magenta-soft">
                 {pickProduct.img ? (
-                  <Image src={pickProduct.img.src} alt="" fill sizes="56px" className="object-cover" />
+                  <Image
+                    src={pickProduct.img.src}
+                    alt=""
+                    fill
+                    sizes="56px"
+                    className="object-cover"
+                  />
                 ) : null}
               </span>
               <span className="min-w-0">
-                <span className="block font-hand text-lg leading-none text-magenta-ink">{t("todaysPick")}</span>
+                <span className="block font-hand text-lg leading-none text-magenta-ink">
+                  {t("todaysPick")}
+                </span>
                 <span className="block truncate font-semibold">
                   {pick(pickProduct.name, locale)} · {formatAmd(pickProduct.priceAmd, locale)}
                 </span>
               </span>
-              {pickProduct.isAvailable && !pickProduct.boxSize && !pickProduct.options.some((o) => o.kind === "text") ? (
+              {pickProduct.isAvailable &&
+              !pickProduct.boxSize &&
+              !pickProduct.options.some((o) => o.kind === "text") ? (
                 <button
                   type="button"
                   onClick={addPick}

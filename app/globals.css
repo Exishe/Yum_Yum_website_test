@@ -24,9 +24,12 @@
   --color-mint: #6fd3a1;
   --color-orange: #ff9a3d;
 
-  --font-display: var(--font-bagel), var(--font-rubik), var(--font-armenian), ui-rounded, system-ui, sans-serif;
-  --font-sans: var(--font-onest), var(--font-armenian), ui-sans-serif, system-ui, sans-serif;
-  --font-hand: var(--font-caveat), var(--font-armenian), cursive;
+  --font-display:
+    var(--font-bagel), var(--font-rubik), var(--font-armenian), ui-rounded, system-ui, sans-serif;
+  --font-sans:
+    var(--font-onest), var(--font-onest-cyr), var(--font-armenian), ui-sans-serif, system-ui,
+    sans-serif;
+  --font-hand: var(--font-hand-face), var(--font-armenian), cursive;
 
   --radius-card: 1.25rem;
   --radius-xl2: 1.75rem;

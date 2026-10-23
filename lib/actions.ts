@@ -105,15 +105,18 @@ export async function sendContact(input: unknown): Promise<ActionResult> {
 const confirmText: Record<string, { subject: string; body: (url: string) => string }> = {
   hy: {
     subject: "Հաստատեք բաժանորդագրությունը՝ YUM-YUM Donuts",
-    body: (u) => `Բարև։\n\nՍեղմեք հղումը՝ YUM-YUM-ի տեղեկագիրը ստանալու համար․\n${u}\n\nԵթե դուք չեք բաժանորդագրվել, պարզապես անտեսեք այս նամակը։`,
+    body: (u) =>
+      `Բարև։\n\nՍեղմեք հղումը՝ YUM-YUM-ի տեղեկագիրը ստանալու համար․\n${u}\n\nԵթե դուք չեք բաժանորդագրվել, պարզապես անտեսեք այս նամակը։`,
   },
   ru: {
     subject: "Подтвердите подписку на YUM-YUM Donuts",
-    body: (u) => `Привет!\n\nНажмите на ссылку, чтобы получать рассылку YUM-YUM:\n${u}\n\nЕсли вы не подписывались, просто проигнорируйте это письмо.`,
+    body: (u) =>
+      `Привет!\n\nНажмите на ссылку, чтобы получать рассылку YUM-YUM:\n${u}\n\nЕсли вы не подписывались, просто проигнорируйте это письмо.`,
   },
   en: {
     subject: "Confirm your YUM-YUM Donuts subscription",
-    body: (u) => `Hi!\n\nClick the link to get the YUM-YUM newsletter:\n${u}\n\nIf you didn’t sign up, just ignore this email.`,
+    body: (u) =>
+      `Hi!\n\nClick the link to get the YUM-YUM newsletter:\n${u}\n\nIf you didn’t sign up, just ignore this email.`,
   },
 };
 

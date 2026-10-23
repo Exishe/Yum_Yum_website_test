@@ -14,7 +14,11 @@ type Props = { params: Promise<{ locale: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta" });
-  return { title: t("shopsTitle"), description: t("shopsDescription"), alternates: alternates(locale as Locale, "/shops") };
+  return {
+    title: t("shopsTitle"),
+    description: t("shopsDescription"),
+    alternates: alternates(locale as Locale, "/shops"),
+  };
 }
 
 async function HoursTable({ shop }: { shop: PublicShop }) {
@@ -64,17 +68,32 @@ export default async function ShopsPage({ params }: Props) {
             </div>
             <p className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-sm font-semibold">
               {s.googleMapsUrl ? (
-                <a href={s.googleMapsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center underline-offset-2 hover:underline">
+                <a
+                  href={s.googleMapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-11 items-center underline-offset-2 hover:underline"
+                >
                   {t("googleMaps")}
                 </a>
               ) : null}
               {s.yandexMapsUrl ? (
-                <a href={s.yandexMapsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center underline-offset-2 hover:underline">
+                <a
+                  href={s.yandexMapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-11 items-center underline-offset-2 hover:underline"
+                >
                   {t("yandexMaps")}
                 </a>
               ) : null}
               {s.twoGisUrl ? (
-                <a href={s.twoGisUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center underline-offset-2 hover:underline">
+                <a
+                  href={s.twoGisUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-11 items-center underline-offset-2 hover:underline"
+                >
                   {t("twoGis")}
                 </a>
               ) : null}

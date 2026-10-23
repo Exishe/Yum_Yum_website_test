@@ -1,5 +1,15 @@
 import { asc } from "drizzle-orm";
-import { Card, Check, Field, Flash, LocalizedField, PageHeader, SubmitButton, sp, type SearchParams } from "@/components/admin/ui";
+import {
+  Card,
+  Check,
+  Field,
+  Flash,
+  LocalizedField,
+  PageHeader,
+  SubmitButton,
+  sp,
+  type SearchParams,
+} from "@/components/admin/ui";
 import { db } from "@/db";
 import { categories, type Category } from "@/db/schema";
 import { requireUser } from "@/lib/auth";
@@ -14,10 +24,21 @@ function CategoryForm({ c }: { c?: Category }) {
       <LocalizedField label="Name" name="name" value={c?.name} required />
       <LocalizedField label="Description" name="description" value={c?.description} />
       <div className="flex flex-wrap items-end gap-4">
-        <Field label="Sort order" name="sortOrder" type="number" defaultValue={c?.sortOrder ?? 0} className="w-32" />
+        <Field
+          label="Sort order"
+          name="sortOrder"
+          type="number"
+          defaultValue={c?.sortOrder ?? 0}
+          className="w-32"
+        />
         <label className="text-sm font-semibold">
           Photo
-          <input type="file" name="imageFile" accept="image/jpeg,image/png,image/webp,image/avif" className="mt-1 block text-sm" />
+          <input
+            type="file"
+            name="imageFile"
+            accept="image/jpeg,image/png,image/webp,image/avif"
+            className="mt-1 block text-sm"
+          />
         </label>
         <Check label="Published" name="isPublished" defaultChecked={c?.isPublished ?? true} />
         <Check label="In header menu & tabs" name="inMenu" defaultChecked={c?.inMenu ?? true} />

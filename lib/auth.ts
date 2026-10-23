@@ -91,7 +91,10 @@ export async function login(email: string, password: string, ip: string): Promis
     return generic;
   }
   if (user.lockedUntil && user.lockedUntil > new Date()) {
-    return { ok: false, error: `Account locked after too many attempts. Try again after ${LOCK_MINUTES} minutes.` };
+    return {
+      ok: false,
+      error: `Account locked after too many attempts. Try again after ${LOCK_MINUTES} minutes.`,
+    };
   }
   const valid = await bcrypt.compare(password, user.passwordHash);
   if (!valid) {

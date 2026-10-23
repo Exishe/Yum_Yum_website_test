@@ -44,7 +44,11 @@ export function DonutIcon(props: IconProps) {
       />
       <circle cx="16" cy="16" r="3.6" fill="#fff8f2" />
       <circle cx="16" cy="16" r="12" />
-      <path d="M11 10.2l1.4.6M19.6 9.2l.4 1.4M22.4 13l1.3-.7M9 15.2l.2-1.4" stroke="#fff" strokeWidth={1.6} />
+      <path
+        d="M11 10.2l1.4.6M19.6 9.2l.4 1.4M22.4 13l1.3-.7M9 15.2l.2-1.4"
+        stroke="#fff"
+        strokeWidth={1.6}
+      />
     </Svg>
   );
 }
@@ -77,9 +81,16 @@ export function PinIcon(props: IconProps) {
 export function BagIcon(props: IconProps) {
   return (
     <Svg {...props}>
-      <path d="M6.5 11h19l-1.6 15.2a2.2 2.2 0 0 1-2.2 2H10.3a2.2 2.2 0 0 1-2.2-2L6.5 11Z" fill={PINK} />
+      <path
+        d="M6.5 11h19l-1.6 15.2a2.2 2.2 0 0 1-2.2 2H10.3a2.2 2.2 0 0 1-2.2-2L6.5 11Z"
+        fill={PINK}
+      />
       <path d="M11.5 13.5V9.6a4.5 4.5 0 0 1 9 0v3.9" />
-      <path d="M11.6 19.5c1.2 1.6 2.7 2.4 4.4 2.4s3.2-.8 4.4-2.4" stroke={MAGENTA} strokeWidth={2.2} />
+      <path
+        d="M11.6 19.5c1.2 1.6 2.7 2.4 4.4 2.4s3.2-.8 4.4-2.4"
+        stroke={MAGENTA}
+        strokeWidth={2.2}
+      />
     </Svg>
   );
 }
@@ -99,7 +110,10 @@ export function CardIcon(props: IconProps) {
 export function FlowerIcon(props: IconProps) {
   return (
     <Svg {...props}>
-      <path d="M16 18v10.5M16 24c-2.8-.2-5-1.8-5.8-4.4 2.8-.3 5 1 5.8 4.4ZM16 22.2c2.4-.4 4.4-2 5-4.3-2.5-.1-4.4 1.2-5 4.3Z" fill="#7bd389" />
+      <path
+        d="M16 18v10.5M16 24c-2.8-.2-5-1.8-5.8-4.4 2.8-.3 5 1 5.8 4.4ZM16 22.2c2.4-.4 4.4-2 5-4.3-2.5-.1-4.4 1.2-5 4.3Z"
+        fill="#7bd389"
+      />
       <circle cx="16" cy="7.8" r="3.6" fill={MAGENTA} />
       <circle cx="10.8" cy="11.6" r="3.6" fill={MAGENTA} />
       <circle cx="21.2" cy="11.6" r="3.6" fill={MAGENTA} />
@@ -142,7 +156,10 @@ export function GiftIcon(props: IconProps) {
       <rect x="5" y="13" width="22" height="14" rx="2" fill={PINK} />
       <rect x="3.5" y="9" width="25" height="5" rx="1.6" fill={MAGENTA} />
       <path d="M16 9v18" stroke={SUN} strokeWidth={3} />
-      <path d="M16 9c-1.4-3.6-6.5-5-6.5-2 0 2 3.4 2 6.5 2Zm0 0c1.4-3.6 6.5-5 6.5-2 0 2-3.4 2-6.5 2Z" fill={SUN} />
+      <path
+        d="M16 9c-1.4-3.6-6.5-5-6.5-2 0 2 3.4 2 6.5 2Zm0 0c1.4-3.6 6.5-5 6.5-2 0 2-3.4 2-6.5 2Z"
+        fill={SUN}
+      />
     </Svg>
   );
 }
@@ -159,12 +176,27 @@ export function CupIcon(props: IconProps) {
 }
 
 /** Small decorative sprinkle shapes used in the hero background. */
-export function Sprinkle({ color, className, style }: { color: string; className?: string; style?: React.CSSProperties }) {
+export function Sprinkle({
+  color,
+  className,
+  style,
+}: {
+  color: string;
+  className?: string;
+  style?: React.CSSProperties;
+}) {
   return (
     <span
       aria-hidden
       className={className}
-      style={{ background: color, width: 18, height: 6, borderRadius: 999, display: "block", ...style }}
+      style={{
+        background: color,
+        width: 18,
+        height: 6,
+        borderRadius: 999,
+        display: "block",
+        ...style,
+      }}
     />
   );
 }

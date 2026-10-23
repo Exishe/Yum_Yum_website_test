@@ -9,7 +9,13 @@ import { deleteProductAction } from "../../../actions";
 
 export const metadata = { title: "Edit product" };
 
-export default async function EditProduct({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: SearchParams }) {
+export default async function EditProduct({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: SearchParams;
+}) {
   const user = await requireUser();
   const { id } = await params;
   const q = await searchParams;
@@ -27,14 +33,21 @@ export default async function EditProduct({ params, searchParams }: { params: Pr
   if (!Number.isInteger(pid)) notFound();
   const [product] = await db.select().from(products).where(eq(products.id, pid)).limit(1);
   if (!product) notFound();
-  const options = await db.select().from(productOptions).where(eq(productOptions.productId, pid)).orderBy(asc(productOptions.sortOrder));
+  const options = await db
+    .select()
+    .from(productOptions)
+    .where(eq(productOptions.productId, pid))
+    .orderBy(asc(productOptions.sortOrder));
   return (
     <>
       <PageHeader title={product.name.en}>
         {user.role === "admin" ? (
           <form action={deleteProductAction}>
             <input type="hidden" name="id" value={product.id} />
-            <SubmitButton confirm="Delete this product for good? Hiding it is usually better." className="bg-magenta-soft text-plum hover:bg-magenta hover:text-white">
+            <SubmitButton
+              confirm="Delete this product for good? Hiding it is usually better."
+              className="bg-magenta-soft text-plum hover:bg-magenta hover:text-white"
+            >
               Delete
             </SubmitButton>
           </form>

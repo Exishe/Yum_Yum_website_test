@@ -9,7 +9,11 @@ export const metadata = { title: "Audit log" };
 export default async function AuditPage() {
   await requireUser(["admin"]);
   const rows = await db.select().from(auditLog).orderBy(desc(auditLog.id)).limit(300);
-  const fmt = new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Yerevan", dateStyle: "short", timeStyle: "medium" });
+  const fmt = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Yerevan",
+    dateStyle: "short",
+    timeStyle: "medium",
+  });
   return (
     <>
       <PageHeader title="Audit log" />

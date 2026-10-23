@@ -71,26 +71,38 @@ export function CartDrawer() {
                     <li key={line.key} className="flex gap-4 py-4">
                       <span className="relative size-16 shrink-0 overflow-hidden rounded-2xl bg-magenta-soft">
                         {line.image ? (
-                          <Image src={line.image} alt="" fill sizes="64px" className="object-cover" />
+                          <Image
+                            src={line.image}
+                            alt=""
+                            fill
+                            sizes="64px"
+                            className="object-cover"
+                          />
                         ) : null}
                       </span>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-start justify-between gap-2">
-                          <p className="font-semibold leading-snug">{name}</p>
+                          <p className="leading-snug font-semibold">{name}</p>
                           <p className="shrink-0 font-semibold tabular-nums">
                             {formatAmd(line.unitPriceAmd * line.quantity, locale)}
                           </p>
                         </div>
                         {line.detail?.options?.length ? (
-                          <p className="text-sm text-muted">{line.detail.options.map((o) => pick(o, locale)).join(", ")}</p>
+                          <p className="text-sm text-muted">
+                            {line.detail.options.map((o) => pick(o, locale)).join(", ")}
+                          </p>
                         ) : null}
                         {line.detail?.contents?.length ? (
                           <p className="text-sm text-muted">
-                            {t("inBox", { list: line.detail.contents.map((o) => pick(o, locale)).join(", ") })}
+                            {t("inBox", {
+                              list: line.detail.contents.map((o) => pick(o, locale)).join(", "),
+                            })}
                           </p>
                         ) : null}
                         {line.messages.length ? (
-                          <p className="text-sm text-muted">{t("text", { text: line.messages.join(" · ") })}</p>
+                          <p className="text-sm text-muted">
+                            {t("text", { text: line.messages.join(" · ") })}
+                          </p>
                         ) : null}
                         <div className="mt-2 flex items-center gap-2">
                           <button
@@ -101,7 +113,10 @@ export function CartDrawer() {
                           >
                             <Minus size={16} weight="bold" />
                           </button>
-                          <span className="w-6 text-center font-semibold tabular-nums" aria-live="polite">
+                          <span
+                            className="w-6 text-center font-semibold tabular-nums"
+                            aria-live="polite"
+                          >
                             {line.quantity}
                           </span>
                           <button
@@ -129,7 +144,9 @@ export function CartDrawer() {
               <div className="border-t border-line bg-white px-5 py-5">
                 <div className="mb-4 flex items-center justify-between text-lg">
                   <span>{t("subtotal")}</span>
-                  <span className="font-display text-2xl tabular-nums">{formatAmd(cartSubtotal(state), locale)}</span>
+                  <span className="font-display text-2xl tabular-nums">
+                    {formatAmd(cartSubtotal(state), locale)}
+                  </span>
                 </div>
                 <Dialog.Close asChild>
                   <Link

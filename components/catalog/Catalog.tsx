@@ -11,14 +11,28 @@ import type { ClientCategory, ClientProduct } from "@/lib/client-types";
 import { cn } from "@/lib/cn";
 import { formatAmd } from "@/lib/format";
 import { t as pick } from "@/lib/localized";
-import { QuickView, addSimple, needsDetails } from "./QuickView";
+import dynamic from "next/dynamic";
+import { addSimple, needsDetails } from "./actions";
 
-const FILTERS = ["glazed", "chocolate", "fruity", "filled", "kids", "iced", "hot", "savoury"] as const;
+const QuickView = dynamic(() => import("./QuickView").then((m) => m.QuickView), { ssr: false });
+
+const FILTERS = [
+  "glazed",
+  "chocolate",
+  "fruity",
+  "filled",
+  "kids",
+  "iced",
+  "hot",
+  "savoury",
+] as const;
 const HOME_LIMIT = 7;
 
 function featuredOf(c: ClientCategory | undefined): ClientProduct | undefined {
   if (!c) return undefined;
-  return c.products.find((p) => p.isFeatured && p.img) ?? c.products.find((p) => p.img) ?? c.products[0];
+  return (
+    c.products.find((p) => p.isFeatured && p.img) ?? c.products.find((p) => p.img) ?? c.products[0]
+  );
 }
 
 function Row({
@@ -38,7 +52,9 @@ function Row({
     <li className="flex items-center gap-3 border-b border-dashed border-line py-3 last:border-0 sm:gap-4">
       {showThumb ? (
         <span className="relative hidden size-14 shrink-0 overflow-hidden rounded-xl bg-magenta-soft sm:block">
-          {p.img ? <Image src={p.img.src} alt="" fill sizes="56px" className="object-cover" /> : null}
+          {p.img ? (
+            <Image src={p.img.src} alt="" fill sizes="56px" className="object-cover" />
+          ) : null}
         </span>
       ) : null}
       <button type="button" onClick={() => onOpen(p)} className="group min-w-0 flex-1 text-left">
@@ -56,7 +72,9 @@ function Row({
             </span>
           ))}
           <span aria-hidden className="leader hidden h-3 flex-1 self-end sm:block" />
-          <span className="ml-auto shrink-0 font-bold tabular-nums">{formatAmd(p.priceAmd, locale)}</span>
+          <span className="ml-auto shrink-0 font-bold tabular-nums">
+            {formatAmd(p.priceAmd, locale)}
+          </span>
         </span>
         {p.description || !p.isAvailable ? (
           <span className="mt-0.5 block text-sm text-muted">
@@ -119,7 +137,9 @@ export function Catalog({
       return visible
         .flatMap((c) => c.products)
         .filter((p) =>
-          [p.name.hy, p.name.ru, p.name.en, p.description?.[locale] ?? ""].some((s) => s.toLowerCase().includes(q)),
+          [p.name.hy, p.name.ru, p.name.en, p.description?.[locale] ?? ""].some((s) =>
+            s.toLowerCase().includes(q),
+          ),
         );
     }
     const list = current?.products ?? [];
@@ -130,7 +150,8 @@ export function Catalog({
   const featured = featuredOf(current);
   // The category photo is a real shop photo; product shots are small catalogue images.
   const featuredPhoto = current?.img ?? featured?.img ?? null;
-  const shown = mode === "home" ? items.filter((p) => p.id !== featured?.id).slice(0, HOME_LIMIT) : items;
+  const shown =
+    mode === "home" ? items.filter((p) => p.id !== featured?.id).slice(0, HOME_LIMIT) : items;
 
   function selectTab(next: string) {
     setSlug(next);
@@ -176,7 +197,9 @@ export function Catalog({
                 onClick={() => selectTab(c.slug)}
                 className={cn(
                   "h-12 shrink-0 rounded-full border-2 px-5 text-sm font-semibold transition-colors",
-                  selected ? "border-plum bg-plum text-white" : "border-plum/80 bg-white hover:bg-plum/5",
+                  selected
+                    ? "border-plum bg-plum text-white"
+                    : "border-plum/80 bg-white hover:bg-plum/5",
                 )}
               >
                 {pick(c.name, locale)}
@@ -190,7 +213,11 @@ export function Catalog({
         <div className="mt-6 flex flex-col gap-4 lg:flex-row lg:items-center">
           <label className="relative block lg:w-80">
             <span className="sr-only">{t("search")}</span>
-            <MagnifyingGlass size={20} aria-hidden className="absolute top-1/2 left-4 -translate-y-1/2 text-muted" />
+            <MagnifyingGlass
+              size={20}
+              aria-hidden
+              className="absolute top-1/2 left-4 -translate-y-1/2 text-muted"
+            />
             <input
               type="search"
               value={query}
@@ -223,7 +250,9 @@ export function Catalog({
                   onClick={() => setFilter(f)}
                   className={cn(
                     "h-11 shrink-0 rounded-full px-4 text-sm font-semibold transition-colors",
-                    filter === f ? "bg-magenta text-white" : "bg-magenta-soft/70 text-plum hover:bg-magenta-soft",
+                    filter === f
+                      ? "bg-magenta text-white"
+                      : "bg-magenta-soft/70 text-plum hover:bg-magenta-soft",
                   )}
                 >
                   {t(`filter.${f}` as "filter.all")}
@@ -263,12 +292,16 @@ export function Catalog({
             <div className="absolute inset-x-3 bottom-3 flex items-center justify-between gap-3 rounded-2xl bg-white p-3 pl-4 shadow-card">
               <div className="min-w-0">
                 <p className="font-hand text-lg leading-none text-magenta-ink">{t("featured")}</p>
-                <h3 className="truncate font-sans text-lg font-bold">{pick(featured.name, locale)}</h3>
+                <h3 className="truncate font-sans text-lg font-bold">
+                  {pick(featured.name, locale)}
+                </h3>
               </div>
               <button
                 type="button"
                 disabled={!featured.isAvailable}
-                onClick={(e) => (needsDetails(featured) ? setOpen(featured) : addSimple(featured, e.currentTarget))}
+                onClick={(e) =>
+                  needsDetails(featured) ? setOpen(featured) : addSimple(featured, e.currentTarget)
+                }
                 className="inline-flex h-11 shrink-0 items-center gap-1 rounded-full bg-magenta px-4 text-sm font-bold text-white transition-transform hover:-translate-y-0.5 disabled:opacity-50"
               >
                 {t("addPrice", { price: formatAmd(featured.priceAmd, locale) })}
@@ -279,9 +312,17 @@ export function Catalog({
 
         <div className="rounded-[var(--radius-xl2)] bg-white p-4 shadow-card sm:p-6">
           {shown.length ? (
-            <ul className={cn(mode === "full" && "lg:columns-2 lg:gap-10 [&>li]:break-inside-avoid")}>
+            <ul
+              className={cn(mode === "full" && "lg:columns-2 lg:gap-10 [&>li]:break-inside-avoid")}
+            >
               {shown.map((p) => (
-                <Row key={p.id} p={p} locale={locale} showThumb={mode === "full"} onOpen={setOpen} />
+                <Row
+                  key={p.id}
+                  p={p}
+                  locale={locale}
+                  showThumb={mode === "full"}
+                  onOpen={setOpen}
+                />
               ))}
             </ul>
           ) : (
@@ -301,7 +342,7 @@ export function Catalog({
         </div>
       </div>
 
-      <QuickView product={open} onClose={() => setOpen(null)} />
+      {open ? <QuickView product={open} onClose={() => setOpen(null)} /> : null}
     </div>
   );
 }

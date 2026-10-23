@@ -5,12 +5,21 @@ import type { ImageInfo } from "@/lib/images";
 
 export type SpottedPhoto = { key: "wall" | "shake" | "neon" | "mall" | "togo"; image: ImageInfo };
 
-export async function Spotted({ photos, instagram }: { photos: SpottedPhoto[]; instagram: string | null }) {
+export async function Spotted({
+  photos,
+  instagram,
+}: {
+  photos: SpottedPhoto[];
+  instagram: string | null;
+}) {
   const t = await getTranslations("spotted");
   const tc = await getTranslations("common");
   const href = instagram ? `https://www.instagram.com/${instagram}/` : null;
   return (
-    <section aria-labelledby="spotted-title" className="mx-auto max-w-[1440px] px-4 py-20 sm:px-6 lg:px-8">
+    <section
+      aria-labelledby="spotted-title"
+      className="mx-auto max-w-[1440px] px-4 py-20 sm:px-6 lg:px-8"
+    >
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h2 id="spotted-title" className="text-[clamp(2.6rem,6vw,4.5rem)] leading-[0.95]">

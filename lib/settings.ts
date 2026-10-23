@@ -30,7 +30,11 @@ export type Ratings = {
   yandex?: { rating: number; count: number; label?: string };
   buyam?: { rating: number };
 };
-export type LegalSettings = { companyName: string | null; taxId: string | null; address: string | null };
+export type LegalSettings = {
+  companyName: string | null;
+  taxId: string | null;
+  address: string | null;
+};
 
 export type SiteSettings = {
   contact: ContactSettings;

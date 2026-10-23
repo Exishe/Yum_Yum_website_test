@@ -23,7 +23,12 @@ const Y = "/images/source/yandex";
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = (await params) as { locale: Locale };
   setRequestLocale(locale);
-  const [menu, shops, reviews, settings] = await Promise.all([getMenu(), getShops(), getReviews(), getSettings()]);
+  const [menu, shops, reviews, settings] = await Promise.all([
+    getMenu(),
+    getShops(),
+    getReviews(),
+    getSettings(),
+  ]);
 
   const all = menu.flatMap((c) => c.products);
   const bySlug = (slug: string) => {
@@ -91,7 +96,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <Hero choices={choices} phone={phone} phoneDisplay={phoneDisplay} shopsCount={shops.length} />
       <PhotoStrip photos={strip} />
       <Perks shopsCount={shops.length} />
-      <section aria-labelledby="menu-title" className="mx-auto max-w-[1440px] px-4 pt-14 pb-6 sm:px-6 lg:px-8">
+      <section
+        aria-labelledby="menu-title"
+        className="mx-auto max-w-[1440px] px-4 pt-14 pb-6 sm:px-6 lg:px-8"
+      >
         <Catalog categories={toClientCategories(menu)} mode="home" />
       </section>
       <GiftsSection

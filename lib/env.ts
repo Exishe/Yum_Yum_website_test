@@ -24,6 +24,10 @@ export const env = {
   cronSecret: process.env.CRON_SECRET ?? "",
 };
 
-if (env.isProd && process.env.NEXT_PHASE !== "phase-production-build" && env.secret === "dev-only-secret-change-me") {
+if (
+  env.isProd &&
+  process.env.NEXT_PHASE !== "phase-production-build" &&
+  env.secret === "dev-only-secret-change-me"
+) {
   console.warn("[security] APP_SECRET is not set. Set a long random value in production.");
 }

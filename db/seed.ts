@@ -55,7 +55,12 @@ async function main() {
     await db.delete(s.productOptions).where(eq(s.productOptions.productId, row.id));
     if (options?.length) {
       await db.insert(s.productOptions).values(
-        options.map((o, i) => ({ ...o, productId: row.id, sortOrder: i, isDefault: o.isDefault ?? false })),
+        options.map((o, i) => ({
+          ...o,
+          productId: row.id,
+          sortOrder: i,
+          isDefault: o.isDefault ?? false,
+        })),
       );
     }
   }

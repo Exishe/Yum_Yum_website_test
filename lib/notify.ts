@@ -6,7 +6,10 @@ import { env } from "./env";
 type Message = { subject: string; text: string; orderId?: string };
 
 function escapeHtml(s: string) {
-  return s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
+  return s.replace(
+    /[&<>"]/g,
+    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!,
+  );
 }
 
 async function sendTelegram(m: Message) {
@@ -44,7 +47,8 @@ export async function sendEmail(to: string, subject: string, text: string, html?
  */
 export async function notifyShop(m: Message) {
   const channels: Array<[string, () => Promise<void>]> = [];
-  if (env.notifyChannels.includes("telegram") && env.telegramToken) channels.push(["telegram", () => sendTelegram(m)]);
+  if (env.notifyChannels.includes("telegram") && env.telegramToken)
+    channels.push(["telegram", () => sendTelegram(m)]);
   if (env.notifyChannels.includes("email") && env.resendKey && env.orderEmailTo)
     channels.push(["email", () => sendEmail(env.orderEmailTo, m.subject, m.text)]);
 

@@ -9,41 +9,25 @@ import { PhotoSoon } from "@/components/ui/PhotoSoon";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { announceAdd, cart } from "@/lib/cart-store";
+export { addSimple, needsDetails } from "./actions";
 import type { ClientProduct } from "@/lib/client-types";
 import { cn } from "@/lib/cn";
 import { formatAmd } from "@/lib/format";
 import { t as pick } from "@/lib/localized";
-
-export function addSimple(p: ClientProduct, from?: Element | null) {
-  cart.add({
-    productId: p.id,
-    quantity: 1,
-    optionIds: p.options.filter((o) => o.isDefault && o.kind !== "text").map((o) => o.id),
-    messages: [],
-    contents: [],
-    name: p.name,
-    unitPriceAmd: p.priceAmd + p.options.filter((o) => o.isDefault).reduce((s, o) => s + o.priceDeltaAmd, 0),
-    image: p.img?.src ?? null,
-    detail: { options: p.options.filter((o) => o.isDefault && o.kind !== "text").map((o) => o.name) },
-    leadTimeDays: p.leadTimeDays,
-  });
-  announceAdd(from);
-}
-
-/** Products that need a choice from the customer before they can go in the basket. */
-export function needsDetails(p: ClientProduct) {
-  return !!p.boxSize || p.options.some((o) => o.kind === "text");
-}
 
 function Body({ product, onDone }: { product: ClientProduct; onDone: () => void }) {
   const t = useTranslations("catalog");
   const tg = useTranslations("gifts");
   const locale = useLocale() as Locale;
   const sizes = product.options.filter((o) => o.kind === "size");
-  const extras = product.options.filter((o) => o.kind === "syrup" || o.kind === "extra" || o.kind === "filling");
+  const extras = product.options.filter(
+    (o) => o.kind === "syrup" || o.kind === "extra" || o.kind === "filling",
+  );
   const textOption = product.options.find((o) => o.kind === "text");
   const multiLine = (textOption?.maxLength ?? 0) > 20;
-  const [size, setSize] = useState<number | null>(sizes.find((s) => s.isDefault)?.id ?? sizes[0]?.id ?? null);
+  const [size, setSize] = useState<number | null>(
+    sizes.find((s) => s.isDefault)?.id ?? sizes[0]?.id ?? null,
+  );
   const [chosen, setChosen] = useState<number[]>([]);
   const [qty, setQty] = useState(1);
   const [text, setText] = useState("");
@@ -51,7 +35,10 @@ function Body({ product, onDone }: { product: ClientProduct; onDone: () => void 
   const selected = product.options.filter((o) => o.id === size || chosen.includes(o.id));
   const unit = product.priceAmd + selected.reduce((s, o) => s + o.priceDeltaAmd, 0);
   const messages = textOption
-    ? (multiLine ? text.split("\n") : [text]).map((m) => m.trim()).filter(Boolean).slice(0, 12)
+    ? (multiLine ? text.split("\n") : [text])
+        .map((m) => m.trim())
+        .filter(Boolean)
+        .slice(0, 12)
     : [];
   const tooLong = !!textOption?.maxLength && messages.some((m) => m.length > textOption.maxLength!);
   const name = pick(product.name, locale);
@@ -76,9 +63,13 @@ function Body({ product, onDone }: { product: ClientProduct; onDone: () => void 
       <div className="flex-1 overflow-y-auto px-5 pt-5 pb-4">
         <div className="flex items-start justify-between gap-4">
           <Dialog.Title className="font-display text-3xl leading-tight">{name}</Dialog.Title>
-          <p className="shrink-0 font-display text-2xl text-magenta-ink">{formatAmd(product.priceAmd, locale)}</p>
+          <p className="shrink-0 font-display text-2xl text-magenta-ink">
+            {formatAmd(product.priceAmd, locale)}
+          </p>
         </div>
-        {product.description ? <p className="mt-1 text-muted">{pick(product.description, locale)}</p> : null}
+        {product.description ? (
+          <p className="mt-1 text-muted">{pick(product.description, locale)}</p>
+        ) : null}
 
         {sizes.length > 1 ? (
           <fieldset className="mt-5">
@@ -92,9 +83,17 @@ function Body({ product, onDone }: { product: ClientProduct; onDone: () => void 
                     size === o.id ? "border-plum bg-plum text-white" : "border-line bg-white",
                   )}
                 >
-                  <input type="radio" name="size" className="sr-only" checked={size === o.id} onChange={() => setSize(o.id)} />
+                  <input
+                    type="radio"
+                    name="size"
+                    className="sr-only"
+                    checked={size === o.id}
+                    onChange={() => setSize(o.id)}
+                  />
                   {pick(o.name, locale)}
-                  {o.priceDeltaAmd ? <span className="opacity-75">+{formatAmd(o.priceDeltaAmd, locale)}</span> : null}
+                  {o.priceDeltaAmd ? (
+                    <span className="opacity-75">+{formatAmd(o.priceDeltaAmd, locale)}</span>
+                  ) : null}
                 </label>
               ))}
             </div>
@@ -121,9 +120,12 @@ function Body({ product, onDone }: { product: ClientProduct; onDone: () => void 
                       type="checkbox"
                       className="sr-only"
                       checked={on}
-                      onChange={() => setChosen((c) => (on ? c.filter((x) => x !== o.id) : [...c, o.id]))}
+                      onChange={() =>
+                        setChosen((c) => (on ? c.filter((x) => x !== o.id) : [...c, o.id]))
+                      }
                     />
-                    {pick(o.name, locale)} <span className="opacity-75">+{formatAmd(o.priceDeltaAmd, locale)}</span>
+                    {pick(o.name, locale)}{" "}
+                    <span className="opacity-75">+{formatAmd(o.priceDeltaAmd, locale)}</span>
                   </label>
                 );
               })}
@@ -158,7 +160,10 @@ function Body({ product, onDone }: { product: ClientProduct; onDone: () => void 
                 className="h-12 w-full rounded-full border-2 border-line bg-white px-4 focus:border-plum focus:outline-none"
               />
             )}
-            <p id="qv-hint" className={cn("mt-1 text-sm", tooLong ? "text-magenta-ink" : "text-muted")}>
+            <p
+              id="qv-hint"
+              className={cn("mt-1 text-sm", tooLong ? "text-magenta-ink" : "text-muted")}
+            >
               {multiLine
                 ? t("quick.messagesHint", { max: textOption.maxLength ?? 60 })
                 : t("quick.messageHint", { max: textOption.maxLength ?? 12 })}
@@ -184,58 +189,66 @@ function Body({ product, onDone }: { product: ClientProduct; onDone: () => void 
           </Link>
         </div>
       ) : (
-      <div className="flex shrink-0 items-center gap-3 border-t border-line bg-white px-5 py-4">
-        <div className="flex items-center gap-1" role="group" aria-label={t("quick.quantity")}>
+        <div className="flex shrink-0 items-center gap-3 border-t border-line bg-white px-5 py-4">
+          <div className="flex items-center gap-1" role="group" aria-label={t("quick.quantity")}>
+            <button
+              type="button"
+              onClick={() => setQty((q) => Math.max(1, q - 1))}
+              aria-label={t("quick.decrease")}
+              className="grid size-11 place-items-center rounded-full border border-line"
+            >
+              <Minus size={16} weight="bold" />
+            </button>
+            <span className="w-8 text-center font-semibold tabular-nums" aria-live="polite">
+              {qty}
+            </span>
+            <button
+              type="button"
+              onClick={() => setQty((q) => Math.min(50, q + 1))}
+              aria-label={t("quick.increase")}
+              className="grid size-11 place-items-center rounded-full border border-line"
+            >
+              <Plus size={16} weight="bold" />
+            </button>
+          </div>
           <button
             type="button"
-            onClick={() => setQty((q) => Math.max(1, q - 1))}
-            aria-label={t("quick.decrease")}
-            className="grid size-11 place-items-center rounded-full border border-line"
+            disabled={!product.isAvailable || tooLong || (!!textOption && messages.length === 0)}
+            onClick={(e) => {
+              cart.add({
+                productId: product.id,
+                quantity: qty,
+                optionIds: selected.map((o) => o.id),
+                messages,
+                contents: [],
+                name: product.name,
+                unitPriceAmd: unit,
+                image: product.img?.src ?? null,
+                detail: { options: selected.map((o) => o.name) },
+                leadTimeDays: product.leadTimeDays,
+              });
+              announceAdd(e.currentTarget);
+              onDone();
+            }}
+            className="h-12 flex-1 rounded-full bg-plum px-5 font-semibold text-white transition-transform hover:-translate-y-0.5 disabled:translate-y-0 disabled:opacity-50"
           >
-            <Minus size={16} weight="bold" />
-          </button>
-          <span className="w-8 text-center font-semibold tabular-nums" aria-live="polite">
-            {qty}
-          </span>
-          <button
-            type="button"
-            onClick={() => setQty((q) => Math.min(50, q + 1))}
-            aria-label={t("quick.increase")}
-            className="grid size-11 place-items-center rounded-full border border-line"
-          >
-            <Plus size={16} weight="bold" />
+            {product.isAvailable
+              ? t("quick.addToOrder", { price: formatAmd(unit * qty, locale) })
+              : t("soldOut")}
           </button>
         </div>
-        <button
-          type="button"
-          disabled={!product.isAvailable || tooLong || (!!textOption && messages.length === 0)}
-          onClick={(e) => {
-            cart.add({
-              productId: product.id,
-              quantity: qty,
-              optionIds: selected.map((o) => o.id),
-              messages,
-              contents: [],
-              name: product.name,
-              unitPriceAmd: unit,
-              image: product.img?.src ?? null,
-              detail: { options: selected.map((o) => o.name) },
-              leadTimeDays: product.leadTimeDays,
-            });
-            announceAdd(e.currentTarget);
-            onDone();
-          }}
-          className="h-12 flex-1 rounded-full bg-plum px-5 font-semibold text-white transition-transform hover:-translate-y-0.5 disabled:translate-y-0 disabled:opacity-50"
-        >
-          {product.isAvailable ? t("quick.addToOrder", { price: formatAmd(unit * qty, locale) }) : t("soldOut")}
-        </button>
-      </div>
       )}
     </div>
   );
 }
 
-export function QuickView({ product, onClose }: { product: ClientProduct | null; onClose: () => void }) {
+export function QuickView({
+  product,
+  onClose,
+}: {
+  product: ClientProduct | null;
+  onClose: () => void;
+}) {
   const tc = useTranslations("common");
   return (
     <Dialog.Root open={!!product} onOpenChange={(o) => !o && onClose()}>

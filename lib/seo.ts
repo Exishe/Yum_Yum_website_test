@@ -11,7 +11,9 @@ export function alternates(locale: Locale, href: AppPathname | Href): Metadata["
   return {
     canonical: url(locale),
     languages: {
-      ...Object.fromEntries(locales.map((l) => [l === "hy" ? "hy-AM" : l === "ru" ? "ru-RU" : "en", url(l)])),
+      ...Object.fromEntries(
+        locales.map((l) => [l === "hy" ? "hy-AM" : l === "ru" ? "ru-RU" : "en", url(l)]),
+      ),
       "x-default": url("hy"),
     },
   };

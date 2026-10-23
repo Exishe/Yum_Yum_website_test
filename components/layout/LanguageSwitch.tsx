@@ -44,7 +44,11 @@ export function LanguageSwitch({ tone = "dark" }: { tone?: "dark" | "light" }) {
               onClick={() => setSelected(l)}
               className={cn(
                 "grid h-9 min-w-11 place-items-center rounded-full px-2 transition-colors duration-300",
-                l === selected ? "text-plum" : tone === "dark" ? "text-white/80 hover:text-white" : "text-plum/70",
+                l === selected
+                  ? "text-plum"
+                  : tone === "dark"
+                    ? "text-white/80 hover:text-white"
+                    : "text-plum/70",
               )}
             >
               {t(l)}

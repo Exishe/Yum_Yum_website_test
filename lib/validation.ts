@@ -8,12 +8,10 @@ import { normalizeArmenianPhone } from "./format";
 
 /** Trims, removes control characters and collapses runs of spaces. */
 export function clean(value: string): string {
-  return (
-    value
-      .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F​-‏‪-‮]/g, "")
-      .replace(/[ \t]+/g, " ")
-      .trim()
-  );
+  return value
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F​-‏‪-‮]/g, "")
+    .replace(/[ \t]+/g, " ")
+    .trim();
 }
 
 const text = (min: number, max: number, key = "required") =>
@@ -52,7 +50,10 @@ export const cartItemSchema = z.object({
   productId: z.number().int().positive(),
   quantity: z.number().int().min(1).max(50),
   optionIds: z.array(z.number().int().positive()).max(10).default([]),
-  messages: z.array(z.string().transform(clean).pipe(z.string().max(60))).max(12).default([]),
+  messages: z
+    .array(z.string().transform(clean).pipe(z.string().max(60)))
+    .max(12)
+    .default([]),
   /** Product IDs packed into a box. */
   contents: z.array(z.number().int().positive()).max(12).default([]),
 });
@@ -93,7 +94,8 @@ export const checkoutSchema = z
       ctx.addIssue({ code: "custom", path: ["shopId"], message: "shop" });
     }
     if (v.fulfilment === "delivery") {
-      if (!v.address) ctx.addIssue({ code: "custom", path: ["address", "street"], message: "required" });
+      if (!v.address)
+        ctx.addIssue({ code: "custom", path: ["address", "street"], message: "required" });
       if (!v.district) ctx.addIssue({ code: "custom", path: ["district"], message: "district" });
     }
     if (!v.slot.startsWith(v.date)) {

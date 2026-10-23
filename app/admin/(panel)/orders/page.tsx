@@ -1,6 +1,16 @@
 import { desc } from "drizzle-orm";
 import Link from "next/link";
-import { Card, Flash, PageHeader, StatusBadge, btn, inputCls, sp, statusLabel, type SearchParams } from "@/components/admin/ui";
+import {
+  Card,
+  Flash,
+  PageHeader,
+  StatusBadge,
+  btn,
+  inputCls,
+  sp,
+  statusLabel,
+  type SearchParams,
+} from "@/components/admin/ui";
 import { db } from "@/db";
 import { orders, orderStatus, shops } from "@/db/schema";
 import { requireUser } from "@/lib/auth";
@@ -17,8 +27,16 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
     db.select({ id: shops.id, name: shops.name }).from(shops),
   ]);
   const shopName = new Map(shopList.map((s) => [s.id, s.name.en]));
-  const qs = new URLSearchParams(Object.entries(q).flatMap(([k, v]) => (typeof v === "string" && v ? [[k, v]] : []))).toString();
-  const fmt = new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Yerevan", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+  const qs = new URLSearchParams(
+    Object.entries(q).flatMap(([k, v]) => (typeof v === "string" && v ? [[k, v]] : [])),
+  ).toString();
+  const fmt = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Yerevan",
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
   return (
     <>
@@ -32,7 +50,12 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
         <form className="grid grid-cols-2 gap-3 md:grid-cols-6 md:items-end" method="get">
           <label className="col-span-2 text-sm font-semibold">
             Search
-            <input name="q" defaultValue={sp(q.q)} placeholder="Name, phone or #code" className={inputCls} />
+            <input
+              name="q"
+              defaultValue={sp(q.q)}
+              placeholder="Name, phone or #code"
+              className={inputCls}
+            />
           </label>
           <label className="text-sm font-semibold">
             Status
@@ -71,7 +94,10 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
             {rows.map((o) => (
               <tr key={o.id} className="hover:bg-blush/60">
                 <td className="px-4 py-3 font-semibold">
-                  <Link href={`/admin/orders/${o.id}`} className="underline-offset-2 hover:underline">
+                  <Link
+                    href={`/admin/orders/${o.id}`}
+                    className="underline-offset-2 hover:underline"
+                  >
                     #{o.shortCode}
                   </Link>
                 </td>
@@ -81,9 +107,15 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
                 </td>
                 <td className="px-4 py-3">
                   {o.customerName}
-                  <span className="block text-xs text-muted">{o.phone.startsWith("+") ? formatPhone(o.phone) : o.phone}</span>
+                  <span className="block text-xs text-muted">
+                    {o.phone.startsWith("+") ? formatPhone(o.phone) : o.phone}
+                  </span>
                 </td>
-                <td className="px-4 py-3">{o.fulfilment === "pickup" ? `Pickup · ${shopName.get(o.shopId ?? 0) ?? "?"}` : `Delivery · ${o.district}`}</td>
+                <td className="px-4 py-3">
+                  {o.fulfilment === "pickup"
+                    ? `Pickup · ${shopName.get(o.shopId ?? 0) ?? "?"}`
+                    : `Delivery · ${o.district}`}
+                </td>
                 <td className="px-4 py-3 tabular-nums">{o.totalAmd.toLocaleString("ru-RU")} ֏</td>
                 <td className="px-4 py-3">
                   <StatusBadge status={o.status} />

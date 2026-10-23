@@ -13,7 +13,11 @@ export function Flash({ ok, error }: { ok?: string; error?: string }) {
         error ? "bg-magenta-soft text-plum" : "bg-[#dff5e8] text-[#14532d]",
       )}
     >
-      {error ? <WarningCircle size={20} className="shrink-0" aria-hidden /> : <CheckCircle size={20} className="shrink-0" aria-hidden />}
+      {error ? (
+        <WarningCircle size={20} className="shrink-0" aria-hidden />
+      ) : (
+        <CheckCircle size={20} className="shrink-0" aria-hidden />
+      )}
       {error ?? ok}
     </p>
   );
@@ -56,25 +60,62 @@ export function Field({
   return (
     <label className={cn("block text-sm font-semibold", className)}>
       {label}
-      <input name={name} type={type} defaultValue={defaultValue ?? ""} required={required} className={inputCls} {...rest} />
+      <input
+        name={name}
+        type={type}
+        defaultValue={defaultValue ?? ""}
+        required={required}
+        className={inputCls}
+        {...rest}
+      />
       {hint ? <span className="mt-1 block text-xs font-normal text-muted">{hint}</span> : null}
     </label>
   );
 }
 
-export function TextArea({ label, name, defaultValue, rows = 3 }: { label: string; name: string; defaultValue?: string | null; rows?: number }) {
+export function TextArea({
+  label,
+  name,
+  defaultValue,
+  rows = 3,
+}: {
+  label: string;
+  name: string;
+  defaultValue?: string | null;
+  rows?: number;
+}) {
   return (
     <label className="block text-sm font-semibold">
       {label}
-      <textarea name={name} rows={rows} defaultValue={defaultValue ?? ""} className={cn(inputCls, "h-auto py-2")} />
+      <textarea
+        name={name}
+        rows={rows}
+        defaultValue={defaultValue ?? ""}
+        className={cn(inputCls, "h-auto py-2")}
+      />
     </label>
   );
 }
 
-export function Check({ label, name, defaultChecked, hint }: { label: string; name: string; defaultChecked?: boolean; hint?: string }) {
+export function Check({
+  label,
+  name,
+  defaultChecked,
+  hint,
+}: {
+  label: string;
+  name: string;
+  defaultChecked?: boolean;
+  hint?: string;
+}) {
   return (
     <label className="flex min-h-11 items-start gap-2 text-sm">
-      <input type="checkbox" name={name} defaultChecked={defaultChecked} className="mt-0.5 size-5 accent-magenta" />
+      <input
+        type="checkbox"
+        name={name}
+        defaultChecked={defaultChecked}
+        className="mt-0.5 size-5 accent-magenta"
+      />
       <span>
         <span className="font-semibold">{label}</span>
         {hint ? <span className="block text-xs text-muted">{hint}</span> : null}
@@ -111,9 +152,19 @@ export function LocalizedField({
           <label key={l} className="block text-xs font-semibold text-muted" lang={l}>
             {full}
             {multiline ? (
-              <textarea name={`${name}.${l}`} defaultValue={value?.[l] ?? ""} rows={2} className={cn(inputCls, "h-auto py-2 text-plum")} />
+              <textarea
+                name={`${name}.${l}`}
+                defaultValue={value?.[l] ?? ""}
+                rows={2}
+                className={cn(inputCls, "h-auto py-2 text-plum")}
+              />
             ) : (
-              <input name={`${name}.${l}`} defaultValue={value?.[l] ?? ""} required={required} className={cn(inputCls, "text-plum")} />
+              <input
+                name={`${name}.${l}`}
+                defaultValue={value?.[l] ?? ""}
+                required={required}
+                className={cn(inputCls, "text-plum")}
+              />
             )}
           </label>
         ))}
@@ -144,16 +195,24 @@ export const statusLabel: Record<string, string> = {
 
 export function StatusBadge({ status }: { status: string }) {
   return (
-    <span className={cn("inline-block rounded-full px-2.5 py-1 text-xs font-bold whitespace-nowrap", statusTone[status])}>
+    <span
+      className={cn(
+        "inline-block rounded-full px-2.5 py-1 text-xs font-bold whitespace-nowrap",
+        statusTone[status],
+      )}
+    >
       {statusLabel[status] ?? status}
     </span>
   );
 }
 
 export const btn = {
-  primary: "inline-flex h-11 items-center justify-center gap-2 rounded-full bg-plum px-5 text-sm font-semibold text-white hover:bg-plum-3",
-  ghost: "inline-flex h-11 items-center justify-center gap-2 rounded-full border-2 border-plum/15 bg-white px-5 text-sm font-semibold hover:border-plum",
-  danger: "inline-flex h-11 items-center justify-center gap-2 rounded-full bg-magenta-soft px-5 text-sm font-semibold text-plum hover:bg-magenta hover:text-white",
+  primary:
+    "inline-flex h-11 items-center justify-center gap-2 rounded-full bg-plum px-5 text-sm font-semibold text-white hover:bg-plum-3",
+  ghost:
+    "inline-flex h-11 items-center justify-center gap-2 rounded-full border-2 border-plum/15 bg-white px-5 text-sm font-semibold hover:border-plum",
+  danger:
+    "inline-flex h-11 items-center justify-center gap-2 rounded-full bg-magenta-soft px-5 text-sm font-semibold text-plum hover:bg-magenta hover:text-white",
 };
 
 export type SearchParams = Promise<Record<string, string | string[] | undefined>>;

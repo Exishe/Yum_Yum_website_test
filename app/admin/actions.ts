@@ -29,7 +29,14 @@ import {
   type WeekHours,
 } from "@/db/schema";
 import { audit, diff } from "@/lib/audit";
-import { hashPassword, login, logout, logoutEverywhere, requireUser, verifyPassword } from "@/lib/auth";
+import {
+  hashPassword,
+  login,
+  logout,
+  logoutEverywhere,
+  requireUser,
+  verifyPassword,
+} from "@/lib/auth";
 import { CATALOG_TAG, REVIEWS_TAG, SHOPS_TAG, ZONES_TAG } from "@/lib/catalog";
 import { clientIp } from "@/lib/security";
 import { SETTINGS_TAG } from "@/lib/settings";
@@ -98,10 +105,13 @@ export async function changePasswordAction(fd: FormData) {
   const user = await requireUser();
   const current = String(fd.get("current") ?? "");
   const next = String(fd.get("next") ?? "");
-  if (!(await verifyPassword(user.id, current))) back("/admin/account", "error", "The current password is wrong.");
+  if (!(await verifyPassword(user.id, current)))
+    back("/admin/account", "error", "The current password is wrong.");
   const parsed = passwordSchema.safeParse(next);
-  if (!parsed.success) back("/admin/account", "error", parsed.error.issues[0]?.message ?? "Weak password.");
-  if (next !== String(fd.get("confirm") ?? "")) back("/admin/account", "error", "The two new passwords differ.");
+  if (!parsed.success)
+    back("/admin/account", "error", parsed.error.issues[0]?.message ?? "Weak password.");
+  if (next !== String(fd.get("confirm") ?? ""))
+    back("/admin/account", "error", "The two new passwords differ.");
   await db
     .update(users)
     .set({ passwordHash: await hashPassword(next), mustChangePassword: false })
@@ -118,7 +128,8 @@ export async function updateOrderStatusAction(fd: FormData) {
   const user = await requireUser();
   const id = String(fd.get("orderId") ?? "");
   const parsed = statusSchema.safeParse(fd.get("status"));
-  if (!z.uuid().safeParse(id).success || !parsed.success) back("/admin/orders", "error", "Unknown order or status.");
+  if (!z.uuid().safeParse(id).success || !parsed.success)
+    back("/admin/orders", "error", "Unknown order or status.");
   const [order] = await db.select().from(orders).where(eq(orders.id, id)).limit(1);
   if (!order) back("/admin/orders", "error", "Order not found.");
   if (order.status !== parsed.data) {
@@ -130,7 +141,9 @@ export async function updateOrderStatusAction(fd: FormData) {
       userId: user.id,
       note: str(fd, "note", 300) || null,
     });
-    await audit(user, "order_status", "order", order.shortCode, { status: [order.status, parsed.data] });
+    await audit(user, "order_status", "order", order.shortCode, {
+      status: [order.status, parsed.data],
+    });
   }
   back(`/admin/orders/${id}`, "ok", "Status updated.");
 }
@@ -139,7 +152,10 @@ export async function updateOrderNoteAction(fd: FormData) {
   const user = await requireUser();
   const id = String(fd.get("orderId") ?? "");
   if (!z.uuid().safeParse(id).success) back("/admin/orders", "error", "Unknown order.");
-  await db.update(orders).set({ staffNote: str(fd, "staffNote", 1000) || null }).where(eq(orders.id, id));
+  await db
+    .update(orders)
+    .set({ staffNote: str(fd, "staffNote", 1000) || null })
+    .where(eq(orders.id, id));
   await audit(user, "order_note", "order", id);
   back(`/admin/orders/${id}`, "ok", "Note saved.");
 }
@@ -161,15 +177,20 @@ export async function saveProductAction(fd: FormData) {
   const path = isNew ? "/admin/products/new" : `/admin/products/${id}`;
 
   const name = loc(fd, "name", 120);
-  if (!name.hy || !name.ru || !name.en) back(path, "error", "Give the product a name in all three languages.");
+  if (!name.hy || !name.ru || !name.en)
+    back(path, "error", "Give the product a name in all three languages.");
   const priceAmd = num(fd, "priceAmd");
-  if (!Number.isFinite(priceAmd) || priceAmd < 0 || priceAmd > 10_000_000) back(path, "error", "Check the price.");
+  if (!Number.isFinite(priceAmd) || priceAmd < 0 || priceAmd > 10_000_000)
+    back(path, "error", "Check the price.");
   const categoryId = num(fd, "categoryId");
   if (!Number.isFinite(categoryId)) back(path, "error", "Choose a category.");
 
   let options: z.infer<typeof optionSchema>[] = [];
   try {
-    options = z.array(optionSchema).max(30).parse(JSON.parse(String(fd.get("options") || "[]")));
+    options = z
+      .array(optionSchema)
+      .max(30)
+      .parse(JSON.parse(String(fd.get("options") || "[]")));
   } catch {
     back(path, "error", "One of the options is not valid.");
   }
@@ -204,7 +225,10 @@ export async function saveProductAction(fd: FormData) {
   let productId = id;
   if (isNew) {
     const slug = `${slugify(name.en) || "item"}-${randomBytes(2).toString("hex")}`;
-    const [row] = await db.insert(products).values({ ...values, slug, source: "admin" }).returning({ id: products.id });
+    const [row] = await db
+      .insert(products)
+      .values({ ...values, slug, source: "admin" })
+      .returning({ id: products.id });
     productId = row!.id;
     await audit(user, "create", "product", productId, values);
   } else {
@@ -217,7 +241,9 @@ export async function saveProductAction(fd: FormData) {
   await db.transaction(async (tx) => {
     await tx.delete(productOptions).where(eq(productOptions.productId, productId));
     if (options.length) {
-      await tx.insert(productOptions).values(options.map((o, i) => ({ ...o, productId, sortOrder: i })));
+      await tx
+        .insert(productOptions)
+        .values(options.map((o, i) => ({ ...o, productId, sortOrder: i })));
     }
   });
   updateTag(CATALOG_TAG);
@@ -229,10 +255,15 @@ export async function quickProductAction(fd: FormData) {
   const user = await requireUser();
   const id = num(fd, "id");
   const priceAmd = num(fd, "priceAmd");
-  if (!Number.isFinite(id) || !Number.isFinite(priceAmd) || priceAmd < 0) back("/admin/products", "error", "Check the price.");
+  if (!Number.isFinite(id) || !Number.isFinite(priceAmd) || priceAmd < 0)
+    back("/admin/products", "error", "Check the price.");
   const [before] = await db.select().from(products).where(eq(products.id, id)).limit(1);
   if (!before) back("/admin/products", "error", "Product not found.");
-  const values = { priceAmd, isAvailable: bool(fd, "isAvailable"), priceIsSample: priceAmd === before.priceAmd ? before.priceIsSample : false };
+  const values = {
+    priceAmd,
+    isAvailable: bool(fd, "isAvailable"),
+    priceIsSample: priceAmd === before.priceAmd ? before.priceIsSample : false,
+  };
   await db.update(products).set(values).where(eq(products.id, id));
   await audit(user, "update", "product", id, diff(before as Record<string, unknown>, values));
   updateTag(CATALOG_TAG);
@@ -264,7 +295,8 @@ export async function saveCategoryAction(fd: FormData) {
   const user = await requireUser(["admin"]);
   const id = num(fd, "id");
   const name = loc(fd, "name", 80);
-  if (!name.hy || !name.ru || !name.en) back("/admin/categories", "error", "Name the category in all three languages.");
+  if (!name.hy || !name.ru || !name.en)
+    back("/admin/categories", "error", "Name the category in all three languages.");
   let image: string | undefined;
   try {
     image = await maybeUpload(fd, "imageFile", "categories");
@@ -282,11 +314,20 @@ export async function saveCategoryAction(fd: FormData) {
   if (Number.isFinite(id) && id > 0) {
     const [before] = await db.select().from(categories).where(eq(categories.id, id)).limit(1);
     await db.update(categories).set(values).where(eq(categories.id, id));
-    await audit(user, "update", "category", id, before ? diff(before as Record<string, unknown>, values) : values);
+    await audit(
+      user,
+      "update",
+      "category",
+      id,
+      before ? diff(before as Record<string, unknown>, values) : values,
+    );
   } else {
     const [row] = await db
       .insert(categories)
-      .values({ ...values, slug: `${slugify(name.en) || "category"}-${randomBytes(2).toString("hex")}` })
+      .values({
+        ...values,
+        slug: `${slugify(name.en) || "category"}-${randomBytes(2).toString("hex")}`,
+      })
       .returning({ id: categories.id });
     await audit(user, "create", "category", row!.id, values);
   }
@@ -312,7 +353,9 @@ export async function saveShopAction(fd: FormData) {
       if (bool(fd, `closed.${d}`)) return null;
       const open = str(fd, `open.${d}`, 5);
       const close = str(fd, `close.${d}`, 5);
-      return hhmm.test(open) && hhmm.test(close) ? { open, close } : { open: "09:00", close: "22:00" };
+      return hhmm.test(open) && hhmm.test(close)
+        ? { open, close }
+        : { open: "09:00", close: "22:00" };
     });
   }
   const url = (k: string) => {
@@ -350,11 +393,20 @@ export async function saveShopAction(fd: FormData) {
   if (Number.isFinite(id) && id > 0) {
     const [before] = await db.select().from(shops).where(eq(shops.id, id)).limit(1);
     await db.update(shops).set(values).where(eq(shops.id, id));
-    await audit(user, "update", "shop", id, before ? diff(before as Record<string, unknown>, values) : values);
+    await audit(
+      user,
+      "update",
+      "shop",
+      id,
+      before ? diff(before as Record<string, unknown>, values) : values,
+    );
   } else {
     const [row] = await db
       .insert(shops)
-      .values({ ...values, slug: `${slugify(name.en) || "shop"}-${randomBytes(2).toString("hex")}` })
+      .values({
+        ...values,
+        slug: `${slugify(name.en) || "shop"}-${randomBytes(2).toString("hex")}`,
+      })
       .returning({ id: shops.id });
     shopId = row!.id;
     await audit(user, "create", "shop", shopId, values);
@@ -383,7 +435,13 @@ export async function saveZoneAction(fd: FormData) {
   if (Number.isFinite(id) && id > 0) {
     const [before] = await db.select().from(deliveryZones).where(eq(deliveryZones.id, id)).limit(1);
     await db.update(deliveryZones).set(values).where(eq(deliveryZones.id, id));
-    await audit(user, "update", "zone", id, before ? diff(before as Record<string, unknown>, values) : values);
+    await audit(
+      user,
+      "update",
+      "zone",
+      id,
+      before ? diff(before as Record<string, unknown>, values) : values,
+    );
   } else {
     const [row] = await db.insert(deliveryZones).values(values).returning({ id: deliveryZones.id });
     await audit(user, "create", "zone", row!.id, values);
@@ -414,13 +472,18 @@ export async function saveReviewAction(fd: FormData) {
     url: /^https:\/\//.test(url) ? url : null,
     rating: rating >= 1 && rating <= 5 ? rating : null,
     // The quote is stored exactly as the reviewer wrote it.
-    quote: String(fd.get("quote") ?? "").trim().slice(0, 600),
-    quoteLocale: ["hy", "ru", "en"].includes(str(fd, "quoteLocale")) ? str(fd, "quoteLocale") : "en",
+    quote: String(fd.get("quote") ?? "")
+      .trim()
+      .slice(0, 600),
+    quoteLocale: ["hy", "ru", "en"].includes(str(fd, "quoteLocale"))
+      ? str(fd, "quoteLocale")
+      : "en",
     reviewDate: str(fd, "reviewDate", 20) || null,
     isApproved: bool(fd, "isApproved"),
     sortOrder: num(fd, "sortOrder") || 0,
   };
-  if (!values.author || !values.platform || !values.quote) back("/admin/reviews", "error", "Author, platform and quote are required.");
+  if (!values.author || !values.platform || !values.quote)
+    back("/admin/reviews", "error", "Author, platform and quote are required.");
   if (Number.isFinite(id) && id > 0) {
     await db.update(reviews).set(values).where(eq(reviews.id, id));
     await audit(user, "update", "review", id, values);
@@ -449,7 +512,9 @@ export async function saveTextAction(fd: FormData) {
   const q = str(fd, "q", 120);
   if (!/^[a-zA-Z0-9_.]+$/.test(key)) back("/admin/texts", "error", "Unknown text key.");
   for (const locale of ["hy", "ru", "en"] as const) {
-    const value = String(fd.get(`value.${locale}`) ?? "").trim().slice(0, 2000);
+    const value = String(fd.get(`value.${locale}`) ?? "")
+      .trim()
+      .slice(0, 2000);
     const original = String(fd.get(`original.${locale}`) ?? "");
     if (!value || value === original) {
       await db.delete(siteTexts).where(and(eq(siteTexts.key, key), eq(siteTexts.locale, locale)));
@@ -468,14 +533,32 @@ export async function saveTextAction(fd: FormData) {
 /* ── settings ── */
 
 const settingsSchemas = {
-  banner: z.object({ enabled: z.boolean(), text: z.object({ hy: z.string(), ru: z.string(), en: z.string() }) }),
+  banner: z.object({
+    enabled: z.boolean(),
+    text: z.object({ hy: z.string(), ru: z.string(), en: z.string() }),
+  }),
   contact: z.object({
-    phones: z.array(z.string().regex(/^\+374\d{8}$/)).min(1).max(4),
-    whatsapp: z.string().regex(/^374\d{8}$/).nullable(),
+    phones: z
+      .array(z.string().regex(/^\+374\d{8}$/))
+      .min(1)
+      .max(4),
+    whatsapp: z
+      .string()
+      .regex(/^374\d{8}$/)
+      .nullable(),
     whatsappConfirmed: z.boolean(),
-    instagram: z.string().regex(/^[A-Za-z0-9_.]{1,30}$/).nullable(),
-    facebook: z.string().regex(/^[A-Za-z0-9_.-]{1,60}$/).nullable(),
-    tiktok: z.string().regex(/^[A-Za-z0-9_.]{1,30}$/).nullable(),
+    instagram: z
+      .string()
+      .regex(/^[A-Za-z0-9_.]{1,30}$/)
+      .nullable(),
+    facebook: z
+      .string()
+      .regex(/^[A-Za-z0-9_.-]{1,60}$/)
+      .nullable(),
+    tiktok: z
+      .string()
+      .regex(/^[A-Za-z0-9_.]{1,30}$/)
+      .nullable(),
     email: z.email().nullable(),
   }),
   ordering: z.object({
@@ -490,7 +573,11 @@ const settingsSchemas = {
   externalDelivery: z
     .array(z.object({ name: z.string().max(40), url: z.string().max(300), enabled: z.boolean() }))
     .max(6),
-  legal: z.object({ companyName: z.string().nullable(), taxId: z.string().nullable(), address: z.string().nullable() }),
+  legal: z.object({
+    companyName: z.string().nullable(),
+    taxId: z.string().nullable(),
+    address: z.string().nullable(),
+  }),
 } as const;
 
 export async function saveSettingsAction(fd: FormData) {
@@ -506,7 +593,9 @@ export async function saveSettingsAction(fd: FormData) {
       break;
     case "contact":
       value = {
-        phones: str(fd, "phones").split(/[,\s]+/).filter(Boolean),
+        phones: str(fd, "phones")
+          .split(/[,\s]+/)
+          .filter(Boolean),
         whatsapp: n(str(fd, "whatsapp").replace(/\D/g, "")),
         whatsappConfirmed: bool(fd, "whatsappConfirmed"),
         instagram: n(str(fd, "instagram").replace(/^@/, "")),
@@ -527,14 +616,29 @@ export async function saveSettingsAction(fd: FormData) {
       };
       break;
     case "externalDelivery":
-      value = [0, 1, 2, 3].map((i) => ({ name: str(fd, `name.${i}`, 40), url: str(fd, `url.${i}`, 300), enabled: bool(fd, `enabled.${i}`) })).filter((d) => d.name);
+      value = [0, 1, 2, 3]
+        .map((i) => ({
+          name: str(fd, `name.${i}`, 40),
+          url: str(fd, `url.${i}`, 300),
+          enabled: bool(fd, `enabled.${i}`),
+        }))
+        .filter((d) => d.name);
       break;
     case "legal":
-      value = { companyName: n(str(fd, "companyName")), taxId: n(str(fd, "taxId")), address: n(str(fd, "address")) };
+      value = {
+        companyName: n(str(fd, "companyName")),
+        taxId: n(str(fd, "taxId")),
+        address: n(str(fd, "address")),
+      };
       break;
   }
   const parsed = schema.safeParse(value);
-  if (!parsed.success) back("/admin/settings", "error", `Check “${key}”: ${parsed.error.issues[0]?.path.join(".")} is not valid.`);
+  if (!parsed.success)
+    back(
+      "/admin/settings",
+      "error",
+      `Check “${key}”: ${parsed.error.issues[0]?.path.join(".")} is not valid.`,
+    );
   await db
     .insert(settings)
     .values({ key, value: parsed.data })
@@ -585,7 +689,12 @@ export async function resetUserPasswordAction(fd: FormData) {
   const temp = randomBytes(9).toString("base64url");
   const [target] = await db
     .update(users)
-    .set({ passwordHash: await hashPassword(temp), mustChangePassword: true, failedLogins: 0, lockedUntil: null })
+    .set({
+      passwordHash: await hashPassword(temp),
+      mustChangePassword: true,
+      failedLogins: 0,
+      lockedUntil: null,
+    })
     .where(eq(users.id, id))
     .returning({ email: users.email });
   if (!target) back("/admin/users", "error", "User not found.");

@@ -9,7 +9,9 @@ async function main() {
     process.exit(1);
   }
   const { sql } = scriptDb();
-  await sql.unsafe(`DROP SCHEMA IF EXISTS drizzle CASCADE; DROP SCHEMA public CASCADE; CREATE SCHEMA public;`);
+  await sql.unsafe(
+    `DROP SCHEMA IF EXISTS drizzle CASCADE; DROP SCHEMA public CASCADE; CREATE SCHEMA public;`,
+  );
   await sql.end();
   console.log("Local database wiped.");
 }

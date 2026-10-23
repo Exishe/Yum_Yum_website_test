@@ -24,7 +24,9 @@ function buildCsp(nonce: string) {
     `style-src 'self' 'unsafe-inline'`,
     `img-src 'self' data: blob: ${supabase}`.trim(),
     `font-src 'self'`,
-    `connect-src 'self' ${analyticsHost} https://challenges.cloudflare.com`.replace(/\s+/g, " ").trim(),
+    `connect-src 'self' ${analyticsHost} https://challenges.cloudflare.com`
+      .replace(/\s+/g, " ")
+      .trim(),
     `frame-src https://challenges.cloudflare.com https://www.openstreetmap.org`,
     `object-src 'none'`,
     `base-uri 'self'`,

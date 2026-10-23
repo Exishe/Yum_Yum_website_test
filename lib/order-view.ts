@@ -9,8 +9,16 @@ export async function getPublicOrder(publicId: string) {
   const order = await db.query.orders.findFirst({ where: eq(orders.publicId, publicId) });
   if (!order) return null;
   const [items, history] = await Promise.all([
-    db.select().from(orderItems).where(eq(orderItems.orderId, order.id)).orderBy(asc(orderItems.id)),
-    db.select().from(orderStatusHistory).where(eq(orderStatusHistory.orderId, order.id)).orderBy(asc(orderStatusHistory.createdAt)),
+    db
+      .select()
+      .from(orderItems)
+      .where(eq(orderItems.orderId, order.id))
+      .orderBy(asc(orderItems.id)),
+    db
+      .select()
+      .from(orderStatusHistory)
+      .where(eq(orderStatusHistory.orderId, order.id))
+      .orderBy(asc(orderStatusHistory.createdAt)),
   ]);
   return { order, items, history };
 }

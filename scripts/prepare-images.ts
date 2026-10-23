@@ -22,7 +22,10 @@ async function main() {
   for (const file of files) {
     const img = sharp(file);
     const meta = await img.metadata();
-    const blur = await sharp(file).resize(12, 12, { fit: "inside" }).webp({ quality: 40 }).toBuffer();
+    const blur = await sharp(file)
+      .resize(12, 12, { fit: "inside" })
+      .webp({ quality: 40 })
+      .toBuffer();
     const key = "/" + relative(root, file).split(sep).join("/");
     entries.push(
       `  ${JSON.stringify(key)}: { w: ${meta.width}, h: ${meta.height}, blur: "data:image/webp;base64,${blur.toString("base64")}" },`,

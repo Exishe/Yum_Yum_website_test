@@ -17,7 +17,9 @@ export function StickyOrderBar({ shops }: { shops: Array<{ id: number; name: str
     <div className="on-dark fixed inset-x-3 bottom-3 z-40 flex animate-rise items-center justify-between gap-3 rounded-full bg-plum py-2 pr-2 pl-6 text-white shadow-lift lg:hidden">
       <p className="min-w-0 text-sm leading-tight">
         <span className="block font-semibold">{t("count", { count })}</span>
-        {shop ? <span className="block truncate text-white/75">{t("pickupAt", { shop: shop.name })}</span> : null}
+        {shop ? (
+          <span className="block truncate text-white/75">{t("pickupAt", { shop: shop.name })}</span>
+        ) : null}
       </p>
       <Link
         href="/checkout"

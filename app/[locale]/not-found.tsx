@@ -12,7 +12,10 @@ export default async function NotFound() {
         </span>
         <h1 className="mt-6 text-[clamp(2.6rem,7vw,4.5rem)] leading-none">{t("title")}</h1>
         <p className="mt-4 text-lg text-muted">{t("lead")}</p>
-        <Link href="/" className="mt-8 inline-flex h-12 items-center rounded-full bg-plum px-6 font-semibold text-white">
+        <Link
+          href="/"
+          className="mt-8 inline-flex h-12 items-center rounded-full bg-plum px-6 font-semibold text-white"
+        >
           {t("home")}
         </Link>
       </div>

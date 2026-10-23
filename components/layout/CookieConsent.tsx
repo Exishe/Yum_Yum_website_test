@@ -44,15 +44,33 @@ export function openCookieSettings() {
   window.dispatchEvent(new Event("yy:cookie-settings"));
 }
 
-export function CookieSettingsButton({ className, children }: { className?: string; children: React.ReactNode }) {
+export function CookieSettingsButton({
+  className,
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) {
   return (
-    <button type="button" onClick={openCookieSettings} className={cn("min-h-6 underline-offset-2 hover:underline", className)}>
+    <button
+      type="button"
+      onClick={openCookieSettings}
+      className={cn("min-h-6 underline-offset-2 hover:underline", className)}
+    >
       {children}
     </button>
   );
 }
 
-export function CookieConsent({ analyticsSrc, analyticsDomain, nonce }: { analyticsSrc?: string; analyticsDomain?: string; nonce?: string }) {
+export function CookieConsent({
+  analyticsSrc,
+  analyticsDomain,
+  nonce,
+}: {
+  analyticsSrc?: string;
+  analyticsDomain?: string;
+  nonce?: string;
+}) {
   const t = useTranslations("cookies");
   const consent = useConsent();
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -77,7 +95,8 @@ export function CookieConsent({ analyticsSrc, analyticsDomain, nonce }: { analyt
     if (nonce) s.nonce = nonce;
     if (analyticsDomain) s.dataset.domain = analyticsDomain;
     // Umami uses data-website-id; Plausible uses data-domain.
-    if (process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID) s.dataset.websiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID;
+    if (process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID)
+      s.dataset.websiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID;
     document.head.appendChild(s);
   }, [consent, analyticsSrc, analyticsDomain, nonce]);
 

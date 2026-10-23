@@ -4,7 +4,13 @@ import { CaretDown, ArrowRight, Phone, Clock } from "@phosphor-icons/react/dist/
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
-import { DonutIcon, FlowerIcon, HeartDonutIcon, PhoneIcon, PinIcon } from "@/components/icons/brand";
+import {
+  DonutIcon,
+  FlowerIcon,
+  HeartDonutIcon,
+  PhoneIcon,
+  PinIcon,
+} from "@/components/icons/brand";
 import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
 import type { ImageInfo } from "@/lib/images";
@@ -133,13 +139,20 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
               aria-hidden
               size={14}
               weight="bold"
-              className={cn("relative hidden transition-transform duration-300 sm:block", open && "rotate-180")}
+              className={cn(
+                "relative hidden transition-transform duration-300 sm:block",
+                open && "rotate-180",
+              )}
             />
           </button>
           <NavPill href="/gifts" icon={<FlowerIcon size={22} />} className="hidden lg:inline-flex">
             {t("bouquets")}
           </NavPill>
-          <NavPill href="/story" icon={<HeartDonutIcon size={22} />} className="hidden lg:inline-flex">
+          <NavPill
+            href="/story"
+            icon={<HeartDonutIcon size={22} />}
+            className="hidden lg:inline-flex"
+          >
             {t("story")}
           </NavPill>
         </nav>
@@ -200,14 +213,19 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
                         </sup>
                       </span>
                       {c.from ? (
-                        <span className="shrink-0 text-sm font-medium text-white/80">{t("from", { price: c.from })}</span>
+                        <span className="shrink-0 text-sm font-medium text-white/80">
+                          {t("from", { price: c.from })}
+                        </span>
                       ) : null}
                     </Link>
                   </li>
                 ))}
               </ul>
               <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-white/85">
-                <Link href="/gifts" className="inline-flex items-center gap-2 font-semibold text-white hover:text-sun">
+                <Link
+                  href="/gifts"
+                  className="inline-flex items-center gap-2 font-semibold text-white hover:text-sun"
+                >
                   <FlowerIcon size={20} /> {t("bouquets")}
                 </Link>
                 <a href={`tel:${phone}`} className="inline-flex items-center gap-2 hover:text-sun">
@@ -216,7 +234,10 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
                 <span className="inline-flex items-center gap-2">
                   <Clock aria-hidden size={18} /> {tc("hoursDaily")}
                 </span>
-                <Link href="/menu" className="ml-auto inline-flex items-center gap-1 font-semibold text-sun hover:underline">
+                <Link
+                  href="/menu"
+                  className="ml-auto inline-flex items-center gap-1 font-semibold text-sun hover:underline"
+                >
                   {t("fullMenu")} <ArrowRight aria-hidden size={16} weight="bold" />
                 </Link>
               </div>
@@ -258,11 +279,19 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
                   >
                     <span className="relative size-12 shrink-0 overflow-hidden rounded-full bg-plum-3">
                       {c.image ? (
-                        <Image src={c.image.src} alt="" fill sizes="48px" className="object-cover" />
+                        <Image
+                          src={c.image.src}
+                          alt=""
+                          fill
+                          sizes="48px"
+                          className="object-cover"
+                        />
                       ) : null}
                     </span>
                     <span className="flex-1 font-display text-2xl leading-tight">{c.name}</span>
-                    {c.from ? <span className="text-xs text-white/75">{t("from", { price: c.from })}</span> : null}
+                    {c.from ? (
+                      <span className="text-xs text-white/75">{t("from", { price: c.from })}</span>
+                    ) : null}
                   </Link>
                 </li>
               ))}
@@ -278,7 +307,9 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
                   href={q.href}
                   className="flex min-h-16 items-center gap-3 rounded-2xl bg-white/8 px-4 py-3 font-semibold hover:bg-white/12"
                 >
-                  <span className="grid size-10 place-items-center rounded-full bg-white">{q.icon}</span>
+                  <span className="grid size-10 place-items-center rounded-full bg-white">
+                    {q.icon}
+                  </span>
                   {q.label}
                 </Link>
               ))}

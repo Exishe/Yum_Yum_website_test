@@ -1,4 +1,10 @@
-import { ArrowUpRight, FacebookLogo, InstagramLogo, TiktokLogo, WhatsappLogo } from "@phosphor-icons/react/dist/ssr";
+import {
+  ArrowUpRight,
+  FacebookLogo,
+  InstagramLogo,
+  TiktokLogo,
+  WhatsappLogo,
+} from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
@@ -14,7 +20,9 @@ import { NewsletterForm } from "./NewsletterForm";
 function hoursLabel(shop: PublicShop, mall: string, daily: string) {
   if (!shop.hours) return mall;
   const first = shop.hours[1];
-  const same = shop.hours.every((h) => h && first && h.open === first.open && h.close === first.close);
+  const same = shop.hours.every(
+    (h) => h && first && h.open === first.open && h.close === first.close,
+  );
   return same && first ? `${first.open}–${first.close}` : daily;
 }
 
@@ -73,7 +81,10 @@ export async function Footer({
 
         <div className="grid grid-cols-1 gap-10 py-12 sm:grid-cols-2 lg:grid-cols-4">
           <nav aria-labelledby="f-shop">
-            <h2 id="f-shop" className="mb-4 font-sans text-xs font-bold tracking-[0.18em] text-sun uppercase">
+            <h2
+              id="f-shop"
+              className="mb-4 font-sans text-xs font-bold tracking-[0.18em] text-sun uppercase"
+            >
               {t("shop")}
             </h2>
             <ul className="flex flex-col gap-2.5">
@@ -93,13 +104,17 @@ export async function Footer({
           </nav>
 
           <div>
-            <h2 className="mb-4 font-sans text-xs font-bold tracking-[0.18em] text-sun uppercase">{t("visit")}</h2>
+            <h2 className="mb-4 font-sans text-xs font-bold tracking-[0.18em] text-sun uppercase">
+              {t("visit")}
+            </h2>
             <ul className="flex flex-col gap-3 text-sm">
               {shops.map((s) => (
                 <li key={s.slug} className="flex items-baseline justify-between gap-3">
                   <span>
                     <span className="block font-semibold text-white">{pick(s.name, locale)}</span>
-                    <span className="text-white/70">{hoursLabel(s, tc("mallHours"), tc("everyDay"))}</span>
+                    <span className="text-white/70">
+                      {hoursLabel(s, tc("mallHours"), tc("everyDay"))}
+                    </span>
                   </span>
                   {s.googleMapsUrl ? (
                     <a
@@ -118,7 +133,9 @@ export async function Footer({
           </div>
 
           <div>
-            <h2 className="mb-4 font-sans text-xs font-bold tracking-[0.18em] text-sun uppercase">{t("contact")}</h2>
+            <h2 className="mb-4 font-sans text-xs font-bold tracking-[0.18em] text-sun uppercase">
+              {t("contact")}
+            </h2>
             <ul className="flex flex-col gap-2.5">
               {contact.phones.map((p) => (
                 <li key={p}>
@@ -133,7 +150,9 @@ export async function Footer({
                 </Link>
               </li>
             </ul>
-            <p className="mt-6 mb-3 text-xs font-bold tracking-[0.18em] text-white/60 uppercase">{t("social")}</p>
+            <p className="mt-6 mb-3 text-xs font-bold tracking-[0.18em] text-white/60 uppercase">
+              {t("social")}
+            </p>
             <ul className="flex gap-2">
               {contact.instagram ? (
                 <li>
@@ -191,7 +210,10 @@ export async function Footer({
           </div>
 
           <nav aria-labelledby="f-company">
-            <h2 id="f-company" className="mb-4 font-sans text-xs font-bold tracking-[0.18em] text-sun uppercase">
+            <h2
+              id="f-company"
+              className="mb-4 font-sans text-xs font-bold tracking-[0.18em] text-sun uppercase"
+            >
               {t("company")}
             </h2>
             <ul className="flex flex-col gap-2.5">
@@ -217,7 +239,9 @@ export async function Footer({
         <div className="flex flex-col gap-6 border-t border-white/12 pt-8 lg:flex-row lg:items-center lg:justify-between">
           <LanguageSwitch />
           <div className="flex items-center gap-3">
-            <span className="text-xs font-bold tracking-[0.18em] text-white/60 uppercase">{t("pay")}</span>
+            <span className="text-xs font-bold tracking-[0.18em] text-white/60 uppercase">
+              {t("pay")}
+            </span>
             <ul className="flex gap-2" aria-label={t("pay")}>
               <PayBadge>VISA</PayBadge>
               <PayBadge>Mastercard</PayBadge>
@@ -246,7 +270,9 @@ export async function Footer({
               </Link>
             </li>
             <li>
-              <CookieSettingsButton className="hover:text-white">{t("cookies")}</CookieSettingsButton>
+              <CookieSettingsButton className="hover:text-white">
+                {t("cookies")}
+              </CookieSettingsButton>
             </li>
           </ul>
         </div>

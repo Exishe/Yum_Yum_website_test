@@ -6,7 +6,11 @@ export async function Ticker({ shopsCount }: { shopsCount: number }) {
   const items = messages.ticker.map((s) => s.replace("{count}", String(shopsCount)));
   const row = (hidden: boolean) =>
     items.map((s, i) => (
-      <li key={`${hidden}${i}`} aria-hidden={hidden || undefined} className="flex shrink-0 items-center gap-6">
+      <li
+        key={`${hidden}${i}`}
+        aria-hidden={hidden || undefined}
+        className="flex shrink-0 items-center gap-6"
+      >
         <span className="font-display text-2xl whitespace-nowrap text-white sm:text-3xl">{s}</span>
         <span aria-hidden className="size-3 rounded-full bg-sun" />
       </li>

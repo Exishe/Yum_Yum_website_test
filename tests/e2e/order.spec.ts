@@ -5,7 +5,8 @@ async function dismissCookies(page: Page) {
 }
 
 /** A different valid phone per test so the per-phone limit is not hit. */
-const phone = () => `+374 94 ${String(Math.floor(100000 + Math.random() * 899999)).replace(/(\d{2})(\d{2})(\d{2})/, "$1 $2 $3")}`;
+const phone = () =>
+  `+374 94 ${String(Math.floor(100000 + Math.random() * 899999)).replace(/(\d{2})(\d{2})(\d{2})/, "$1 $2 $3")}`;
 
 for (const locale of ["hy", "ru", "en"] as const) {
   test(`places a pickup order in ${locale}`, async ({ page }) => {

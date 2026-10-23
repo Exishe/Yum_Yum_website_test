@@ -15,7 +15,10 @@ export async function StorySection({
 }) {
   const t = await getTranslations("story");
   return (
-    <section aria-labelledby="story-title" className="mx-auto max-w-[1440px] px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
+    <section
+      aria-labelledby="story-title"
+      className="mx-auto max-w-[1440px] px-4 py-20 sm:px-6 lg:px-8 lg:py-24"
+    >
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-[0.75fr_1.1fr_0.6fr]">
         <div className="lg:pr-6">
           <p className="font-hand text-2xl text-magenta-ink">{t("eyebrow")}</p>

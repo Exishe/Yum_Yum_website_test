@@ -26,9 +26,17 @@ export function newPublicId() {
   return randomBytes(12).toString("base64url");
 }
 
-export async function createOrder(data: CheckoutData, ipHash: string): Promise<OrderSuccess | OrderError> {
+export async function createOrder(
+  data: CheckoutData,
+  ipHash: string,
+): Promise<OrderSuccess | OrderError> {
   const locale = data.locale as Locale;
-  const [menu, shops, zones, settings] = await Promise.all([getMenu(), getShops(), getZones(), getSettings()]);
+  const [menu, shops, zones, settings] = await Promise.all([
+    getMenu(),
+    getShops(),
+    getZones(),
+    getSettings(),
+  ]);
 
   const products = new Map<number, MenuProduct>();
   for (const c of menu) for (const p of c.products) products.set(p.id, p);
@@ -63,7 +71,11 @@ export async function createOrder(data: CheckoutData, ipHash: string): Promise<O
     if (!quote.ok) {
       return quote.reason === "noZone"
         ? { ok: false, error: "noZone", field: "district" }
-        : { ok: false, error: "belowMinimum", params: { price: formatAmd(quote.minOrderAmd, locale) } };
+        : {
+            ok: false,
+            error: "belowMinimum",
+            params: { price: formatAmd(quote.minOrderAmd, locale) },
+          };
     }
     zoneId = quote.zone.id;
     deliveryFee = quote.feeAmd;
@@ -121,10 +133,18 @@ export async function createOrder(data: CheckoutData, ipHash: string): Promise<O
         quantity: l.quantity,
         lineTotalAmd: l.lineTotalAmd,
         details: {
-          options: l.options.map((o) => ({ id: o.id, name: t(o.name, locale), priceDeltaAmd: o.priceDeltaAmd })),
+          options: l.options.map((o) => ({
+            id: o.id,
+            name: t(o.name, locale),
+            priceDeltaAmd: o.priceDeltaAmd,
+          })),
           messages: l.messages.length ? l.messages : undefined,
           contents: l.contents.length
-            ? l.contents.map((c) => ({ productId: c.id, name: t(c.name, locale), priceAmd: c.priceAmd }))
+            ? l.contents.map((c) => ({
+                productId: c.id,
+                name: t(c.name, locale),
+                priceAmd: c.priceAmd,
+              }))
             : undefined,
         },
       })),
@@ -187,5 +207,9 @@ export async function orderNotification(publicId: string) {
     .filter((l) => l !== "")
     .join("\n");
 
-  return { orderId: order.id, subject: `New order #${order.shortCode} · ${order.totalAmd} AMD`, text };
+  return {
+    orderId: order.id,
+    subject: `New order #${order.shortCode} · ${order.totalAmd} AMD`,
+    text,
+  };
 }

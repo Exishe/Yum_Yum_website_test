@@ -83,7 +83,10 @@ export type ShopStatus =
   | { state: "unknown" };
 
 /** Live open/closed state for a shop. Mall shops (hours = null) return "unknown". */
-export function shopStatus(hours: WeekHours | null | undefined, now: Date = new Date()): ShopStatus {
+export function shopStatus(
+  hours: WeekHours | null | undefined,
+  now: Date = new Date(),
+): ShopStatus {
   if (!hours || hours.length !== 7) return { state: "unknown" };
   const p = yerevanParts(now);
   const today = hours[p.weekday];

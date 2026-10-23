@@ -4,12 +4,16 @@ import { Plus } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
-import { QuickView } from "@/components/catalog/QuickView";
+import dynamic from "next/dynamic";
 import { PhotoSoon } from "@/components/ui/PhotoSoon";
 import type { Locale } from "@/i18n/routing";
 import type { ClientProduct } from "@/lib/client-types";
 import { formatAmd } from "@/lib/format";
 import { t as pick } from "@/lib/localized";
+
+const QuickView = dynamic(() => import("@/components/catalog/QuickView").then((m) => m.QuickView), {
+  ssr: false,
+});
 
 export function GiftGrid({ products }: { products: ClientProduct[] }) {
   const t = useTranslations("catalog");
@@ -54,7 +58,7 @@ export function GiftGrid({ products }: { products: ClientProduct[] }) {
           );
         })}
       </ul>
-      <QuickView product={open} onClose={() => setOpen(null)} />
+      {open ? <QuickView product={open} onClose={() => setOpen(null)} /> : null}
     </>
   );
 }

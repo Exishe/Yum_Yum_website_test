@@ -39,7 +39,11 @@ export function OrderButton() {
       const anim = dot.animate(
         [
           { transform: "translate(0,0) scale(1)", opacity: 1 },
-          { transform: `translate(${dx * 0.5}px, ${dy - 80}px) scale(1.2) rotate(180deg)`, opacity: 1, offset: 0.5 },
+          {
+            transform: `translate(${dx * 0.5}px, ${dy - 80}px) scale(1.2) rotate(180deg)`,
+            opacity: 1,
+            offset: 0.5,
+          },
           { transform: `translate(${dx}px, ${dy}px) scale(0.4) rotate(360deg)`, opacity: 0.2 },
         ],
         { duration: 650, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },

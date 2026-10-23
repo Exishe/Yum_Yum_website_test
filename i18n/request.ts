@@ -21,7 +21,9 @@ function setPath(target: Messages, path: string, value: string) {
 export default getRequestConfig(async ({ requestLocale }) => {
   const requested = await requestLocale;
   const locale = hasLocale(routing.locales, requested) ? requested : routing.defaultLocale;
-  const messages = structuredClone((await import(`../messages/${locale}.json`)).default) as Messages;
+  const messages = structuredClone(
+    (await import(`../messages/${locale}.json`)).default,
+  ) as Messages;
 
   // Texts edited by the client in the admin panel win over the files.
   try {

@@ -38,7 +38,8 @@ function load() {
     const raw = window.localStorage.getItem(KEY);
     if (raw) {
       const parsed = JSON.parse(raw) as CartState;
-      if (Array.isArray(parsed.lines)) state = { lines: parsed.lines.slice(0, 40), shopId: parsed.shopId ?? null };
+      if (Array.isArray(parsed.lines))
+        state = { lines: parsed.lines.slice(0, 40), shopId: parsed.shopId ?? null };
     }
   } catch {
     state = EMPTY;
@@ -104,7 +105,10 @@ export const cart = {
         ),
       });
     } else {
-      const key = typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : String(Date.now());
+      const key =
+        typeof crypto !== "undefined" && "randomUUID" in crypto
+          ? crypto.randomUUID()
+          : String(Date.now());
       save({ ...state, lines: [...state.lines, { ...line, key }].slice(0, 40) });
     }
   },
@@ -115,7 +119,9 @@ export const cart = {
       lines:
         quantity <= 0
           ? state.lines.filter((l) => l.key !== key)
-          : state.lines.map((l) => (l.key === key ? { ...l, quantity: Math.min(50, quantity) } : l)),
+          : state.lines.map((l) =>
+              l.key === key ? { ...l, quantity: Math.min(50, quantity) } : l,
+            ),
     });
   },
   remove(key: string) {
@@ -142,5 +148,7 @@ export function cartSubtotal(s: CartState) {
 /** Fires the "fly into the basket" animation from the clicked element. */
 export function announceAdd(from?: Element | null) {
   if (typeof window === "undefined") return;
-  window.dispatchEvent(new CustomEvent("yy:cart-add", { detail: { rect: from?.getBoundingClientRect() } }));
+  window.dispatchEvent(
+    new CustomEvent("yy:cart-add", { detail: { rect: from?.getBoundingClientRect() } }),
+  );
 }

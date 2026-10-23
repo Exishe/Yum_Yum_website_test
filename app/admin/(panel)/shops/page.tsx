@@ -23,13 +23,17 @@ export default async function ShopsAdmin({ searchParams }: { searchParams: Searc
         <ul className="divide-y divide-line">
           {rows.map((s) => (
             <li key={s.id}>
-              <Link href={`/admin/shops/${s.id}`} className="flex flex-wrap items-center justify-between gap-2 px-4 py-3 hover:bg-blush">
+              <Link
+                href={`/admin/shops/${s.id}`}
+                className="flex flex-wrap items-center justify-between gap-2 px-4 py-3 hover:bg-blush"
+              >
                 <span>
                   <span className="font-semibold">{s.name.en}</span>
                   <span className="block text-xs text-muted">{s.address.en}</span>
                 </span>
                 <span className="text-xs">
-                  {s.isActive ? "On the website" : "Hidden"} · {s.isConfirmed ? "confirmed" : "not confirmed by the client"}
+                  {s.isActive ? "On the website" : "Hidden"} ·{" "}
+                  {s.isConfirmed ? "confirmed" : "not confirmed by the client"}
                 </span>
               </Link>
             </li>

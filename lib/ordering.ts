@@ -32,13 +32,16 @@ export function availableDays(opts: {
   return dates
     .map((dateKey) => {
       const window =
-        fulfilment === "delivery" ? rules.deliveryHours : windowFor(opts.shopHours ?? null, dateKey);
+        fulfilment === "delivery"
+          ? rules.deliveryHours
+          : windowFor(opts.shopHours ?? null, dateKey);
       if (!window) return { dateKey, slots: [] };
       const slots = buildSlots({
         dateKey,
         open: window.open,
         close: window.close,
-        slotMinutes: fulfilment === "delivery" ? rules.deliverySlotMinutes : rules.pickupSlotMinutes,
+        slotMinutes:
+          fulfilment === "delivery" ? rules.deliverySlotMinutes : rules.pickupSlotMinutes,
         leadMinutes: rules.minLeadMinutes,
         now: opts.now,
       });

@@ -11,12 +11,28 @@ export async function GET(req: NextRequest) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.redirect(new URL("/admin/login", req.url));
   const q = Object.fromEntries(req.nextUrl.searchParams.entries());
-  const rows = await db.select().from(orders).where(orderFilters(q)).orderBy(desc(orders.createdAt)).limit(5000);
-  const items = rows.length ? await db.select().from(orderItems).where(inArray(orderItems.orderId, rows.map((r) => r.id))) : [];
+  const rows = await db
+    .select()
+    .from(orders)
+    .where(orderFilters(q))
+    .orderBy(desc(orders.createdAt))
+    .limit(5000);
+  const items = rows.length
+    ? await db
+        .select()
+        .from(orderItems)
+        .where(
+          inArray(
+            orderItems.orderId,
+            rows.map((r) => r.id),
+          ),
+        )
+    : [];
   const shopList = await db.select({ id: shops.id, name: shops.name }).from(shops);
   const shopName = new Map(shopList.map((s) => [s.id, s.name.en]));
   const byOrder = new Map<string, string[]>();
-  for (const i of items) byOrder.set(i.orderId, [...(byOrder.get(i.orderId) ?? []), `${i.quantity}x ${i.name}`]);
+  for (const i of items)
+    byOrder.set(i.orderId, [...(byOrder.get(i.orderId) ?? []), `${i.quantity}x ${i.name}`]);
 
   // Neutralise spreadsheet formulas (CSV injection) and quote every cell.
   const cell = (v: unknown) => {
@@ -24,8 +40,28 @@ export async function GET(req: NextRequest) {
     if (/^[=+\-@\t\r]/.test(s)) s = `'${s}`;
     return `"${s.replace(/"/g, '""')}"`;
   };
-  const fmt = new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Yerevan", dateStyle: "short", timeStyle: "short" });
-  const header = ["code", "status", "placed", "for", "slot", "type", "shop/district", "name", "phone", "items", "subtotal", "delivery", "total", "payment", "comment"];
+  const fmt = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Yerevan",
+    dateStyle: "short",
+    timeStyle: "short",
+  });
+  const header = [
+    "code",
+    "status",
+    "placed",
+    "for",
+    "slot",
+    "type",
+    "shop/district",
+    "name",
+    "phone",
+    "items",
+    "subtotal",
+    "delivery",
+    "total",
+    "payment",
+    "comment",
+  ];
   const lines = rows.map((o) =>
     [
       o.shortCode,

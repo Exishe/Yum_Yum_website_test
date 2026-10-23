@@ -13,7 +13,11 @@ type Props = { params: Promise<{ locale: string }>; searchParams: Promise<{ cate
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta" });
-  return { title: t("menuTitle"), description: t("menuDescription"), alternates: alternates(locale as Locale, "/menu") };
+  return {
+    title: t("menuTitle"),
+    description: t("menuDescription"),
+    alternates: alternates(locale as Locale, "/menu"),
+  };
 }
 
 export default async function MenuPage({ params, searchParams }: Props) {

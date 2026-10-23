@@ -5,8 +5,8 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import "../globals.css";
 import { Banner } from "@/components/layout/Banner";
-import { CartDrawer } from "@/components/layout/CartDrawer";
 import { CookieConsent } from "@/components/layout/CookieConsent";
+import { LazyCartDrawer } from "@/components/layout/LazyCartDrawer";
 import { Footer } from "@/components/layout/Footer";
 import { Header, type NavCategory } from "@/components/layout/Header";
 import { StickyOrderBar } from "@/components/layout/StickyOrderBar";
@@ -26,7 +26,11 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta" });
   return {
@@ -39,7 +43,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       type: "website",
       siteName: t("siteName"),
       locale: locale === "hy" ? "hy_AM" : locale === "ru" ? "ru_RU" : "en_GB",
-      images: [{ url: `/${locale}/opengraph-image`, width: 1200, height: 630, alt: t("ogAlt") }],
+      images: [{ url: "/images/brand/og.jpg", width: 1200, height: 630, alt: t("ogAlt") }],
     },
     twitter: { card: "summary_large_image" },
     formatDetection: { telephone: false },
@@ -82,10 +86,26 @@ export default async function LocaleLayout({
       };
     });
   const phone = settings.contact.phones[0] ?? "+37433301574";
-  // The legal texts are only rendered on the server; keep them out of the browser bundle.
-  const { legal: _legal, meta: _meta, ...clientMessages } = messages as Record<string, unknown>;
-  void _legal;
-  void _meta;
+  // Send the browser only the texts that client components use.
+  const clientNamespaces = [
+    "common",
+    "nav",
+    "lang",
+    "banner",
+    "hero",
+    "catalog",
+    "gifts",
+    "cart",
+    "checkout",
+    "errors",
+    "cookies",
+    "footer",
+    "contact",
+    "shops",
+    "reviews",
+  ];
+  const all = messages as Record<string, unknown>;
+  const clientMessages = Object.fromEntries(clientNamespaces.map((k) => [k, all[k]]));
 
   return (
     <html lang={locale} className={fontVariables} suppressHydrationWarning>
@@ -98,12 +118,16 @@ export default async function LocaleLayout({
             {tc("skip")}
           </a>
           {settings.banner.enabled ? <Banner text={pick(settings.banner.text, locale)} /> : null}
-          <Header categories={categories} phone={phone} phoneDisplay={formatPhone(phone, "local")} />
+          <Header
+            categories={categories}
+            phone={phone}
+            phoneDisplay={formatPhone(phone, "local")}
+          />
           <main id="main" tabIndex={-1} className="outline-none">
             {children}
           </main>
           <Footer categories={menu.filter((c) => c.inMenu)} shops={shops} settings={settings} />
-          <CartDrawer />
+          <LazyCartDrawer />
           <StickyOrderBar shops={shops.map((s) => ({ id: s.id, name: pick(s.name, locale) }))} />
           <CookieConsent
             nonce={nonce}

@@ -21,12 +21,16 @@ export function ContactForm() {
 
   if (done)
     return (
-      <p role="status" className="flex items-center gap-3 rounded-2xl bg-white p-6 text-lg shadow-card">
+      <p
+        role="status"
+        className="flex items-center gap-3 rounded-2xl bg-white p-6 text-lg shadow-card"
+      >
         <CheckCircle size={28} className="text-magenta" aria-hidden /> {t("sent")}
       </p>
     );
 
-  const input = "mt-1 w-full rounded-2xl border-2 border-line bg-white px-4 py-3 focus:border-plum focus:outline-none aria-invalid:border-magenta";
+  const input =
+    "mt-1 w-full rounded-2xl border-2 border-line bg-white px-4 py-3 focus:border-plum focus:outline-none aria-invalid:border-magenta";
   const err = (k: string) =>
     fields[k] ? (
       <p id={`c-${k}-err`} className="mt-1 text-sm text-magenta-ink">
@@ -61,27 +65,62 @@ export function ContactForm() {
     >
       <label className="font-semibold">
         {t("name")}
-        <input name="name" autoComplete="name" required maxLength={60} aria-invalid={!!fields.name} aria-describedby={fields.name ? "c-name-err" : undefined} className={input} />
+        <input
+          name="name"
+          autoComplete="name"
+          required
+          maxLength={60}
+          aria-invalid={!!fields.name}
+          aria-describedby={fields.name ? "c-name-err" : undefined}
+          className={input}
+        />
         {err("name")}
       </label>
       <label className="font-semibold">
         {t("contact")}
-        <input name="contact" autoComplete="tel" required maxLength={120} aria-invalid={!!fields.contact} aria-describedby={fields.contact ? "c-contact-err" : undefined} className={input} />
+        <input
+          name="contact"
+          autoComplete="tel"
+          required
+          maxLength={120}
+          aria-invalid={!!fields.contact}
+          aria-describedby={fields.contact ? "c-contact-err" : undefined}
+          className={input}
+        />
         {err("contact")}
       </label>
       <label className="font-semibold">
         {t("message")}
-        <textarea name="message" rows={5} required maxLength={2000} aria-invalid={!!fields.message} aria-describedby={fields.message ? "c-message-err" : undefined} className={input} />
+        <textarea
+          name="message"
+          rows={5}
+          required
+          maxLength={2000}
+          aria-invalid={!!fields.message}
+          aria-describedby={fields.message ? "c-message-err" : undefined}
+          className={input}
+        />
         {err("message")}
       </label>
-      <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden className="hidden" />
+      <input
+        type="text"
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden
+        className="hidden"
+      />
       <Turnstile onToken={onToken} label={tk("turnstile")} locale={locale} />
       {error ? (
         <p role="alert" className="text-sm text-magenta-ink">
           {error}
         </p>
       ) : null}
-      <button type="submit" disabled={pending} className="h-13 rounded-full bg-plum py-3.5 font-semibold text-white disabled:opacity-60">
+      <button
+        type="submit"
+        disabled={pending}
+        className="h-13 rounded-full bg-plum py-3.5 font-semibold text-white disabled:opacity-60"
+      >
         {pending ? tc("sending") : tc("send")}
       </button>
     </form>
