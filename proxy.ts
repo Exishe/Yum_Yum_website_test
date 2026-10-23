@@ -57,6 +57,9 @@ export default function proxy(request: NextRequest) {
     : intl(request);
 
   response.headers.set("Content-Security-Policy", csp);
+  // Preview links (pnpm share) must never end up in search results.
+  if (process.env.PREVIEW_NOINDEX === "1")
+    response.headers.set("X-Robots-Tag", "noindex, nofollow");
   if (isAdmin) {
     response.headers.set("X-Robots-Tag", "noindex, nofollow");
     response.headers.set("Cache-Control", "no-store");

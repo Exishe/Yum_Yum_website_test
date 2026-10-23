@@ -44,6 +44,17 @@ Demo mode is used automatically whenever `DATABASE_URL` is not set, and only out
 
 ---
 
+## Share a preview link (temporary, from your PC)
+
+1. In PowerShell, in the project folder: `npx.cmd -y pnpm@10.28.0 share` (or `pnpm share`). It builds the fast production version and serves it on http://localhost:3000 with the demo database. Search engines are told not to index it.
+2. Install Cloudflare's tunnel once: `winget install --id Cloudflare.cloudflared -e` (macOS: `brew install cloudflared`). Close and reopen PowerShell.
+3. In a **second** PowerShell window: `cloudflared tunnel --url http://localhost:3000`
+4. It prints a link like `https://random-words.trycloudflare.com`. Send people that link with `/hy`, `/ru` or `/en` at the end.
+
+The link works only while both windows stay open and the PC is awake, and changes every time. For a permanent link, deploy (section 7).
+
+---
+
 ## 1. Install the tools (once per computer)
 
 You need **Node.js 22 LTS**, **pnpm 10**, **Git**, and a **PostgreSQL 16** database

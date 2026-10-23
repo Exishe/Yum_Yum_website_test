@@ -26,7 +26,8 @@
     "images": "tsx scripts/prepare-images.ts",
     "prepare": "husky",
     "demo": "tsx scripts/demo.ts && next dev",
-    "demo:reset": "tsx db/reset.ts"
+    "demo:reset": "tsx db/reset.ts",
+    "share": "tsx scripts/share.ts"
   },
   "lint-staged": {
     "*.{ts,tsx,js,mjs}": [

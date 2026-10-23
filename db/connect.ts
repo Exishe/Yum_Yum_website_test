@@ -58,8 +58,11 @@ export function openDatabase(opts: { script?: boolean } = {}): Connection {
       "DATABASE_URL is not set. Demo mode (built-in database) is for local use only.",
     );
   }
-  mkdirSync(DEMO_DATA_DIR, { recursive: true });
-  const client = new PGlite(DEMO_DATA_DIR);
+  // `next build` loads modules in several worker processes; give each a
+  // throwaway in-memory database so they never touch the files at once.
+  const building = process.env.NEXT_PHASE === "phase-production-build";
+  if (!building) mkdirSync(DEMO_DATA_DIR, { recursive: true });
+  const client = building ? new PGlite() : new PGlite(DEMO_DATA_DIR);
   const db = drizzlePglite(client, { schema }) as unknown as Db;
   return {
     kind: "pglite",
