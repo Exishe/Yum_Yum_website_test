@@ -1,0 +1,279 @@
+@import "tailwindcss";
+
+/*
+ * Armenian and Cyrillic faces are self-hosted with stable URLs so each page can
+ * preload only what its language needs (see app/[locale]/layout.tsx).
+ * Source: Google Fonts, SIL Open Font License 1.1.
+ */
+@font-face {
+  font-family: "YY Armenian";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("/fonts/noto-sans-armenian-v47.woff2") format("woff2");
+  unicode-range: U+0308, U+0530-058F, U+2010, U+2024, U+25CC, U+FB13-FB17;
+}
+@font-face {
+  font-family: "YY Rubik";
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+  src: url("/fonts/rubik-cyrillic-v31.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "YY Onest";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/fonts/onest-cyrillic-v11.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+/*
+ * YUM-YUM design tokens.
+ * Magenta and yellow are sampled from the 1080 px logo (#DE1281, #FFEC01).
+ * Text colours are checked against WCAG AA in docs/DESIGN.md.
+ */
+@theme {
+  --color-magenta: #de1281;
+  --color-magenta-ink: #b30c68; /* magenta for small text on cream: 6.3:1 */
+  --color-pink-glow: #ff6fb5; /* magenta-family text on plum: 7.0:1 */
+  --color-magenta-soft: #ffd3e7;
+  --color-yellow: #ffec01; /* logo yellow */
+  --color-sun: #ffe14d; /* warmer yellow for large areas and buttons */
+  --color-sun-soft: #fff4b8;
+  --color-plum: #2b0a24;
+  --color-plum-2: #3d1234;
+  --color-plum-3: #552049;
+  --color-muted: #6a4a62; /* secondary text on cream: 7.2:1 */
+  --color-cream: #fff8f2;
+  --color-blush: #fff3f8;
+  --color-line: #f1dfe9;
+  --color-sky: #5ec8f2;
+  --color-mint: #6fd3a1;
+  --color-orange: #ff9a3d;
+
+  --font-display: var(--font-bagel), "YY Rubik", "YY Armenian", ui-rounded, system-ui, sans-serif;
+  --font-sans: var(--font-onest), "YY Onest", "YY Armenian", ui-sans-serif, system-ui, sans-serif;
+  --font-hand: var(--font-hand-face), "YY Armenian", cursive;
+
+  --radius-card: 1.25rem;
+  --radius-xl2: 1.75rem;
+
+  --shadow-card: 0 1px 0 rgb(43 10 36 / 0.04), 0 10px 30px -12px rgb(43 10 36 / 0.18);
+  --shadow-lift: 0 2px 0 rgb(43 10 36 / 0.05), 0 22px 40px -16px rgb(43 10 36 / 0.28);
+  --shadow-pop: 0 6px 0 rgb(43 10 36 / 0.9);
+
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-spin-slow: spin 38s linear infinite;
+  --animate-marquee: marquee 48s linear infinite;
+  --animate-blob: blob 18s ease-in-out infinite;
+  --animate-drift: drift 14s ease-in-out infinite;
+  --animate-wiggle: wiggle 0.6s ease-in-out;
+  --animate-pop: pop 0.45s var(--ease-bounce);
+  --animate-panel: panel 0.35s var(--ease-out-soft);
+  --animate-rise: rise 0.5s var(--ease-out-soft) both;
+  --animate-fade: fade 0.2s ease-out;
+  --animate-slide-in: slide-in 0.35s var(--ease-out-soft);
+  --animate-slide-up: slide-up 0.35s var(--ease-out-soft);
+
+  @keyframes marquee {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+  @keyframes blob {
+    0%,
+    100% {
+      border-radius: 58% 42% 55% 45% / 45% 55% 45% 55%;
+      transform: translate3d(0, 0, 0) rotate(0deg);
+    }
+    33% {
+      border-radius: 40% 60% 38% 62% / 60% 35% 65% 40%;
+      transform: translate3d(2%, -3%, 0) rotate(8deg);
+    }
+    66% {
+      border-radius: 62% 38% 46% 54% / 38% 62% 38% 62%;
+      transform: translate3d(-2%, 2%, 0) rotate(-6deg);
+    }
+  }
+  @keyframes drift {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0) rotate(var(--r, 20deg));
+    }
+    50% {
+      transform: translate3d(6px, -14px, 0) rotate(calc(var(--r, 20deg) + 30deg));
+    }
+  }
+  @keyframes wiggle {
+    0%,
+    100% {
+      transform: rotate(0);
+    }
+    25% {
+      transform: rotate(-10deg);
+    }
+    60% {
+      transform: rotate(8deg);
+    }
+  }
+  @keyframes panel {
+    from {
+      opacity: 0;
+      transform: translate3d(0, -14px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes slide-in {
+    from {
+      transform: translate3d(100%, 0, 0);
+    }
+  }
+  @keyframes slide-up {
+    from {
+      transform: translate3d(0, 100%, 0);
+    }
+  }
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 18px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes pop {
+    0% {
+      transform: scale(1);
+    }
+    40% {
+      transform: scale(1.25);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 6rem;
+  }
+  body {
+    background: var(--color-cream);
+    color: var(--color-plum);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: var(--font-display);
+    /* Bagel has a single weight; never fake a bold. Cyrillic and Armenian fall
+       back to Rubik and Noto Sans Armenian at their heavy weights. */
+    font-weight: 800;
+    font-synthesis: none;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  :lang(hy) h1,
+  :lang(hy) h2,
+  :lang(hy) h3,
+  :lang(hy) .font-display {
+    letter-spacing: 0;
+    line-height: 1.08;
+  }
+  ::selection {
+    background: var(--color-sun);
+    color: var(--color-plum);
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-magenta);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  .on-dark :focus-visible,
+  .on-dark:focus-visible {
+    outline-color: var(--color-sun);
+  }
+  /* Visually hidden inputs inside chip labels must stay inside their scroll row. */
+  label:has(> input.sr-only) {
+    position: relative;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+@layer utilities {
+  /* Armenian and Cyrillic headlines are longer than the English pun. */
+  .shops-badge:lang(hy) {
+    font-size: clamp(0.95rem, 2.6vw, 1.25rem);
+  }
+  .hero-title:lang(hy),
+  .hero-title:lang(ru) {
+    font-size: clamp(2.35rem, 9.6vw, 6.4rem);
+  }
+  .dot-grid {
+    background-image: radial-gradient(rgb(222 18 129 / 0.16) 1.2px, transparent 1.3px);
+    background-size: 22px 22px;
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .snap-row {
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+  .snap-row > * {
+    scroll-snap-align: start;
+  }
+  .leader {
+    background-image: radial-gradient(circle, rgb(43 10 36 / 0.35) 0.9px, transparent 1px);
+    background-size: 6px 3px;
+    background-repeat: repeat-x;
+    background-position: left center;
+  }
+  .text-outline-white {
+    -webkit-text-stroke: 1.5px white;
+  }
+  .wave-top {
+    mask: radial-gradient(60% 40px at 50% 0, transparent 98%, #000) top / 100% 100% no-repeat;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

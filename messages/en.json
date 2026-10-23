@@ -1,0 +1,548 @@
+{
+  "meta": {
+    "siteName": "YUM-YUM Donuts",
+    "title": "YUM-YUM Donuts: donuts, coffee and gifts in Yerevan",
+    "description": "Yerevan's donut and coffee shop since 1997. Glazed donuts every morning, iced coffee, cakes and donut bouquets. Order for pickup or delivery.",
+    "menuTitle": "Menu & prices",
+    "menuDescription": "Donuts, iced drinks, coffee, cakes and gifts with prices in dram. Order for pickup or delivery in Yerevan.",
+    "giftsTitle": "Donut bouquets, boxes and name donuts",
+    "giftsDescription": "Donut bouquets, birthday stacks and boxes of 6 or 12. Names written in glaze by hand. Order a day ahead.",
+    "storyTitle": "Our story",
+    "storyDescription": "Since 1997, the pink-and-yellow donut shop that a few generations of Yerevan grew up with.",
+    "shopsTitle": "Shops and opening hours",
+    "shopsDescription": "All YUM-YUM Donuts shops in Yerevan with addresses, hours and directions.",
+    "checkoutTitle": "Your order",
+    "contactTitle": "Contact us",
+    "privacyTitle": "Privacy policy",
+    "termsTitle": "Terms of sale and delivery",
+    "orderTitle": "Order status",
+    "newsletterTitle": "Newsletter",
+    "ogAlt": "Chocolate, sprinkle and glazed donuts at YUM-YUM Donuts"
+  },
+  "common": {
+    "skip": "Skip to content",
+    "close": "Close",
+    "back": "Back",
+    "loading": "Loading…",
+    "call": "Call",
+    "orCall": "or call {phone}",
+    "send": "Send",
+    "sending": "Sending…",
+    "required": "required",
+    "optional": "optional",
+    "photoSoon": "photo coming soon",
+    "newTab": "opens in a new tab",
+    "everyDay": "Every day",
+    "hoursDaily": "Every day 9:00–22:00",
+    "mallHours": "mall hours",
+    "yerevan": "Yerevan"
+  },
+  "nav": {
+    "menu": "Menu",
+    "bouquets": "Bouquets",
+    "story": "Our story",
+    "findShop": "Find a shop",
+    "order": "Order",
+    "orderLabel": "Your order, {count, plural, =0 {empty} one {# item} other {# items}}",
+    "home": "YUM-YUM Donuts, home page",
+    "mainNav": "Main",
+    "openMenu": "Open the menu",
+    "closeMenu": "Close the menu",
+    "menuPanel": "Menu categories",
+    "items": "{count, plural, one {# item} other {# items}}",
+    "from": "from {price}",
+    "fullMenu": "Full menu",
+    "gifts": "Gifts",
+    "shops": "Shops",
+    "contact": "Contact",
+    "callUs": "Call us",
+    "quick": "Quick links"
+  },
+  "lang": {
+    "label": "Language",
+    "hy": "ՀԱՅ",
+    "ru": "РУС",
+    "en": "EN",
+    "hyFull": "Հայերեն",
+    "ruFull": "Русский",
+    "enFull": "English"
+  },
+  "banner": {
+    "label": "Today in the window",
+    "dismiss": "Hide this message"
+  },
+  "hero": {
+    "badge": "First tray out at 9:00, every day",
+    "titleA": "Donut",
+    "titleB": "give up.",
+    "tagline": "",
+    "lead": "Glazed donuts, iced coffee and birthday cakes from the pink-and-yellow shop a few generations of Yerevan grew up with.",
+    "craving": "so… what are you craving?",
+    "chips": {
+      "glazed": "Something glazed",
+      "cold": "Something cold",
+      "gift": "A gift",
+      "cake": "Cake & coffee"
+    },
+    "cta": {
+      "glazed": "See all donuts",
+      "cold": "See iced drinks",
+      "gift": "Build a gift",
+      "cake": "See cakes & bakes"
+    },
+    "todaysPick": "today’s pick",
+    "addPick": "Add {name} to your order",
+    "ring": "DONUT GIVE UP • GLAZED BY HAND • YEREVAN • ",
+    "shopsBadge": "{count} shops",
+    "shopsBadgeSub": "in Yerevan",
+    "photoAlt": {
+      "glazed": "Chocolate, sprinkle and white-glazed donuts, close up",
+      "cold": "Iced coffee in a DONUT GIVE UP cup next to a caramel donut",
+      "gift": "Donut bouquet in pink paper with messages written in glaze",
+      "cake": "Cappuccino in a DONUT GIVE UP cup and a slice of chocolate cake"
+    },
+    "stripLabel": "Photos from our shops",
+    "strip": "yum"
+  },
+  "perks": {
+    "label": "Why people come back",
+    "fresh": "Fresh at 9:00",
+    "freshSub": "Glazed every morning",
+    "shops": "{count} shops",
+    "shopsSub": "Centre and both malls",
+    "takeaway": "Take it with you",
+    "takeawaySub": "Boxes and bouquets to go",
+    "cards": "Cards welcome",
+    "cardsSub": "Visa, MasterCard, ArCa"
+  },
+  "catalog": {
+    "eyebrow": "what’s in the window today",
+    "title": "Menu & prices",
+    "tabs": "Menu categories",
+    "filters": "Filter",
+    "filter": {
+      "all": "All",
+      "glazed": "Glazed",
+      "chocolate": "Chocolate",
+      "fruity": "Fruity",
+      "filled": "Filled",
+      "kids": "Kids love it",
+      "iced": "Iced",
+      "hot": "Hot",
+      "savoury": "Savoury",
+      "gifts": "Gifts"
+    },
+    "search": "Search the menu",
+    "searchPlaceholder": "Pistachio, Oreo, latte…",
+    "noResults": "Nothing with “{query}” today. Try another word, or call us and we’ll check the window.",
+    "clearSearch": "Clear search",
+    "featured": "the one everyone orders",
+    "add": "Add",
+    "addNamed": "Add {name}",
+    "addPrice": "Add · {price}",
+    "soldOut": "sold out today",
+    "badge": {
+      "new": "new",
+      "bestseller": "bestseller"
+    },
+    "priceNote": "Prices in Armenian dram. Selection changes daily: what’s in the window is what we have.",
+    "seeAll": "See the full menu",
+    "showMore": "Show {count} more",
+    "results": "{count, plural, =0 {No items} one {# item} other {# items}}",
+    "quick": {
+      "title": "Details",
+      "size": "Size",
+      "syrup": "Add a syrup",
+      "extra": "Extras",
+      "filling": "Filling",
+      "quantity": "Quantity",
+      "decrease": "One less",
+      "increase": "One more",
+      "message": "Text in glaze",
+      "messagePlaceholder": "Name or a short word",
+      "messageHint": "Up to {max} characters. We write it by hand.",
+      "messages": "Messages on the donuts",
+      "messagesHint": "One message per line, up to {max} characters each.",
+      "leadTime": "Made to order: pick a date from tomorrow.",
+      "addToOrder": "Add to order · {price}",
+      "added": "Added to your order"
+    }
+  },
+  "gifts": {
+    "eyebrow": "flowers wilt. donuts get eaten.",
+    "title": "Say it with donuts.",
+    "lead": "A bouquet wrapped in pink paper, a stack for a birthday, names and little messages written in glaze on top. Order a day ahead and tell us who it’s for.",
+    "bouquet": "Donut bouquet",
+    "bouquetSub": "Donuts with your messages, wrapped in pink",
+    "stack": "Birthday stack",
+    "stackSub": "Donut tower with a “Happy Birthday” topper",
+    "nameDonut": "Name donuts",
+    "nameDonutSub": "Any name or word written in glaze",
+    "from": "from {price}",
+    "each": "{price} each",
+    "callToOrder": "Call to order · {phone}",
+    "orderOnline": "Order online",
+    "handwritten": "yes, we write the names by hand",
+    "bouquetAlt": "Donut bouquet with messages “have a nice day” and a name, wrapped in pink paper with a yellow ribbon",
+    "stackAlt": "Stack of yellow donuts with sprinkles under a gold “Happy Birthday” topper",
+    "pageLead": "Bouquets, birthday stacks, boxes and name donuts. Everything here is made by hand on the day, so please order at least one day ahead.",
+    "bouquetsTitle": "Bouquets and compositions",
+    "box": {
+      "title": "Pack your box",
+      "lead": "Pick 6 or 12 and watch them fill the box. Mix as you like.",
+      "size": "Box size",
+      "six": "Box of 6",
+      "twelve": "Box of 12",
+      "pick": "Tap a donut to add it",
+      "left": "{count, plural, =0 {Box is full!} one {# space left} other {# spaces left}}",
+      "remove": "Take out {name}",
+      "clear": "Empty the box",
+      "add": "Add box · {price}",
+      "boxFee": "box {price}",
+      "full": "Box is full",
+      "slot": "Empty space {n}"
+    },
+    "name": {
+      "title": "Try your name donut",
+      "lead": "Type a name. This is roughly how it will look in glaze.",
+      "label": "Text for the donut",
+      "placeholder": "Ani",
+      "hint": "Up to {max} letters. Latin, Armenian or Cyrillic.",
+      "add": "Add name donut · {price}",
+      "previewAlt": "Preview of a donut with the text “{text}” written in glaze"
+    }
+  },
+  "story": {
+    "eyebrow": "ask your parents about us",
+    "title": "The wall of donuts on Abovyan.",
+    "body": "We’re a donut & coffee shop that has fed a few generations of Yerevan. The same counters full of glazed rings, the same donut wall on the back, and now cakes, muffins and iced coffee too.",
+    "statShops": "shops in Yerevan",
+    "statHours": "open every day",
+    "statHoursValue": "13h",
+    "statRating": "on Google, {count} reviews",
+    "statSince": "since",
+    "readMore": "Read our story",
+    "interiorAlt": "Inside YUM-YUM on Abovyan: the lit donut wall, menu boards and the counter",
+    "counterAlt": "Display counter with croissants, muffins and chocolate donuts",
+    "muffinsAlt": "Chocolate muffins with an espresso and a jar of cookies",
+    "cakeAlt": "Slice of blackberry layer cake on YUM-YUM paper",
+    "page": {
+      "lead": "On 9 December 1997, when Yerevan was still cold and dark most evenings, a small café with yellow walls and pink tables opened on Mashtots Avenue.",
+      "p1": "It was started by Toros, an Armenian from New Jersey, with his sister Nune Sahakyan running the place. The idea was simple: Yerevan had no quick, friendly café, and everyone in the world loves a donut.",
+      "p2": "Coffee cost 250 dram, and taking food away in a paper bag was something new. Students from the art, architecture and polytechnic schools and the conservatory, painters, actors and embassy staff came every day. People wrote their theses here, met, fell in love.",
+      "p3": "When the queue got too long, a sign appeared: 30 minutes per table. Guests kept correcting it to 130, then 230. A local magazine later called the place “the Facebook of its day”.",
+      "p4": "The first café closed in 2010 and moved to Northern Avenue. Today the same pink-and-yellow sign hangs over shops across the city, and the donuts are still glazed by hand every morning.",
+      "source": "History from “Donatanots”, ԵՐԵՎԱՆ magazine no. 18, 2013, by Lena Gevorgyan.",
+      "timeline": "Timeline",
+      "t1997": "First café opens at 39/12 Mashtots Ave.",
+      "t2010": "Moves to Northern Avenue.",
+      "tToday": "{count} shops across Yerevan, from Abovyan to the malls."
+    }
+  },
+  "ticker": [
+    "Donut give up",
+    "Glazed every morning",
+    "Bouquets to order",
+    "Iced coffee",
+    "{count} shops"
+  ],
+  "spotted": {
+    "titleA": "Spotted at",
+    "titleB": "YUM YUM",
+    "tag": "Tag us @{handle}",
+    "lead": "Real people, real donuts. Tag us on Instagram and you might end up here.",
+    "captions": {
+      "wall": "the donut wall",
+      "shake": "milkshake o’clock",
+      "neon": "two hands, two donuts",
+      "mall": "mall run",
+      "togo": "to go, please"
+    },
+    "alts": {
+      "wall": "Girl in a cap holding a sprinkle donut in front of the donut wall",
+      "shake": "Woman at a table with a milkshake and a plate of donuts",
+      "neon": "Girl holding two donuts under pink and blue neon",
+      "mall": "Woman in a pink sweater holding a donut box at the mall counter",
+      "togo": "Hand holding a milkshake in a GIVE UP cup with a donut on top"
+    }
+  },
+  "reviews": {
+    "label": "What people say",
+    "prev": "Previous review",
+    "next": "Next review",
+    "stars": "Rated {rating} out of 5",
+    "on": "{author} · {platform}",
+    "ratingsTitle": "Ratings",
+    "google": "Google · {count} reviews",
+    "yandex": "Yandex Maps · {label}",
+    "buyam": "buy.am"
+  },
+  "shops": {
+    "title": "Find the pink door.",
+    "lead": "{count} shops, all open every day. Pick one to see it on the map.",
+    "list": "Shops",
+    "directions": "Directions",
+    "directionsTo": "Directions to {name}",
+    "openNow": "Open now · until {time}",
+    "closedNow": "Closed · opens at {time}",
+    "closedTomorrow": "Closed · opens tomorrow at {time}",
+    "mallHours": "mall hours",
+    "photoAlt": "YUM-YUM Donuts at {name}",
+    "googleMaps": "Google Maps",
+    "yandexMaps": "Yandex Maps",
+    "twoGis": "2GIS",
+    "call": "Call the shop",
+    "map": "Map of {name}",
+    "hours": "Hours",
+    "pageLead": "Every shop has the same donuts, the same coffee and the same pink door. Mall shops follow the mall’s opening hours.",
+    "weekdays": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+  },
+  "delivery": {
+    "title": "Also on delivery apps",
+    "on": "Order on {name}"
+  },
+  "cart": {
+    "title": "Your order",
+    "empty": "Nothing here yet. The donuts are waiting.",
+    "browse": "See the menu",
+    "subtotal": "Subtotal",
+    "checkout": "Checkout",
+    "remove": "Remove {name}",
+    "decrease": "One less {name}",
+    "increase": "One more {name}",
+    "count": "{count, plural, =0 {Nothing} one {# item} other {# items}} in your order",
+    "pickupAt": "Pick up at {shop}",
+    "barCheckout": "Checkout",
+    "inBox": "In the box: {list}",
+    "text": "Text: {text}"
+  },
+  "checkout": {
+    "title": "Your order",
+    "lead": "Pick it up in a shop or we bring it to your door. You pay when you get it.",
+    "how": "How do you want it?",
+    "pickup": "Pickup",
+    "pickupSub": "Ready at the shop you choose",
+    "delivery": "Delivery",
+    "deliverySub": "Yerevan only, {open}–{close}",
+    "deliveryOff": "Delivery is paused right now. Pickup works as usual.",
+    "shop": "Shop",
+    "shopPlaceholder": "Choose a shop",
+    "when": "When",
+    "date": "Date",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "slot": "Time",
+    "noSlots": "No times left on this day. Please pick another day.",
+    "you": "Your details",
+    "name": "Name",
+    "phone": "Phone",
+    "phoneHint": "+374 XX XXX XXX. We call only if something is unclear.",
+    "address": "Address",
+    "district": "District",
+    "districtPlaceholder": "Choose a district",
+    "street": "Street",
+    "building": "Building",
+    "entrance": "Entrance",
+    "floor": "Floor",
+    "apartment": "Apartment",
+    "comment": "Comment",
+    "commentPlaceholder": "Doorbell code, who it’s for, “no nuts, please”…",
+    "payment": "Payment",
+    "cash": "Cash",
+    "cardOnDelivery": "Card on delivery or at pickup",
+    "onlineSoon": "Online payment is coming later.",
+    "consent": "I agree to the <link>privacy policy</link> and that YUM-YUM may use my name, phone and address to prepare and deliver this order.",
+    "summary": "Summary",
+    "deliveryFee": "Delivery",
+    "free": "free",
+    "total": "Total",
+    "minOrder": "Minimum order for {zone} is {price}.",
+    "leadNote": "Your order includes made-to-order items, so the earliest day is tomorrow.",
+    "submit": "Place order · {price}",
+    "submitting": "Placing your order…",
+    "empty": "Your order is empty.",
+    "edit": "Change",
+    "turnstile": "Quick check that you’re human",
+    "orDelivery": "Prefer an app?"
+  },
+  "order": {
+    "thanks": "Thank you, {name}!",
+    "number": "Order {code}",
+    "received": "We’ve got your order. The shop will confirm it shortly.",
+    "track": "This page updates by itself. Bookmark it to check your order later.",
+    "status": "Status",
+    "statuses": {
+      "new": "Received",
+      "confirmed": "Confirmed",
+      "preparing": "Being prepared",
+      "on_the_way": "On the way",
+      "ready_for_pickup": "Ready for pickup",
+      "done": "Done. Enjoy!",
+      "cancelled": "Cancelled"
+    },
+    "pickupAt": "Pickup at {shop}",
+    "deliveryTo": "Delivery to {address}",
+    "when": "{date}, {slot}",
+    "items": "Items",
+    "whatsapp": "Message us on WhatsApp",
+    "whatsappText": "Hi! My order {code} from the website:",
+    "call": "Questions? Call {phone}",
+    "notFound": "We couldn’t find this order. Check the link, or call us.",
+    "payOnPickup": "Pay at pickup: {method}",
+    "payOnDelivery": "Pay on delivery: {method}",
+    "methods": {
+      "cash": "cash",
+      "card_on_delivery": "card",
+      "online": "online"
+    }
+  },
+  "footer": {
+    "about": "A donut and coffee shop that has fed a few generations of Yerevan since 1997. Glazed by hand, every morning.",
+    "shop": "Shop",
+    "visit": "Visit",
+    "contact": "Contact",
+    "company": "Company",
+    "storyLink": "Our story",
+    "contactForm": "Write to us",
+    "press": "Press and partnerships",
+    "newsletter": "Fresh from the window",
+    "newsletterLead": "New flavours and seasonal boxes, about once a month. No spam.",
+    "email": "Email address",
+    "emailPlaceholder": "you@example.com",
+    "subscribe": "Subscribe",
+    "subscribed": "Almost there: check your inbox and confirm.",
+    "pay": "We accept",
+    "rights": "© {year} YUM-YUM Donuts, Yerevan",
+    "privacy": "Privacy policy",
+    "cookies": "Cookie settings",
+    "terms": "Terms of sale and delivery",
+    "legal": "Company details: {details}",
+    "legalPending": "to be added",
+    "allShops": "All shops",
+    "social": "Follow us"
+  },
+  "cookies": {
+    "text": "We only use the cookies the site needs to work (your language and your order). Analytics are off unless you allow them, and they never track you personally.",
+    "accept": "Allow analytics",
+    "essential": "Only essential",
+    "settings": "Cookie settings",
+    "title": "Cookies",
+    "essentialTitle": "Essential",
+    "essentialText": "Language, order basket, admin sign-in. Always on.",
+    "analyticsTitle": "Anonymous analytics",
+    "analyticsText": "Counts visits without cookies or personal data. Helps us see which pages work.",
+    "save": "Save"
+  },
+  "contact": {
+    "title": "Write to us",
+    "lead": "For orders, the fastest way is to call. For anything else (events, catering, partnerships), write here and we’ll get back to you.",
+    "name": "Your name",
+    "contact": "Phone or email",
+    "message": "Message",
+    "sent": "Thank you! We’ll reply soon.",
+    "phones": "Phones",
+    "socials": "Social media"
+  },
+  "newsletter": {
+    "confirmed": "You’re subscribed. See you in your inbox!",
+    "invalid": "This link has expired or was already used.",
+    "unsubscribed": "You’ve been unsubscribed."
+  },
+  "errors": {
+    "required": "Please fill this in.",
+    "tooLong": "That’s a bit too long.",
+    "phone": "Please enter an Armenian phone number, e.g. +374 94 30 15 74.",
+    "email": "Please check the email address.",
+    "consent": "Please agree to the privacy policy.",
+    "shop": "Please choose a shop.",
+    "district": "Please choose a district.",
+    "date": "Please choose a date.",
+    "slot": "Please choose a time.",
+    "emptyCart": "Your order is empty.",
+    "spam": "Something went wrong. Please try again.",
+    "turnstile": "Please complete the check above.",
+    "rateLimit": "Too many tries. Please wait a few minutes.",
+    "generic": "Something went wrong on our side. Please try again or call us.",
+    "unavailable": "{name} just sold out. Please remove it.",
+    "badBox": "Please fill the box before adding it.",
+    "badOption": "Please check the options for {name}.",
+    "badMessage": "Please shorten the text for {name}.",
+    "belowMinimum": "Minimum order for this area is {price}.",
+    "noZone": "We don’t deliver to this district yet.",
+    "leadTime": "Some items are made to order. Please choose tomorrow or later.",
+    "closed": "That shop is closed at that time.",
+    "slotPast": "That time has passed. Please pick a later one."
+  },
+  "notFound": {
+    "title": "This page was eaten.",
+    "lead": "Probably by someone who couldn’t wait. Let’s get you back to the donuts.",
+    "home": "Back to the home page"
+  },
+  "legal": {
+    "updated": "Last updated: {date}",
+    "privacy": [
+      {
+        "h": "Who we are",
+        "p": "YUM-YUM Donuts runs donut and coffee shops in Yerevan, Armenia. This policy explains what personal data this website collects and what we do with it. Company details: see the bottom of every page."
+      },
+      {
+        "h": "What we collect",
+        "p": "When you place an order: your name, phone number, and for delivery, your address and district, plus any comment you write. When you subscribe to the newsletter: your email address. When you write to us: your name, contact and message. We also keep a one-way hash of your IP address to stop spam; we cannot turn it back into an address."
+      },
+      {
+        "h": "Why",
+        "p": "Only to prepare and deliver your order, to contact you about it, and to send the newsletter you asked for. We do not sell or share your data for advertising."
+      },
+      {
+        "h": "Who else sees it",
+        "p": "Our shop staff. Our hosting and database providers (Vercel, Supabase) store it on our behalf. Order notifications go to the shop through Telegram or email. Nobody else."
+      },
+      {
+        "h": "How long we keep it",
+        "p": "Delivery addresses, phone numbers and names are removed from orders {days} days after the order. The order itself (items, totals) stays for our accounts. Newsletter emails stay until you unsubscribe."
+      },
+      {
+        "h": "Cookies",
+        "p": "We use only essential cookies: your language, your basket (stored in your browser) and the staff sign-in. Anonymous analytics run only if you allow them in Cookie settings."
+      },
+      {
+        "h": "Your rights",
+        "p": "You can ask us to show, correct or delete your data at any time. Call us or use the contact form. You can also complain to the Personal Data Protection Agency of Armenia."
+      }
+    ],
+    "terms": [
+      {
+        "h": "Orders",
+        "p": "An order is accepted when the shop confirms it. If an item has sold out, we call you and offer a swap or remove it from the bill."
+      },
+      {
+        "h": "Prices",
+        "p": "Prices are in Armenian dram and include VAT. The price you see when you order is the price you pay."
+      },
+      {
+        "h": "Pickup",
+        "p": "Pick up your order at the shop and time you chose. We keep it for one hour after the end of your time slot."
+      },
+      {
+        "h": "Delivery",
+        "p": "We deliver in Yerevan. The fee and minimum order depend on the district and are shown before you order. We aim to arrive within your time slot."
+      },
+      {
+        "h": "Made-to-order items",
+        "p": "Bouquets, birthday stacks and name donuts are made for you, so we need at least one day’s notice. You can cancel free of charge until the day before."
+      },
+      {
+        "h": "Payment",
+        "p": "Pay in cash or by card (Visa, MasterCard, ArCa) on delivery or at pickup."
+      },
+      {
+        "h": "Allergies",
+        "p": "Our kitchen handles wheat, milk, eggs, nuts and soy. Please ask the shop before ordering if you have an allergy."
+      },
+      {
+        "h": "Questions and complaints",
+        "p": "Call the shop or use the contact form. We answer every message."
+      }
+    ]
+  }
+}
