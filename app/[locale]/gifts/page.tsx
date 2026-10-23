@@ -46,7 +46,8 @@ export default async function GiftsPage({ params }: Props) {
             <Photo
               image={imgOrThrow("/images/source/tomsarkgh/yumyum-26.jpg")}
               alt={t("bouquetAlt")}
-              priority
+              loading="eager"
+              fetchPriority="high"
               sizes="380px"
               className="aspect-[4/5] w-full rounded-[1.3rem] object-cover"
             />
