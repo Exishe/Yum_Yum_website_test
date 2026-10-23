@@ -87,10 +87,10 @@ export function CookieConsent({ analyticsSrc, analyticsDomain, nonce }: { analyt
         <div
           role="region"
           aria-label={t("title")}
-          className="fixed inset-x-3 bottom-24 z-40 mx-auto max-w-xl animate-rise rounded-3xl bg-white p-5 shadow-lift ring-1 ring-line sm:bottom-6 lg:right-6 lg:left-auto lg:mx-0"
+          className="fixed inset-x-3 bottom-3 z-40 mx-auto max-w-xl animate-rise rounded-3xl bg-white p-4 shadow-lift ring-1 ring-line sm:bottom-6 sm:p-5 lg:right-6 lg:left-auto lg:mx-0"
         >
-          <p className="text-sm text-plum">{t("text")}</p>
-          <div className="mt-4 flex flex-wrap gap-2">
+          <p className="text-xs text-plum sm:text-sm">{t("text")}</p>
+          <div className="mt-3 flex flex-wrap gap-2">
             <button
               type="button"
               onClick={() => write("analytics")}

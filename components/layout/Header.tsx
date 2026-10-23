@@ -36,7 +36,7 @@ function NavPill({
     <Link
       {...rest}
       className={cn(
-        "group relative inline-flex h-11 items-center gap-2 overflow-hidden rounded-full border border-white/25 pr-4 pl-1.5 text-sm font-semibold text-white transition-colors",
+        "group relative h-11 items-center gap-2 overflow-hidden rounded-full border border-white/25 pr-4 pl-1.5 text-sm font-semibold text-white transition-colors",
         className,
       )}
     >

@@ -193,6 +193,14 @@
 }
 
 @layer utilities {
+  /* Armenian and Cyrillic headlines are longer than the English pun. */
+  .shops-badge:lang(hy) {
+    font-size: clamp(0.95rem, 2.6vw, 1.25rem);
+  }
+  .hero-title:lang(hy),
+  .hero-title:lang(ru) {
+    font-size: clamp(2.35rem, 9.6vw, 6.4rem);
+  }
   .dot-grid {
     background-image: radial-gradient(rgb(222 18 129 / 0.16) 1.2px, transparent 1.3px);
     background-size: 22px 22px;

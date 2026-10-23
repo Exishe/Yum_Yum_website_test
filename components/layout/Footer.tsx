@@ -48,7 +48,7 @@ export async function Footer({
   return (
     <footer className="on-dark bg-plum text-white">
       <div className="mx-auto max-w-[1440px] px-4 pt-16 pb-28 sm:px-6 lg:px-8 lg:pb-10">
-        <div className="grid gap-12 border-b border-white/12 pb-12 lg:grid-cols-[1.2fr_1fr]">
+        <div className="grid grid-cols-1 gap-12 border-b border-white/12 pb-12 lg:grid-cols-[1.2fr_1fr]">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
             <Image
               src="/images/brand/logo-240.png"
@@ -71,7 +71,7 @@ export async function Footer({
           </div>
         </div>
 
-        <div className="grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-10 py-12 sm:grid-cols-2 lg:grid-cols-4">
           <nav aria-labelledby="f-shop">
             <h2 id="f-shop" className="mb-4 font-sans text-xs font-bold tracking-[0.18em] text-sun uppercase">
               {t("shop")}
