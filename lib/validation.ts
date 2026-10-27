@@ -6,6 +6,10 @@ import { z } from "zod";
 import { districtKeys } from "./districts";
 import { normalizeArmenianPhone } from "./format";
 
+// Our Content-Security-Policy forbids eval. Without this, zod probes for it with
+// `new Function` on first use and the browser logs a CSP violation.
+z.config({ jitless: true });
+
 /** Trims, removes control characters and collapses runs of spaces. */
 export function clean(value: string): string {
   return value
