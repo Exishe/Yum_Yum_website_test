@@ -82,7 +82,7 @@
     "dismiss": "Hide this message"
   },
   "hero": {
-    "badge": "In Yerevan since 1997",
+    "badge": "Shops all over Yerevan",
     "titleA": "Donut",
     "titleB": "give up.",
     "tagline": "",
@@ -103,7 +103,7 @@
     "todaysPick": "today’s pick",
     "addPick": "Add {name} to your order",
     "ring": "DONUT GIVE UP • SINCE 1997 • YEREVAN • ",
-    "shopsBadge": "{count} shops",
+    "shopsBadge": "since 1997",
     "shopsBadgeSub": "in Yerevan",
     "photoAlt": {
       "glazed": "Chocolate, sprinkle and white-glazed donuts, close up",
@@ -118,8 +118,8 @@
     "label": "Why people come back",
     "fresh": "Since 1997",
     "freshSub": "First café on Mashtots Ave",
-    "shops": "{count} shops",
-    "shopsSub": "Centre and both malls",
+    "shops": "Shops all over town",
+    "shopsSub": "In the centre and in malls",
     "takeaway": "Take it with you",
     "takeawaySub": "Boxes and bouquets to go",
     "cards": "Cards welcome",
@@ -227,7 +227,6 @@
     "eyebrow": "ask your parents about us",
     "title": "A wall of donuts.",
     "body": "We’re a donut & coffee shop that has fed a few generations of Yerevan. Counters full of glazed rings, a wall of donuts, and cakes, muffins and iced coffee too.",
-    "statShops": "shops in Yerevan",
     "statHours": "first café on Mashtots",
     "statHoursValue": "1997",
     "statRating": "on Google, {count} reviews",
@@ -247,10 +246,16 @@
       "timeline": "Timeline",
       "t1997": "First café opens at 39/12 Mashtots Ave.",
       "t2010": "Moves to Northern Avenue.",
-      "tToday": "{count} shops across Yerevan, from Abovyan to the malls."
+      "tToday": "Shops across Yerevan, from Abovyan to the malls."
     }
   },
-  "ticker": ["Donut give up", "Since 1997", "Bouquets to order", "Iced coffee", "{count} shops"],
+  "ticker": [
+    "Donut give up",
+    "Since 1997",
+    "Bouquets to order",
+    "Iced coffee",
+    "Shops all over Yerevan"
+  ],
   "spotted": {
     "titleA": "Spotted at",
     "titleB": "YUM YUM",
@@ -284,7 +289,7 @@
   },
   "shops": {
     "title": "Find the pink door.",
-    "lead": "{count} shops, all open every day. Pick one to see it on the map.",
+    "lead": "All open every day. Pick one to see it on the map.",
     "list": "Shops",
     "directions": "Directions",
     "directionsTo": "Directions to {name}",

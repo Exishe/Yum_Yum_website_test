@@ -12,6 +12,7 @@ import { t } from "./localized";
 import { availableDays, findSlot } from "./ordering";
 import { isPricingError, leadDays, priceLine, quoteDelivery, type PricedLine } from "./pricing";
 import { getSettings } from "./settings";
+import { bothNames, orderMessage } from "./staff-message";
 import type { CheckoutData } from "./validation";
 
 export type OrderError = {
@@ -155,61 +156,46 @@ export async function createOrder(
   return { ok: true, publicId };
 }
 
-/** Plain-text summary for Telegram / email. Staff read Russian or Armenian; we send English + item names as ordered. */
+/** Message for the shop staff (Telegram / email): Armenian first, English next to it. */
 export async function orderNotification(publicId: string) {
   const order = await db.query.orders.findFirst({ where: eq(orders.publicId, publicId) });
   if (!order) return null;
-  const items = await db.select().from(orderItems).where(eq(orderItems.orderId, order.id));
-  const shops = await getShops();
-  const shop = shops.find((s) => s.id === order.shopId);
-  const district = districts.find((d) => d.key === order.district);
-  const date = new Intl.DateTimeFormat("en-GB", {
-    timeZone: "Asia/Yerevan",
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-  }).format(order.scheduledFor);
+  const [items, shops, menu] = await Promise.all([
+    db.select().from(orderItems).where(eq(orderItems.orderId, order.id)),
+    getShops(),
+    getMenu(),
+  ]);
+  // Names were stored in the customer's language; staff get them from the menu in Armenian.
+  const products = new Map(menu.flatMap((c) => c.products).map((p) => [p.id, p]));
+  const optionNames = new Map(
+    [...products.values()].flatMap((p) => p.options).map((o) => [o.id, o.name]),
+  );
 
-  const lines = items.map((i) => {
-    const d = i.details;
-    const extra = [
-      d?.options?.map((o) => o.name).join(", "),
-      d?.contents?.length ? `box: ${d.contents.map((c) => c.name).join(", ")}` : "",
-      d?.messages?.length ? `text: «${d.messages.join(" / ")}»` : "",
-    ]
-      .filter(Boolean)
-      .join(" · ");
-    return `• ${i.quantity} × ${i.name}${extra ? ` (${extra})` : ""} = ${i.lineTotalAmd} AMD`;
+  const { subject, text } = orderMessage({
+    shortCode: order.shortCode,
+    fulfilment: order.fulfilment,
+    shopName: shops.find((s) => s.id === order.shopId)?.name,
+    address: order.address,
+    districtName: districts.find((d) => d.key === order.district)?.name,
+    districtKey: order.district,
+    scheduledFor: order.scheduledFor,
+    slotLabel: order.slotLabel,
+    customerName: order.customerName,
+    phone: formatPhone(order.phone),
+    paymentMethod: order.paymentMethod,
+    deliveryFeeAmd: order.deliveryFeeAmd,
+    totalAmd: order.totalAmd,
+    comment: order.comment,
+    adminUrl: `${env.siteUrl}/admin/orders/${order.id}`,
+    items: items.map((i) => ({
+      quantity: i.quantity,
+      name: i.name,
+      names: i.productId ? products.get(i.productId)?.name : null,
+      lineTotalAmd: i.lineTotalAmd,
+      options: i.details?.options?.map((o) => bothNames(optionNames.get(o.id), o.name)),
+      contents: i.details?.contents?.map((c) => bothNames(products.get(c.productId)?.name, c.name)),
+      messages: i.details?.messages,
+    })),
   });
-
-  const where =
-    order.fulfilment === "pickup"
-      ? `PICKUP at ${shop ? t(shop.name, "en") : "?"}`
-      : `DELIVERY to ${order.address?.street} ${order.address?.building}` +
-        `${order.address?.entrance ? `, entr. ${order.address.entrance}` : ""}` +
-        `${order.address?.floor ? `, fl. ${order.address.floor}` : ""}` +
-        `${order.address?.apartment ? `, apt ${order.address.apartment}` : ""}` +
-        ` (${district ? t(district.name, "en") : order.district})`;
-
-  const text = [
-    `${where}`,
-    `When: ${date}, ${order.slotLabel}`,
-    `Name: ${order.customerName}`,
-    `Phone: ${formatPhone(order.phone)}`,
-    `Payment: ${order.paymentMethod === "cash" ? "cash" : "card"}`,
-    "",
-    ...lines,
-    order.deliveryFeeAmd ? `Delivery: ${order.deliveryFeeAmd} AMD` : "",
-    `TOTAL: ${order.totalAmd} AMD`,
-    order.comment ? `\nComment: ${order.comment}` : "",
-    `\nAdmin: ${env.siteUrl}/admin/orders/${order.id}`,
-  ]
-    .filter((l) => l !== "")
-    .join("\n");
-
-  return {
-    orderId: order.id,
-    subject: `New order #${order.shortCode} · ${order.totalAmd} AMD`,
-    text,
-  };
+  return { orderId: order.id, subject, text };
 }

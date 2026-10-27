@@ -1,9 +1,8 @@
 import { getMessages } from "next-intl/server";
 
 /** Plum band with the brand lines scrolling past. */
-export async function Ticker({ shopsCount }: { shopsCount: number }) {
-  const messages = (await getMessages()) as { ticker: string[] };
-  const items = messages.ticker.map((s) => s.replace("{count}", String(shopsCount)));
+export async function Ticker() {
+  const { ticker: items } = (await getMessages()) as { ticker: string[] };
   const row = (hidden: boolean) =>
     items.map((s, i) => (
       <li

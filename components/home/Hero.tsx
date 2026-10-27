@@ -40,12 +40,10 @@ export function Hero({
   choices,
   phone,
   phoneDisplay,
-  shopsCount,
 }: {
   choices: HeroChoice[];
   phone: string;
   phoneDisplay: string;
-  shopsCount: number;
 }) {
   const t = useTranslations("hero");
   const tc = useTranslations("common");
@@ -254,7 +252,7 @@ export function Hero({
           <p className="absolute top-[6%] right-[2%] grid size-[clamp(6rem,18vw,8.5rem)] rotate-6 place-items-center rounded-full bg-sun text-center shadow-card">
             <span>
               <span className="shops-badge block px-2 font-display text-[clamp(1.3rem,3.6vw,1.8rem)] leading-none">
-                {t("shopsBadge", { count: shopsCount })}
+                {t("shopsBadge")}
               </span>
               <span className="text-xs font-medium">{t("shopsBadgeSub")}</span>
             </span>

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Photo } from "@/components/ui/Photo";
 import type { Locale } from "@/i18n/routing";
-import { getShops } from "@/lib/catalog";
 import { imgOrThrow } from "@/lib/images";
 import { alternates } from "@/lib/seo";
 
@@ -22,12 +21,11 @@ export default async function StoryPage({ params }: Props) {
   const { locale } = (await params) as { locale: Locale };
   setRequestLocale(locale);
   const t = await getTranslations("story");
-  const shops = await getShops();
   const T = "/images/source/tomsarkgh";
   const timeline = [
     { year: "1997", text: t("page.t1997") },
     { year: "2010", text: t("page.t2010") },
-    { year: String(new Date().getFullYear()), text: t("page.tToday", { count: shops.length }) },
+    { year: String(new Date().getFullYear()), text: t("page.tToday") },
   ];
   return (
     <article className="dot-grid">

@@ -11,6 +11,7 @@ import { db } from "@/db";
 import { contactMessages, newsletterSubscribers } from "@/db/schema";
 import { env } from "./env";
 import { notifyShop, sendEmail } from "./notify";
+import { contactMessage } from "./staff-message";
 import { createOrder, orderNotification } from "./orders";
 import { clientIp, hashValue, rateLimit, sha256, verifyTurnstile } from "./security";
 import { checkoutSchema, contactSchema, newsletterSchema } from "./validation";
@@ -89,12 +90,7 @@ export async function sendContact(input: unknown): Promise<ActionResult> {
       locale: data.locale,
       ipHash: hashValue(ip),
     });
-    after(() =>
-      notifyShop({
-        subject: `Website message from ${data.name}`,
-        text: `${data.name} (${data.contact}) wrote:\n\n${data.message}`,
-      }),
-    );
+    after(() => notifyShop(contactMessage(data)));
     return { ok: true };
   } catch (err) {
     console.error("[sendContact]", err);

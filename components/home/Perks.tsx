@@ -1,16 +1,11 @@
 import { getTranslations } from "next-intl/server";
 import { BagIcon, CardIcon, FreshDonutIcon, PinIcon } from "@/components/icons/brand";
 
-export async function Perks({ shopsCount }: { shopsCount: number }) {
+export async function Perks() {
   const t = await getTranslations("perks");
   const perks = [
     { icon: FreshDonutIcon, title: t("fresh"), sub: t("freshSub"), tile: "bg-sun-soft" },
-    {
-      icon: PinIcon,
-      title: t("shops", { count: shopsCount }),
-      sub: t("shopsSub"),
-      tile: "bg-magenta-soft",
-    },
+    { icon: PinIcon, title: t("shops"), sub: t("shopsSub"), tile: "bg-magenta-soft" },
     { icon: BagIcon, title: t("takeaway"), sub: t("takeawaySub"), tile: "bg-sun-soft" },
     { icon: CardIcon, title: t("cards"), sub: t("cardsSub"), tile: "bg-magenta-soft" },
   ];

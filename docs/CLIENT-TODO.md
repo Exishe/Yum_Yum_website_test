@@ -6,7 +6,7 @@ Tick each item. Most can be done by the client directly in the admin panel.
 
 - [ ] **Photo rights.** Confirm YUM-YUM may use every photo in `docs/CREDITS.md`, especially the 43 visitor photos from Yandex Maps (or send your own shop photos — one per shop is enough).
 - [ ] **Prices.** Check every price (Admin → Products & prices → _Unconfirmed prices_). Seed prices come from buy.am and the in-shop drink menu boards (Oct 2026). Items with no public price (birthday stack, name donut, box of 12, two cake slices) show **“price on request”** with call/WhatsApp buttons: open each one, type the price and untick _Price on request_. Then press _All prices are correct_.
-- [ ] **Current shop list.** We show 7: Abovyan 25, Abovyan 2/5, Mashtots 35, Mashtots 48, Komitas 20, Megamall, Yerevan Mall. Directories also list Mashtots 5 (Pak Shuka), Moskovyan 10, Erebuni Mall, Garage Mall; Tamanyan 6 is shown as closed. Which are open today?
+- [ ] **Current shop list.** We show 7: Abovyan 25, Abovyan 2/5, Mashtots 35, Mashtots 48, Komitas 20, Megamall, Yerevan Mall. Directories also list Mashtots 5 (Pak Shuka), Moskovyan 10, Erebuni Mall, Garage Mall; Tamanyan 6 is shown as closed. Which are open today? Until confirmed, the site never states how many shops there are.
 - [ ] **Hours per shop**, including Sunday (Mashtots 35 opens at 10:00 on Sundays according to Google), and the real mall hours.
 - [ ] **Which photo is which shop** (Admin → Shops → photo). Our guesses are marked "not confirmed".
 - [ ] **Phone numbers.** Directories show five different numbers (033 30 15 74, 094 30 15 74, 077 30 15 74, 011 50 55 50, 010 50 55 50). Which should the website show, and per shop?

@@ -95,9 +95,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   return (
     <>
       <JsonLd data={organizationJsonLd(shops, settings, locale)} />
-      <Hero choices={choices} phone={phone} phoneDisplay={phoneDisplay} shopsCount={shops.length} />
+      <Hero choices={choices} phone={phone} phoneDisplay={phoneDisplay} />
       <PhotoStrip photos={strip} />
-      <Perks shopsCount={shops.length} />
+      <Perks />
       <section
         aria-labelledby="menu-title"
         className="mx-auto max-w-[1440px] px-4 pt-14 pb-6 sm:px-6 lg:px-8"
@@ -116,7 +116,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         phoneDisplay={phoneDisplay}
       />
       <StorySection
-        shopsCount={shops.length}
         rating={settings.ratings.google}
         photos={{
           interior: imgOrThrow(`${T}/yumyum-13.jpg`),
@@ -125,7 +124,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           cake: imgOrThrow(`${T}/yumyum-16.jpg`),
         }}
       />
-      <Ticker shopsCount={shops.length} />
+      <Ticker />
       <Spotted
         instagram={settings.contact.instagram}
         photos={[

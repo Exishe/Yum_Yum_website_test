@@ -6,11 +6,9 @@ import type { ImageInfo } from "@/lib/images";
 
 export async function StorySection({
   photos,
-  shopsCount,
   rating,
 }: {
   photos: { interior: ImageInfo; counter: ImageInfo; muffins: ImageInfo; cake: ImageInfo };
-  shopsCount: number;
   rating?: { rating: number; count: number };
 }) {
   const t = await getTranslations("story");
@@ -26,12 +24,7 @@ export async function StorySection({
             {t("title")}
           </h2>
           <p className="mt-5 text-plum/85">{t("body")}</p>
-          <dl className="mt-7 grid grid-cols-3 gap-4 lg:grid-cols-2">
-            <div>
-              <dt className="sr-only">{t("statShops")}</dt>
-              <dd className="font-display text-4xl text-magenta">{shopsCount}</dd>
-              <dd className="text-sm">{t("statShops")}</dd>
-            </div>
+          <dl className="mt-7 grid grid-cols-2 gap-4">
             <div>
               <dt className="sr-only">{t("statHours")}</dt>
               <dd className="font-display text-4xl text-magenta">{t("statHoursValue")}</dd>

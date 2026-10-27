@@ -12,6 +12,7 @@ import { formatPhone } from "@/lib/format";
 import type { ImageInfo } from "@/lib/images";
 import { t as pick } from "@/lib/localized";
 import { shopStatus, type ShopStatus } from "@/lib/time";
+import { DemoNote } from "@/components/AskPrice";
 
 export type PickerShop = PublicShop & { img: ImageInfo | null };
 
@@ -87,7 +88,9 @@ export function ShopPicker({
           <H id="shops-title" className="text-[clamp(2.6rem,6vw,4.4rem)] leading-[0.95]">
             {t("title")}
           </H>
-          <p className="mt-3">{t("lead", { count: shops.length })}</p>
+          <p className="mt-3">
+            {t("lead")} <DemoNote />
+          </p>
           <ul className="mt-6 flex flex-col gap-2" aria-label={t("list")}>
             {shops.map((s, i) => (
               <li key={s.slug}>
