@@ -45,6 +45,15 @@ test("security headers are sent", async ({ request }) => {
   expect(h["referrer-policy"]).toBe("strict-origin-when-cross-origin");
 });
 
+test("https upgrade only over https (Safari applies it to http://localhost too)", async ({
+  request,
+}) => {
+  const plain = await request.get("/hy");
+  expect(plain.headers()["content-security-policy"]).not.toContain("upgrade-insecure-requests");
+  const behindHttps = await request.get("/hy", { headers: { "x-forwarded-proto": "https" } });
+  expect(behindHttps.headers()["content-security-policy"]).toContain("upgrade-insecure-requests");
+});
+
 test("unknown order ids reveal nothing", async ({ page }) => {
   await page.goto("/en/order/AAAAAAAAAAAAAAAA");
   await expect(page.getByText("We couldn’t find this order")).toBeVisible();

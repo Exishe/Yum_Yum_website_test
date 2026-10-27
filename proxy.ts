@@ -13,7 +13,7 @@ const analyticsHost = (() => {
   }
 })();
 
-function buildCsp(nonce: string) {
+function buildCsp(nonce: string, https: boolean) {
   const isDev = process.env.NODE_ENV === "development";
   const supabase = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
   return [
@@ -34,7 +34,9 @@ function buildCsp(nonce: string) {
     `frame-ancestors 'none'`,
     `manifest-src 'self'`,
     `worker-src 'self' blob:`,
-    isDev ? "" : "upgrade-insecure-requests",
+    // Only over https. Safari also applies it to http://localhost, where it
+    // turns every stylesheet, script and image into a failing https request.
+    https && !isDev ? "upgrade-insecure-requests" : "",
   ]
     .filter(Boolean)
     .join("; ");
@@ -42,7 +44,10 @@ function buildCsp(nonce: string) {
 
 export default function proxy(request: NextRequest) {
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
-  const csp = buildCsp(nonce);
+  const https =
+    request.nextUrl.protocol === "https:" ||
+    request.headers.get("x-forwarded-proto")?.split(",")[0]?.trim() === "https";
+  const csp = buildCsp(nonce, https);
   const { pathname } = request.nextUrl;
 
   // The admin panel is not localised and does its own auth checks.
