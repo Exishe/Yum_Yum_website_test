@@ -26,13 +26,13 @@ native speaker should still read it once.
 
 ## Russian (ru)
 
-| Key              | Text                 | What to check                                                   |
-| ---------------- | -------------------- | --------------------------------------------------------------- |
-| hero.titleA/B    | Вкуснейшие / донаты. | From their RU description, which says «пончики». Keep «донаты»? |
-| checkout.consent | «Я согласен(на)…»    | Gender form.                                                    |
-| gifts.box.left   | Plural forms         | «Осталось 1 место / 2 места / 5 мест».                          |
-| legal.*          | All                  | Legal review.                                                   |
-| Product names    | `db/seed-data.ts`    | «Пистачо Кинг», «Фрауни» — as on buy.am.                        |
+| Key              | Text                 | What to check                                                               |
+| ---------------- | -------------------- | --------------------------------------------------------------------------- |
+| hero.titleA/B    | Вкуснейшие / донаты. | From their RU description. Client chose «донаты» over «пончики» (Oct 2026). |
+| checkout.consent | «Я согласен(на)…»    | Gender form.                                                                |
+| gifts.box.left   | Plural forms         | «Осталось 1 место / 2 места / 5 мест».                                      |
+| legal.*          | All                  | Legal review.                                                               |
+| Product names    | `db/seed-data.ts`    | «Пистачо Кинг», «Фрауни» — as on buy.am.                                    |
 
 ## English (en)
 
