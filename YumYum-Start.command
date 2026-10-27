@@ -6,6 +6,8 @@ REPO="$HOME/Yum_Yum_website_test"
 BRANCH="claude/vibrant-mccarthy-mby47q"
 URL="http://localhost:3000/ru"
 PNPM="npx -y pnpm@10.28.0"
+# Set while a newer window restarts the site, so this window does not report an error.
+RESTART_MARK="${TMPDIR:-/tmp}/yumyum-restarting"
 export COREPACK_ENABLE_DOWNLOAD_PROMPT=0 # без вопроса «скачать pnpm?»
 
 say_step() { printf '\n\033[1;35m▶ %s\033[0m\n' "$1"; }
@@ -19,11 +21,21 @@ fail() {
 cd "$REPO" 2>/dev/null || fail "Не нашёл папку проекта: $REPO"
 command -v node >/dev/null || fail "Не установлен Node.js (https://nodejs.org)."
 
-# Сайт уже запущен в другом окне — просто открываем браузер.
+# Сайт уже запущен в другом окне: останавливаем его, чтобы подхватить
+# обновления и новые настройки (например, Telegram).
+if curl -s "$URL" 2>/dev/null | grep -q "YUM-YUM"; then
+  say_step "Сайт уже запущен — перезапускаю, чтобы применить обновления и настройки"
+  touch "$RESTART_MARK"
+  PIDS=$(lsof -ti tcp:3000 -sTCP:LISTEN 2>/dev/null)
+  # Fallback when lsof cannot see the process: our own server by name.
+  [ -z "$PIDS" ] && PIDS=$(pgrep -f "scripts/share.ts|next-server \(v" 2>/dev/null)
+  [ -n "$PIDS" ] && kill $PIDS 2>/dev/null
+  for _ in $(seq 1 20); do curl -s -o /dev/null "$URL" || break; sleep 1; done
+  sleep 2
+  rm -f "$RESTART_MARK"
+fi
 if curl -s -o /dev/null "$URL"; then
-  say_step "Сайт уже запущен, открываю браузер"
-  open "$URL"
-  exit 0
+  fail "Адрес localhost:3000 занят другой программой. Закройте её и запустите снова."
 fi
 
 say_step "1/3 Скачиваю последние изменения с GitHub"
@@ -53,4 +65,10 @@ say_step "3/3 Собираю быструю версию (1–2 минуты), �
 # Данные с прошлых запусков (меню, отзывы) не должны показываться вместо свежих.
 rm -rf .next/cache/fetch-cache
 
-$PNPM share || fail "Сайт не запустился."
+if ! $PNPM share; then
+  if [ -f "$RESTART_MARK" ]; then
+    printf '\n\033[1;32m✔ Сайт перезапущен в другом окне. Это окно можно закрыть.\033[0m\n'
+    exit 0
+  fi
+  fail "Сайт не запустился."
+fi
