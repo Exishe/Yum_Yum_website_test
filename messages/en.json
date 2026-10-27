@@ -45,7 +45,9 @@
     "buyam": "Order on buy.am",
     "buyamShort": "on buy.am",
     "demoNote": "example, to confirm",
-    "demoNoteHint": "This value is an example. We will confirm it with you before launch."
+    "demoNoteHint": "This value is an example. We will confirm it with you before launch.",
+    "scrollBack": "Scroll back",
+    "scrollMore": "Scroll forward"
   },
   "nav": {
     "menu": "Menu",
@@ -86,7 +88,7 @@
     "titleA": "Donut",
     "titleB": "give up.",
     "tagline": "",
-    "lead": "Glazed donuts, iced coffee and birthday cakes from the pink-and-yellow shop a few generations of Yerevan grew up with.",
+    "lead": "A donut shop and café that generations of Yerevan locals remember from their childhood and youth.",
     "craving": "so… what are you craving?",
     "chips": {
       "glazed": "Something glazed",
@@ -126,7 +128,7 @@
     "cardsSub": "Visa, MasterCard, ArCa"
   },
   "catalog": {
-    "eyebrow": "what’s in the window today",
+    "eyebrow": "what we have",
     "title": "Menu & prices",
     "tabs": "Menu categories",
     "filters": "Filter",
@@ -155,7 +157,7 @@
       "new": "new",
       "bestseller": "bestseller"
     },
-    "priceNote": "Prices in Armenian dram. Selection changes daily: what’s in the window is what we have.",
+    "priceNote": "Prices in Armenian dram. Selection can differ between shops.",
     "seeAll": "See the full menu",
     "showMore": "Show {count} more",
     "results": "{count, plural, =0 {No items} one {# item} other {# items}}",
@@ -192,7 +194,6 @@
     "each": "{price} each",
     "callToOrder": "Call to order · {phone}",
     "orderOnline": "Order online",
-    "handwritten": "yes, we write the names by hand",
     "bouquetAlt": "Donut bouquet with messages “have a nice day” and a name, wrapped in pink paper with a yellow ribbon",
     "stackAlt": "Stack of yellow donuts with sprinkles under a gold “Happy Birthday” topper",
     "pageLead": "Bouquets, birthday stacks, boxes and name donuts. Everything here is made by hand on the day, so please order at least one day ahead.",
@@ -224,13 +225,11 @@
     }
   },
   "story": {
-    "eyebrow": "ask your parents about us",
-    "title": "A wall of donuts.",
-    "body": "We’re a donut & coffee shop that has fed a few generations of Yerevan. Counters full of glazed rings, a wall of donuts, and cakes, muffins and iced coffee too.",
+    "eyebrow": "about us",
+    "title": "Memories since 1997.",
+    "body": "A donut shop and café that many generations of Yerevan locals and visitors remember from childhood and youth. We serve the tastiest donuts, aromatic coffee and plenty of ice cream to our old and new friends.",
     "statHours": "first café on Mashtots",
     "statHoursValue": "1997",
-    "statRating": "on Google, {count} reviews",
-    "statSince": "since",
     "readMore": "Read our story",
     "interiorAlt": "Inside YUM-YUM: the lit donut wall, menu boards and the counter",
     "counterAlt": "Display counter with croissants, muffins and chocolate donuts",
@@ -283,12 +282,11 @@
     "stars": "Rated {rating} out of 5",
     "on": "{author} · {platform}",
     "ratingsTitle": "Ratings",
-    "google": "Google · {count} reviews",
     "yandex": "Yandex Maps · {label}",
     "buyam": "buy.am"
   },
   "shops": {
-    "title": "Find the pink door.",
+    "title": "Find a shop near you.",
     "lead": "All open every day. Pick one to see it on the map.",
     "list": "Shops",
     "directions": "Directions",
@@ -304,7 +302,7 @@
     "call": "Call the shop",
     "map": "Map of {name}",
     "hours": "Hours",
-    "pageLead": "Every shop has the same donuts, the same coffee and the same pink door. Mall shops follow the mall’s opening hours.",
+    "pageLead": "Mall shops follow the mall’s opening hours.",
     "weekdays": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
   },
   "delivery": {

@@ -6,10 +6,8 @@ import type { ImageInfo } from "@/lib/images";
 
 export async function StorySection({
   photos,
-  rating,
 }: {
   photos: { interior: ImageInfo; counter: ImageInfo; muffins: ImageInfo; cake: ImageInfo };
-  rating?: { rating: number; count: number };
 }) {
   const t = await getTranslations("story");
   return (
@@ -17,26 +15,19 @@ export async function StorySection({
       aria-labelledby="story-title"
       className="mx-auto max-w-[1440px] px-4 py-20 sm:px-6 lg:px-8 lg:py-24"
     >
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-[0.75fr_1.1fr_0.6fr]">
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-[0.9fr_1.1fr_0.6fr]">
         <div className="lg:pr-6">
           <p className="font-hand text-2xl text-magenta-ink">{t("eyebrow")}</p>
-          <h2 id="story-title" className="mt-1 text-[clamp(2.6rem,5vw,3.9rem)] leading-[0.98]">
+          <h2 id="story-title" className="mt-1 text-[clamp(2.4rem,3.6vw,3.4rem)] leading-[1.02]">
             {t("title")}
           </h2>
           <p className="mt-5 text-plum/85">{t("body")}</p>
-          <dl className="mt-7 grid grid-cols-2 gap-4">
+          <dl className="mt-7 flex gap-4">
             <div>
               <dt className="sr-only">{t("statHours")}</dt>
               <dd className="font-display text-4xl text-magenta">{t("statHoursValue")}</dd>
               <dd className="text-sm">{t("statHours")}</dd>
             </div>
-            {rating ? (
-              <div>
-                <dt className="sr-only">Google</dt>
-                <dd className="font-display text-4xl text-magenta">{rating.rating.toFixed(1)}</dd>
-                <dd className="text-sm">{t("statRating", { count: rating.count })}</dd>
-              </div>
-            ) : null}
           </dl>
           <Link
             href="/story"

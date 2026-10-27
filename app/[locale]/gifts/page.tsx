@@ -40,8 +40,8 @@ export default async function GiftsPage({ params }: Props) {
         <div className="mx-auto grid max-w-[1440px] grid-cols-1 items-center gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8 lg:py-16">
           <div>
             <p className="font-hand text-2xl text-magenta-ink">{t("eyebrow")}</p>
-            <h1 className="text-[clamp(3rem,8vw,6rem)] leading-[0.92]">{t("title")}</h1>
-            <p className="mt-5 max-w-xl text-lg">
+            <h1 className="text-[clamp(2.6rem,6.5vw,5rem)] leading-[0.95]">{t("title")}</h1>
+            <p className="mt-6 max-w-xl text-lg leading-relaxed">
               {t("pageLead")} <DemoNote />
             </p>
           </div>

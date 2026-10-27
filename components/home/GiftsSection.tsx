@@ -88,7 +88,7 @@ export async function GiftsSection({
             </a>
           </div>
         </div>
-        <div className="no-scrollbar snap-row -mx-4 flex gap-4 overflow-x-auto px-4 pb-4 lg:mx-0 lg:block lg:overflow-visible lg:px-0">
+        <div className="no-scrollbar snap-row -mx-4 flex scroll-px-4 gap-4 overflow-x-auto px-4 pb-4 lg:mx-0 lg:block lg:scroll-px-0 lg:overflow-visible lg:px-0">
           <div className="relative min-h-0 lg:h-[600px]">
             <figure className="w-[78vw] max-w-[380px] shrink-0 -rotate-3 rounded-[1.75rem] bg-white p-2.5 shadow-lift transition-transform duration-500 hover:rotate-0 lg:absolute lg:top-0 lg:left-[6%] lg:w-[54%]">
               <Photo
@@ -106,9 +106,6 @@ export async function GiftsSection({
               sizes="(min-width: 1024px) 320px, 70vw"
               className="aspect-[5/6] w-full rounded-[1.3rem] object-cover"
             />
-            <figcaption className="absolute -bottom-12 left-6 hidden font-hand text-2xl leading-tight lg:block">
-              {t("handwritten")}
-            </figcaption>
           </figure>
         </div>
       </div>

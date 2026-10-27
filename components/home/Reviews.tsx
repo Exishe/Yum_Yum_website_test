@@ -80,14 +80,6 @@ export function Reviews({ reviews, ratings }: { reviews: PublicReview[]; ratings
         aria-label={t("ratingsTitle")}
         className="mt-10 flex flex-wrap justify-center gap-3 text-sm"
       >
-        {ratings.google ? (
-          <li className="rounded-full bg-white px-4 py-2 shadow-card">
-            <strong className="mr-1 font-display text-lg">
-              {ratings.google.rating.toFixed(1)}
-            </strong>
-            {t("google", { count: ratings.google.count })}
-          </li>
-        ) : null}
         {ratings.yandex ? (
           <li className="rounded-full bg-white px-4 py-2 shadow-card">
             <strong className="mr-1 font-display text-lg">

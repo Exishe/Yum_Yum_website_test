@@ -22,6 +22,13 @@
       "when": 1793085086564,
       "tag": "0002_blocked_phones",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793170000000,
+      "tag": "0003_armenian_names",
+      "breakpoints": true
     }
   ]
 }

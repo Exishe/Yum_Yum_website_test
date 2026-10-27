@@ -11,13 +11,15 @@ export async function Perks() {
   ];
   return (
     <section aria-label={t("label")} className="mx-auto max-w-[1440px] px-4 py-10 sm:px-6 lg:px-8">
-      <ul className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-5">
+      <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
         {perks.map(({ icon: Icon, title, sub, tile }) => (
           <li
             key={title}
-            className="group flex flex-col gap-3 rounded-[var(--radius-card)] bg-white p-4 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift sm:flex-row sm:items-center sm:p-5"
+            className="group flex items-center gap-4 rounded-[var(--radius-card)] bg-white p-4 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift sm:p-5"
           >
-            <span className={`grid size-14 shrink-0 place-items-center rounded-2xl ${tile}`}>
+            <span
+              className={`grid size-12 shrink-0 place-items-center rounded-2xl sm:size-14 ${tile}`}
+            >
               <Icon size={34} className="group-hover:animate-wiggle" />
             </span>
             <span>

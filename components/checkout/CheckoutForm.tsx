@@ -370,7 +370,7 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
                   <div
                     role="radiogroup"
                     aria-labelledby="date-label"
-                    className="no-scrollbar snap-row -mx-1 flex gap-2 overflow-x-auto px-1 pb-1"
+                    className="no-scrollbar snap-row -mx-1 flex scroll-px-1 gap-2 overflow-x-auto px-1 pb-1"
                   >
                     {days.map((d) => {
                       const label =

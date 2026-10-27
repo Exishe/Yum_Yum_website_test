@@ -194,6 +194,8 @@
     font-synthesis: none;
     letter-spacing: -0.01em;
     text-wrap: balance;
+    /* Last resort for a long Armenian word on a narrow phone; sizes are set so it rarely triggers. */
+    overflow-wrap: break-word;
   }
   :lang(hy) h1,
   :lang(hy) h2,
@@ -229,6 +231,11 @@
   /* Armenian and Cyrillic headlines are longer than the English pun. */
   .shops-badge:lang(hy) {
     font-size: clamp(0.95rem, 2.6vw, 1.25rem);
+  }
+  /* Armenian letters reach higher and lower than Latin ones: tight display
+     leading (0.9–1) makes lines touch, so Armenian headings never go below 1.08. */
+  :lang(hy) :is(h1, h2, h3):not(.font-sans)[class*="leading-"] {
+    line-height: 1.08;
   }
   .hero-title:lang(hy),
   .hero-title:lang(ru) {

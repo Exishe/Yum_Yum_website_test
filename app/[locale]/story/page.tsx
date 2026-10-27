@@ -31,7 +31,9 @@ export default async function StoryPage({ params }: Props) {
     <article className="dot-grid">
       <header className="mx-auto max-w-[1440px] px-4 pt-12 sm:px-6 lg:px-8 lg:pt-16">
         <p className="font-hand text-2xl text-magenta-ink">{t("eyebrow")}</p>
-        <h1 className="max-w-4xl text-[clamp(3rem,8vw,6.5rem)] leading-[0.92]">{t("title")}</h1>
+        <h1 className="max-w-4xl text-[clamp(2.6rem,6.5vw,5.25rem)] leading-[0.95]">
+          {t("title")}
+        </h1>
         <p className="mt-6 max-w-2xl text-xl leading-relaxed">{t("page.lead")}</p>
       </header>
       <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1fr_1fr] lg:px-8">
@@ -54,7 +56,7 @@ export default async function StoryPage({ params }: Props) {
       </div>
       <section aria-labelledby="timeline" className="bg-plum py-14 text-white">
         <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
-          <h2 id="timeline" className="text-4xl">
+          <h2 id="timeline" className="text-[clamp(1.75rem,8vw,2.25rem)]">
             {t("page.timeline")}
           </h2>
           <ol className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-3">

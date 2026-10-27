@@ -116,7 +116,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         phoneDisplay={phoneDisplay}
       />
       <StorySection
-        rating={settings.ratings.google}
         photos={{
           interior: imgOrThrow(`${T}/yumyum-13.jpg`),
           counter: imgOrThrow(`${T}/yumyum-14.jpg`),

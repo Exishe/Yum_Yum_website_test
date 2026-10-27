@@ -24,7 +24,7 @@ const base: StaffOrder = {
     {
       quantity: 1,
       name: "Коробка на 6",
-      names: { hy: "Տուփ 6 դոնաթի համար", ru: "Коробка на 6", en: "Box of 6" },
+      names: { hy: "6 հատանոց տուփ", ru: "Коробка на 6", en: "Box of 6" },
       lineTotalAmd: 1400,
       contents: ["Լիմոն (Lemon)"],
       messages: ["Աննա"],

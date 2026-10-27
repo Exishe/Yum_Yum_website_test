@@ -1,48 +1,45 @@
 # Copy and slogans
 
-Voice: warm, quick, a little cheeky. Short sentences. No "elevate", no "unleash".
-Each language is written for its readers, not translated word for word.
+Voice: warm and simple. Short sentences. No "elevate", no "unleash".
+Armenian and Russian start from YUM-YUM's own wording (their 4u.am profile, buy.am product
+names, the 2013 ԵՐԵՎԱՆ magazine article) instead of translated marketing lines.
 
 ## "DONUT GIVE UP"
 
-The cups say **DONUT GIVE UP**: "donut" sounds like "don't". The pun only works in English,
-so the English line stays as the brand line everywhere it appears as a _mark_ (the rotating
-ring around the hero photo, the footer, the cup photos). Each language gets its own headline.
+**DONUT GIVE UP** is printed on YUM-YUM's own cups in Yerevan (seen on customer photos on
+Yandex Maps). "Donut" sounds like "don't", so the pun only works in English. It stays in
+English wherever it appears as a _mark_: the ring around the hero photo, the ticker, the cup
+photos. The English headline uses it; Armenian and Russian use the company's own line.
 
-| Lang | Headline                         | Back-translation                       | Why it works                                                                                                                                                                                                                      |
-| ---- | -------------------------------- | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| EN   | **Donut / give up.**             | —                                      | The cup line itself.                                                                                                                                                                                                              |
-| RU   | **Не вешай нос — / бери донат.** | "Don't hang your nose — take a donut." | «Не вешай нос» is the everyday Russian for "don't lose heart"; the second half answers it with a donut. Same spirit, same rhythm, rhymes softly (нос / донат). Tagline under it: «Как написано на наших стаканах: DONUT GIVE UP.» |
-| HY   | **Մի՛ հանձնվիր, / դոնաթ կեր։**   | "Don't give up, eat a donut."          | Literal "don't give up" is natural and warm in Armenian; the two-beat second line turns it into an instruction you want to follow. Tagline: «Ինչպես գրված է մեր բաժակների վրա՝ DONUT GIVE UP։»                                    |
+| Lang | Headline                   | Source                                                                                                                    |
+| ---- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| EN   | **Donut / give up.**       | The cup line.                                                                                                             |
+| RU   | **Вкуснейшие / донаты.**   | Their RU description: «вкуснейшие пончики, ароматный кофе и разнообразное мороженое» (we say «донаты», see the glossary). |
+| HY   | **Ամենահամեղ / դոնաթները** | Their HY description: «ամենահամեղ դոնաթների, անուշաբույր սուրճի և բազմազան պաղպաղակի».                                    |
 
-## "Say it with donuts"
+Tagline under the Armenian and Russian headline: «Անուշաբույր սուրճ և բազմազան պաղպաղակ» /
+«Ароматный кофе и разнообразное мороженое», from the same sentence.
 
-| Lang | Line                | Back-translation | Why                                                                                             |
-| ---- | ------------------- | ---------------- | ----------------------------------------------------------------------------------------------- |
-| EN   | Say it with donuts. | —                | Plays on "say it with flowers". Eyebrow: "flowers wilt. donuts get eaten."                      |
-| RU   | Скажи это донатами. | Same             | «Скажи это цветами» is a known phrase in Russian too. Eyebrow: «цветы вянут, а донаты съедают.» |
-| HY   | Ասա դոնաթներով։     | Same             | Short, imperative, natural. Eyebrow: «ծաղիկները թառամում են, դոնաթները՝ ուտվում։»               |
+## Section headings
 
-## "Find the pink door"
+| Section | EN                                                    | RU                                | HY                                   |
+| ------- | ----------------------------------------------------- | --------------------------------- | ------------------------------------ |
+| Menu    | what we have / Menu & prices                          | наш ассортимент / Меню и цены     | Մեր տեսականին / Ճաշացանկ և գներ      |
+| Gifts   | flowers wilt. donuts get eaten. / Say it with donuts. | На любой повод / Сладкие подарки. | Ցանկացած առիթի համար / Քաղցր նվերներ |
+| Story   | about us / Memories since 1997.                       | О нас / Воспоминания с 1997 года. | Մեր մասին / Հուշեր՝ 1997 թվականից    |
+| Shops   | Find a shop near you.                                 | Наши адреса.                      | Մեր հասցեները                        |
 
-| Lang | Line                   | Back-translation                                                     |
-| ---- | ---------------------- | -------------------------------------------------------------------- |
-| EN   | Find the pink door.    | —                                                                    |
-| RU   | Ищи розовую дверь.     | "Look for the pink door." (Informal «ищи» matches the playful tone.) |
-| HY   | Գտիր վարդագույն դուռը։ | "Find the pink door."                                                |
+The Armenian lines are plain and polite («Ի՞նչ կցանկանայիք այսօր», «Պատվիրեք նախօրոք»): the
+company addresses customers with «դուք» in its own texts, so the site does too.
 
-## Other recurring lines
+## Product names
 
-| Key            | EN                        | RU                         | HY                          |
-| -------------- | ------------------------- | -------------------------- | --------------------------- |
-| hero.badge     | In Yerevan since 1997     | В Ереване с 1997 года      | Երևանում՝ 1997 թվականից     |
-| hero.craving   | so… what are you craving? | ну что, чего хочется?      | դե ի՞նչ ես ուզում           |
-| story.eyebrow  | ask your parents about us | спросите о нас у родителей | հարցրեք ծնողներին մեր մասին |
-| notFound.title | This page was eaten.      | Эту страницу съели.        | Այս էջը կերել են։           |
+Armenian product names follow buy.am, where YUM-YUM lists its own menu: «Դոնաթով փունջ»,
+«Դոնաթով կոմպոզիցիա», «Յամ դոնաթ», «Լոնգ Ջոն», «Պիստաչո Քինգ». Glaze is «գլազուր»
+(what Armenian bakeries and buy.am use), not «ջնարակ».
 
-Address forms: Russian uses formal «вы» in forms and the informal imperative only in
-slogans; Armenian uses «դուք» in forms and «դու» in slogans. That mix is normal for
-Yerevan cafés on Instagram.
+## Words we do not use
 
-The full copy lives in `messages/hy.json`, `ru.json`, `en.json`. The client can change any
-line in Admin → Site texts.
+- «Դոնաթների պատը», «դոնաթանոց-սրճարան», «Անունով դոնաթ»: invented, not YUM-YUM's terms.
+  Their own term is «դոնաթների խանութ-սրճարան»; the name donut is «Անվանական դոնաթ».
+- Google rating: removed from the site at the client's request.

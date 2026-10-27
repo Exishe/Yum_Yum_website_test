@@ -238,11 +238,11 @@ export async function Footer({
 
         <div className="flex flex-col gap-6 border-t border-white/12 pt-8 lg:flex-row lg:items-center lg:justify-between">
           <LanguageSwitch />
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <span className="text-xs font-bold tracking-[0.18em] text-white/60 uppercase">
               {t("pay")}
             </span>
-            <ul className="flex gap-2" aria-label={t("pay")}>
+            <ul className="flex flex-wrap gap-2" aria-label={t("pay")}>
               <PayBadge>VISA</PayBadge>
               <PayBadge>Mastercard</PayBadge>
               <PayBadge>ArCa</PayBadge>

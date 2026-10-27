@@ -16,7 +16,7 @@ export const seedCategories = [
     slug: "donuts",
     name: L("Դոնաթներ", "Донаты", "Donuts"),
     description: L(
-      "Դասական և հեղինակային դոնաթներ՝ ջնարակով և միջուկով։",
+      "Դասական և հեղինակային դոնաթներ՝ գլազուրով և միջուկով։",
       "Классические и авторские донаты с глазурью и начинками.",
       "Classic and signature donuts, glazed and filled.",
     ),
@@ -133,7 +133,7 @@ export const seedProducts: SeedProduct[] = [
   donut(
     "donut-chocolate",
     L("Շոկոլադե դոնաթ", "Шоколадный донат", "Chocolate glazed"),
-    L("Մուգ շոկոլադե ջնարակ", "Тёмная шоколадная глазурь", "Dark chocolate glaze"),
+    L("Մուգ շոկոլադե գլազուր", "Тёмная шоколадная глазурь", "Dark chocolate glaze"),
     700,
     ["glazed", "chocolate"],
     { badges: ["bestseller"], isFeatured: true },
@@ -142,7 +142,7 @@ export const seedProducts: SeedProduct[] = [
     "donut-chocolate-rainbow",
     L("Շոկոլադե «Ծիածան»", "Шоколадный «Радуга»", "Chocolate rainbow"),
     L(
-      "Շոկոլադե ջնարակ և գունավոր ցողիկներ",
+      "Շոկոլադե գլազուր և գունավոր ցողիկներ",
       "Шоколадная глазурь и цветная посыпка",
       "Chocolate glaze, rainbow sprinkles",
     ),
@@ -153,49 +153,49 @@ export const seedProducts: SeedProduct[] = [
   donut(
     "donut-caramel",
     L("Կարամելային դոնաթ", "Донат с карамелью", "Caramel"),
-    L("Կարամելային ջնարակ", "Карамельная глазурь", "Caramel glaze"),
+    L("Կարամելային գլազուր", "Карамельная глазурь", "Caramel glaze"),
     700,
     ["glazed"],
   ),
   donut(
     "donut-white-chocolate",
-    L("Սպիտակ շոկոլադով", "С белым шоколадом", "White chocolate"),
-    L("Սպիտակ շոկոլադե ջնարակ", "Глазурь из белого шоколада", "White chocolate glaze"),
+    L("Սպիտակ շոկոլադով դոնաթ", "С белым шоколадом", "White chocolate"),
+    L("Սպիտակ շոկոլադե գլազուր", "Глазурь из белого шоколада", "White chocolate glaze"),
     700,
     ["glazed", "chocolate"],
   ),
   donut(
     "donut-strawberry-rainbow",
     L("Ելակ «Ծիածան»", "Клубника «Радуга»", "Strawberry rainbow"),
-    L("Վարդագույն ելակային ջնարակ", "Розовая клубничная глазурь", "Pink strawberry glaze"),
+    L("Վարդագույն ելակային գլազուր", "Розовая клубничная глазурь", "Pink strawberry glaze"),
     550,
     ["glazed", "fruity", "kids"],
   ),
   donut(
     "donut-peach-rainbow",
     L("Դեղձ «Ծիածան»", "Персик «Радуга»", "Peach rainbow"),
-    L("Դեղձային ջնարակ և ցողիկներ", "Персиковая глазурь и посыпка", "Peach glaze, sprinkles"),
+    L("Դեղձային գլազուր և ցողիկներ", "Персиковая глазурь и посыпка", "Peach glaze, sprinkles"),
     550,
     ["glazed", "fruity", "kids"],
   ),
   donut(
     "donut-blue-bali-rainbow",
     L("«Բլյու Բալի»", "«Блю Бали»", "Blue Bali rainbow"),
-    L("Կապույտ ջնարակ և ցողիկներ", "Голубая глазурь и посыпка", "Blue glaze, sprinkles"),
+    L("Կապույտ գլազուր և ցողիկներ", "Голубая глазурь и посыпка", "Blue glaze, sprinkles"),
     550,
     ["glazed", "kids"],
   ),
   donut(
     "donut-bubble-rainbow",
     L("«Բաբլ»", "«Бабл»", "Bubble rainbow"),
-    L("Մաստակի համով ջնարակ", "Глазурь со вкусом жвачки", "Bubble-gum glaze"),
+    L("Մաստակի համով գլազուր", "Глазурь со вкусом жвачки", "Bubble-gum glaze"),
     550,
     ["glazed", "kids"],
   ),
   donut(
     "donut-lemon",
-    L("Կիտրոնային", "Лимонный", "Lemon"),
-    L("Կիտրոնային ջնարակ", "Лимонная глазурь", "Lemon glaze"),
+    L("Կիտրոնային դոնաթ", "Лимонный", "Lemon"),
+    L("Կիտրոնային գլազուր", "Лимонная глазурь", "Lemon glaze"),
     600,
     ["glazed", "fruity"],
   ),
@@ -224,7 +224,7 @@ export const seedProducts: SeedProduct[] = [
     "donut-american-flag",
     L("«Ամերիկյան դրոշ»", "«Флаг Америки»", "American flag"),
     L(
-      "Մեր ամերիկյան արմատների համար",
+      "Ամերիկյան դրոշի գույներով",
       "В честь наших американских корней",
       "A nod to our New Jersey roots",
     ),
@@ -248,7 +248,7 @@ export const seedProducts: SeedProduct[] = [
   ),
   donut(
     "donut-pistachio-king",
-    L("Պիստակ Քինգ", "Пистачо Кинг", "Pistachio King"),
+    L("Պիստաչո Քինգ", "Пистачо Кинг", "Pistachio King"),
     L("Պիստակի կրեմով", "С фисташковым кремом", "Pistachio cream"),
     1000,
     ["filled"],
@@ -270,7 +270,11 @@ export const seedProducts: SeedProduct[] = [
   ),
   donut(
     "yum-donut-bavarian-chocolate",
-    L("Յամ-դոնաթ բավարական կրեմով", "Ям-донат с баварским кремом", "Yum donut, Bavarian cream"),
+    L(
+      "Յամ դոնաթ բավարական կրեմով և շոկոլադով",
+      "Ям-донат с баварским кремом и шоколадом",
+      "Yum donut, Bavarian cream",
+    ),
     L(
       "Բավարական կրեմ ներսում, շոկոլադ վրան",
       "Баварский крем внутри, шоколад сверху",
@@ -282,7 +286,11 @@ export const seedProducts: SeedProduct[] = [
   ),
   donut(
     "yum-donut-bavarian-caramel",
-    L("Յամ-դոնաթ կրեմ և կարամել", "Ям-донат крем и карамель", "Yum donut, cream & caramel"),
+    L(
+      "Յամ դոնաթ բավարական կրեմով և կարամելով",
+      "Ям-донат с баварским кремом и карамелью",
+      "Yum donut, cream & caramel",
+    ),
     L(
       "Բավարական կրեմ ներսում, կարամել վրան",
       "Баварский крем внутри, карамель сверху",
@@ -293,7 +301,7 @@ export const seedProducts: SeedProduct[] = [
   ),
   donut(
     "yum-donut-cherry",
-    L("Յամ-դոնաթ բալով", "Ям-донат «Вишня»", "Yum donut, cherry"),
+    L("Յամ դոնաթ «Բալ»", "Ям-донат «Вишня»", "Yum donut, cherry"),
     L(
       "Բալի միջուկ, սպիտակ շոկոլադ",
       "Вишнёвая начинка, белый шоколад",
@@ -304,7 +312,7 @@ export const seedProducts: SeedProduct[] = [
   ),
   donut(
     "yum-donut-white-chocolate-strawberry",
-    L("Յամ-դոնաթ ելակով", "Ям-донат с клубникой", "Yum donut, strawberry"),
+    L("Յամ դոնաթ սպիտակ շոկոլադով և ելակով", "Ям-донат с клубникой", "Yum donut, strawberry"),
     L(
       "Ելակի միջուկ, սպիտակ շոկոլադ",
       "Клубничная начинка, белый шоколад",
@@ -315,21 +323,29 @@ export const seedProducts: SeedProduct[] = [
   ),
   donut(
     "yum-donut-chocolate-caramel",
-    L("Յամ-դոնաթ շոկոլադ-կարամել", "Ям-донат шоколад-карамель", "Yum donut, chocolate caramel"),
+    L(
+      "Յամ դոնաթ շոկոլադով և կարամելով",
+      "Ям-донат шоколад-карамель",
+      "Yum donut, chocolate caramel",
+    ),
     L("Շոկոլադե միջուկ, կարամել", "Шоколадная начинка, карамель", "Chocolate filling, caramel"),
     800,
     ["filled", "chocolate"],
   ),
   donut(
     "yum-donut-double-chocolate",
-    L("Յամ-դոնաթ կրկնակի շոկոլադ", "Ям-донат «Шоколад-шоколад»", "Yum donut, double chocolate"),
+    L("Յամ դոնաթ կրկնակի շոկոլադով", "Ям-донат «Шоколад-шоколад»", "Yum donut, double chocolate"),
     L("Շոկոլադ ներսում և դրսում", "Шоколад внутри и снаружи", "Chocolate inside and out"),
     800,
     ["filled", "chocolate"],
   ),
   donut(
     "long-john-bavarian-chocolate",
-    L("Լոնգ Ջոն բավարական կրեմով", "Лонг Джон с баварским кремом", "Long John, Bavarian cream"),
+    L(
+      "Լոնգ Ջոն բավարական կրեմով և շոկոլադով",
+      "Лонг Джон с баварским кремом",
+      "Long John, Bavarian cream",
+    ),
     L(
       "Երկար դոնաթ, կրեմ և շոկոլադ",
       "Длинный донат, крем и шоколад",
@@ -340,9 +356,13 @@ export const seedProducts: SeedProduct[] = [
   ),
   donut(
     "long-john-chocolate-caramel",
-    L("Լոնգ Ջոն շոկոլադ-կարամել", "Лонг Джон шоколад-карамель", "Long John, chocolate caramel"),
     L(
-      "Շոկոլադե միջուկ, կարամելային ջնարակ",
+      "Լոնգ Ջոն շոկոլադե միջուկով և կարամելով",
+      "Лонг Джон шоколад-карамель",
+      "Long John, chocolate caramel",
+    ),
+    L(
+      "Շոկոլադե միջուկ, կարամելային գլազուր",
       "Шоколадная начинка, карамельная глазурь",
       "Chocolate filling, caramel glaze",
     ),
@@ -711,7 +731,7 @@ export const seedProducts: SeedProduct[] = [
   {
     slug: "box-of-6",
     category: "gifts",
-    name: L("Տուփ 6 դոնաթի համար", "Коробка на 6 донатов", "Box of 6"),
+    name: L("6 հատանոց տուփ", "Коробка на 6 донатов", "Box of 6"),
     description: L(
       "Ընտրեք 6 դոնաթ, մենք կդասավորենք",
       "Выберите 6 донатов — мы красиво уложим",
@@ -726,7 +746,7 @@ export const seedProducts: SeedProduct[] = [
   {
     slug: "box-of-12",
     category: "gifts",
-    name: L("Տուփ 12 դոնաթի համար", "Коробка на 12 донатов", "Box of 12"),
+    name: L("12 հատանոց տուփ", "Коробка на 12 донатов", "Box of 12"),
     description: L(
       "Գրասենյակի, ընկերների կամ մեծ ընտանիքի համար",
       "Для офиса, друзей или большой семьи",
@@ -741,9 +761,9 @@ export const seedProducts: SeedProduct[] = [
   {
     slug: "name-donut",
     category: "gifts",
-    name: L("Անունով դոնաթ", "Донат с именем", "Name donut"),
+    name: L("Անվանական դոնաթ", "Именной донат", "Name donut"),
     description: L(
-      "Ցանկացած անուն կամ բառ՝ գրված ջնարակով",
+      "Ցանկացած անուն կամ կարճ մաղթանք դոնաթի վրա",
       "Любое имя или слово, написанное глазурью",
       "Any name or word, written in glaze",
     ),
@@ -765,9 +785,13 @@ export const seedProducts: SeedProduct[] = [
   {
     slug: "birthday-stack",
     category: "gifts",
-    name: L("Ծննդյան դոնաթե աշտարակ", "Именинная башня из донатов", "Birthday donut stack"),
+    name: L(
+      "Դոնաթներից տորթ «Happy Birthday»",
+      "Торт из донатов «Happy Birthday»",
+      "Happy Birthday donut cake",
+    ),
     description: L(
-      "Դոնաթե աշտարակ «Happy Birthday» թոփերով",
+      "Ցողիկներով դոնաթներ՝ ոսկեգույն «Happy Birthday» զարդով",
       "Башня из донатов с топпером «Happy Birthday»",
       "A donut tower with a “Happy Birthday” topper",
     ),
@@ -802,8 +826,8 @@ export const seedProducts: SeedProduct[] = [
       slug,
       category: "gifts",
       name: isComposition
-        ? L(`Կոմպոզիցիա N${n}`, `Композиция N${n}`, `Composition N${n}`)
-        : L(`Դոնաթե ծաղկեփունջ N${n}`, `Букет из донатов N${n}`, `Donut bouquet N${n}`),
+        ? L(`Դոնաթով կոմպոզիցիա N${n}`, `Композиция из донатов N${n}`, `Donut composition N${n}`)
+        : L(`Դոնաթով փունջ N${n}`, `Букет из донатов N${n}`, `Donut bouquet N${n}`),
       description: L(
         "Վարդագույն թղթով, ձեր գրություններով",
         "В розовой бумаге, с вашими надписями",

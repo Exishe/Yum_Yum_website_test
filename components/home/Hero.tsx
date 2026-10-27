@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { FreshDonutIcon } from "@/components/icons/brand";
+import { ScrollRow } from "@/components/ui/ScrollRow";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { announceAdd, cart } from "@/lib/cart-store";
@@ -143,7 +144,7 @@ export function Hero({
             <span className="block text-magenta">{t("titleB")}</span>
           </h1>
           {tagline ? (
-            <p className="mt-3 font-hand text-2xl text-magenta-ink" lang={locale}>
+            <p className="mt-4 font-hand text-2xl text-magenta-ink lg:mt-5" lang={locale}>
               {tagline}
             </p>
           ) : null}
@@ -152,10 +153,12 @@ export function Hero({
           <p className="mt-8 font-hand text-2xl text-magenta-ink" id="craving-label">
             {t("craving")}
           </p>
-          <div
+          <ScrollRow
             role="radiogroup"
             aria-labelledby="craving-label"
-            className="no-scrollbar snap-row -mx-4 mt-3 flex w-[calc(100%+2rem)] gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:w-full sm:flex-wrap sm:px-0"
+            watch={active}
+            className="-mx-4 mt-3 w-[calc(100%+2rem)] sm:mx-0 sm:w-full"
+            rowClassName="snap-row gap-2 scroll-px-4 px-4 pb-1 sm:scroll-px-0 sm:flex-wrap sm:px-0"
           >
             {choices.map((c) => {
               const selected = c.key === active;
@@ -180,7 +183,7 @@ export function Hero({
                 </button>
               );
             })}
-          </div>
+          </ScrollRow>
 
           <div className="mt-7 flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:items-center">
             <Link
@@ -276,10 +279,10 @@ export function Hero({
                 ) : null}
               </span>
               <span className="min-w-0">
-                <span className="block font-hand text-lg leading-none text-magenta-ink">
+                <span className="block font-hand text-lg leading-tight text-magenta-ink">
                   {t("todaysPick")}
                 </span>
-                <span className="block truncate font-semibold">
+                <span className="line-clamp-2 block leading-snug font-semibold">
                   {pick(pickProduct.name, locale)} ·{" "}
                   {pickProduct.priceOnRequest
                     ? tc("onRequest")

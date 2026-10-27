@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import { PhotoSoon } from "@/components/ui/PhotoSoon";
+import { ScrollRow } from "@/components/ui/ScrollRow";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import type { ClientCategory, ClientProduct } from "@/lib/client-types";
@@ -185,10 +186,12 @@ export function Catalog({
             </h1>
           )}
         </div>
-        <div
+        <ScrollRow
           role="tablist"
           aria-label={t("tabs")}
-          className="no-scrollbar snap-row -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0"
+          watch={current?.slug}
+          className="-mx-4 sm:mx-0 lg:max-w-[min(62%,56rem)]"
+          rowClassName="snap-row gap-2 scroll-px-4 px-4 pb-1 sm:scroll-px-0 sm:px-0"
         >
           {visible.map((c) => {
             const selected = c.slug === current?.slug && !q;
@@ -212,7 +215,7 @@ export function Catalog({
               </button>
             );
           })}
-        </div>
+        </ScrollRow>
       </div>
 
       {mode === "full" ? (
@@ -243,10 +246,12 @@ export function Catalog({
             ) : null}
           </label>
           {!q && availableFilters.length > 1 ? (
-            <div
+            <ScrollRow
               role="group"
               aria-label={t("filters")}
-              className="no-scrollbar snap-row -mx-4 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:px-0"
+              watch={filter}
+              className="-mx-4 sm:mx-0"
+              rowClassName="snap-row gap-2 scroll-px-4 px-4 sm:scroll-px-0 sm:px-0"
             >
               {["all", ...availableFilters].map((f) => (
                 <button
@@ -264,7 +269,7 @@ export function Catalog({
                   {t(`filter.${f}` as "filter.all")}
                 </button>
               ))}
-            </div>
+            </ScrollRow>
           ) : null}
           <p className="text-sm text-muted lg:ml-auto" aria-live="polite">
             {t("results", { count: items.length })}
@@ -297,8 +302,8 @@ export function Catalog({
             )}
             <div className="absolute inset-x-3 bottom-3 flex items-center justify-between gap-3 rounded-2xl bg-white p-3 pl-4 shadow-card">
               <div className="min-w-0">
-                <p className="font-hand text-lg leading-none text-magenta-ink">{t("featured")}</p>
-                <h3 className="truncate font-sans text-lg font-bold">
+                <p className="font-hand text-lg leading-tight text-magenta-ink">{t("featured")}</p>
+                <h3 className="mt-0.5 line-clamp-2 font-sans text-lg leading-snug font-bold">
                   {pick(featured.name, locale)}
                 </h3>
               </div>
