@@ -9,6 +9,8 @@ export const env = {
   turnstileSecret: process.env.TURNSTILE_SECRET_KEY ?? "",
   turnstileSiteKey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "",
   telegramToken: process.env.TELEGRAM_BOT_TOKEN ?? "",
+  /** Only for tests against a local stand-in for Telegram. */
+  telegramApi: (process.env.TELEGRAM_API ?? "https://api.telegram.org").replace(/\/$/, ""),
   telegramChatId: process.env.TELEGRAM_CHAT_ID ?? "",
   resendKey: process.env.RESEND_API_KEY ?? "",
   emailFrom: process.env.EMAIL_FROM ?? "YUM-YUM Donuts <orders@example.com>",

@@ -14,7 +14,7 @@ function escapeHtml(s: string) {
 
 async function sendTelegram(m: Message) {
   if (!env.telegramToken || !env.telegramChatId) throw new Error("Telegram is not configured");
-  const res = await fetch(`https://api.telegram.org/bot${env.telegramToken}/sendMessage`, {
+  const res = await fetch(`${env.telegramApi}/bot${env.telegramToken}/sendMessage`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

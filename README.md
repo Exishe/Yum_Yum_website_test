@@ -44,6 +44,16 @@ Demo mode is used automatically whenever `DATABASE_URL` is not set, and only out
 
 ---
 
+## On a Mac: double-click launchers
+
+After cloning into your home folder (`~/Yum_Yum_website_test`), copy the launchers to the Desktop once:
+`cp ~/Yum_Yum_website_test/YumYum-*.command ~/Desktop/`
+
+- **YumYum-Start.command** pulls the latest code, installs packages, builds the fast version and opens the browser.
+- **YumYum-Telegram.command** connects order notifications to your Telegram (the token stays in `.env.local`).
+
+---
+
 ## Share a preview link (temporary, from your PC)
 
 1. In PowerShell, in the project folder: `npx.cmd -y pnpm@10.28.0 share` (or `pnpm share`). It builds the fast production version and serves it on http://localhost:3000 with the demo database. Search engines are told not to index it.
@@ -233,6 +243,10 @@ registrar, add the DNS records Vercel shows (an `A` record `76.76.21.21` for the
 ### 7.5 Order notifications
 
 **Telegram (recommended, instant on the shop's phones):**
+
+Easiest: run `node scripts/telegram-setup.mjs` in the project folder (on a Mac, double-click
+`YumYum-Telegram.command`). It asks for the BotFather token, waits for a message to the bot,
+sends a test message and writes the three variables below to `.env.local`. By hand:
 
 1. In Telegram, open **@BotFather** → `/newbot` → follow the steps → copy the token → `TELEGRAM_BOT_TOKEN`.
 2. Create a group for the shop staff and add the bot to it. Send any message in the group.
