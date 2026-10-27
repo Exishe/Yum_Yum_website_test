@@ -10,19 +10,45 @@ import { sessions, users, type User, type UserRole } from "@/db/schema";
 import { env } from "./env";
 import { rateLimit, sha256 } from "./security";
 
-const COOKIE = env.isProd ? "__Host-yy_admin" : "yy_admin";
+// Over https the cookie is Secure with the __Host- prefix. The local demo runs on
+// http://localhost, where Safari drops Secure cookies (every admin click would
+// land back on the sign-in page), so there it is a plain cookie.
+const SECURE_COOKIE = "__Host-yy_admin";
+const PLAIN_COOKIE = "yy_admin";
+
+async function isHttps() {
+  if (!env.isProd) return false;
+  const h = await headers();
+  const proto = h.get("x-forwarded-proto")?.split(",")[0]?.trim();
+  // Hosting and tunnels say which protocol the visitor used; plain `next start`
+  // on this machine says nothing, and there it is http.
+  return proto ? proto === "https" : !isLocalHost(h.get("host"));
+}
+
+function isLocalHost(host: string | null) {
+  return !host || /^(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/.test(host);
+}
 const SESSION_HOURS = 12;
 const MAX_FAILED = 5;
 const LOCK_MINUTES = 15;
 // A real bcrypt hash of a random string, so unknown emails take as long as known ones.
 const DUMMY_HASH = "$2b$12$zzCnOVufT8AJkE9F/aWsK.djh0ThF6zozQLUnkadRsB6T6TOjxnCO";
 
+/** The plain cookie is only honoured where it can be set: plain http on this machine. */
+async function sessionToken() {
+  const jar = await cookies();
+  return (
+    jar.get(SECURE_COOKIE)?.value ?? ((await isHttps()) ? undefined : jar.get(PLAIN_COOKIE)?.value)
+  );
+}
+
 export type SessionUser = Pick<User, "id" | "email" | "name" | "role" | "mustChangePassword">;
 
 async function setCookie(token: string, expires: Date) {
-  (await cookies()).set(COOKIE, token, {
+  const secure = await isHttps();
+  (await cookies()).set(secure ? SECURE_COOKIE : PLAIN_COOKIE, token, {
     httpOnly: true,
-    secure: env.isProd,
+    secure,
     sameSite: "strict",
     path: "/",
     expires,
@@ -41,7 +67,7 @@ export async function createSession(userId: number) {
 
 /** The signed-in staff member, or null. Cached per request. */
 export const getCurrentUser = cache(async (): Promise<SessionUser | null> => {
-  const token = (await cookies()).get(COOKIE)?.value;
+  const token = await sessionToken();
   if (!token || token.length > 100) return null;
   const rows = await db
     .select({
@@ -119,9 +145,10 @@ export async function login(email: string, password: string, ip: string): Promis
 
 export async function logout() {
   const jar = await cookies();
-  const token = jar.get(COOKIE)?.value;
+  const token = await sessionToken();
   if (token) await db.delete(sessions).where(eq(sessions.id, sha256(token)));
-  jar.delete(COOKIE);
+  jar.delete(SECURE_COOKIE);
+  jar.delete(PLAIN_COOKIE);
 }
 
 export async function logoutEverywhere(userId: number) {

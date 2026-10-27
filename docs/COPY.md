@@ -17,8 +17,8 @@ photos. The English headline uses it; Armenian and Russian use the company's own
 | RU   | **Вкуснейшие / донаты.**   | Their RU description: «вкуснейшие пончики, ароматный кофе и разнообразное мороженое» (we say «донаты», see the glossary). |
 | HY   | **Ամենահամեղ / դոնաթները** | Their HY description: «ամենահամեղ դոնաթների, անուշաբույր սուրճի և բազմազան պաղպաղակի».                                    |
 
-Tagline under the Armenian and Russian headline: «Անուշաբույր սուրճ և բազմազան պաղպաղակ» /
-«Ароматный кофе и разнообразное мороженое», from the same sentence.
+Tagline under the Armenian and Russian headline: «Անուշաբույր սուրճ և պաղպաղակ» /
+«Ароматный кофе и мороженое», shortened from the same sentence («բազմազան» read badly).
 
 ## Section headings
 
