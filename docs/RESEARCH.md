@@ -14,6 +14,7 @@ Full notes in Russian with every source: [`research/yum-yum-donuts.md`](../resea
 | Menu and prices; delivery 11:00–21:00; rating 4.7                                                                                                                             | https://buy.am/restaurants/yum-yum-donuts                                            |
 | Drink menu with regular/XL prices; slogans "DONUT GIVE UP" and "your cup of memories"                                                                                         | Menu-board photos on Yandex Maps                                                     |
 | "Best donuts in the city!" — Aram K.                                                                                                                                          | Tripadvisor (provided by the developer; Tripadvisor blocks scripts)                  |
+| "Best donuts in town" — Vartan (25.10.2024); "Very kind staff and delicious donuts!" — Gabo (15.05.2025)                                                                      | Yandex Maps, Mashtots 35 reviews (per-review stars not shown)                        |
 | Instagram `@yumyum_donut` (~26k followers, "since 1997"), Facebook `YumYumYerevan`                                                                                            | Public profiles (Instagram content needs login)                                      |
 
 Could not access with scripts: Instagram posts, Facebook posts, Tripadvisor review text,

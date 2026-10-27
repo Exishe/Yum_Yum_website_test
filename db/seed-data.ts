@@ -16,9 +16,9 @@ export const seedCategories = [
     slug: "donuts",
     name: L("Դոնաթներ", "Донаты", "Donuts"),
     description: L(
-      "Ամեն առավոտ թարմ, ձեռքով ջնարակված։",
-      "Каждое утро свежие, глазурь — вручную.",
-      "Fresh every morning, glazed by hand.",
+      "Դասական և հեղինակային դոնաթներ՝ ջնարակով և միջուկով։",
+      "Классические и авторские донаты с глазурью и начинками.",
+      "Classic and signature donuts, glazed and filled.",
     ),
     image: `${P}/tomsarkgh/yumyum-19.jpg`,
     sortOrder: 1,
@@ -1026,6 +1026,30 @@ export const seedZones = [
 
 /* ── Reviews: real, verbatim, attributed. Never invent one. ── */
 export const seedReviews = [
+  // Yandex Maps, Mashtots 35. Yandex does not show per-review stars, so no rating.
+  {
+    author: "Vartan",
+    platform: "Yandex Maps",
+    url: "https://yandex.com/maps/org/yum_yum_donuts/208544967391/reviews/",
+    rating: null,
+    quote: "Best donuts in town",
+    quoteLocale: "en",
+    reviewDate: "2024-10-25",
+    isApproved: true,
+    sortOrder: 1,
+  },
+  {
+    author: "Gabo",
+    platform: "Yandex Maps",
+    url: "https://yandex.com/maps/org/yum_yum_donuts/208544967391/reviews/",
+    rating: null,
+    quote: "Very kind staff and delicious donuts!",
+    quoteLocale: "en",
+    reviewDate: "2025-05-15",
+    isApproved: true,
+    sortOrder: 2,
+  },
+  // Provided by the developer (Tripadvisor blocks scripts); the stars were not re-checked.
   {
     author: "Aram K.",
     platform: "Tripadvisor",
@@ -1034,7 +1058,7 @@ export const seedReviews = [
     quote: "Best donuts in the city!",
     quoteLocale: "en",
     isApproved: true,
-    sortOrder: 1,
+    sortOrder: 3,
   },
 ];
 

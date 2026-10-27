@@ -2,7 +2,7 @@
   "meta": {
     "siteName": "YUM-YUM Donuts",
     "title": "YUM-YUM Donuts: donuts, coffee and gifts in Yerevan",
-    "description": "Yerevan's donut and coffee shop since 1997. Glazed donuts every morning, iced coffee, cakes and donut bouquets. Order for pickup or delivery.",
+    "description": "Yerevan's donut and coffee shop since 1997. Donuts, iced coffee, cakes and donut bouquets. Order for pickup or delivery.",
     "menuTitle": "Menu & prices",
     "menuDescription": "Donuts, iced drinks, coffee, cakes and gifts with prices in dram. Order for pickup or delivery in Yerevan.",
     "giftsTitle": "Donut bouquets, boxes and name donuts",
@@ -72,7 +72,7 @@
     "dismiss": "Hide this message"
   },
   "hero": {
-    "badge": "First tray out at 9:00, every day",
+    "badge": "In Yerevan since 1997",
     "titleA": "Donut",
     "titleB": "give up.",
     "tagline": "",
@@ -92,7 +92,7 @@
     },
     "todaysPick": "today’s pick",
     "addPick": "Add {name} to your order",
-    "ring": "DONUT GIVE UP • GLAZED BY HAND • YEREVAN • ",
+    "ring": "DONUT GIVE UP • SINCE 1997 • YEREVAN • ",
     "shopsBadge": "{count} shops",
     "shopsBadgeSub": "in Yerevan",
     "photoAlt": {
@@ -106,8 +106,8 @@
   },
   "perks": {
     "label": "Why people come back",
-    "fresh": "Fresh at 9:00",
-    "freshSub": "Glazed every morning",
+    "fresh": "Since 1997",
+    "freshSub": "First café on Mashtots Ave",
     "shops": "{count} shops",
     "shopsSub": "Centre and both malls",
     "takeaway": "Take it with you",
@@ -214,24 +214,24 @@
   },
   "story": {
     "eyebrow": "ask your parents about us",
-    "title": "The wall of donuts on Abovyan.",
-    "body": "We’re a donut & coffee shop that has fed a few generations of Yerevan. The same counters full of glazed rings, the same donut wall on the back, and now cakes, muffins and iced coffee too.",
+    "title": "A wall of donuts.",
+    "body": "We’re a donut & coffee shop that has fed a few generations of Yerevan. Counters full of glazed rings, a wall of donuts, and cakes, muffins and iced coffee too.",
     "statShops": "shops in Yerevan",
-    "statHours": "open every day",
-    "statHoursValue": "13h",
+    "statHours": "first café on Mashtots",
+    "statHoursValue": "1997",
     "statRating": "on Google, {count} reviews",
     "statSince": "since",
     "readMore": "Read our story",
-    "interiorAlt": "Inside YUM-YUM on Abovyan: the lit donut wall, menu boards and the counter",
+    "interiorAlt": "Inside YUM-YUM: the lit donut wall, menu boards and the counter",
     "counterAlt": "Display counter with croissants, muffins and chocolate donuts",
     "muffinsAlt": "Chocolate muffins with an espresso and a jar of cookies",
     "cakeAlt": "Slice of blackberry layer cake on YUM-YUM paper",
     "page": {
       "lead": "On 9 December 1997, when Yerevan was still cold and dark most evenings, a small café with yellow walls and pink tables opened on Mashtots Avenue.",
-      "p1": "It was started by Toros, an Armenian from New Jersey, with his sister Nune Sahakyan running the place. The idea was simple: Yerevan had no quick, friendly café, and everyone in the world loves a donut.",
-      "p2": "Coffee cost 250 dram, and taking food away in a paper bag was something new. Students from the art, architecture and polytechnic schools and the conservatory, painters, actors and embassy staff came every day. People wrote their theses here, met, fell in love.",
-      "p3": "When the queue got too long, a sign appeared: 30 minutes per table. Guests kept correcting it to 130, then 230. A local magazine later called the place “the Facebook of its day”.",
-      "p4": "The first café closed in 2010 and moved to Northern Avenue. Today the same pink-and-yellow sign hangs over shops across the city, and the donuts are still glazed by hand every morning.",
+      "p1": "It was started by Toros, an Armenian from New Jersey, with his sister Nune Sahakyan running the place. The idea was simple: Yerevan had no fast-service café, and everyone in the world loves a donut.",
+      "p2": "Coffee cost 250 dram, and takeaway food was still a rarity in Yerevan. Students from the art, architecture and polytechnic schools and the conservatory, painters, actors and embassy staff came every day. People wrote their theses here, met, fell in love.",
+      "p3": "When it got too crowded, a sign appeared: 30 minutes per table. Guests kept correcting it to 130, then 230. One regular later called it “a living Facebook” of its day.",
+      "p4": "The first café closed in 2010 and moved to Northern Avenue. Today the same pink-and-yellow sign hangs over shops across the city.",
       "source": "History from “Donatanots”, ԵՐԵՎԱՆ magazine no. 18, 2013, by Lena Gevorgyan.",
       "timeline": "Timeline",
       "t1997": "First café opens at 39/12 Mashtots Ave.",
@@ -239,13 +239,7 @@
       "tToday": "{count} shops across Yerevan, from Abovyan to the malls."
     }
   },
-  "ticker": [
-    "Donut give up",
-    "Glazed every morning",
-    "Bouquets to order",
-    "Iced coffee",
-    "{count} shops"
-  ],
+  "ticker": ["Donut give up", "Since 1997", "Bouquets to order", "Iced coffee", "{count} shops"],
   "spotted": {
     "titleA": "Spotted at",
     "titleB": "YUM YUM",
@@ -397,7 +391,7 @@
     }
   },
   "footer": {
-    "about": "A donut and coffee shop that has fed a few generations of Yerevan since 1997. Glazed by hand, every morning.",
+    "about": "A donut and coffee shop that has fed a few generations of Yerevan since 1997.",
     "shop": "Shop",
     "visit": "Visit",
     "contact": "Contact",

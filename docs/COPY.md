@@ -33,12 +33,12 @@ ring around the hero photo, the footer, the cup photos). Each language gets its 
 
 ## Other recurring lines
 
-| Key            | EN                                | RU                                  | HY                                |
-| -------------- | --------------------------------- | ----------------------------------- | --------------------------------- |
-| hero.badge     | First tray out at 9:00, every day | Первый поднос — в 9:00, каждый день | Առաջին սկուտեղը՝ 9:00-ին, ամեն օր |
-| hero.craving   | so… what are you craving?         | ну что, чего хочется?               | դե ի՞նչ ես ուզում                 |
-| story.eyebrow  | ask your parents about us         | спросите о нас у родителей          | հարցրեք ծնողներին մեր մասին       |
-| notFound.title | This page was eaten.              | Эту страницу съели.                 | Այս էջը կերել են։                 |
+| Key            | EN                        | RU                         | HY                          |
+| -------------- | ------------------------- | -------------------------- | --------------------------- |
+| hero.badge     | In Yerevan since 1997     | В Ереване с 1997 года      | Երևանում՝ 1997 թվականից     |
+| hero.craving   | so… what are you craving? | ну что, чего хочется?      | դե ի՞նչ ես ուզում           |
+| story.eyebrow  | ask your parents about us | спросите о нас у родителей | հարցրեք ծնողներին մեր մասին |
+| notFound.title | This page was eaten.      | Эту страницу съели.        | Այս էջը կերել են։           |
 
 Address forms: Russian uses formal «вы» in forms and the informal imperative only in
 slogans; Armenian uses «դուք» in forms and «դու» in slogans. That mix is normal for

@@ -12,7 +12,7 @@ Admin → Site texts.
 | hero.titleA/B               | Մի՛ հանձնվիր, / դոնաթ կեր։                 | Tone and punctuation of the slogan.                                                                            |
 | hero.craving                | դե ի՞նչ ես ուզում                          | Informal «դու» — OK for the brand?                                                                             |
 | gifts.eyebrow               | ծաղիկները թառամում են, դոնաթները՝ ուտվում։ | Passive «ուտվում» sounds natural?                                                                              |
-| story.title                 | Դոնաթների պատը Աբովյանում։                 | Should it be «Աբովյան փողոցում»?                                                                               |
+| story.title                 | Դոնաթների պատը։                            | Shop name removed (the photo is not confirmed as Abovyan); check the wording.                                  |
 | story.page.*                | History paragraphs                         | Facts from the 2013 ԵՐԵՎԱՆ article; names Թորոս, Նունե Սահակյան.                                               |
 | spotted.titleB              | YUM YUM-ում                                | Case ending on a Latin brand name.                                                                             |
 | checkout.consent            | Համաձայն եմ…                               | Legal wording.                                                                                                 |

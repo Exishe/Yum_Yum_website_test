@@ -40,7 +40,7 @@ self-hosted: Bagel, Onest (Latin) and Pangolin through `next/font`; Rubik (Cyril
 - History: «Դոնաթանոց», ԵՐԵՎԱՆ magazine no. 18 (2013), Lena Gevorgyan — https://evnmag.com/articles/donatanoc.html.
   Retold in our own words; no text copied.
 - Ratings and hours: Wanderlog (Google data), Yandex Maps, buy.am, Tripadvisor.
-- Review quote "Best donuts in the city!" — Aram K., Tripadvisor (quoted exactly).
+- Review quotes, verbatim: "Best donuts in town" (Vartan, 25.10.2024) and "Very kind staff and delicious donuts!" (Gabo, 15.05.2025), Yandex Maps, Mashtots 35; "Best donuts in the city!" (Aram K., Tripadvisor, provided by the developer).
 
 ## Code
 
