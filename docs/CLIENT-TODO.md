@@ -16,6 +16,7 @@ Tick each item. Most can be done by the client directly in the admin panel.
 - [ ] **Delivery**: zones, fees, minimum order, delivery hours, who delivers (own courier or buy.am only?). Current values are placeholders.
 - [ ] **Delivery apps**: are you on Glovo or Yandex Eats? Send the links, or we keep only buy.am.
 - [ ] **Who receives orders**: a Telegram group for the staff (preferred) and/or an email address. For the demo, `YumYum-Telegram.command` connects a bot in two minutes.
+- [ ] **Who calls to confirm orders**, and how fast (e.g. within 10 minutes during opening hours). Every new order waits for that call before it is prepared.
 - [ ] **Turn off the demo notes** (Admin → Settings → _Demo notes_) once delivery terms, payment methods, lead time and the WhatsApp number are confirmed. Until then the site marks them “example, to confirm”.
 - [ ] **Staff accounts**: names and emails of people who should manage orders and prices.
 - [ ] **Privacy policy and terms**: have a lawyer check them against Armenian law.

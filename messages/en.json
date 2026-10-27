@@ -328,7 +328,7 @@
   },
   "checkout": {
     "title": "Your order",
-    "lead": "Pick it up in a shop or we bring it to your door. You pay when you get it.",
+    "lead": "Pick it up in a shop or we bring it to your door. You pay when you get it. Before we start, we call you to confirm.",
     "how": "How do you want it?",
     "pickup": "Pickup",
     "pickupSub": "Ready at the shop you choose",
@@ -346,7 +346,7 @@
     "you": "Your details",
     "name": "Name",
     "phone": "Phone",
-    "phoneHint": "+374 XX XXX XXX. We call only if something is unclear.",
+    "phoneHint": "+374 XX XXX XXX. We call this number to confirm your order.",
     "address": "Address",
     "district": "District",
     "districtPlaceholder": "Choose a district",
@@ -378,7 +378,7 @@
   "order": {
     "thanks": "Thank you, {name}!",
     "number": "Order {code}",
-    "received": "We’ve got your order. The shop will confirm it shortly.",
+    "received": "We’ve got your order. We’ll call shortly to confirm it, then start preparing.",
     "track": "This page updates by itself. Bookmark it to check your order later.",
     "status": "Status",
     "statuses": {
@@ -472,6 +472,7 @@
     "spam": "Something went wrong. Please try again.",
     "turnstile": "Please complete the check above.",
     "rateLimit": "Too many tries. Please wait a few minutes.",
+    "blocked": "We couldn't take this order online. Please call us: {phone}.",
     "generic": "Something went wrong on our side. Please try again or call us.",
     "unavailable": "{name} just sold out. Please remove it.",
     "onRequest": "We confirm the price of “{name}” by phone. Please remove it and give us a call.",

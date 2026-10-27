@@ -13,12 +13,27 @@ import {
   type SearchParams,
 } from "@/components/admin/ui";
 import { db } from "@/db";
-import { orderItems, orders, orderStatus, orderStatusHistory, shops, users } from "@/db/schema";
+import {
+  blockedPhones,
+  orderItems,
+  orders,
+  orderStatus,
+  orderStatusHistory,
+  shops,
+  users,
+} from "@/db/schema";
 import { requireUser } from "@/lib/auth";
+import { customerHistory } from "@/lib/blocklist";
 import { districts } from "@/lib/districts";
 import { formatPhone } from "@/lib/format";
 import { PrintButton } from "./PrintButton";
-import { updateOrderNoteAction, updateOrderStatusAction } from "../../../actions";
+import {
+  blockPhoneAction,
+  callOutcomeAction,
+  unblockPhoneAction,
+  updateOrderNoteAction,
+  updateOrderStatusAction,
+} from "../../../actions";
 
 export const metadata = { title: "Order" };
 
@@ -35,7 +50,7 @@ export default async function OrderDetail({
   if (!/^[0-9a-f-]{36}$/.test(id)) notFound();
   const [order] = await db.select().from(orders).where(eq(orders.id, id)).limit(1);
   if (!order) notFound();
-  const [items, history, shop] = await Promise.all([
+  const [items, history, shop, past, [blocked]] = await Promise.all([
     db.select().from(orderItems).where(eq(orderItems.orderId, id)).orderBy(asc(orderItems.id)),
     db
       .select({ h: orderStatusHistory, by: users.name })
@@ -50,6 +65,8 @@ export default async function OrderDetail({
           .where(eq(shops.id, order.shopId))
           .then((r) => r[0])
       : null,
+    customerHistory(order.phone, order.id),
+    db.select().from(blockedPhones).where(eq(blockedPhones.phone, order.phone)).limit(1),
   ]);
   const fmt = new Intl.DateTimeFormat("en-GB", {
     timeZone: "Asia/Yerevan",
@@ -185,6 +202,61 @@ export default async function OrderDetail({
           </Card>
         </div>
         <div className="flex flex-col gap-5 print:hidden">
+          {order.status === "new" ? (
+            <Card className="border-2 border-magenta">
+              <h2 className="text-xl">Call the customer before preparing</h2>
+              <p className="mt-1 text-sm text-muted">
+                Cash on delivery means anyone can place an order. Confirm it by phone first.
+              </p>
+              <a
+                href={`tel:${order.phone}`}
+                className="mt-4 inline-flex h-12 items-center rounded-full bg-plum px-6 text-lg font-semibold text-white"
+              >
+                Call {formatPhone(order.phone)}
+              </a>
+              <p className="mt-3 text-sm">
+                {past.total === 0 ? (
+                  <strong>First order from this number.</strong>
+                ) : (
+                  <>
+                    Earlier orders from this number: <strong>{past.total}</strong> ({past.done}{" "}
+                    done, {past.cancelled} cancelled).
+                  </>
+                )}
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <form action={callOutcomeAction}>
+                  <input type="hidden" name="orderId" value={order.id} />
+                  <input type="hidden" name="outcome" value="confirmed" />
+                  <SubmitButton>Confirmed by phone</SubmitButton>
+                </form>
+                <form action={callOutcomeAction}>
+                  <input type="hidden" name="orderId" value={order.id} />
+                  <input type="hidden" name="outcome" value="no_answer" />
+                  <SubmitButton variant="secondary">No answer</SubmitButton>
+                </form>
+              </div>
+              <form
+                action={callOutcomeAction}
+                className="mt-4 flex flex-wrap items-center gap-3 border-t border-line pt-4"
+              >
+                <input type="hidden" name="orderId" value={order.id} />
+                <input type="hidden" name="outcome" value="fake" />
+                <label className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    name="block"
+                    defaultChecked
+                    className="size-4 accent-magenta"
+                  />
+                  Also block this number
+                </label>
+                <SubmitButton variant="danger" confirm="Cancel this order as fake?">
+                  Fake order: cancel
+                </SubmitButton>
+              </form>
+            </Card>
+          ) : null}
           <Card>
             <h2 className="mb-3 text-xl">Change status</h2>
             <form action={updateOrderStatusAction} className="flex flex-col gap-3">
@@ -233,6 +305,38 @@ export default async function OrderDetail({
                 </li>
               ))}
             </ol>
+          </Card>
+          <Card>
+            <h2 className="mb-3 text-xl">Number</h2>
+            {blocked ? (
+              <form action={unblockPhoneAction} className="flex flex-col gap-3">
+                <input type="hidden" name="phone" value={order.phone} />
+                <input type="hidden" name="returnTo" value={`/admin/orders/${order.id}`} />
+                <p className="text-sm">
+                  <strong className="text-magenta-ink">Blocked</strong> since{" "}
+                  {fmt.format(blocked.createdAt)}
+                  {blocked.reason ? ` · ${blocked.reason}` : ""}. This number cannot order online.
+                </p>
+                <SubmitButton variant="secondary">Unblock</SubmitButton>
+              </form>
+            ) : (
+              <form action={blockPhoneAction} className="flex flex-col gap-3">
+                <input type="hidden" name="phone" value={order.phone} />
+                <input type="hidden" name="returnTo" value={`/admin/orders/${order.id}`} />
+                <input
+                  name="reason"
+                  placeholder="Reason (optional), e.g. prank order"
+                  className={inputCls}
+                  maxLength={200}
+                />
+                <SubmitButton
+                  variant="danger"
+                  confirm="Block this number? It will no longer be able to order online."
+                >
+                  Block this number
+                </SubmitButton>
+              </form>
+            )}
           </Card>
           <Card>
             <h2 className="mb-3 text-xl">Staff note</h2>

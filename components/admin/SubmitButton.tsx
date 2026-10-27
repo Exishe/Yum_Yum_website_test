@@ -9,12 +9,15 @@ export function SubmitButton({
   confirm,
   name,
   value,
+  variant = "primary",
 }: {
   children: React.ReactNode;
   className?: string;
   confirm?: string;
   name?: string;
   value?: string;
+  /** secondary: outlined; danger: magenta, for cancel / block. */
+  variant?: "primary" | "secondary" | "danger";
 }) {
   const { pending } = useFormStatus();
   return (
@@ -27,7 +30,10 @@ export function SubmitButton({
         if (confirm && !window.confirm(confirm)) e.preventDefault();
       }}
       className={cn(
-        "inline-flex h-11 items-center justify-center gap-2 rounded-full bg-plum px-5 text-sm font-semibold text-white hover:bg-plum-3 disabled:opacity-60",
+        "inline-flex h-11 items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold disabled:opacity-60",
+        variant === "primary" && "bg-plum text-white hover:bg-plum-3",
+        variant === "secondary" && "bg-white text-plum ring-2 ring-plum/20 hover:ring-plum",
+        variant === "danger" && "bg-magenta text-white hover:bg-magenta-ink",
         className,
       )}
     >

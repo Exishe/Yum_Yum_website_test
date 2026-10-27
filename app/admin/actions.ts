@@ -12,6 +12,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { db } from "@/db";
 import {
+  blockedPhones,
   categories,
   contactMessages,
   deliveryZones,
@@ -43,6 +44,7 @@ import { SETTINGS_TAG } from "@/lib/settings";
 import { TEXTS_TAG } from "@/lib/site-texts";
 import { anonymizeOldOrders } from "@/lib/retention";
 import { saveImage } from "@/lib/storage";
+import { normalizeArmenianPhone } from "@/lib/format";
 import { clean, loginSchema, passwordSchema } from "@/lib/validation";
 
 /* ── helpers ── */
@@ -146,6 +148,88 @@ export async function updateOrderStatusAction(fd: FormData) {
     });
   }
   back(`/admin/orders/${id}`, "ok", "Status updated.");
+}
+
+/*
+ * Confirm-by-call: a new order is only prepared after staff reached the
+ * customer. "fake" cancels it and, by default, blocks the number.
+ */
+export async function callOutcomeAction(fd: FormData) {
+  const user = await requireUser();
+  const id = String(fd.get("orderId") ?? "");
+  const outcome = z.enum(["confirmed", "no_answer", "fake"]).safeParse(fd.get("outcome"));
+  if (!z.uuid().safeParse(id).success || !outcome.success)
+    back("/admin/orders", "error", "Unknown order or answer.");
+  const [order] = await db.select().from(orders).where(eq(orders.id, id)).limit(1);
+  if (!order) back("/admin/orders", "error", "Order not found.");
+
+  const next =
+    outcome.data === "confirmed"
+      ? "confirmed"
+      : outcome.data === "fake"
+        ? "cancelled"
+        : order.status;
+  const note = {
+    confirmed: "Confirmed by phone",
+    no_answer: "Called: no answer",
+    fake: "Fake order: cancelled after the call",
+  }[outcome.data];
+  if (next !== order.status) await db.update(orders).set({ status: next }).where(eq(orders.id, id));
+  await db.insert(orderStatusHistory).values({
+    orderId: id,
+    fromStatus: order.status,
+    toStatus: next,
+    userId: user.id,
+    note,
+  });
+  await audit(user, "order_call", "order", order.shortCode, { outcome: outcome.data });
+
+  if (outcome.data === "fake" && bool(fd, "block")) {
+    await db
+      .insert(blockedPhones)
+      .values({ phone: order.phone, reason: `Fake order #${order.shortCode}`, blockedBy: user.id })
+      .onConflictDoNothing();
+    await audit(user, "block_phone", "phone", order.phone, { order: order.shortCode });
+    back(`/admin/orders/${id}`, "ok", "Order cancelled and the number blocked.");
+  }
+  back(
+    `/admin/orders/${id}`,
+    "ok",
+    {
+      confirmed: "Confirmed. Prepare the order.",
+      no_answer: "Call noted.",
+      fake: "Order cancelled.",
+    }[outcome.data],
+  );
+}
+
+/** Where to go back to after (un)blocking: the order page it came from, or the list. */
+function blockReturn(fd: FormData) {
+  const to = String(fd.get("returnTo") ?? "");
+  return /^\/admin\/orders\/[0-9a-f-]{36}$/.test(to) ? to : "/admin/blocked";
+}
+
+export async function blockPhoneAction(fd: FormData) {
+  const user = await requireUser();
+  const to = blockReturn(fd);
+  const phone = normalizeArmenianPhone(str(fd, "phone", 25));
+  if (!phone) back(to, "error", "Check the number: +374 and 8 digits.");
+  await db
+    .insert(blockedPhones)
+    .values({ phone, reason: str(fd, "reason", 200) || null, blockedBy: user.id })
+    .onConflictDoNothing();
+  await audit(user, "block_phone", "phone", phone);
+  back(to, "ok", "Number blocked. It can no longer order online.");
+}
+
+export async function unblockPhoneAction(fd: FormData) {
+  const user = await requireUser();
+  const to = blockReturn(fd);
+  const phone = normalizeArmenianPhone(str(fd, "phone", 25));
+  if (!phone) back(to, "error", "Unknown number.");
+  await db.delete(blockedPhones).where(eq(blockedPhones.phone, phone));
+  await audit(user, "unblock_phone", "phone", phone);
+  back(to, "ok", "Number unblocked.");
 }
 
 export async function updateOrderNoteAction(fd: FormData) {

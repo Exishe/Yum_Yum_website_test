@@ -8,7 +8,7 @@
 --     "anon" key. Every table has RLS on with NO policy by default, which means
 --     deny everything. The only exceptions are the read-only policies below for
 --     published catalogue data.
---   * Orders, customers, users, sessions, audit and settings have no policies at
+--   * Orders, customers, blocked numbers, users, sessions, audit and settings have no policies at
 --     all: the public can never read or write them directly.
 
 DO $$
@@ -18,7 +18,7 @@ BEGIN
     'categories','products','product_options','shops','delivery_zones',
     'orders','order_items','order_status_history','reviews','site_texts',
     'settings','newsletter_subscribers','contact_messages','users','sessions',
-    'audit_log','rate_limits','notification_log'
+    'audit_log','rate_limits','notification_log','blocked_phones'
   ] LOOP
     EXECUTE format('ALTER TABLE public.%I ENABLE ROW LEVEL SECURITY', t);
   END LOOP;

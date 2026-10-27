@@ -12,6 +12,7 @@ import { t } from "./localized";
 import { availableDays, findSlot } from "./ordering";
 import { isPricingError, leadDays, priceLine, quoteDelivery, type PricedLine } from "./pricing";
 import { getSettings } from "./settings";
+import { customerHistory } from "./blocklist";
 import { bothNames, orderMessage } from "./staff-message";
 import type { CheckoutData } from "./validation";
 
@@ -187,6 +188,7 @@ export async function orderNotification(publicId: string) {
     totalAmd: order.totalAmd,
     comment: order.comment,
     adminUrl: `${env.siteUrl}/admin/orders/${order.id}`,
+    history: await customerHistory(order.phone, order.id),
     items: items.map((i) => ({
       quantity: i.quantity,
       name: i.name,

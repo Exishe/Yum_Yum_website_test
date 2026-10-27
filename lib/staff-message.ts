@@ -24,6 +24,11 @@ const L = {
   entrance: "մուտք",
   floor: "հարկ",
   apartment: "բն.",
+  callFirst: "Զանգահարեք հաճախորդին՝ պատվերը հաստատելու համար / Call the customer to confirm",
+  firstOrder: "Առաջին պատվերն այս համարից / First order from this number",
+  earlier: "Նախկին պատվերներ / Earlier orders",
+  done: "կատարված / done",
+  cancelled: "չեղարկված / cancelled",
   newMessage: "Նոր հաղորդագրություն կայքից / Website message",
   wrote: "գրել է / wrote",
 } as const;
@@ -60,6 +65,8 @@ export type StaffOrder = {
   totalAmd: number;
   comment?: string | null;
   adminUrl: string;
+  /** Earlier orders from the same number; omitted when unknown. */
+  history?: { total: number; done: number; cancelled: number };
   items: Array<{
     quantity: number;
     name: string;
@@ -104,10 +111,16 @@ export function orderMessage(o: StaffOrder): { subject: string; text: string } {
   });
 
   const text = [
+    `⚠ ${L.callFirst}`,
     where,
     `${L.when}: ${date("hy-AM")} (${date("en-GB")}), ${o.slotLabel}`,
     `${L.name}: ${o.customerName}`,
     `${L.phone}: ${o.phone}`,
+    o.history
+      ? o.history.total === 0
+        ? L.firstOrder
+        : `${L.earlier}: ${o.history.total} (${o.history.done} ${L.done}, ${o.history.cancelled} ${L.cancelled})`
+      : "",
     `${L.payment}: ${o.paymentMethod === "cash" ? L.cash : L.card}`,
     "",
     ...lines,

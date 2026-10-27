@@ -379,6 +379,14 @@ export const notificationLog = pgTable("notification_log", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
+/** Numbers that may not order online (pranks, repeated fake orders). Normalised +374XXXXXXXX. */
+export const blockedPhones = pgTable("blocked_phones", {
+  phone: text("phone").primaryKey(),
+  reason: text("reason"),
+  blockedBy: integer("blocked_by").references(() => users.id, { onDelete: "set null" }),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
 export type Category = typeof categories.$inferSelect;
 export type Product = typeof products.$inferSelect;
 export type ProductOption = typeof productOptions.$inferSelect;
@@ -390,3 +398,4 @@ export type OrderStatus = (typeof orderStatus.enumValues)[number];
 export type Review = typeof reviews.$inferSelect;
 export type User = typeof users.$inferSelect;
 export type UserRole = (typeof userRole.enumValues)[number];
+export type BlockedPhone = typeof blockedPhones.$inferSelect;

@@ -9,11 +9,14 @@ import { randomBytes } from "node:crypto";
 import { after } from "next/server";
 import { db } from "@/db";
 import { contactMessages, newsletterSubscribers } from "@/db/schema";
+import { isPhoneBlocked } from "./blocklist";
 import { env } from "./env";
+import { formatPhone } from "./format";
 import { notifyShop, sendEmail } from "./notify";
 import { contactMessage } from "./staff-message";
 import { createOrder, orderNotification } from "./orders";
 import { clientIp, hashValue, rateLimit, sha256, verifyTurnstile } from "./security";
+import { getSettings } from "./settings";
 import { checkoutSchema, contactSchema, newsletterSchema } from "./validation";
 
 export type ActionResult<T = object> =
@@ -47,6 +50,11 @@ export async function placeOrder(input: unknown): Promise<ActionResult<{ publicI
     return { ok: false, error: "rateLimit" };
   }
   if (!(await verifyTurnstile(data.turnstileToken, ip))) return { ok: false, error: "turnstile" };
+  // Blocked numbers get a neutral answer that points to the phone, not "you are blocked".
+  if (await isPhoneBlocked(data.phone)) {
+    const shopPhone = (await getSettings()).contact.phones[0] ?? "";
+    return { ok: false, error: "blocked", params: { phone: formatPhone(shopPhone, "local") } };
+  }
 
   try {
     const result = await createOrder(data, hashValue(ip));

@@ -7,6 +7,7 @@ import { logoutAction } from "../actions";
 const NAV: Array<{ href: string; label: string; admin?: boolean }> = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/orders", label: "Orders" },
+  { href: "/admin/blocked", label: "Blocked numbers" },
   { href: "/admin/products", label: "Products & prices" },
   { href: "/admin/categories", label: "Categories", admin: true },
   { href: "/admin/shops", label: "Shops", admin: true },

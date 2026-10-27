@@ -106,9 +106,7 @@ export default async function Dashboard({ searchParams }: { searchParams: Search
                 Privacy clean-up runs every night. It removes names, phones and addresses from old
                 orders.
               </p>
-              <SubmitButton className="bg-white text-plum ring-2 ring-plum/15 hover:bg-blush">
-                Run privacy clean-up now
-              </SubmitButton>
+              <SubmitButton variant="secondary">Run privacy clean-up now</SubmitButton>
             </form>
           ) : null}
         </Card>

@@ -43,6 +43,17 @@ describe("orderMessage", () => {
     expect(text).toContain("Վճարում / Payment: կանխիկ / cash");
     expect(text).toContain("ԸՆԴԱՄԵՆԸ / TOTAL: 2 100 ֏");
     expect(text).not.toMatch(/Шоколад|Коробка/);
+    expect(text.split("\n")[0]).toContain("Call the customer to confirm");
+  });
+
+  it("tells staff whether the number is new or has a record", () => {
+    expect(orderMessage({ ...base, history: { total: 0, done: 0, cancelled: 0 } }).text).toContain(
+      "Առաջին պատվերն այս համարից / First order from this number",
+    );
+    expect(orderMessage({ ...base, history: { total: 3, done: 1, cancelled: 2 } }).text).toContain(
+      "Նախկին պատվերներ / Earlier orders: 3 (1 կատարված / done, 2 չեղարկված / cancelled)",
+    );
+    expect(orderMessage(base).text).not.toContain("Earlier orders");
   });
 
   it("describes a delivery address and fee", () => {
