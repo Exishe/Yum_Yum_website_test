@@ -108,7 +108,21 @@ export function ProductForm({
             name="priceIsSample"
             defaultChecked={product?.priceIsSample ?? false}
           />
+          <Check
+            label="Price on request"
+            name="priceOnRequest"
+            defaultChecked={product?.priceOnRequest ?? false}
+            hint="Hides the price; customers call or write instead of adding it to the basket"
+          />
         </div>
+        <Field
+          label="Same product on buy.am (optional)"
+          name="buyamUrl"
+          type="url"
+          defaultValue={product?.buyamUrl ?? ""}
+          placeholder="https://buy.am/products/yum-yum-donuts/…"
+          hint="Shows an “Order on buy.am” link on the product"
+        />
       </Card>
       <Card className="flex flex-col gap-4">
         <div className="flex flex-wrap items-start gap-5">

@@ -50,7 +50,9 @@ export function GiftGrid({ products }: { products: ClientProduct[] }) {
                 </span>
                 <span className="block p-4">
                   <span className="block font-semibold">{name}</span>
-                  <span className="block text-sm text-muted">{formatAmd(p.priceAmd, locale)}</span>
+                  <span className="block text-sm text-muted">
+                    {p.priceOnRequest ? tc("priceOnRequest") : formatAmd(p.priceAmd, locale)}
+                  </span>
                   <span className="sr-only">{t("addNamed", { name })}</span>
                 </span>
               </button>

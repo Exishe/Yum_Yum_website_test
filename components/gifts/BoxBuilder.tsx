@@ -4,6 +4,7 @@ import { ArrowCounterClockwise } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
+import { AskPrice } from "@/components/AskPrice";
 import type { Locale } from "@/i18n/routing";
 import { announceAdd, cart } from "@/lib/cart-store";
 import type { ClientProduct } from "@/lib/client-types";
@@ -22,8 +23,9 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
   if (!box?.boxSize) return null;
   const size = box.boxSize;
   const left = size - packed.length;
-  const total = box.priceAmd + packed.reduce((s, p) => s + p.priceAmd, 0);
-  const available = donuts.filter((d) => d.isAvailable);
+  const donutsTotal = packed.reduce((s, p) => s + p.priceAmd, 0);
+  const total = box.priceAmd + donutsTotal;
+  const available = donuts.filter((d) => d.isAvailable && !d.priceOnRequest);
 
   function chooseBox(id: number) {
     const next = sorted.find((b) => b.id === id);
@@ -124,34 +126,53 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
                   <ArrowCounterClockwise size={16} aria-hidden /> {t("clear")}
                 </button>
               ) : null}
-              <button
-                type="button"
-                disabled={left !== 0}
-                onClick={(e) => {
-                  cart.add({
-                    productId: box.id,
-                    quantity: 1,
-                    optionIds: [],
-                    messages: [],
-                    contents: packed.map((p) => p.id),
-                    name: box.name,
-                    unitPriceAmd: total,
-                    image: packed[0]?.img?.src ?? box.img?.src ?? null,
-                    detail: { contents: packed.map((p) => p.name) },
-                    leadTimeDays: Math.max(box.leadTimeDays, ...packed.map((p) => p.leadTimeDays)),
-                  });
-                  announceAdd(e.currentTarget);
-                  setPacked([]);
-                }}
-                className="h-12 rounded-full bg-plum px-6 font-semibold text-white transition-transform hover:-translate-y-0.5 disabled:translate-y-0 disabled:opacity-45"
-              >
-                {t("add", { price: formatAmd(total, locale) })}
-              </button>
+              {box.priceOnRequest ? null : (
+                <button
+                  type="button"
+                  disabled={left !== 0}
+                  onClick={(e) => {
+                    cart.add({
+                      productId: box.id,
+                      quantity: 1,
+                      optionIds: [],
+                      messages: [],
+                      contents: packed.map((p) => p.id),
+                      name: box.name,
+                      unitPriceAmd: total,
+                      image: packed[0]?.img?.src ?? box.img?.src ?? null,
+                      detail: { contents: packed.map((p) => p.name) },
+                      leadTimeDays: Math.max(
+                        box.leadTimeDays,
+                        ...packed.map((p) => p.leadTimeDays),
+                      ),
+                    });
+                    announceAdd(e.currentTarget);
+                    setPacked([]);
+                  }}
+                  className="h-12 rounded-full bg-plum px-6 font-semibold text-white transition-transform hover:-translate-y-0.5 disabled:translate-y-0 disabled:opacity-45"
+                >
+                  {t("add", { price: formatAmd(total, locale) })}
+                </button>
+              )}
             </div>
           </div>
-          <p className="mt-1 text-sm text-muted">
-            {t("boxFee", { price: formatAmd(box.priceAmd, locale) })}
-          </p>
+          {box.priceOnRequest ? (
+            <>
+              <p className="mt-1 text-sm text-muted">
+                {t("boxFeeOnRequest", { price: formatAmd(donutsTotal, locale) })}
+              </p>
+              <AskPrice
+                className="mt-4"
+                item={`${pick(box.name, locale)}${
+                  packed.length ? `: ${packed.map((p) => pick(p.name, locale)).join(", ")}` : ""
+                }`}
+              />
+            </>
+          ) : (
+            <p className="mt-1 text-sm text-muted">
+              {t("boxFee", { price: formatAmd(box.priceAmd, locale) })}
+            </p>
+          )}
         </div>
 
         {/* The donuts to choose from */}

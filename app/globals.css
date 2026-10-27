@@ -88,19 +88,18 @@
       transform: translate3d(-50%, 0, 0);
     }
   }
+  /* Transform only: the irregular shape is fixed (see .blob-shape), so the
+     browser moves a ready layer instead of repainting the blob every frame. */
   @keyframes blob {
     0%,
     100% {
-      border-radius: 58% 42% 55% 45% / 45% 55% 45% 55%;
-      transform: translate3d(0, 0, 0) rotate(0deg);
+      transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
     }
     33% {
-      border-radius: 40% 60% 38% 62% / 60% 35% 65% 40%;
-      transform: translate3d(2%, -3%, 0) rotate(8deg);
+      transform: translate3d(2%, -3%, 0) rotate(28deg) scale(1.05, 0.97);
     }
     66% {
-      border-radius: 62% 38% 46% 54% / 38% 62% 38% 62%;
-      transform: translate3d(-2%, 2%, 0) rotate(-6deg);
+      transform: translate3d(-2%, 2%, 0) rotate(-20deg) scale(0.97, 1.04);
     }
   }
   @keyframes drift {
@@ -276,4 +275,10 @@
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* The hero blobs' fixed shape; the motion comes from @keyframes blob. */
+.blob-shape {
+  border-radius: 58% 42% 55% 45% / 45% 55% 45% 55%;
+  will-change: transform;
 }

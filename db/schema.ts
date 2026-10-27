@@ -76,6 +76,10 @@ export const products = pgTable(
     priceAmd: integer("price_amd").notNull(),
     /** True while the price is a seed value that the client has not confirmed. */
     priceIsSample: boolean("price_is_sample").notNull().default(true),
+    /** No known price: the site shows "price on request" and asks the customer to call or write. */
+    priceOnRequest: boolean("price_on_request").notNull().default(false),
+    /** The same product on buy.am, for customers who prefer to order there. */
+    buyamUrl: text("buyam_url"),
     image: text("image"),
     imageAlt: jsonb("image_alt").$type<Localized>(),
     /** Filter tags: glazed, chocolate, fruity, kids, gifts, filled, iced, hot … */

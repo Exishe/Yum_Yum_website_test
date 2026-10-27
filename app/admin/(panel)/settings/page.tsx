@@ -30,6 +30,20 @@ export default async function SettingsPage({ searchParams }: { searchParams: Sea
       <Flash ok={sp(q.ok)} error={sp(q.error)} />
       <div className="flex flex-col gap-5">
         <Card>
+          <h2 className="mb-3 text-xl">Demo notes</h2>
+          <form action={saveSettingsAction} className="flex flex-col gap-3">
+            <input type="hidden" name="key" value="demoNotes" />
+            <Check
+              label="Show “example, to be discussed” next to delivery terms and other values you have not confirmed yet"
+              name="enabled"
+              defaultChecked={s.demoNotes.enabled}
+            />
+            <div>
+              <SubmitButton>Save</SubmitButton>
+            </div>
+          </form>
+        </Card>
+        <Card>
           <h2 className="mb-3 text-xl">“Today in the window” banner</h2>
           <form action={saveSettingsAction} className="flex flex-col gap-3">
             <input type="hidden" name="key" value="banner" />

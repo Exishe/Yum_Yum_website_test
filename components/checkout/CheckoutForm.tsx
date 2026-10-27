@@ -20,6 +20,7 @@ import { availableDays, type OrderingRules } from "@/lib/ordering";
 import { quoteDelivery } from "@/lib/pricing";
 import { addDays, yerevanParts } from "@/lib/time";
 import { checkoutSchema, type CheckoutInput } from "@/lib/validation";
+import { DemoNote } from "@/components/AskPrice";
 
 type Props = {
   shops: PublicShop[];
@@ -280,7 +281,9 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
         ) : (
           <div className={section}>
             <fieldset className="m-0 min-w-0 border-0 p-0">
-              <legend className={cn(legend, "mb-4 p-0")}>{t("address")}</legend>
+              <legend className={cn(legend, "mb-4 p-0")}>
+                {t("address")} <DemoNote className="ml-1" />
+              </legend>
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-6">
                 <label className="col-span-2 font-semibold sm:col-span-6">
                   {t("district")}
@@ -334,7 +337,8 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
                   {t("minOrder", {
                     zone: pick(quote.zone.name, locale),
                     price: formatAmd(quote.minOrderAmd, locale),
-                  })}
+                  })}{" "}
+                  <DemoNote />
                 </p>
               ) : null}
             </fieldset>
@@ -348,7 +352,10 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
             <div>
               {leadDays > 0 ? (
                 <p className="mb-3 flex items-center gap-2 rounded-2xl bg-sun-soft px-4 py-3 text-sm">
-                  <CalendarBlank size={20} aria-hidden /> {t("leadNote")}
+                  <CalendarBlank size={20} aria-hidden className="shrink-0" />
+                  <span>
+                    {t("leadNote")} <DemoNote />
+                  </span>
                 </p>
               ) : null}
               {!now ? (
@@ -464,7 +471,9 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
         {/* Payment */}
         <div className={section}>
           <fieldset className="m-0 min-w-0 border-0 p-0">
-            <legend className={cn(legend, "mb-4 p-0")}>{t("payment")}</legend>
+            <legend className={cn(legend, "mb-4 p-0")}>
+              {t("payment")} <DemoNote className="ml-1" />
+            </legend>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {(["cash", "card_on_delivery"] as const).map((m) => (
                 <label
@@ -524,7 +533,9 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
             </div>
             {fulfilment === "delivery" ? (
               <div className="flex justify-between">
-                <dt>{t("deliveryFee")}</dt>
+                <dt>
+                  {t("deliveryFee")} {fulfilment === "delivery" ? <DemoNote /> : null}
+                </dt>
                 <dd className="tabular-nums">
                   {quote?.ok ? (fee === 0 ? t("free") : formatAmd(fee, locale)) : "—"}
                 </dd>

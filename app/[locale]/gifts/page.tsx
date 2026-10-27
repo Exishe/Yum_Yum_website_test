@@ -9,6 +9,7 @@ import { getMenu } from "@/lib/catalog";
 import { toClientProduct } from "@/lib/client-products";
 import { imgOrThrow } from "@/lib/images";
 import { alternates } from "@/lib/seo";
+import { DemoNote } from "@/components/AskPrice";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -40,7 +41,9 @@ export default async function GiftsPage({ params }: Props) {
           <div>
             <p className="font-hand text-2xl text-magenta-ink">{t("eyebrow")}</p>
             <h1 className="text-[clamp(3rem,8vw,6rem)] leading-[0.92]">{t("title")}</h1>
-            <p className="mt-5 max-w-xl text-lg">{t("pageLead")}</p>
+            <p className="mt-5 max-w-xl text-lg">
+              {t("pageLead")} <DemoNote />
+            </p>
           </div>
           <figure className="mx-auto w-full max-w-[380px] rotate-2 rounded-[1.75rem] bg-white p-2.5 shadow-lift">
             <Photo

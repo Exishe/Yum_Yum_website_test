@@ -1,9 +1,24 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
 const email = process.env.E2E_ADMIN_EMAIL ?? "admin@yumyum.local";
 const password = process.env.E2E_ADMIN_PASSWORD ?? "donut-give-up-2026";
 
 test.describe.configure({ mode: "serial" });
+
+/** One pickup order through the real checkout, so the admin has something to manage. */
+async function placePickupOrder(page: Page) {
+  await page.goto("/en/menu?category=donuts");
+  await page.evaluate(() => localStorage.setItem("yy-consent-v1", "essential"));
+  await page.reload();
+  await page.locator("#menu-panel li button[aria-label]").first().click();
+  await page.goto("/en/checkout");
+  await page.locator("input[name='name']").fill("Test Admin");
+  await page.locator("input[name='phone']").fill("+374 94 55 66 77");
+  await page.locator("input[name='consent']").check();
+  await page.locator("#checkout-form button[type='submit']").click();
+  await page.waitForURL(/\/order\/[A-Za-z0-9_-]+\?new=1/);
+  await page.close();
+}
 
 test("admin pages need a sign-in", async ({ page }) => {
   await page.goto("/admin/orders");
@@ -20,8 +35,12 @@ test("staff can manage an order and a price", async ({ page }, info) => {
   await page.getByRole("button", { name: "Sign in" }).click();
   await expect(page.getByRole("heading", { name: /Hello/ })).toBeVisible();
 
-  // Orders: newest order, set to confirmed.
+  // Orders: newest order, set to confirmed. On a fresh database place one first.
   await page.goto("/admin/orders");
+  if ((await page.locator("tbody a").count()) === 0) {
+    await placePickupOrder(await page.context().newPage());
+    await page.reload();
+  }
   await page.locator("tbody a").first().click();
   await page.getByRole("radio", { name: "Confirmed", exact: true }).check();
   await page.getByRole("button", { name: "Update status" }).click();

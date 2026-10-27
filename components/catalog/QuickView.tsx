@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { Dialog } from "radix-ui";
 import { useState } from "react";
+import { AskPrice, BuyamButton, DemoNote } from "@/components/AskPrice";
 import { PhotoSoon } from "@/components/ui/PhotoSoon";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
@@ -17,6 +18,7 @@ import { t as pick } from "@/lib/localized";
 
 function Body({ product, onDone }: { product: ClientProduct; onDone: () => void }) {
   const t = useTranslations("catalog");
+  const tc = useTranslations("common");
   const tg = useTranslations("gifts");
   const locale = useLocale() as Locale;
   const sizes = product.options.filter((o) => o.kind === "size");
@@ -63,12 +65,20 @@ function Body({ product, onDone }: { product: ClientProduct; onDone: () => void 
       <div className="flex-1 overflow-y-auto px-5 pt-5 pb-4">
         <div className="flex items-start justify-between gap-4">
           <Dialog.Title className="font-display text-3xl leading-tight">{name}</Dialog.Title>
-          <p className="shrink-0 font-display text-2xl text-magenta-ink">
-            {formatAmd(product.priceAmd, locale)}
+          <p
+            className={cn(
+              "shrink-0 text-magenta-ink",
+              product.priceOnRequest ? "pt-2 text-sm font-semibold" : "font-display text-2xl",
+            )}
+          >
+            {product.priceOnRequest ? tc("priceOnRequest") : formatAmd(product.priceAmd, locale)}
           </p>
         </div>
         {product.description ? (
           <p className="mt-1 text-muted">{pick(product.description, locale)}</p>
+        ) : null}
+        {product.buyamUrl && !product.priceOnRequest ? (
+          <BuyamButton url={product.buyamUrl} className="mt-1" />
         ) : null}
 
         {sizes.length > 1 ? (
@@ -173,12 +183,20 @@ function Body({ product, onDone }: { product: ClientProduct; onDone: () => void 
 
         {product.leadTimeDays > 0 ? (
           <p className="mt-5 flex items-center gap-2 rounded-2xl bg-sun-soft px-4 py-3 text-sm">
-            <CalendarBlank size={20} aria-hidden /> {t("quick.leadTime")}
+            <CalendarBlank size={20} aria-hidden className="shrink-0" />
+            <span>
+              {t("quick.leadTime")} <DemoNote />
+            </span>
           </p>
         ) : null}
       </div>
 
-      {product.boxSize ? (
+      {product.priceOnRequest && !product.boxSize ? (
+        <div className="shrink-0 border-t border-line bg-white px-5 py-4">
+          <p className="mb-3 text-sm text-muted">{tc("askNote")}</p>
+          <AskPrice item={messages.length ? `${name} «${messages.join(", ")}»` : name} />
+        </div>
+      ) : product.boxSize ? (
         <div className="shrink-0 border-t border-line bg-white px-5 py-4">
           <Link
             href={{ pathname: "/gifts", hash: "box" }}

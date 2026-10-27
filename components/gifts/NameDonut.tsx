@@ -2,6 +2,7 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { useId, useState } from "react";
+import { AskPrice } from "@/components/AskPrice";
 import type { Locale } from "@/i18n/routing";
 import { announceAdd, cart } from "@/lib/cart-store";
 import type { ClientProduct } from "@/lib/client-types";
@@ -11,6 +12,7 @@ import { t as pick } from "@/lib/localized";
 /** Live preview of a name written in glaze. A drawing, not a photo: it says "roughly like this". */
 export function NameDonut({ product }: { product: ClientProduct }) {
   const t = useTranslations("gifts.name");
+  const tc = useTranslations("common");
   const locale = useLocale() as Locale;
   const textOption = product.options.find((o) => o.kind === "text");
   const max = textOption?.maxLength ?? 12;
@@ -44,28 +46,39 @@ export function NameDonut({ product }: { product: ClientProduct }) {
         <p id="name-hint" className="mt-1 text-sm text-muted">
           {t("hint", { max })} {text.length}/{max}
         </p>
-        <button
-          type="button"
-          disabled={!text.trim() || !product.isAvailable}
-          onClick={(e) => {
-            cart.add({
-              productId: product.id,
-              quantity: 1,
-              optionIds: [],
-              messages: [text.trim()],
-              contents: [],
-              name: product.name,
-              unitPriceAmd: product.priceAmd,
-              image: product.img?.src ?? null,
-              leadTimeDays: product.leadTimeDays,
-            });
-            announceAdd(e.currentTarget);
-            setText("");
-          }}
-          className="mt-5 h-13 w-full rounded-full bg-plum px-6 py-3.5 font-semibold text-white transition-transform hover:-translate-y-0.5 disabled:translate-y-0 disabled:opacity-45 sm:w-auto"
-        >
-          {t("add", { price: formatAmd(product.priceAmd, locale) })}
-        </button>
+        {product.priceOnRequest ? (
+          <div className="mt-5 max-w-lg">
+            <p className="mb-3 text-sm">
+              <strong>{tc("priceOnRequest")}.</strong> {tc("askNote")}
+            </p>
+            <AskPrice
+              item={`${pick(product.name, locale)}${text.trim() ? ` «${text.trim()}»` : ""}`}
+            />
+          </div>
+        ) : (
+          <button
+            type="button"
+            disabled={!text.trim() || !product.isAvailable}
+            onClick={(e) => {
+              cart.add({
+                productId: product.id,
+                quantity: 1,
+                optionIds: [],
+                messages: [text.trim()],
+                contents: [],
+                name: product.name,
+                unitPriceAmd: product.priceAmd,
+                image: product.img?.src ?? null,
+                leadTimeDays: product.leadTimeDays,
+              });
+              announceAdd(e.currentTarget);
+              setText("");
+            }}
+            className="mt-5 h-13 w-full rounded-full bg-plum px-6 py-3.5 font-semibold text-white transition-transform hover:-translate-y-0.5 disabled:translate-y-0 disabled:opacity-45 sm:w-auto"
+          >
+            {t("add", { price: formatAmd(product.priceAmd, locale) })}
+          </button>
+        )}
         <p className="mt-3 text-sm text-muted">{pick(product.description, locale)}</p>
       </div>
       <div className="order-1 mx-auto w-full max-w-[340px] lg:order-2">

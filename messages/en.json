@@ -35,7 +35,17 @@
     "everyDay": "Every day",
     "hoursDaily": "Every day 9:00–22:00",
     "mallHours": "mall hours",
-    "yerevan": "Yerevan"
+    "yerevan": "Yerevan",
+    "onRequest": "on request",
+    "priceOnRequest": "Price on request",
+    "askNote": "We confirm the price of this one by phone. Call or message us and we'll take your order.",
+    "askCall": "Call us",
+    "askWhatsapp": "Message on WhatsApp",
+    "askText": "Hello! Could you tell me the price of: {item}",
+    "buyam": "Order on buy.am",
+    "buyamShort": "on buy.am",
+    "demoNote": "example, to confirm",
+    "demoNoteHint": "This value is an example. We will confirm it with you before launch."
   },
   "nav": {
     "menu": "Menu",
@@ -199,6 +209,7 @@
       "clear": "Empty the box",
       "add": "Add box · {price}",
       "boxFee": "box {price}",
+      "boxFeeOnRequest": "donuts {price} + box, price on request",
       "full": "Box is full",
       "slot": "Empty space {n}"
     },
@@ -458,6 +469,7 @@
     "rateLimit": "Too many tries. Please wait a few minutes.",
     "generic": "Something went wrong on our side. Please try again or call us.",
     "unavailable": "{name} just sold out. Please remove it.",
+    "onRequest": "We confirm the price of “{name}” by phone. Please remove it and give us a call.",
     "badBox": "Please fill the box before adding it.",
     "badOption": "Please check the options for {name}.",
     "badMessage": "Please shorten the text for {name}.",

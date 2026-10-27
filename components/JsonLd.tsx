@@ -94,14 +94,17 @@ export function menuJsonLd(menu: MenuCategory[], locale: Locale) {
         name: t(p.name, locale),
         description: p.description ? t(p.description, locale) : undefined,
         image: p.image ? `${env.siteUrl}${p.image}` : undefined,
-        offers: {
-          "@type": "Offer",
-          price: p.priceAmd,
-          priceCurrency: "AMD",
-          availability: p.isAvailable
-            ? "https://schema.org/InStock"
-            : "https://schema.org/OutOfStock",
-        },
+        // No offer for "price on request": a made-up price must not reach search engines.
+        offers: p.priceOnRequest
+          ? undefined
+          : {
+              "@type": "Offer",
+              price: p.priceAmd,
+              priceCurrency: "AMD",
+              availability: p.isAvailable
+                ? "https://schema.org/InStock"
+                : "https://schema.org/OutOfStock",
+            },
       })),
     })),
   };

@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { formatAmd } from "@/lib/format";
 import type { ImageInfo } from "@/lib/images";
+import { DemoNote } from "@/components/AskPrice";
 
 export async function GiftsSection({
   bouquet,
@@ -15,14 +16,24 @@ export async function GiftsSection({
 }: {
   bouquet: ImageInfo;
   stack: ImageInfo;
-  prices: { bouquet: number | null; stack: number | null; name: number | null };
+  /** null hides the price; "request" shows "price on request". */
+  prices: {
+    bouquet: number | null;
+    stack: number | "request" | null;
+    name: number | "request" | null;
+  };
   phone: string;
   phoneDisplay: string;
 }) {
   const t = await getTranslations("gifts");
+  const tc = await getTranslations("common");
   const locale = (await getLocale()) as Locale;
-  const price = (n: number | null, kind: "from" | "each") =>
-    n == null ? null : t(kind, { price: formatAmd(n, locale) });
+  const price = (n: number | "request" | null, kind: "from" | "each") =>
+    n === "request"
+      ? tc("priceOnRequest")
+      : n == null
+        ? null
+        : t(kind, { price: formatAmd(n, locale) });
   const options = [
     { title: t("bouquet"), sub: t("bouquetSub"), price: price(prices.bouquet, "from") },
     { title: t("stack"), sub: t("stackSub"), price: price(prices.stack, "from") },
@@ -45,7 +56,9 @@ export async function GiftsSection({
           <h2 id="gifts-title" className="mt-1 text-[clamp(2.8rem,6.5vw,5rem)] leading-[0.95]">
             {t("title")}
           </h2>
-          <p className="mt-5 max-w-lg text-lg">{t("lead")}</p>
+          <p className="mt-5 max-w-lg text-lg">
+            {t("lead")} <DemoNote />
+          </p>
           <ul className="mt-7 flex max-w-lg flex-col gap-3">
             {options.map((o) => (
               <li

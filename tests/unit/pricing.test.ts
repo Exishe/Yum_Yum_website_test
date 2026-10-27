@@ -10,6 +10,8 @@ const p = (id: number, price: number, extra: Partial<MenuProduct> = {}): MenuPro
   name: L(`P${id}`),
   description: null,
   priceAmd: price,
+  priceOnRequest: false,
+  buyamUrl: null,
   image: null,
   imageAlt: null,
   tags: [],
@@ -51,8 +53,10 @@ const named = p(5, 900, {
     { id: 50, kind: "text", name: L("Text"), priceDeltaAmd: 0, isDefault: false, maxLength: 5 },
   ],
 });
-const all = new Map([latte, donut, soldOut, box, named].map((x) => [x.id, x]));
-const boxable = new Set([2, 3]);
+const askUs = p(6, 900, { priceOnRequest: true });
+const askUsBox = p(7, 400, { boxSize: 2, priceOnRequest: true });
+const all = new Map([latte, donut, soldOut, box, named, askUs, askUsBox].map((x) => [x.id, x]));
+const boxable = new Set([2, 3, 6]);
 
 describe("priceLine", () => {
   it("adds option prices", () => {
@@ -74,6 +78,17 @@ describe("priceLine", () => {
     });
     expect(priceLine({ productId: 99, quantity: 1 }, all, boxable)).toMatchObject({
       code: "unavailable",
+    });
+  });
+  it("refuses items whose price is on request, alone or in a box", () => {
+    expect(priceLine({ productId: 6, quantity: 1 }, all, boxable)).toMatchObject({
+      code: "onRequest",
+    });
+    expect(priceLine({ productId: 7, quantity: 1, contents: [2, 2] }, all, boxable)).toMatchObject({
+      code: "onRequest",
+    });
+    expect(priceLine({ productId: 4, quantity: 1, contents: [2, 6] }, all, boxable)).toMatchObject({
+      code: "badBox",
     });
   });
   it("prices a full box and refuses a half-empty one", () => {

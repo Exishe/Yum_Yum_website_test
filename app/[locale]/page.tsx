@@ -35,6 +35,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     const p = all.find((x) => x.slug === slug);
     return p ? toClientProduct(p) : null;
   };
+  const priceOf = (p: ReturnType<typeof bySlug>) =>
+    p ? (p.priceOnRequest ? ("request" as const) : p.priceAmd) : null;
   const minIn = (pred: (p: (typeof all)[number]) => boolean) => {
     const prices = all.filter(pred).map((p) => p.priceAmd);
     return prices.length ? Math.min(...prices) : null;
@@ -107,8 +109,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         stack={imgOrThrow(`${T}/yumyum-21.jpg`)}
         prices={{
           bouquet: minIn((p) => p.slug.startsWith("bouquet")),
-          stack: bySlug("birthday-stack")?.priceAmd ?? null,
-          name: bySlug("name-donut")?.priceAmd ?? null,
+          stack: priceOf(bySlug("birthday-stack")),
+          name: priceOf(bySlug("name-donut")),
         }}
         phone={phone}
         phoneDisplay={phoneDisplay}

@@ -36,6 +36,9 @@ export type LegalSettings = {
   address: string | null;
 };
 
+/** "Example, to be discussed" hints next to values the client has not confirmed yet. */
+export type DemoNotesSettings = { enabled: boolean };
+
 export type SiteSettings = {
   contact: ContactSettings;
   banner: BannerSettings;
@@ -43,6 +46,7 @@ export type SiteSettings = {
   externalDelivery: ExternalDelivery;
   ratings: Ratings;
   legal: LegalSettings;
+  demoNotes: DemoNotesSettings;
   foundedYear: number;
 };
 

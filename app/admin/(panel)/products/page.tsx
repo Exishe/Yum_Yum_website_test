@@ -99,6 +99,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Sea
                 <span className="block text-xs text-muted">
                   {p.name.hy} · {p.name.ru}
                   {!p.isPublished ? " · hidden" : ""}
+                  {p.priceOnRequest ? " · price on request" : ""}
                 </span>
               </Link>
               <form action={quickProductAction} className="flex items-center gap-3">

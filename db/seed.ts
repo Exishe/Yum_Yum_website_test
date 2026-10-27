@@ -10,6 +10,8 @@ import { eq, sql as dsql } from "drizzle-orm";
 import { scriptDb } from "./script-client";
 import * as s from "./schema";
 import {
+  SAMPLE,
+  buyamProductUrls,
   seedCategories,
   seedProducts,
   seedReviews,
@@ -45,6 +47,8 @@ export async function seedDatabase(
       categoryId: catId.get(category)!,
       sortOrder: sort,
       priceIsSample: true,
+      priceOnRequest: rest.source === SAMPLE,
+      buyamUrl: buyamProductUrls[rest.slug] ?? null,
     };
     const q = db.insert(s.products).values(values);
     const rows = await (force

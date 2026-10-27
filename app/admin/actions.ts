@@ -202,6 +202,10 @@ export async function saveProductAction(fd: FormData) {
     back(path, "error", err instanceof Error ? err.message : "Upload failed.");
   }
 
+  const buyamUrl = str(fd, "buyamUrl", 300) || null;
+  if (buyamUrl && !/^https:\/\/buy\.am\/\S+$/.test(buyamUrl))
+    back(path, "error", "The buy.am link must start with https://buy.am/");
+
   const boxSize = num(fd, "boxSize");
   const values = {
     categoryId,
@@ -210,6 +214,8 @@ export async function saveProductAction(fd: FormData) {
     imageAlt: locOrNull(fd, "imageAlt", 200),
     priceAmd,
     priceIsSample: bool(fd, "priceIsSample"),
+    priceOnRequest: bool(fd, "priceOnRequest"),
+    buyamUrl,
     tags: list(fd, "tags"),
     badges: list(fd, "badges").filter((b) => b === "new" || b === "bestseller"),
     isAvailable: bool(fd, "isAvailable"),
@@ -259,10 +265,13 @@ export async function quickProductAction(fd: FormData) {
     back("/admin/products", "error", "Check the price.");
   const [before] = await db.select().from(products).where(eq(products.id, id)).limit(1);
   if (!before) back("/admin/products", "error", "Product not found.");
+  const changed = priceAmd !== before.priceAmd;
   const values = {
     priceAmd,
     isAvailable: bool(fd, "isAvailable"),
-    priceIsSample: priceAmd === before.priceAmd ? before.priceIsSample : false,
+    priceIsSample: changed ? false : before.priceIsSample,
+    // Typing a new price is the answer to "price on request".
+    priceOnRequest: changed ? false : before.priceOnRequest,
   };
   await db.update(products).set(values).where(eq(products.id, id));
   await audit(user, "update", "product", id, diff(before as Record<string, unknown>, values));
@@ -578,6 +587,7 @@ const settingsSchemas = {
     taxId: z.string().nullable(),
     address: z.string().nullable(),
   }),
+  demoNotes: z.object({ enabled: z.boolean() }),
 } as const;
 
 export async function saveSettingsAction(fd: FormData) {
@@ -623,6 +633,9 @@ export async function saveSettingsAction(fd: FormData) {
           enabled: bool(fd, `enabled.${i}`),
         }))
         .filter((d) => d.name);
+      break;
+    case "demoNotes":
+      value = { enabled: bool(fd, "enabled") };
       break;
     case "legal":
       value = {

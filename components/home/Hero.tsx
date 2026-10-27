@@ -3,7 +3,7 @@
 import { ArrowRight, Plus } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FreshDonutIcon } from "@/components/icons/brand";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
@@ -61,6 +61,17 @@ export function Hero({
     if (w.requestIdleCallback) w.requestIdleCallback(start, { timeout: 2500 });
     else window.setTimeout(start, 1500);
   }, []);
+  // ...and pauses while the hero is scrolled out of view.
+  const heroRef = useRef<HTMLElement>(null);
+  const [inView, setInView] = useState(true);
+  useEffect(() => {
+    const el = heroRef.current;
+    if (!el || !("IntersectionObserver" in window)) return;
+    const io = new IntersectionObserver(([e]) => setInView(!!e?.isIntersecting));
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  const moving = lively && inView;
   const choice = choices.find((c) => c.key === active) ?? choices[0]!;
   const pickProduct = choice.product;
   const tagline = t("tagline");
@@ -88,17 +99,21 @@ export function Hero({
   }
 
   return (
-    <section aria-labelledby="hero-title" className="dot-grid relative overflow-hidden bg-cream">
+    <section
+      ref={heroRef}
+      aria-labelledby="hero-title"
+      className="dot-grid relative overflow-hidden bg-cream"
+    >
       {/* Soft shapes that slowly change shape */}
       <div
         aria-hidden
         className={cn(
           "pointer-events-none absolute inset-0",
-          !lively && "[&_*]:[animation-play-state:paused]",
+          !moving && "[&_*]:[animation-play-state:paused]",
         )}
       >
-        <div className="absolute -top-24 -right-24 size-[min(70vw,640px)] animate-blob bg-magenta-soft/90 lg:top-0 lg:right-[-6%]" />
-        <div className="absolute top-[58%] -left-28 size-[min(48vw,360px)] animate-blob bg-sun-soft [animation-delay:-7s]" />
+        <div className="blob-shape absolute -top-24 -right-24 size-[min(70vw,640px)] animate-blob bg-magenta-soft/90 lg:top-0 lg:right-[-6%]" />
+        <div className="blob-shape absolute top-[58%] -left-28 size-[min(48vw,360px)] animate-blob bg-sun-soft [animation-delay:-7s]" />
         {SPRINKLES.map((s, i) => (
           <span
             key={i}
@@ -201,6 +216,7 @@ export function Hero({
             className={cn(
               "absolute inset-0 size-full motion-reduce:animate-none",
               lively && "animate-spin-slow",
+              !moving && "[animation-play-state:paused]",
             )}
           >
             <defs>
@@ -266,10 +282,14 @@ export function Hero({
                   {t("todaysPick")}
                 </span>
                 <span className="block truncate font-semibold">
-                  {pick(pickProduct.name, locale)} · {formatAmd(pickProduct.priceAmd, locale)}
+                  {pick(pickProduct.name, locale)} ·{" "}
+                  {pickProduct.priceOnRequest
+                    ? tc("onRequest")
+                    : formatAmd(pickProduct.priceAmd, locale)}
                 </span>
               </span>
               {pickProduct.isAvailable &&
+              !pickProduct.priceOnRequest &&
               !pickProduct.boxSize &&
               !pickProduct.options.some((o) => o.kind === "text") ? (
                 <button
@@ -282,7 +302,7 @@ export function Hero({
                 </button>
               ) : (
                 <Link
-                  href="/gifts"
+                  href={choice.href}
                   aria-label={pick(pickProduct.name, locale)}
                   className="grid size-11 shrink-0 place-items-center rounded-full bg-sun"
                 >

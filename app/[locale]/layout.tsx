@@ -20,6 +20,7 @@ import { img } from "@/lib/images";
 import { t as pick } from "@/lib/localized";
 import { alternates } from "@/lib/seo";
 import { getSettings } from "@/lib/settings";
+import { SiteProvider } from "@/components/SiteContext";
 
 export const viewport: Viewport = {
   themeColor: "#000000",
@@ -128,23 +129,33 @@ export default async function LocaleLayout({
           >
             {tc("skip")}
           </a>
-          {settings.banner.enabled ? <Banner text={pick(settings.banner.text, locale)} /> : null}
-          <Header
-            categories={categories}
-            phone={phone}
-            phoneDisplay={formatPhone(phone, "local")}
-          />
-          <main id="main" tabIndex={-1} className="outline-none">
-            {children}
-          </main>
-          <Footer categories={menu.filter((c) => c.inMenu)} shops={shops} settings={settings} />
-          <LazyCartDrawer />
-          <StickyOrderBar shops={shops.map((s) => ({ id: s.id, name: pick(s.name, locale) }))} />
-          <CookieConsent
-            nonce={nonce}
-            analyticsSrc={process.env.NEXT_PUBLIC_ANALYTICS_SCRIPT}
-            analyticsDomain={process.env.NEXT_PUBLIC_ANALYTICS_DOMAIN}
-          />
+          <SiteProvider
+            value={{
+              phone,
+              phoneDisplay: formatPhone(phone, "local"),
+              whatsapp: settings.contact.whatsapp,
+              whatsappConfirmed: settings.contact.whatsappConfirmed,
+              demoNotes: settings.demoNotes.enabled,
+            }}
+          >
+            {settings.banner.enabled ? <Banner text={pick(settings.banner.text, locale)} /> : null}
+            <Header
+              categories={categories}
+              phone={phone}
+              phoneDisplay={formatPhone(phone, "local")}
+            />
+            <main id="main" tabIndex={-1} className="outline-none">
+              {children}
+            </main>
+            <Footer categories={menu.filter((c) => c.inMenu)} shops={shops} settings={settings} />
+            <LazyCartDrawer />
+            <StickyOrderBar shops={shops.map((s) => ({ id: s.id, name: pick(s.name, locale) }))} />
+            <CookieConsent
+              nonce={nonce}
+              analyticsSrc={process.env.NEXT_PUBLIC_ANALYTICS_SCRIPT}
+              analyticsDomain={process.env.NEXT_PUBLIC_ANALYTICS_DOMAIN}
+            />
+          </SiteProvider>
         </NextIntlClientProvider>
       </body>
     </html>

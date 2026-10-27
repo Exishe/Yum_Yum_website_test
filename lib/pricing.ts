@@ -25,6 +25,7 @@ export type PricedLine = {
 
 export type PricingError =
   | { code: "unavailable"; productId: number }
+  | { code: "onRequest"; productId: number }
   | { code: "badOption"; productId: number }
   | { code: "badBox"; productId: number }
   | { code: "badMessage"; productId: number };
@@ -36,6 +37,7 @@ export function priceLine(
 ): PricedLine | PricingError {
   const product = products.get(input.productId);
   if (!product || !product.isAvailable) return { code: "unavailable", productId: input.productId };
+  if (product.priceOnRequest) return { code: "onRequest", productId: product.id };
 
   const optionIds = [...new Set(input.optionIds ?? [])];
   const options = optionIds.map((id) => product.options.find((o) => o.id === id));
@@ -57,7 +59,7 @@ export function priceLine(
     const ids = input.contents ?? [];
     if (ids.length !== product.boxSize) return { code: "badBox", productId: product.id };
     const found = ids.map((id) => products.get(id));
-    if (found.some((p) => !p || !p.isAvailable || !boxableIds.has(p.id))) {
+    if (found.some((p) => !p || !p.isAvailable || p.priceOnRequest || !boxableIds.has(p.id))) {
       return { code: "badBox", productId: product.id };
     }
     contents = found as MenuProduct[];

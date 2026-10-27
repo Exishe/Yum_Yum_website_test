@@ -34,6 +34,9 @@ export type MenuProduct = {
   name: Localized;
   description: Localized | null;
   priceAmd: number;
+  /** No known price: show "on request" and let the customer call or write instead of adding to the basket. */
+  priceOnRequest: boolean;
+  buyamUrl: string | null;
   image: string | null;
   imageAlt: Localized | null;
   tags: string[];
@@ -102,6 +105,8 @@ export const getMenu = unstable_cache(
           name: p.name,
           description: p.description,
           priceAmd: p.priceAmd,
+          priceOnRequest: p.priceOnRequest,
+          buyamUrl: p.buyamUrl,
           image: p.image,
           imageAlt: p.imageAlt,
           tags: p.tags,
@@ -119,7 +124,9 @@ export const getMenu = unstable_cache(
 );
 
 export function minPrice(cat: MenuCategory): number | null {
-  const prices = cat.products.filter((p) => p.isAvailable && !p.boxSize).map((p) => p.priceAmd);
+  const prices = cat.products
+    .filter((p) => p.isAvailable && !p.boxSize && !p.priceOnRequest)
+    .map((p) => p.priceAmd);
   return prices.length ? Math.min(...prices) : null;
 }
 

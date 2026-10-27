@@ -21,7 +21,7 @@ export function addSimple(p: ClientProduct, from?: Element | null) {
   announceAdd(from);
 }
 
-/** Products that need a choice from the customer before they can go in the basket. */
+/** Products that open the detail view instead of going straight into the basket. */
 export function needsDetails(p: ClientProduct) {
-  return !!p.boxSize || p.options.some((o) => o.kind === "text");
+  return p.priceOnRequest || !!p.boxSize || p.options.some((o) => o.kind === "text");
 }

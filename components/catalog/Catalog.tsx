@@ -47,6 +47,7 @@ function Row({
   onOpen: (p: ClientProduct) => void;
 }) {
   const t = useTranslations("catalog");
+  const tc = useTranslations("common");
   const name = pick(p.name, locale);
   return (
     <li className="flex items-center gap-3 border-b border-dashed border-line py-3 last:border-0 sm:gap-4">
@@ -72,8 +73,13 @@ function Row({
             </span>
           ))}
           <span aria-hidden className="leader hidden h-3 flex-1 self-end sm:block" />
-          <span className="ml-auto shrink-0 font-bold tabular-nums">
-            {formatAmd(p.priceAmd, locale)}
+          <span
+            className={cn(
+              "ml-auto shrink-0 tabular-nums",
+              p.priceOnRequest ? "text-sm font-semibold text-magenta-ink" : "font-bold",
+            )}
+          >
+            {p.priceOnRequest ? tc("onRequest") : formatAmd(p.priceAmd, locale)}
           </span>
         </span>
         {p.description || !p.isAvailable ? (
@@ -304,7 +310,9 @@ export function Catalog({
                 }
                 className="inline-flex h-11 shrink-0 items-center gap-1 rounded-full bg-magenta px-4 text-sm font-bold text-white transition-transform hover:-translate-y-0.5 disabled:opacity-50"
               >
-                {t("addPrice", { price: formatAmd(featured.priceAmd, locale) })}
+                {featured.priceOnRequest
+                  ? tc("priceOnRequest")
+                  : t("addPrice", { price: formatAmd(featured.priceAmd, locale) })}
               </button>
             </div>
           </article>
