@@ -639,3 +639,13 @@
     display: none !important;
   }
 }
+
+/* Site-specific: on desktop the left corner holds the hero's buttons, so the
+   badge sits bottom right there (only the decorative hero photo is behind it). */
+@media (min-width: 721px) {
+  .demo-badge,
+  .demo-pill {
+    left: auto;
+    right: 20px;
+  }
+}
