@@ -33,8 +33,9 @@ export function openDatabase(opts: { script?: boolean } = {}): Connection {
   const url = process.env.DATABASE_URL;
   if (url) {
     const sql = postgres(url, {
-      // Supabase's transaction pooler (port 6543) does not support prepared statements.
-      prepare: !url.includes(":6543"),
+      // Transaction poolers (Supabase on port 6543, Neon's "-pooler" hosts) and
+      // prepared statements do not mix reliably, so they are off there.
+      prepare: !url.includes(":6543") && !url.includes("-pooler."),
       max: opts.script ? 1 : process.env.NODE_ENV === "production" ? 5 : 3,
       idle_timeout: 20,
       connect_timeout: 10,

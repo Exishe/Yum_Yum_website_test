@@ -31,8 +31,8 @@
 
 ## Backups and restore
 
-**Supabase** (free tier) takes daily backups but keeps them only briefly and restore needs
-a paid plan, so also take your own:
+**Neon** keeps a short restore window (6 hours on the free plan, up to 7 days on Launch),
+so also take your own:
 
 ```powershell
 # Windows / macOS — needs the PostgreSQL client tools (pg_dump/pg_restore 16)
@@ -41,7 +41,7 @@ pg_dump "$env:DATABASE_URL" --format=custom --no-owner --file yumyum-$(Get-Date 
 
 macOS: `pg_dump "$DATABASE_URL" -Fc --no-owner -f yumyum-$(date +%F).dump`
 
-Use the _direct_ connection string (port 5432) for `pg_dump`, not the pooler. Keep weekly
+Use the _direct_ connection string for `pg_dump` (Neon: the host without `-pooler`), not the pooler. Keep weekly
 dumps somewhere private (e.g. an encrypted cloud folder). Dumps contain customer data.
 
 Restore into an empty database:
@@ -51,7 +51,7 @@ pg_restore --no-owner --dbname "$env:DATABASE_URL" yumyum-2026-10-23.dump
 pnpm db:migrate     # re-applies row level security policies
 ```
 
-Photos in Supabase Storage can be downloaded from the dashboard (Storage → bucket → select → Download).
+Photos in Vercel Blob can be downloaded from the dashboard (Project → Storage → the Blob store → Browser).
 
 ## Before launch checklist
 
@@ -59,7 +59,8 @@ Photos in Supabase Storage can be downloaded from the dashboard (Storage → buc
 - [ ] Turnstile keys set (forms refuse submissions in production without them).
 - [ ] The seeded admin password changed; extra staff accounts created with the _staff_ role.
 - [ ] `DATABASE_URL` in Vercel uses the pooler; the database password is not reused anywhere.
-- [ ] Supabase: Settings → API → "Data API" can stay on; RLS protects every table. Check that `select * from orders` with the anon key returns nothing.
+- [ ] If the database is on Supabase: Settings → API → "Data API" can stay on; RLS protects every table. Check that `select * from orders` with the anon key returns nothing.
+- [ ] `DEMO.enabled` set to `false` in `lib/demo-config.ts` (removes the Wiymood badge, noindex and demo analytics).
 - [ ] Domain on HTTPS; `NEXT_PUBLIC_SITE_URL` updated.
 - [ ] A first backup taken.
 

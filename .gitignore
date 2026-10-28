@@ -10,6 +10,7 @@ coverage
 playwright-report
 test-results
 /public/uploads
+/.uploads
 .pglocal
 .vercel
 .DS_Store

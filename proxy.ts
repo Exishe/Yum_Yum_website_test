@@ -16,14 +16,14 @@ const analyticsHost = (() => {
 
 function buildCsp(nonce: string, https: boolean) {
   const isDev = process.env.NODE_ENV === "development";
-  const supabase = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
   return [
     `default-src 'self'`,
     `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${isDev ? " 'unsafe-eval'" : ""}`,
     // Inline style attributes are needed by the animation library. Style
     // injection cannot run code, so this is an accepted trade-off.
     `style-src 'self' 'unsafe-inline'`,
-    `img-src 'self' data: blob: ${supabase}`.trim(),
+    // Vercel Blob holds photos uploaded in the admin.
+    `img-src 'self' data: blob: https://*.public.blob.vercel-storage.com`,
     `font-src 'self'`,
     `connect-src 'self' ${analyticsHost} https://challenges.cloudflare.com`
       .replace(/\s+/g, " ")

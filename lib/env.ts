@@ -19,9 +19,8 @@ export const env = {
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean),
-  supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
-  supabaseServiceKey: process.env.SUPABASE_SERVICE_ROLE_KEY ?? "",
-  storageBucket: process.env.SUPABASE_STORAGE_BUCKET ?? "product-images",
+  /** Set by Vercel when a Blob store is connected to the project. */
+  blobToken: process.env.BLOB_READ_WRITE_TOKEN ?? "",
   retentionDays: Number(process.env.DATA_RETENTION_DAYS ?? 90),
   cronSecret: process.env.CRON_SECRET ?? "",
 };

@@ -17,9 +17,8 @@
  └───────────────┬───────────────────────────┬──────────────────────┘
                  │ SQL (owner role, server only)│ after() → notify
                  ▼                              ▼
-     ┌──────── Supabase ────────┐      Telegram bot / Resend email
-     │ PostgreSQL + RLS          │
-     │ Storage: product-images   │
+     ┌─ Neon (via Vercel) ──────┐      Telegram bot / Resend email
+     │ PostgreSQL + RLS          │      Vercel Blob: admin photos
      └───────────────────────────┘
 ```
 

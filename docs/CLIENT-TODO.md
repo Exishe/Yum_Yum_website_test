@@ -33,4 +33,4 @@ Tick each item. Most can be done by the client directly in the admin panel.
 
 ## Also for the developer
 
-- [ ] Create the Supabase, Cloudflare Turnstile and Vercel accounts (README §7) — the client clicks sign-up; nothing has been created yet.
+- [ ] Create the Vercel (with Neon and Blob inside it) and Cloudflare Turnstile accounts (README §7) — the client clicks sign-up; nothing has been created yet.

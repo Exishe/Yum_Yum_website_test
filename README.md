@@ -199,48 +199,60 @@ Every push runs the same checks on GitHub Actions (`.github/workflows/ci.yml`).
 
 ---
 
-## 7. Put it online (free): Supabase + Vercel
+## 7. Put it online: Vercel (with Neon and Blob inside it)
 
-### 7.1 Supabase (database and photo storage)
+Everything is created from one Vercel account and billed there: the site, the database
+(Neon, from the Vercel Marketplace) and photo storage (Vercel Blob).
 
-1. Go to **supabase.com** → _New project_. Region: **Frankfurt (eu-central-1)** (closest to Yerevan). Save the database password.
-2. _Project settings → Database → Connection string → Transaction pooler_: copy the URI and replace `[YOUR-PASSWORD]`. This is `DATABASE_URL`.
-3. On your computer, run migrations and the seed against it once:
+### 7.1 Vercel project
+
+1. **vercel.com** → _Add New → Project_ → import the GitHub repository.
+2. Framework preset: Next.js (detected). Install command: `pnpm install`.
+3. Do not deploy yet: first add the database and photo storage below.
+
+### 7.2 Database (Neon) and photo storage (Blob)
+
+1. Project → _Storage → Create Database → Neon_. Region: **Frankfurt** (closest to Yerevan).
+   Connect it to the project. Vercel adds `DATABASE_URL` to the project's environment variables.
+2. Project → _Storage → Create → Blob_, connect it to the project. Vercel adds
+   `BLOB_READ_WRITE_TOKEN`. Photos uploaded in the admin are stored there.
+3. On your computer, create the tables and the menu once. Copy `DATABASE_URL` from
+   _Settings → Environment Variables_ (or `vercel env pull`), then:
 
    ```powershell
-   $env:DATABASE_URL="postgresql://postgres.xxxx:PASSWORD@aws-0-eu-central-1.pooler.supabase.com:6543/postgres"
+   $env:DATABASE_URL="postgresql://…neon.tech/neondb?sslmode=require"
    $env:SEED_ADMIN_EMAIL="owner@yumyum.am"; $env:SEED_ADMIN_PASSWORD=""
    pnpm db:migrate; pnpm db:seed
    ```
 
    macOS: `DATABASE_URL="…" SEED_ADMIN_EMAIL="owner@yumyum.am" pnpm db:migrate && pnpm db:seed`
 
-4. _Storage → New bucket_ → name `product-images`, **Public bucket: on**.
-5. _Project settings → API_: copy the **Project URL** (`NEXT_PUBLIC_SUPABASE_URL`) and the **service_role** key (`SUPABASE_SERVICE_ROLE_KEY`, secret).
+Any other Postgres works too (for example Supabase: use its transaction pooler URL as
+`DATABASE_URL`).
 
-### 7.2 Cloudflare Turnstile (anti-spam)
+### 7.3 Cloudflare Turnstile (anti-spam)
 
 dash.cloudflare.com → _Turnstile_ → _Add site_ → your domain (and `*.vercel.app` while testing),
 widget mode _Managed_. Copy the site key and secret key.
 
-### 7.3 Vercel (hosting)
+### 7.4 Environment variables and deploy
 
-1. **vercel.com** → _Add New → Project_ → import the GitHub repository.
-2. Framework preset: Next.js (detected). Install command: `pnpm install`.
-3. _Environment Variables_: add everything from `.env.example` that you use. At minimum:
-   `DATABASE_URL`, `NEXT_PUBLIC_SITE_URL` (e.g. `https://yumyum.am`), `APP_SECRET`,
-   `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`, `CRON_SECRET`,
-   `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and one notification channel.
-4. _Deploy_. The nightly privacy clean-up is scheduled by `vercel.json` and authenticated with `CRON_SECRET`.
+1. _Settings → Environment Variables_: besides `DATABASE_URL` and `BLOB_READ_WRITE_TOKEN`
+   (added by Vercel), add at minimum `NEXT_PUBLIC_SITE_URL` (e.g. `https://yumyum.am`),
+   `APP_SECRET`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`, `CRON_SECRET`,
+   and one notification channel. See `.env.example`.
+2. _Deploy_. The nightly privacy clean-up is scheduled by `vercel.json` and authenticated with `CRON_SECRET`.
+3. While `DEMO.enabled` is true in `lib/demo-config.ts`, also turn on _Analytics_ in the
+   project to see visits.
 
-### 7.4 Custom domain
+### 7.5 Custom domain
 
 Vercel → Project → _Settings → Domains_ → add `yumyum.am` and `www.yumyum.am`. At the domain
 registrar, add the DNS records Vercel shows (an `A` record `76.76.21.21` for the apex and a
 `CNAME` `cname.vercel-dns.com` for `www`). HTTPS is automatic. Then update
 `NEXT_PUBLIC_SITE_URL` and redeploy.
 
-### 7.5 Order notifications
+### 7.6 Order notifications
 
 **Telegram (recommended, instant on the shop's phones):**
 

@@ -3,16 +3,6 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
-const supabaseHost = (() => {
-  try {
-    return process.env.NEXT_PUBLIC_SUPABASE_URL
-      ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname
-      : null;
-  } catch {
-    return null;
-  }
-})();
-
 // Static security headers. The Content-Security-Policy needs a per-request
 // nonce, so it is set in proxy.ts instead.
 const securityHeaders = [
@@ -38,9 +28,8 @@ const nextConfig: NextConfig = {
     deviceSizes: [390, 640, 768, 1024, 1280, 1440, 1920],
     imageSizes: [48, 64, 96, 128, 192, 256, 384],
     minimumCacheTTL: 60 * 60 * 24 * 30,
-    remotePatterns: supabaseHost
-      ? [{ protocol: "https", hostname: supabaseHost, pathname: "/storage/v1/object/public/**" }]
-      : [],
+    // Photos uploaded in the admin (Vercel Blob).
+    remotePatterns: [{ protocol: "https", hostname: "*.public.blob.vercel-storage.com" }],
   },
   experimental: {
     serverActions: { bodySizeLimit: "6mb" },

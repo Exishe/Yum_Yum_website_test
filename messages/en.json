@@ -505,7 +505,7 @@
       },
       {
         "h": "Who else sees it",
-        "p": "Our shop staff. Our hosting and database providers (Vercel, Supabase) store it on our behalf. Order notifications go to the shop through Telegram or email. Nobody else."
+        "p": "Our shop staff. Our hosting and database providers (Vercel, Neon) store it on our behalf. Order notifications go to the shop through Telegram or email. Nobody else."
       },
       {
         "h": "How long we keep it",
