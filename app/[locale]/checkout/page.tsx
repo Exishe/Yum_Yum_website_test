@@ -4,13 +4,14 @@ import { CheckoutForm } from "@/components/checkout/CheckoutForm";
 import { DeliveryLinks } from "@/components/DeliveryLinks";
 import { getShops, getZones } from "@/lib/catalog";
 import { getSettings } from "@/lib/settings";
+import { robotsFor } from "@/lib/demo-config";
 
 type Props = { params: Promise<{ locale: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta" });
-  return { title: t("checkoutTitle"), robots: { index: false } };
+  return { title: t("checkoutTitle"), robots: robotsFor({ index: false }) };
 }
 
 export default async function CheckoutPage({ params }: Props) {

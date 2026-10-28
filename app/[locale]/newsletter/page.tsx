@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { DonutIcon } from "@/components/icons/brand";
 import { Link } from "@/i18n/navigation";
+import { robotsFor } from "@/lib/demo-config";
 
 type Props = { params: Promise<{ locale: string }>; searchParams: Promise<{ status?: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta" });
-  return { title: t("newsletterTitle"), robots: { index: false } };
+  return { title: t("newsletterTitle"), robots: robotsFor({ index: false }) };
 }
 
 export default async function NewsletterPage({ params, searchParams }: Props) {

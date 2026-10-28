@@ -289,3 +289,35 @@
   border-radius: 58% 42% 55% 45% / 45% 55% 45% 55%;
   will-change: transform;
 }
+
+/* Wiymood demo badge: its own look, so it never reads as part of the client's site. */
+.dev-badge {
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+}
+.dev-badge-glow {
+  animation: dev-glow 2s ease-in-out infinite;
+}
+@keyframes dev-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 0 rgb(250 204 21 / 0.55),
+      0 10px 24px -10px rgb(0 0 0 / 0.5);
+  }
+  50% {
+    box-shadow:
+      0 0 0 10px rgb(250 204 21 / 0),
+      0 10px 24px -10px rgb(0 0 0 / 0.5);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dev-badge-glow {
+    animation: none;
+    box-shadow: 0 0 0 3px rgb(250 204 21 / 0.45);
+  }
+}

@@ -11,6 +11,7 @@ import { formatAmd, formatDate, formatPhone } from "@/lib/format";
 import { t as pick } from "@/lib/localized";
 import { getPublicOrder } from "@/lib/order-view";
 import { getSettings } from "@/lib/settings";
+import { robotsFor } from "@/lib/demo-config";
 
 type Props = {
   params: Promise<{ locale: string; publicId: string }>;
@@ -20,7 +21,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta" });
-  return { title: t("orderTitle"), robots: { index: false, follow: false } };
+  return { title: t("orderTitle"), robots: robotsFor({ index: false, follow: false }) };
 }
 
 export default async function OrderPage({ params, searchParams }: Props) {

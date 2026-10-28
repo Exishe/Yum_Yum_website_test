@@ -104,6 +104,7 @@ export function CookieConsent({
     <>
       {consent === null ? (
         <div
+          data-float-bottom
           role="region"
           aria-label={t("title")}
           className="fixed inset-x-3 bottom-3 z-40 mx-auto max-w-xl animate-rise rounded-3xl bg-white p-4 shadow-lift ring-1 ring-line sm:bottom-6 sm:p-5 lg:right-6 lg:left-auto lg:mx-0"

@@ -1,6 +1,7 @@
 import createIntlMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
 import { routing } from "./i18n/routing";
+import { hiddenFromSearch } from "@/lib/demo-config";
 
 const intl = createIntlMiddleware(routing);
 
@@ -62,9 +63,8 @@ export default function proxy(request: NextRequest) {
     : intl(request);
 
   response.headers.set("Content-Security-Policy", csp);
-  // Preview links (pnpm share) must never end up in search results.
-  if (process.env.PREVIEW_NOINDEX === "1")
-    response.headers.set("X-Robots-Tag", "noindex, nofollow");
+  // The concept demo and preview links (pnpm share) must never end up in search results.
+  if (hiddenFromSearch) response.headers.set("X-Robots-Tag", "noindex, nofollow");
   if (isAdmin) {
     response.headers.set("X-Robots-Tag", "noindex, nofollow");
     response.headers.set("Cache-Control", "no-store");

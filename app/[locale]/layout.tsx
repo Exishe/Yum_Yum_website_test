@@ -21,6 +21,9 @@ import { t as pick } from "@/lib/localized";
 import { alternates } from "@/lib/seo";
 import { getSettings } from "@/lib/settings";
 import { SiteProvider } from "@/components/SiteContext";
+import Script from "next/script";
+import { DevBadge } from "@/components/layout/DevBadge";
+import { DEMO, demoTexts, robotsFor } from "@/lib/demo-config";
 
 export const viewport: Viewport = {
   themeColor: "#000000",
@@ -50,6 +53,7 @@ export async function generateMetadata({
     twitter: { card: "summary_large_image" },
     formatDetection: { telephone: false },
     icons: { apple: "/images/brand/apple-touch-icon.png" },
+    robots: robotsFor(undefined),
   };
 }
 
@@ -155,8 +159,20 @@ export default async function LocaleLayout({
               analyticsSrc={process.env.NEXT_PUBLIC_ANALYTICS_SCRIPT}
               analyticsDomain={process.env.NEXT_PUBLIC_ANALYTICS_DOMAIN}
             />
+            {DEMO.enabled ? (
+              <DevBadge
+                texts={demoTexts(locale)}
+                href={DEMO.telegram}
+                reopenAfterSeconds={DEMO.reopenAfterSeconds}
+              />
+            ) : null}
           </SiteProvider>
         </NextIntlClientProvider>
+        {/* Concept demo: Vercel Web Analytics shows whether the client opened the site.
+            Cookieless; the script only exists on Vercel. */}
+        {DEMO.enabled && process.env.VERCEL === "1" ? (
+          <Script src="/_vercel/insights/script.js" strategy="afterInteractive" nonce={nonce} />
+        ) : null}
       </body>
     </html>
   );
