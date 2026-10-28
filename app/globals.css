@@ -290,34 +290,352 @@
   will-change: transform;
 }
 
-/* Wiymood demo badge: its own look, so it never reads as part of the client's site. */
-.dev-badge {
-  font-family:
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    "Segoe UI",
-    sans-serif;
+/* Wiymood demo badge (lib/demo-config.ts, components/layout/DevBadge.tsx). Supplied by the team as is. */
+.demo-badge {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  z-index: 39;
+  isolation: isolate;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  width: 400px;
+  max-width: calc(100vw - 290px);
+  padding: 16px 14px 16px 16px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #004aa3;
+  color: #fff;
+  box-shadow:
+    0 24px 50px -20px rgba(0, 60, 140, 0.75),
+    0 0 0 1px rgba(0, 74, 163, 0.25);
+  transition: bottom 0.25s ease;
+  animation: wm-in 0.8s cubic-bezier(0.18, 1.3, 0.32, 1) 0.5s both;
 }
-.dev-badge-glow {
-  animation: dev-glow 2s ease-in-out infinite;
+/* A light beam runs around the edge: a rotating conic gradient behind an inner fill that leaves a 2px rim */
+.demo-badge::before {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  left: 50%;
+  top: 50%;
+  width: 200%;
+  aspect-ratio: 1;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0 55%,
+    rgba(255, 255, 255, 0.95) 72%,
+    #f23c29 82%,
+    transparent 90%
+  );
+  transform: translate(-50%, -50%) rotate(0deg);
+  animation: wm-spin 4.5s linear infinite;
+  will-change: transform;
 }
-@keyframes dev-glow {
-  0%,
-  100% {
-    box-shadow:
-      0 0 0 0 rgb(250 204 21 / 0.55),
-      0 10px 24px -10px rgb(0 0 0 / 0.5);
+.demo-badge::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 2px;
+  border-radius: 18px;
+  background:
+    radial-gradient(120% 140% at 100% 0%, #1677e8 0%, transparent 55%),
+    linear-gradient(160deg, #0a62cf 0%, #004aa3 100%);
+}
+.wm {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 18px -10px rgba(0, 0, 0, 0.55);
+}
+.wm-mark {
+  position: relative;
+  display: block;
+  width: 34px;
+  height: 25.5px;
+}
+/* The Wiymood mark in brand blue on white, as in the logo; the PNG is used only as a mask */
+.wm-w {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #005dc2;
+  -webkit-mask: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAA8CAQAAABbLvUHAAADu0lEQVR42u1a7XGjMBB99qSBbUEtqAVSAimBK4GUkJRASnBKsEuwSoASvCXs/QCEgJWwjZNj5iwmiU3Q6mn37ZflnWDbY48nwHXjZfTOgMBotgmwQA4DAtDghK/NwBQIhOQgIiKX7hKpxQq2cO0EAA7IwSPchAavW9DiHkA5gwcwDMptcJCQgQFQAI7AYGSgGfB/oEEDO7lH/q/dgonpGaj/B4D01OBKgPzU4AqA/OTgNYO2zkFO14OPy7kWtit7GQ6nR1fU60aOAnZUdDT4xuc2ABIq5AB4ZAsLiwzvcHfxjx8H0OAAq9CEAWQ44E/C2EWk7mzwBu4B8mrt9fBIAWlQ4S2qRQsDVuYRDNxjnOQDmboEvGyDCq+RNVpS8M/FwUxpGOYgLIro/8hrnoJi+WEAy6vyEKOASUZA8iBHpNuv1p9dTJbt0gb5v0h1xXTH3WvNo7N7sss+EMl3hBc7cQ/uekKayKMuKt6S6mi9BrMJudtlPvGKL3VBu8bEdEfRZWdzCA7vcHhHo+gl+10Okpo9Tp0uT8qGze1KWNM0mYnWWyb3GcOpH6eY6yvB9Ro0nTuEizUBQCiuYn/TxFbZfeMBcfA63NSvApwHCjeqBmn0Sc98zo8CpJE22IMahlMi3M1usl9lYJ7lEKeaO7atqzIJqXGcFj3Mzp4hNBMN8qzwirkJKa+p74s5meTTDBwzzM0chhaYG1OC9/90424XsnDcRaC+12SaqIF5SYN6IOmTllFCjJvd0RqA7EpOeoBN9AETyZ6EYqb5KQPbtMczc9JIZtuR6E2T92KXCCVFpIrWjH9SFmlmNmDkgdaKqI1GAGP1ICNDpcAL9cf+56TMd4pkg6qDWM5OGIaZvTSBkJyDM6bxuMhFjpL5kx8rh8lz/byDelKUd0+MZYrUcpBjYs1aTCvhpUNbJrw5g+34RUF4nj77rc49oYHp6uxxJ5cnmk3CqTdxexRmcIyG5nFDzkEfPZiY4KJ9b9URYiojHgsZhDe/4c4UH4oppmbUadDey6PHgTYxqzf4lABnoX5+L8ZInQCYGnH+9VeV3PzCdkM6xxxlCZ4ndOTqN3+5Z7uhoHJizPQ+h9/Z4qlvEciMSR5Oqk0MIKS8EuAAsr4CXsjxSxKgIm8et+qEHqf3jzecy5def5eIC6rn/BpjKu9fsUtEpJbyxuP9TM4Rue3davDdFMA2NHzIOWqKWo5SaMIWL5JCjooGa6liVNnJ0if2Q/fbgNGggVv5XQaDDNR1J4wGTumh/dht/atRfwHNdLVeDeJ7+QAAAABJRU5ErkJggg==")
+    center / contain no-repeat;
+  mask: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAA8CAQAAABbLvUHAAADu0lEQVR42u1a7XGjMBB99qSBbUEtqAVSAimBK4GUkJRASnBKsEuwSoASvCXs/QCEgJWwjZNj5iwmiU3Q6mn37ZflnWDbY48nwHXjZfTOgMBotgmwQA4DAtDghK/NwBQIhOQgIiKX7hKpxQq2cO0EAA7IwSPchAavW9DiHkA5gwcwDMptcJCQgQFQAI7AYGSgGfB/oEEDO7lH/q/dgonpGaj/B4D01OBKgPzU4AqA/OTgNYO2zkFO14OPy7kWtit7GQ6nR1fU60aOAnZUdDT4xuc2ABIq5AB4ZAsLiwzvcHfxjx8H0OAAq9CEAWQ44E/C2EWk7mzwBu4B8mrt9fBIAWlQ4S2qRQsDVuYRDNxjnOQDmboEvGyDCq+RNVpS8M/FwUxpGOYgLIro/8hrnoJi+WEAy6vyEKOASUZA8iBHpNuv1p9dTJbt0gb5v0h1xXTH3WvNo7N7sss+EMl3hBc7cQ/uekKayKMuKt6S6mi9BrMJudtlPvGKL3VBu8bEdEfRZWdzCA7vcHhHo+gl+10Okpo9Tp0uT8qGze1KWNM0mYnWWyb3GcOpH6eY6yvB9Ro0nTuEizUBQCiuYn/TxFbZfeMBcfA63NSvApwHCjeqBmn0Sc98zo8CpJE22IMahlMi3M1usl9lYJ7lEKeaO7atqzIJqXGcFj3Mzp4hNBMN8qzwirkJKa+p74s5meTTDBwzzM0chhaYG1OC9/90424XsnDcRaC+12SaqIF5SYN6IOmTllFCjJvd0RqA7EpOeoBN9AETyZ6EYqb5KQPbtMczc9JIZtuR6E2T92KXCCVFpIrWjH9SFmlmNmDkgdaKqI1GAGP1ICNDpcAL9cf+56TMd4pkg6qDWM5OGIaZvTSBkJyDM6bxuMhFjpL5kx8rh8lz/byDelKUd0+MZYrUcpBjYs1aTCvhpUNbJrw5g+34RUF4nj77rc49oYHp6uxxJ5cnmk3CqTdxexRmcIyG5nFDzkEfPZiY4KJ9b9URYiojHgsZhDe/4c4UH4oppmbUadDey6PHgTYxqzf4lABnoX5+L8ZInQCYGnH+9VeV3PzCdkM6xxxlCZ4ndOTqN3+5Z7uhoHJizPQ+h9/Z4qlvEciMSR5Oqk0MIKS8EuAAsr4CXsjxSxKgIm8et+qEHqf3jzecy5def5eIC6rn/BpjKu9fsUtEpJbyxuP9TM4Rue3davDdFMA2NHzIOWqKWo5SaMIWL5JCjooGa6liVNnJ0if2Q/fbgNGggVv5XQaDDNR1J4wGTumh/dht/atRfwHNdLVeDeJ7+QAAAABJRU5ErkJggg==")
+    center / contain no-repeat;
+}
+/* The red dot drops onto the mark, then keeps bouncing like a ball, squashing as it lands */
+.wm-dot {
+  position: absolute;
+  left: 87.4%;
+  top: 16.2%;
+  width: 7.5px;
+  height: 7.5px;
+  margin: -3.75px 0 0 -3.75px;
+  border-radius: 50%;
+  background: #f23c29;
+  transform-origin: 50% 100%;
+  animation:
+    wm-drop 0.75s cubic-bezier(0.3, 1.7, 0.5, 1) 1.1s both,
+    wm-hop 2.2s cubic-bezier(0.33, 0, 0.3, 1) 2s infinite;
+  will-change: transform;
+}
+.demo-badge-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+.demo-badge-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.78);
+}
+.demo-badge strong {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #fff;
+}
+.demo-badge-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  margin-top: 8px;
+}
+.demo-badge-links .demo-badge-cta {
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: #fff;
+  color: #005dc2;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 6px 16px -8px rgba(0, 0, 0, 0.45);
+  transition:
+    transform 0.2s cubic-bezier(0.2, 1.4, 0.4, 1),
+    background 0.15s ease;
+}
+.demo-badge-links .demo-badge-cta::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgba(0, 93, 194, 0.16) 50%, transparent 70%);
+  transform: translateX(-120%);
+  animation: wm-sheen 3.6s ease-in-out 2.4s infinite;
+}
+.demo-badge-links .demo-badge-cta:hover {
+  background: #eef5ff;
+  color: #004a9e;
+  transform: translateY(-2px) scale(1.03);
+}
+.demo-badge-links .demo-badge-cta:active {
+  transform: scale(0.97);
+}
+.demo-badge button {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    transform 0.2s ease;
+}
+.demo-badge button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+.demo-badge[hidden] {
+  display: none;
+}
+.demo-pill {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  z-index: 39;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 18px 5px 5px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(160deg, #0a62cf, #004aa3);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 14px 34px -14px rgba(0, 60, 140, 0.8);
+  cursor: pointer;
+  animation:
+    wm-in 0.5s cubic-bezier(0.18, 1.3, 0.32, 1) both,
+    wm-pulse 2.4s ease-out 0.5s infinite;
+}
+.demo-pill .wm {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  box-shadow: none;
+}
+.demo-pill .wm-mark {
+  width: 24px;
+  height: 18px;
+}
+.demo-pill .wm-dot {
+  width: 5.5px;
+  height: 5.5px;
+  margin: -2.75px 0 0 -2.75px;
+}
+.demo-pill:hover {
+  background: linear-gradient(160deg, #1670dc, #0a55b3);
+}
+@keyframes wm-in {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.92);
   }
-  50% {
-    box-shadow:
-      0 0 0 10px rgb(250 204 21 / 0),
-      0 10px 24px -10px rgb(0 0 0 / 0.5);
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes wm-spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+@keyframes wm-sheen {
+  0% {
+    transform: translateX(-120%);
+  }
+  30%,
+  100% {
+    transform: translateX(120%);
+  }
+}
+@keyframes wm-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-26px) scale(0.4);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes wm-hop {
+  0%,
+  62%,
+  100% {
+    transform: none;
+  }
+  8% {
+    transform: scale(1.25, 0.75);
+  }
+  26% {
+    transform: translateY(-9px) scale(0.88, 1.12);
+  }
+  44% {
+    transform: scale(1.22, 0.78);
+  }
+  52% {
+    transform: translateY(-2.5px);
+  }
+}
+@keyframes wm-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(10, 98, 207, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba(10, 98, 207, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(10, 98, 207, 0);
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .dev-badge-glow {
+  .demo-badge,
+  .demo-badge::before,
+  .wm-dot,
+  .demo-pill,
+  .demo-badge-links .demo-badge-cta::after {
     animation: none;
-    box-shadow: 0 0 0 3px rgb(250 204 21 / 0.45);
+  }
+}
+@media (max-width: 720px) {
+  .demo-badge {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    width: auto;
+    max-width: none;
+    padding: 12px;
+  }
+  .wm {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+  }
+  /* On phones the close button sits in the corner so the text gets the full width */
+  .demo-badge {
+    padding-right: 12px;
+    gap: 12px;
+  }
+  .demo-badge button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+  }
+  .demo-badge-body {
+    padding-right: 26px;
+  }
+  /* If the site has its own floating box at the bottom (chat, WhatsApp), lift the badge above it, e.g. body:has(.your-widget) .demo-badge, body:has(.your-widget) .demo-pill { bottom: 96px; } */
+  .demo-pill {
+    left: 12px;
+    bottom: 12px;
+  }
+}
+@media (max-width: 380px) {
+  .wm {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+  }
+  .wm-mark {
+    width: 26px;
+    height: 19.5px;
+  }
+  .wm-dot {
+    width: 6px;
+    height: 6px;
+    margin: -3px 0 0 -3px;
+  }
+  .demo-badge strong {
+    font-size: 14px;
+  }
+  .demo-badge-links .demo-badge-cta {
+    padding: 8px 14px;
+    font-size: 12.5px;
+  }
+}
+@media print {
+  .demo-badge,
+  .demo-pill {
+    display: none !important;
   }
 }

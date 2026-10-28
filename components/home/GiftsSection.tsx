@@ -63,13 +63,13 @@ export async function GiftsSection({
             {options.map((o) => (
               <li
                 key={o.title}
-                className="flex items-center justify-between gap-4 rounded-2xl bg-white px-5 py-4 shadow-card"
+                className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 rounded-2xl bg-white px-5 py-4 shadow-card"
               >
-                <span>
+                <span className="min-w-0">
                   <span className="block font-semibold">{o.title}</span>
                   <span className="block text-sm text-muted">{o.sub}</span>
                 </span>
-                {o.price ? <span className="shrink-0 font-bold">{o.price}</span> : null}
+                {o.price ? <span className="ml-auto shrink-0 font-bold">{o.price}</span> : null}
               </li>
             ))}
           </ul>

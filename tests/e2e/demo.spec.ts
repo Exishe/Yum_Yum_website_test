@@ -5,13 +5,13 @@ test.skip(!DEMO.enabled, "the concept-demo settings are switched off");
 
 test("the Wiymood badge folds into a pill and opens again", async ({ page }) => {
   await page.goto("/ru");
-  const badge = page.locator("aside.dev-badge");
+  const badge = page.locator("aside[data-demo-badge]");
   await expect(badge).toContainText(`команда ${DEMO.team}`);
   await expect(badge.getByRole("link")).toHaveAttribute("href", DEMO.telegram);
 
   await badge.getByRole("button").click();
-  await expect(badge).toHaveCount(0);
-  await page.locator("button.dev-badge").click();
+  await expect(badge).toBeHidden();
+  await page.locator("button[data-demo-open]").click();
   await expect(badge).toBeVisible();
 });
 

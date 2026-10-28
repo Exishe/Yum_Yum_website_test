@@ -21,19 +21,19 @@ export const DEMO = {
       label: "Փորձնական տարբերակ",
       title: "Այս կայքը {client}-ի համար պատրաստել է {team} թիմը։",
       button: "Գրեք մեզ Telegram-ով",
-      collapse: "Փոքրացնել",
+      collapse: "Փակել",
     },
     ru: {
       label: "Концепт сайта",
       title: "Этот сайт для {client} сделала команда {team}",
       button: "Написать разработчикам",
-      collapse: "Свернуть",
+      collapse: "Скрыть",
     },
     en: {
       label: "Website concept",
       title: "The {team} team built this site for {client}",
       button: "Message the developers",
-      collapse: "Minimise",
+      collapse: "Hide",
     },
   },
 } as const;
