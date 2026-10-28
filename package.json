@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "vercel-build": "node -e \"if(!process.env.DATABASE_URL){console.error('DATABASE_URL is not set. Vercel: Storage → Create Database → Neon, connect it to this project.');process.exit(1)}\" && pnpm db:migrate && pnpm db:seed && next build",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",

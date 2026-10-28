@@ -216,7 +216,10 @@ Everything is created from one Vercel account and billed there: the site, the da
    Connect it to the project. Vercel adds `DATABASE_URL` to the project's environment variables.
 2. Project → _Storage → Create → Blob_, connect it to the project. Vercel adds
    `BLOB_READ_WRITE_TOKEN`. Photos uploaded in the admin are stored there.
-3. On your computer, create the tables and the menu once. Copy `DATABASE_URL` from
+3. Nothing to run by hand: on Vercel the `vercel-build` script creates or updates the
+   tables and adds the menu before every build (the seed never overwrites edits made in the
+   admin). Set `SEED_ADMIN_EMAIL` and `SEED_ADMIN_PASSWORD` first; they create the first admin.
+   To do it from your computer instead, copy `DATABASE_URL` from
    _Settings → Environment Variables_ (or `vercel env pull`), then:
 
    ```powershell
