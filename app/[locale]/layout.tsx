@@ -154,11 +154,15 @@ export default async function LocaleLayout({
             <Footer categories={menu.filter((c) => c.inMenu)} shops={shops} settings={settings} />
             <LazyCartDrawer />
             <StickyOrderBar shops={shops.map((s) => ({ id: s.id, name: pick(s.name, locale) }))} />
-            <CookieConsent
-              nonce={nonce}
-              analyticsSrc={process.env.NEXT_PUBLIC_ANALYTICS_SCRIPT}
-              analyticsDomain={process.env.NEXT_PUBLIC_ANALYTICS_DOMAIN}
-            />
+            {/* The site sets only essential cookies, so there is nothing to ask about.
+                The consent window returns only if an optional analytics script is set. */}
+            {process.env.NEXT_PUBLIC_ANALYTICS_SCRIPT ? (
+              <CookieConsent
+                nonce={nonce}
+                analyticsSrc={process.env.NEXT_PUBLIC_ANALYTICS_SCRIPT}
+                analyticsDomain={process.env.NEXT_PUBLIC_ANALYTICS_DOMAIN}
+              />
+            ) : null}
             {DEMO.enabled ? (
               <DevBadge
                 texts={demoTexts(locale)}

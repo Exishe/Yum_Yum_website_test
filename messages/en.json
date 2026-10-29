@@ -427,7 +427,8 @@
     "legal": "Company details: {details}",
     "legalPending": "to be added",
     "allShops": "All shops",
-    "social": "Follow us"
+    "social": "Follow us",
+    "cookiesNote": "This site uses only essential cookies"
   },
   "cookies": {
     "text": "We only use the cookies the site needs to work (your language and your order). Analytics are off unless you allow them, and they never track you personally.",
@@ -513,7 +514,7 @@
       },
       {
         "h": "Cookies",
-        "p": "We use only essential cookies: your language, your basket (stored in your browser) and the staff sign-in. Anonymous analytics run only if you allow them in Cookie settings."
+        "p": "We use only essential cookies: your language and the staff sign-in. Your basket stays in your browser. We may count visits anonymously, without cookies or personal data."
       },
       {
         "h": "Your rights",
