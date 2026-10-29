@@ -12,15 +12,19 @@ import {
 } from "@/components/admin/ui";
 import { db } from "@/db";
 import { categories, products } from "@/db/schema";
+import { adminT } from "@/lib/admin-lang";
 import { requireUser } from "@/lib/auth";
 import { cn } from "@/lib/cn";
 import { confirmAllPricesAction, quickProductAction } from "../../actions";
 
-export const metadata = { title: "Products & prices" };
+export async function generateMetadata() {
+  return { title: (await adminT())("Products & prices") };
+}
 
 export default async function ProductsPage({ searchParams }: { searchParams: SearchParams }) {
   const user = await requireUser();
   const q = await searchParams;
+  const t = await adminT();
   const cats = await db.select().from(categories).orderBy(asc(categories.sortOrder));
   const c = Number(sp(q.c)) || null;
   const where: SQL[] = [];
@@ -35,36 +39,38 @@ export default async function ProductsPage({ searchParams }: { searchParams: Sea
 
   return (
     <>
-      <PageHeader title="Products & prices">
+      <PageHeader title={t("Products & prices")}>
         <Link href="/admin/products/new" className={btn.primary}>
-          New product
+          {t("New product")}
         </Link>
       </PageHeader>
       <Flash ok={sp(q.ok)} error={sp(q.error)} />
       {sampleCount > 0 ? (
         <Card className="mb-5 bg-sun-soft">
           <p className="text-sm">
-            <strong>{sampleCount} prices are seed values</strong> from buy.am and the shop menu
-            boards (October 2026). Check each one; saving a new price marks it confirmed.
+            <strong>{t("{n} prices are not confirmed yet.", { n: sampleCount })}</strong>{" "}
+            {t(
+              "They come from buy.am and the shop menu boards (October 2026). Check each one; saving a new price marks it confirmed.",
+            )}
           </p>
           {user.role === "admin" ? (
             <form action={confirmAllPricesAction} className="mt-3">
               <SubmitButton
-                confirm="Mark every price as confirmed by the shop?"
+                confirm={t("Mark every price as confirmed by the shop?")}
                 className="bg-plum"
               >
-                All prices are correct
+                {t("All prices are correct")}
               </SubmitButton>
             </form>
           ) : null}
         </Card>
       ) : null}
-      <nav aria-label="Categories" className="no-scrollbar mb-4 flex gap-2 overflow-x-auto">
+      <nav aria-label={t("Categories")} className="no-scrollbar mb-4 flex gap-2 overflow-x-auto">
         <Link
           href="/admin/products"
           className={cn(btn.ghost, !c && !sp(q.sample) && "border-plum")}
         >
-          All
+          {t("All")}
         </Link>
         {cats.map((cat) => (
           <Link
@@ -72,14 +78,14 @@ export default async function ProductsPage({ searchParams }: { searchParams: Sea
             href={`/admin/products?c=${cat.id}`}
             className={cn(btn.ghost, c === cat.id && "border-plum")}
           >
-            {cat.name.en}
+            {cat.name[t.lang] || cat.name.en}
           </Link>
         ))}
         <Link
           href="/admin/products?sample=1"
           className={cn(btn.ghost, sp(q.sample) && "border-plum")}
         >
-          Unconfirmed prices
+          {t("Unconfirmed prices")}
         </Link>
       </nav>
       <Card className="p-0">
@@ -95,17 +101,19 @@ export default async function ProductsPage({ searchParams }: { searchParams: Sea
                 href={`/admin/products/${p.id}`}
                 className="min-w-40 flex-1 hover:text-magenta-ink"
               >
-                <span className="block font-semibold">{p.name.en}</span>
+                <span className="block font-semibold">{p.name[t.lang] || p.name.en}</span>
                 <span className="block text-xs text-muted">
-                  {p.name.hy} · {p.name.ru}
-                  {!p.isPublished ? " · hidden" : ""}
-                  {p.priceOnRequest ? " · price on request" : ""}
+                  {t.lang === "hy" ? `${p.name.ru} · ${p.name.en}` : `${p.name.hy} · ${p.name.ru}`}
+                  {!p.isPublished ? ` · ${t("hidden")}` : ""}
+                  {p.priceOnRequest ? ` · ${t("price on request")}` : ""}
                 </span>
               </Link>
               <form action={quickProductAction} className="flex items-center gap-3">
                 <input type="hidden" name="id" value={p.id} />
                 <label className="flex items-center gap-1 text-sm">
-                  <span className="sr-only">Price for {p.name.en}</span>
+                  <span className="sr-only">
+                    {t("Price for {name}", { name: p.name[t.lang] || p.name.en })}
+                  </span>
                   <input
                     name="priceAmd"
                     type="number"
@@ -126,9 +134,9 @@ export default async function ProductsPage({ searchParams }: { searchParams: Sea
                     defaultChecked={p.isAvailable}
                     className="size-4 accent-magenta"
                   />{" "}
-                  in stock
+                  {t("in stock")}
                 </label>
-                <SubmitButton className="h-10 px-4">Save</SubmitButton>
+                <SubmitButton className="h-10 px-4">{t("Save")}</SubmitButton>
               </form>
             </li>
           ))}

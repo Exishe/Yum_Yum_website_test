@@ -1,6 +1,8 @@
 import { SignOut } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import Link from "next/link";
+import { LangSwitch } from "@/components/admin/LangSwitch";
+import { adminT } from "@/lib/admin-lang";
 import { requireUser } from "@/lib/auth";
 import { logoutAction } from "../actions";
 
@@ -22,6 +24,7 @@ const NAV: Array<{ href: string; label: string; admin?: boolean }> = [
 
 export default async function PanelLayout({ children }: { children: React.ReactNode }) {
   const user = await requireUser();
+  const t = await adminT();
   return (
     <div className="min-h-dvh lg:grid lg:grid-cols-[240px_1fr]">
       <aside className="on-dark bg-plum text-white lg:sticky lg:top-0 lg:h-dvh lg:overflow-y-auto">
@@ -33,15 +36,18 @@ export default async function PanelLayout({ children }: { children: React.ReactN
             height={40}
             className="rounded-full"
           />
-          <div className="min-w-0">
-            <p className="font-display text-lg leading-none">YUM-YUM admin</p>
+          <div className="min-w-0 flex-1">
+            <p className="font-display text-lg leading-none">{t("YUM-YUM admin")}</p>
             <p className="truncate text-xs text-white/70">
-              {user.name} · {user.role}
+              {user.name} · {t(user.role === "admin" ? "Admin" : "Staff")}
             </p>
+          </div>
+          <div className="lg:hidden">
+            <LangSwitch lang={t.lang} dark />
           </div>
         </div>
         <nav
-          aria-label="Admin"
+          aria-label={t("Admin menu")}
           className="no-scrollbar flex gap-1 overflow-x-auto px-3 pb-3 lg:flex-col lg:overflow-visible"
         >
           {NAV.filter((n) => !n.admin || user.role === "admin").map((n) => (
@@ -50,29 +56,32 @@ export default async function PanelLayout({ children }: { children: React.ReactN
               href={n.href}
               className="shrink-0 rounded-xl px-3 py-2.5 text-sm font-medium text-white/85 hover:bg-white/10 hover:text-white"
             >
-              {n.label}
+              {t(n.label)}
             </Link>
           ))}
           <Link
             href="/admin/account"
             className="shrink-0 rounded-xl px-3 py-2.5 text-sm font-medium text-white/85 hover:bg-white/10"
           >
-            My account
+            {t("My account")}
           </Link>
           <Link
             href="/hy"
             className="shrink-0 rounded-xl px-3 py-2.5 text-sm font-medium text-sun hover:bg-white/10"
           >
-            Open the website ↗
+            {t("Open the website ↗")}
           </Link>
           <form action={logoutAction} className="shrink-0">
             <button
               type="submit"
               className="flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-white/85 hover:bg-white/10"
             >
-              <SignOut size={16} aria-hidden /> Sign out
+              <SignOut size={16} aria-hidden /> {t("Sign out")}
             </button>
           </form>
+          <div className="hidden shrink-0 px-3 py-2 lg:block">
+            <LangSwitch lang={t.lang} dark />
+          </div>
         </nav>
       </aside>
       <main className="min-w-0 px-4 py-6 sm:px-8 sm:py-8">{children}</main>

@@ -4,10 +4,13 @@ import { ProductForm } from "@/components/admin/ProductForm";
 import { Flash, PageHeader, SubmitButton, sp, type SearchParams } from "@/components/admin/ui";
 import { db } from "@/db";
 import { categories, productOptions, products } from "@/db/schema";
+import { adminT } from "@/lib/admin-lang";
 import { requireUser } from "@/lib/auth";
 import { deleteProductAction } from "../../../actions";
 
-export const metadata = { title: "Edit product" };
+export async function generateMetadata() {
+  return { title: (await adminT())("Edit product") };
+}
 
 export default async function EditProduct({
   params,
@@ -19,11 +22,12 @@ export default async function EditProduct({
   const user = await requireUser();
   const { id } = await params;
   const q = await searchParams;
+  const t = await adminT();
   const cats = await db.select().from(categories).orderBy(asc(categories.sortOrder));
   if (id === "new") {
     return (
       <>
-        <PageHeader title="New product" />
+        <PageHeader title={t("New product")} />
         <Flash ok={sp(q.ok)} error={sp(q.error)} />
         <ProductForm options={[]} categories={cats} />
       </>
@@ -40,15 +44,15 @@ export default async function EditProduct({
     .orderBy(asc(productOptions.sortOrder));
   return (
     <>
-      <PageHeader title={product.name.en}>
+      <PageHeader title={product.name[t.lang] || product.name.en}>
         {user.role === "admin" ? (
           <form action={deleteProductAction}>
             <input type="hidden" name="id" value={product.id} />
             <SubmitButton
-              confirm="Delete this product for good? Hiding it is usually better."
+              confirm={t("Delete this product for good? Hiding it is usually better.")}
               className="bg-magenta-soft text-plum hover:bg-magenta hover:text-white"
             >
-              Delete
+              {t("Delete")}
             </SubmitButton>
           </form>
         ) : null}

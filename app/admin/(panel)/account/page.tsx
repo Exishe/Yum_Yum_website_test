@@ -7,17 +7,21 @@ import {
   sp,
   type SearchParams,
 } from "@/components/admin/ui";
+import { adminT } from "@/lib/admin-lang";
 import { requireUser } from "@/lib/auth";
 import { changePasswordAction } from "../../actions";
 
-export const metadata = { title: "My account" };
+export async function generateMetadata() {
+  return { title: (await adminT())("My account") };
+}
 
 export default async function AccountPage({ searchParams }: { searchParams: SearchParams }) {
   const user = await requireUser();
   const q = await searchParams;
+  const t = await adminT();
   return (
     <>
-      <PageHeader title="My account" />
+      <PageHeader title={t("My account")} />
       <Flash
         ok={sp(q.ok)}
         error={
@@ -29,32 +33,33 @@ export default async function AccountPage({ searchParams }: { searchParams: Sear
       />
       <Card className="max-w-md">
         <p className="mb-4 text-sm">
-          {user.name} · {user.email} · {user.role}
+          {user.name} · {t("login")}: <strong>{user.email}</strong> ·{" "}
+          {t(user.role === "admin" ? "Admin" : "Staff")}
         </p>
         <form action={changePasswordAction} className="flex flex-col gap-3">
           <Field
-            label="Current password"
+            label={t("Current password")}
             name="current"
             type="password"
             autoComplete="current-password"
             required
           />
           <Field
-            label="New password"
+            label={t("New password")}
             name="next"
             type="password"
             autoComplete="new-password"
             required
-            hint="At least 12 characters, letters and a number."
+            hint={t("At least 12 characters, letters and a number.")}
           />
           <Field
-            label="New password again"
+            label={t("New password again")}
             name="confirm"
             type="password"
             autoComplete="new-password"
             required
           />
-          <SubmitButton>Change password</SubmitButton>
+          <SubmitButton>{t("Change password")}</SubmitButton>
         </form>
       </Card>
     </>

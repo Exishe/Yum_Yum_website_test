@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 
-const email = process.env.E2E_ADMIN_EMAIL ?? "admin@yumyum.local";
+const email = process.env.E2E_ADMIN_EMAIL ?? "director";
 const password = process.env.E2E_ADMIN_PASSWORD ?? "donut-give-up-2026";
 
 test.describe.configure({ mode: "serial" });
@@ -25,13 +25,43 @@ async function placePickupOrder(page: Page, phone = "+374 94 55 66 77") {
   await page.close();
 }
 
+/** Signs in. The panel opens in Armenian; the tests switch it to English first. */
 async function signIn(page: Page) {
   await page.goto("/admin/login");
-  await page.getByLabel("Email").fill(email);
+  await expect(page.getByRole("heading", { name: "Աշխատակիցների մուտք" })).toBeVisible();
+  await page.getByRole("button", { name: "EN" }).click();
+  await expect(page.getByRole("heading", { name: "Staff sign-in" })).toBeVisible();
+  await page.getByLabel("Login").fill(email);
   await page.getByLabel("Password").fill(password);
   await page.getByRole("button", { name: "Sign in" }).click();
   await expect(page.getByRole("heading", { name: /Hello/ })).toBeVisible();
 }
+
+test("staff accounts use a login and a password the admin sets", async ({
+  page,
+  browser,
+}, info) => {
+  test.skip(info.project.name !== "desktop", "one run is enough");
+  await signIn(page);
+  const login = `anna${Date.now() % 100000}`;
+  await page.goto("/admin/users");
+  await page.locator("form input[name='name']").fill("Anna");
+  await page.locator("form input[name='login']").fill(login);
+  await page.getByLabel("First password").fill("donut-first-2026");
+  await page.getByRole("button", { name: "Create user" }).click();
+  await expect(page.getByText(`${login} can now sign in with the password you set.`)).toBeVisible();
+
+  // The new person signs in and must pick their own password first.
+  const ctx = await browser.newContext();
+  const anna = await ctx.newPage();
+  await anna.goto("/admin/login");
+  await anna.getByLabel("Մուտքանուն").fill(login);
+  await anna.getByLabel("Գաղտնաբառ").fill("donut-first-2026");
+  await anna.getByRole("button", { name: "Մուտք" }).click();
+  await expect(anna).toHaveURL(/\/admin\/account/);
+  await expect(anna.getByRole("navigation").getByText("Պատվերներ")).toBeVisible();
+  await ctx.close();
+});
 
 test("admin pages need a sign-in", async ({ page }) => {
   await page.goto("/admin/orders");
@@ -105,7 +135,10 @@ test("new orders are confirmed by phone; a prank number gets blocked", async ({ 
   await page.locator("tbody a").first().click();
   await expect(page.getByText(/Earlier orders from this number:\s*1/)).toBeVisible();
   await page.getByRole("button", { name: "Fake order: cancel" }).click();
-  await expect(page.getByText("Order cancelled and the number blocked.")).toBeVisible();
+  await expect(page.getByText(/Order cancelled\. If it was a prank/)).toBeVisible();
+  // Cancelling alone never blocks; blocking is a separate, deliberate step.
+  await page.getByRole("button", { name: "Block this number" }).click();
+  await expect(page.getByText("Number blocked. It can no longer order online.")).toBeVisible();
 
   // The blocked number cannot order online and is told to call instead.
   const customer = await page.context().newPage();

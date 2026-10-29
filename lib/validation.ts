@@ -129,11 +129,20 @@ export const newsletterSchema = z.object({
 });
 export type NewsletterInput = z.input<typeof newsletterSchema>;
 
+/**
+ * Staff sign-in name: a short Latin login such as "director" or "anna",
+ * or an email address. Stored lower-case.
+ */
+export function loginName(raw: string): string | null {
+  const v = raw.trim().toLowerCase();
+  return /^[a-z0-9][a-z0-9._@-]{1,59}$/.test(v) ? v : null;
+}
+
 export const loginSchema = z.object({
-  email: z
+  login: z
     .string()
-    .transform((v) => v.trim().toLowerCase())
-    .pipe(z.email().max(160)),
+    .transform((v) => loginName(v) ?? "")
+    .pipe(z.string().min(2)),
   password: z.string().min(1).max(200),
 });
 

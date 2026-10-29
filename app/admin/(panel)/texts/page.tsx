@@ -10,13 +10,16 @@ import {
 } from "@/components/admin/ui";
 import { db } from "@/db";
 import { siteTexts } from "@/db/schema";
+import { adminT } from "@/lib/admin-lang";
 import { requireUser } from "@/lib/auth";
 import en from "@/messages/en.json";
 import hy from "@/messages/hy.json";
 import ru from "@/messages/ru.json";
 import { saveTextAction } from "../../actions";
 
-export const metadata = { title: "Site texts" };
+export async function generateMetadata() {
+  return { title: (await adminT())("Site texts") };
+}
 
 type Tree = { [k: string]: unknown };
 function flatten(obj: Tree, prefix = ""): Record<string, string> {
@@ -34,6 +37,7 @@ const files = { hy: flatten(hy as Tree), ru: flatten(ru as Tree), en: flatten(en
 export default async function TextsPage({ searchParams }: { searchParams: SearchParams }) {
   await requireUser(["admin"]);
   const q = await searchParams;
+  const t = await adminT();
   const search = (sp(q.q) ?? "").trim().toLowerCase();
   const overrides = await db.select().from(siteTexts);
   const over = new Map(overrides.map((o) => [`${o.locale}:${o.key}`, o.value]));
@@ -46,27 +50,30 @@ export default async function TextsPage({ searchParams }: { searchParams: Search
 
   return (
     <>
-      <PageHeader title="Site texts" />
+      <PageHeader title={t("Site texts")} />
       <Flash ok={sp(q.ok)} error={sp(q.error)} />
       <p className="mb-4 max-w-2xl text-sm text-muted">
-        Change any sentence on the website without a developer. Search for a word you see on the
-        site. Clearing a field brings back the original text. Keep placeholders like {"{count}"} or{" "}
-        {"{price}"} as they are.
+        {t(
+          "Change any sentence on the website without a developer. Search for a word you see on the site. Clearing a field brings back the original text. Keep placeholders like {count} or {price} as they are.",
+          { count: "{count}", price: "{price}" },
+        )}
       </p>
       <form method="get" className="mb-5 flex max-w-xl gap-2">
         <label className="sr-only" htmlFor="q">
-          Search texts
+          {t("Search texts")}
         </label>
         <input
           id="q"
           name="q"
           defaultValue={sp(q.q)}
-          placeholder="e.g. donut, hero, Абовяна"
+          placeholder={t("e.g. donut, hero, Абовяна")}
           className={inputCls}
         />
-        <button className={`${btn.primary} mt-1`}>Search</button>
+        <button className={`${btn.primary} mt-1`}>{t("Search")}</button>
       </form>
-      {!search ? <p className="mb-3 text-sm font-semibold">Texts you have changed:</p> : null}
+      {!search ? (
+        <p className="mb-3 text-sm font-semibold">{t("Texts you have changed:")}</p>
+      ) : null}
       <div className="flex flex-col gap-4">
         {keys.slice(0, 40).map((key) => (
           <Card key={key}>
@@ -89,16 +96,18 @@ export default async function TextsPage({ searchParams }: { searchParams: Search
                 ))}
               </div>
               <div>
-                <SubmitButton className="h-9 px-4">Save</SubmitButton>
+                <SubmitButton className="h-9 px-4">{t("Save")}</SubmitButton>
               </div>
             </form>
           </Card>
         ))}
         {keys.length === 0 ? (
-          <p className="text-muted">{search ? "Nothing found." : "No changes yet."}</p>
+          <p className="text-muted">{search ? t("Nothing found.") : t("No changes yet.")}</p>
         ) : null}
         {keys.length > 40 ? (
-          <p className="text-sm text-muted">Showing 40 of {keys.length}. Search more precisely.</p>
+          <p className="text-sm text-muted">
+            {t("Showing 40 of {n}. Search more precisely.", { n: keys.length })}
+          </p>
         ) : null}
       </div>
     </>

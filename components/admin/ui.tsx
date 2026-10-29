@@ -1,10 +1,15 @@
 import { CheckCircle, WarningCircle } from "@phosphor-icons/react/dist/ssr";
 import type { Localized } from "@/db/schema";
+import { decodeFlash } from "@/lib/admin-i18n";
+import { adminT } from "@/lib/admin-lang";
 import { cn } from "@/lib/cn";
 export { SubmitButton } from "./SubmitButton";
 
-export function Flash({ ok, error }: { ok?: string; error?: string }) {
+/** Result message after a form; the text comes from the URL and is translated here. */
+export async function Flash({ ok, error }: { ok?: string; error?: string }) {
   if (!ok && !error) return null;
+  const t = await adminT();
+  const [text, params] = decodeFlash((error ?? ok)!);
   return (
     <p
       role={error ? "alert" : "status"}
@@ -18,7 +23,7 @@ export function Flash({ ok, error }: { ok?: string; error?: string }) {
       ) : (
         <CheckCircle size={20} className="shrink-0" aria-hidden />
       )}
-      {error ?? ok}
+      {t(text, params)}
     </p>
   );
 }
@@ -131,7 +136,7 @@ const LANGS = [
 ] as const;
 
 /** Three inputs, one per language. */
-export function LocalizedField({
+export async function LocalizedField({
   label,
   name,
   value,
@@ -144,13 +149,14 @@ export function LocalizedField({
   multiline?: boolean;
   required?: boolean;
 }) {
+  const t = await adminT();
   return (
     <fieldset className="rounded-xl border border-line p-3">
       <legend className="px-1 text-sm font-semibold">{label}</legend>
       <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
         {LANGS.map(([l, full]) => (
           <label key={l} className="block text-xs font-semibold text-muted" lang={l}>
-            {full}
+            {t(full)}
             {multiline ? (
               <textarea
                 name={`${name}.${l}`}
@@ -193,7 +199,8 @@ export const statusLabel: Record<string, string> = {
   cancelled: "Cancelled",
 };
 
-export function StatusBadge({ status }: { status: string }) {
+export async function StatusBadge({ status }: { status: string }) {
+  const t = await adminT();
   return (
     <span
       className={cn(
@@ -201,7 +208,7 @@ export function StatusBadge({ status }: { status: string }) {
         statusTone[status],
       )}
     >
-      {statusLabel[status] ?? status}
+      {statusLabel[status] ? t(statusLabel[status]) : status}
     </span>
   );
 }

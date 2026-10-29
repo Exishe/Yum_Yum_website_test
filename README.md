@@ -36,7 +36,7 @@ pnpm demo
 
 Then open **http://localhost:3000/hy** (also `/ru` and `/en`). The first page takes about 10 seconds to appear while it compiles; after that it is fast.
 
-- Admin panel: **http://localhost:3000/admin** — `admin@yumyum.local` / `yumyum-demo-2026`
+- Admin panel: **http://localhost:3000/admin** — `director` / `yumyum-demo-2026`
 - Everything works: menu, basket, checkout, order tracking, admin. Orders are saved in a built-in database in the `.pglocal` folder (PGlite: real PostgreSQL in WebAssembly), so there is nothing else to install.
 - Stop with `Ctrl+C`. Start again with `pnpm demo` (your test orders are kept). Start from scratch with `pnpm demo:reset`.
 

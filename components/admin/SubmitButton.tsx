@@ -2,6 +2,7 @@
 
 import { useFormStatus } from "react-dom";
 import { cn } from "@/lib/cn";
+import { useAdminT } from "./AdminLang";
 
 export function SubmitButton({
   children,
@@ -20,6 +21,7 @@ export function SubmitButton({
   variant?: "primary" | "secondary" | "danger";
 }) {
   const { pending } = useFormStatus();
+  const t = useAdminT();
   return (
     <button
       type="submit"
@@ -37,7 +39,7 @@ export function SubmitButton({
         className,
       )}
     >
-      {pending ? "Saving…" : children}
+      {pending ? t("Saving…") : children}
     </button>
   );
 }

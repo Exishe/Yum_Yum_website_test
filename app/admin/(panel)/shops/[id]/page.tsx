@@ -15,11 +15,15 @@ import {
 } from "@/components/admin/ui";
 import { db } from "@/db";
 import { shops, type Shop } from "@/db/schema";
+import { PhotoInput } from "@/components/admin/PhotoInput";
+import { adminT } from "@/lib/admin-lang";
 import { requireUser } from "@/lib/auth";
 import { districts } from "@/lib/districts";
 import { saveShopAction } from "../../../actions";
 
-export const metadata = { title: "Edit shop" };
+export async function generateMetadata() {
+  return { title: (await adminT())("Edit shop") };
+}
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 export default async function EditShop({
@@ -32,6 +36,7 @@ export default async function EditShop({
   await requireUser(["admin"]);
   const { id } = await params;
   const q = await searchParams;
+  const t = await adminT();
   let s: Shop | undefined;
   if (id !== "new") {
     const n = Number(id);
@@ -41,35 +46,40 @@ export default async function EditShop({
   }
   return (
     <>
-      <PageHeader title={s ? s.name.en : "New shop"} />
+      <PageHeader title={s ? s.name[t.lang] || s.name.en : t("New shop")} />
       <Flash ok={sp(q.ok)} error={sp(q.error)} />
       <form action={saveShopAction} className="flex flex-col gap-5">
         <input type="hidden" name="id" value={s?.id ?? ""} />
         <Card className="flex flex-col gap-4">
-          <LocalizedField label="Name" name="name" value={s?.name} />
-          <LocalizedField label="Address" name="address" value={s?.address} />
+          <LocalizedField label={t("Name")} name="name" value={s?.name} />
+          <LocalizedField label={t("Address")} name="address" value={s?.address} />
           <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
             <label className="text-sm font-semibold">
-              District
+              {t("District")}
               <select name="district" defaultValue={s?.district ?? "kentron"} className={inputCls}>
                 {districts.map((d) => (
                   <option key={d.key} value={d.key}>
-                    {d.name.en}
+                    {d.name[t.lang] || d.name.en}
                   </option>
                 ))}
               </select>
             </label>
-            <Field label="Phone" name="phone" defaultValue={s?.phone} placeholder="+37433301574" />
-            <Field label="Latitude" name="lat" defaultValue={s?.lat} />
-            <Field label="Longitude" name="lng" defaultValue={s?.lng} />
             <Field
-              label="Google Maps link"
+              label={t("Phone")}
+              name="phone"
+              defaultValue={s?.phone}
+              placeholder="+37433301574"
+            />
+            <Field label={t("Latitude")} name="lat" defaultValue={s?.lat} />
+            <Field label={t("Longitude")} name="lng" defaultValue={s?.lng} />
+            <Field
+              label={t("Google Maps link")}
               name="googleMapsUrl"
               defaultValue={s?.googleMapsUrl}
               className="md:col-span-2"
             />
             <Field
-              label="Yandex Maps link"
+              label={t("Yandex Maps link")}
               name="yandexMapsUrl"
               defaultValue={s?.yandexMapsUrl}
               className="md:col-span-2"
@@ -81,33 +91,37 @@ export default async function EditShop({
               className="md:col-span-2"
             />
             <Field
-              label="Sort order"
+              label={t("Sort order")}
               name="sortOrder"
               type="number"
               defaultValue={s?.sortOrder ?? 0}
             />
           </div>
           <div className="flex flex-wrap gap-x-6">
-            <Check label="On the website" name="isActive" defaultChecked={s?.isActive ?? true} />
             <Check
-              label="Pickup orders allowed"
+              label={t("On the website")}
+              name="isActive"
+              defaultChecked={s?.isActive ?? true}
+            />
+            <Check
+              label={t("Pickup orders allowed")}
               name="pickupEnabled"
               defaultChecked={s?.pickupEnabled ?? true}
             />
             <Check
-              label="Confirmed open by the client"
+              label={t("Confirmed open by the client")}
               name="isConfirmed"
               defaultChecked={s?.isConfirmed}
             />
           </div>
         </Card>
         <Card className="flex flex-col gap-3">
-          <h2 className="text-xl">Opening hours (Yerevan time)</h2>
+          <h2 className="text-xl">{t("Opening hours (Yerevan time)")}</h2>
           <Check
-            label="Inside a mall: follows the mall's hours"
+            label={t("Inside a mall: follows the mall's hours")}
             name="isMall"
             defaultChecked={s?.isMall}
-            hint="When ticked, the hours below are ignored."
+            hint={t("When ticked, the hours below are ignored.")}
           />
           <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
             {DAYS.map((d, i) => {
@@ -117,9 +131,9 @@ export default async function EditShop({
                   key={d}
                   className="flex flex-wrap items-center gap-3 rounded-xl bg-blush px-3 py-2"
                 >
-                  <span className="w-24 text-sm font-semibold">{d}</span>
+                  <span className="w-24 text-sm font-semibold">{t(d)}</span>
                   <input
-                    aria-label={`${d} opens`}
+                    aria-label={t("{day}: opens", { day: t(d) })}
                     name={`open.${i}`}
                     type="time"
                     defaultValue={h?.open ?? "09:00"}
@@ -127,7 +141,7 @@ export default async function EditShop({
                   />
                   <span>–</span>
                   <input
-                    aria-label={`${d} closes`}
+                    aria-label={t("{day}: closes", { day: t(d) })}
                     name={`close.${i}`}
                     type="time"
                     defaultValue={h?.close ?? "22:00"}
@@ -140,14 +154,14 @@ export default async function EditShop({
                       defaultChecked={!!s?.hours && !h}
                       className="accent-magenta"
                     />{" "}
-                    closed
+                    {t("closed")}
                   </label>
                 </div>
               );
             })}
           </div>
           <LocalizedField
-            label="Hours note (e.g. mall hours)"
+            label={t("Hours note (e.g. mall hours)")}
             name="hoursNote"
             value={s?.hoursNote}
           />
@@ -158,18 +172,10 @@ export default async function EditShop({
               <Image src={s.image} alt="" fill sizes="192px" className="object-cover" />
             ) : null}
           </span>
-          <label className="text-sm font-semibold">
-            New photo
-            <input
-              type="file"
-              name="imageFile"
-              accept="image/jpeg,image/png,image/webp,image/avif"
-              className="mt-1 block text-sm"
-            />
-          </label>
+          <PhotoInput label={t("New photo")} />
         </Card>
         <div>
-          <SubmitButton className="h-12 px-8">Save shop</SubmitButton>
+          <SubmitButton className="h-12 px-8">{t("Save shop")}</SubmitButton>
         </div>
       </form>
     </>

@@ -8,6 +8,7 @@
 import { randomBytes } from "node:crypto";
 import { and, eq } from "drizzle-orm";
 import { updateTag } from "next/cache";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { db } from "@/db";
@@ -29,6 +30,7 @@ import {
   type Localized,
   type WeekHours,
 } from "@/db/schema";
+import { ADMIN_LANG_COOKIE, encodeFlash, type Params } from "@/lib/admin-i18n";
 import { audit, diff } from "@/lib/audit";
 import {
   hashPassword,
@@ -45,7 +47,7 @@ import { TEXTS_TAG } from "@/lib/site-texts";
 import { anonymizeOldOrders } from "@/lib/retention";
 import { saveImage } from "@/lib/storage";
 import { normalizeArmenianPhone } from "@/lib/format";
-import { clean, loginSchema, passwordSchema } from "@/lib/validation";
+import { clean, loginName, loginSchema, passwordSchema } from "@/lib/validation";
 
 /* ── helpers ── */
 
@@ -77,9 +79,10 @@ const slugify = (s: string) =>
     .replace(/^-|-$/g, "")
     .slice(0, 60);
 
-function back(path: string, kind: "ok" | "error", msg: string): never {
+/** Back to a page with a message; the English text is translated when shown. */
+function back(path: string, kind: "ok" | "error", msg: string, params?: Params): never {
   const sep = path.includes("?") ? "&" : "?";
-  redirect(`${path}${sep}${kind}=${encodeURIComponent(msg)}`);
+  redirect(`${path}${sep}${kind}=${encodeURIComponent(encodeFlash(msg, params))}`);
 }
 
 async function maybeUpload(fd: FormData, key: string, folder: "products" | "shops" | "categories") {
@@ -88,12 +91,25 @@ async function maybeUpload(fd: FormData, key: string, folder: "products" | "shop
   return undefined;
 }
 
+/* ── language ── */
+
+export async function setAdminLangAction(fd: FormData) {
+  const lang = fd.get("lang") === "en" ? "en" : "hy";
+  (await cookies()).set(ADMIN_LANG_COOKIE, lang, {
+    path: "/admin",
+    maxAge: 60 * 60 * 24 * 365,
+    sameSite: "lax",
+  });
+  const back = (await headers()).get("referer");
+  redirect(back && new URL(back).pathname.startsWith("/admin") ? new URL(back).pathname : "/admin");
+}
+
 /* ── auth ── */
 
 export async function loginAction(_prev: { error?: string } | undefined, fd: FormData) {
-  const parsed = loginSchema.safeParse({ email: fd.get("email"), password: fd.get("password") });
-  if (!parsed.success) return { error: "Enter your email and password." };
-  const res = await login(parsed.data.email, parsed.data.password, await clientIp());
+  const parsed = loginSchema.safeParse({ login: fd.get("login"), password: fd.get("password") });
+  if (!parsed.success) return { error: "Enter your login and password." };
+  const res = await login(parsed.data.login, parsed.data.password, await clientIp());
   if (!res.ok) return { error: res.error };
   redirect(res.mustChangePassword ? "/admin/account?first=1" : "/admin");
 }
@@ -184,21 +200,13 @@ export async function callOutcomeAction(fd: FormData) {
   });
   await audit(user, "order_call", "order", order.shortCode, { outcome: outcome.data });
 
-  if (outcome.data === "fake" && bool(fd, "block")) {
-    await db
-      .insert(blockedPhones)
-      .values({ phone: order.phone, reason: `Fake order #${order.shortCode}`, blockedBy: user.id })
-      .onConflictDoNothing();
-    await audit(user, "block_phone", "phone", order.phone, { order: order.shortCode });
-    back(`/admin/orders/${id}`, "ok", "Order cancelled and the number blocked.");
-  }
   back(
     `/admin/orders/${id}`,
     "ok",
     {
       confirmed: "Confirmed. Prepare the order.",
       no_answer: "Call noted.",
-      fake: "Order cancelled.",
+      fake: "Order cancelled. If it was a prank, you can block the number below.",
     }[outcome.data],
   );
 }
@@ -620,7 +628,7 @@ export async function saveTextAction(fd: FormData) {
   }
   await audit(user, "update", "site_text", key);
   updateTag(TEXTS_TAG);
-  back(`/admin/texts?q=${encodeURIComponent(q || key)}`, "ok", `Saved “${key}”.`);
+  back(`/admin/texts?q=${encodeURIComponent(q || key)}`, "ok", "Saved “{key}”.", { key });
 }
 
 /* ── settings ── */
@@ -731,11 +739,10 @@ export async function saveSettingsAction(fd: FormData) {
   }
   const parsed = schema.safeParse(value);
   if (!parsed.success)
-    back(
-      "/admin/settings",
-      "error",
-      `Check “${key}”: ${parsed.error.issues[0]?.path.join(".")} is not valid.`,
-    );
+    back("/admin/settings", "error", "Check “{key}”: {field} is not valid.", {
+      key,
+      field: parsed.error.issues[0]?.path.join(".") ?? "",
+    });
   await db
     .insert(settings)
     .values({ key, value: parsed.data })
@@ -749,23 +756,27 @@ export async function saveSettingsAction(fd: FormData) {
 
 export async function createUserAction(fd: FormData) {
   const user = await requireUser(["admin"]);
-  const email = str(fd, "email", 160).toLowerCase();
-  if (!z.email().safeParse(email).success) back("/admin/users", "error", "Check the email.");
+  const login = loginName(str(fd, "login", 160));
+  if (!login)
+    back("/admin/users", "error", "Check the login: Latin letters, numbers, dots or dashes.");
   const role = fd.get("role") === "admin" ? "admin" : "staff";
-  const temp = randomBytes(9).toString("base64url");
+  const password = String(fd.get("password") ?? "");
+  const parsed = passwordSchema.safeParse(password);
+  if (!parsed.success)
+    back("/admin/users", "error", parsed.error.issues[0]?.message ?? "Weak password.");
   try {
     await db.insert(users).values({
-      email,
-      name: str(fd, "name", 80) || email,
+      email: login,
+      name: str(fd, "name", 80) || login,
       role,
-      passwordHash: await hashPassword(temp),
+      passwordHash: await hashPassword(password),
       mustChangePassword: true,
     });
   } catch {
-    back("/admin/users", "error", "A user with this email already exists.");
+    back("/admin/users", "error", "This login is already taken.");
   }
-  await audit(user, "create", "user", email, { role });
-  back("/admin/users", "ok", `User created. Temporary password (shown once): ${temp}`);
+  await audit(user, "create", "user", login, { role });
+  back("/admin/users", "ok", "{login} can now sign in with the password you set.", { login });
 }
 
 export async function toggleUserAction(fd: FormData) {
@@ -783,11 +794,14 @@ export async function toggleUserAction(fd: FormData) {
 export async function resetUserPasswordAction(fd: FormData) {
   const user = await requireUser(["admin"]);
   const id = num(fd, "id");
-  const temp = randomBytes(9).toString("base64url");
+  const password = String(fd.get("password") ?? "");
+  const parsed = passwordSchema.safeParse(password);
+  if (!parsed.success)
+    back("/admin/users", "error", parsed.error.issues[0]?.message ?? "Weak password.");
   const [target] = await db
     .update(users)
     .set({
-      passwordHash: await hashPassword(temp),
+      passwordHash: await hashPassword(password),
       mustChangePassword: true,
       failedLogins: 0,
       lockedUntil: null,
@@ -797,7 +811,9 @@ export async function resetUserPasswordAction(fd: FormData) {
   if (!target) back("/admin/users", "error", "User not found.");
   await logoutEverywhere(id);
   await audit(user, "reset_password", "user", target.email);
-  back("/admin/users", "ok", `New temporary password for ${target.email} (shown once): ${temp}`);
+  back("/admin/users", "ok", "New password set for {login}. They will change it at sign-in.", {
+    login: target.email,
+  });
 }
 
 /* ── messages & privacy ── */
@@ -814,5 +830,5 @@ export async function runRetentionAction() {
   const user = await requireUser(["admin"]);
   const n = await anonymizeOldOrders();
   await audit(user, "retention_run", "order", null, { anonymized: n });
-  back("/admin", "ok", `Anonymised ${n} old orders.`);
+  back("/admin", "ok", "Anonymised {n} old orders.", { n });
 }

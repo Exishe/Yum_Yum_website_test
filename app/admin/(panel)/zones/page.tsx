@@ -12,19 +12,23 @@ import {
 } from "@/components/admin/ui";
 import { db } from "@/db";
 import { deliveryZones, type DeliveryZone } from "@/db/schema";
+import { adminT } from "@/lib/admin-lang";
 import { requireUser } from "@/lib/auth";
 import { districts } from "@/lib/districts";
 import { deleteZoneAction, saveZoneAction } from "../../actions";
 
-export const metadata = { title: "Delivery zones" };
+export async function generateMetadata() {
+  return { title: (await adminT())("Delivery zones") };
+}
 
-function ZoneForm({ z }: { z?: DeliveryZone }) {
+async function ZoneForm({ z }: { z?: DeliveryZone }) {
+  const t = await adminT();
   return (
     <form action={saveZoneAction} className="flex flex-col gap-3">
       <input type="hidden" name="id" value={z?.id ?? ""} />
-      <LocalizedField label="Zone name" name="name" value={z?.name} />
+      <LocalizedField label={t("Zone name")} name="name" value={z?.name} />
       <fieldset>
-        <legend className="text-sm font-semibold">Districts</legend>
+        <legend className="text-sm font-semibold">{t("Districts")}</legend>
         <div className="mt-1 flex flex-wrap gap-2">
           {districts.map((d) => (
             <label
@@ -38,40 +42,46 @@ function ZoneForm({ z }: { z?: DeliveryZone }) {
                 defaultChecked={z?.districts.includes(d.key)}
                 className="accent-magenta"
               />
-              {d.name.en}
+              {d.name[t.lang] || d.name.en}
             </label>
           ))}
         </div>
       </fieldset>
       <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
-        <Field label="Fee, ֏" name="feeAmd" type="number" min={0} defaultValue={z?.feeAmd ?? 0} />
         <Field
-          label="Minimum order, ֏"
+          label={t("Fee, ֏")}
+          name="feeAmd"
+          type="number"
+          min={0}
+          defaultValue={z?.feeAmd ?? 0}
+        />
+        <Field
+          label={t("Minimum order, ֏")}
           name="minOrderAmd"
           type="number"
           min={0}
           defaultValue={z?.minOrderAmd ?? 0}
         />
         <Field
-          label="Free from, ֏"
+          label={t("Free from, ֏")}
           name="freeFromAmd"
           type="number"
           min={0}
           defaultValue={z?.freeFromAmd ?? ""}
-          hint="Empty = never free"
+          hint={t("Empty = never free")}
         />
         <Field
-          label="Usual time, min"
+          label={t("Usual time, min")}
           name="etaMinutes"
           type="number"
           min={10}
           defaultValue={z?.etaMinutes ?? 60}
         />
-        <Field label="Sort" name="sortOrder" type="number" defaultValue={z?.sortOrder ?? 0} />
+        <Field label={t("Sort")} name="sortOrder" type="number" defaultValue={z?.sortOrder ?? 0} />
       </div>
       <div className="flex flex-wrap items-center gap-4">
-        <Check label="Active" name="isActive" defaultChecked={z?.isActive ?? true} />
-        <SubmitButton>{z ? "Save" : "Add zone"}</SubmitButton>
+        <Check label={t("Active")} name="isActive" defaultChecked={z?.isActive ?? true} />
+        <SubmitButton>{z ? t("Save") : t("Add zone")}</SubmitButton>
       </div>
     </form>
   );
@@ -80,13 +90,14 @@ function ZoneForm({ z }: { z?: DeliveryZone }) {
 export default async function ZonesPage({ searchParams }: { searchParams: SearchParams }) {
   await requireUser(["admin"]);
   const q = await searchParams;
+  const t = await adminT();
   const rows = await db.select().from(deliveryZones).orderBy(asc(deliveryZones.sortOrder));
   return (
     <>
-      <PageHeader title="Delivery zones and fees" />
+      <PageHeader title={t("Delivery zones and fees")} />
       <Flash ok={sp(q.ok)} error={sp(q.error)} />
       <p className="mb-4 max-w-2xl text-sm text-muted">
-        The seed fees are placeholders. Set the real ones before launch.
+        {t("The seed fees are placeholders. Set the real ones before launch.")}
       </p>
       <div className="flex flex-col gap-4">
         {rows.map((z) => (
@@ -95,16 +106,16 @@ export default async function ZonesPage({ searchParams }: { searchParams: Search
             <form action={deleteZoneAction} className="mt-2">
               <input type="hidden" name="id" value={z.id} />
               <SubmitButton
-                confirm="Delete this zone?"
+                confirm={t("Delete this zone?")}
                 className="h-9 bg-transparent px-0 text-magenta-ink underline hover:bg-transparent"
               >
-                Delete zone
+                {t("Delete zone")}
               </SubmitButton>
             </form>
           </Card>
         ))}
         <Card className="border-2 border-dashed border-line bg-blush">
-          <h2 className="mb-3 text-xl">New zone</h2>
+          <h2 className="mb-3 text-xl">{t("New zone")}</h2>
           <ZoneForm />
         </Card>
       </div>

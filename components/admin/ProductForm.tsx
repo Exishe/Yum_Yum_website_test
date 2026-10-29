@@ -3,8 +3,10 @@ import { Card, Check, Field, LocalizedField, SubmitButton, inputCls } from "@/co
 import type { Category, Product, ProductOption } from "@/db/schema";
 import { OptionsEditor } from "./OptionsEditor";
 import { saveProductAction } from "@/app/admin/actions";
+import { adminT } from "@/lib/admin-lang";
+import { PhotoInput } from "./PhotoInput";
 
-export function ProductForm({
+export async function ProductForm({
   product,
   options,
   categories,
@@ -13,20 +15,21 @@ export function ProductForm({
   options: ProductOption[];
   categories: Category[];
 }) {
+  const t = await adminT();
   return (
     <form action={saveProductAction} className="flex flex-col gap-5">
       <input type="hidden" name="id" value={product?.id ?? ""} />
       <Card className="flex flex-col gap-4">
-        <LocalizedField label="Name" name="name" value={product?.name} required />
+        <LocalizedField label={t("Name")} name="name" value={product?.name} required />
         <LocalizedField
-          label="Short description"
+          label={t("Short description")}
           name="description"
           value={product?.description}
           multiline
         />
         <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
           <label className="block text-sm font-semibold">
-            Category
+            {t("Category")}
             <select
               name="categoryId"
               defaultValue={product?.categoryId ?? categories[0]?.id}
@@ -34,13 +37,13 @@ export function ProductForm({
             >
               {categories.map((c) => (
                 <option key={c.id} value={c.id}>
-                  {c.name.en}
+                  {c.name[t.lang] || c.name.en}
                 </option>
               ))}
             </select>
           </label>
           <Field
-            label="Price, ֏"
+            label={t("Price, ֏")}
             name="priceAmd"
             type="number"
             min={0}
@@ -49,7 +52,7 @@ export function ProductForm({
             required
           />
           <Field
-            label="Order days ahead"
+            label={t("Order days ahead")}
             name="leadTimeDays"
             type="number"
             min={0}
@@ -58,70 +61,70 @@ export function ProductForm({
             hint="1 for bouquets and name donuts"
           />
           <Field
-            label="Sort order"
+            label={t("Sort order")}
             name="sortOrder"
             type="number"
             defaultValue={product?.sortOrder ?? 0}
           />
           <Field
-            label="Filter tags"
+            label={t("Filter tags")}
             name="tags"
             defaultValue={product?.tags.join(", ")}
-            hint="glazed, chocolate, fruity, filled, kids, iced, hot, savoury, gifts"
+            hint={t("glazed, chocolate, fruity, filled, kids, iced, hot, savoury, gifts")}
             className="md:col-span-2"
           />
           <Field
-            label="Badges"
+            label={t("Badges")}
             name="badges"
             defaultValue={product?.badges.join(", ")}
-            hint="new, bestseller"
+            hint={t("new, bestseller")}
           />
           <Field
-            label="Box size"
+            label={t("Box size")}
             name="boxSize"
             type="number"
             min={0}
             max={12}
             defaultValue={product?.boxSize ?? ""}
-            hint="Only for 'pack your box' boxes"
+            hint={t("Only for 'pack your box' boxes")}
           />
         </div>
         <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-2 lg:grid-cols-4">
           <Check
-            label="Shown on the website"
+            label={t("Shown on the website")}
             name="isPublished"
             defaultChecked={product?.isPublished ?? true}
           />
           <Check
-            label="In stock today"
+            label={t("In stock today")}
             name="isAvailable"
             defaultChecked={product?.isAvailable ?? true}
           />
           <Check
-            label="Featured"
+            label={t("Featured")}
             name="isFeatured"
             defaultChecked={product?.isFeatured}
-            hint="Big photo in its category"
+            hint={t("Big photo in its category")}
           />
           <Check
-            label="Price not yet confirmed"
+            label={t("Price not yet confirmed")}
             name="priceIsSample"
             defaultChecked={product?.priceIsSample ?? false}
           />
           <Check
-            label="Price on request"
+            label={t("Price on request")}
             name="priceOnRequest"
             defaultChecked={product?.priceOnRequest ?? false}
-            hint="Hides the price; customers call or write instead of adding it to the basket"
+            hint={t("Hides the price; customers call or write instead of adding it to the basket")}
           />
         </div>
         <Field
-          label="Same product on buy.am (optional)"
+          label={t("Same product on buy.am (optional)")}
           name="buyamUrl"
           type="url"
           defaultValue={product?.buyamUrl ?? ""}
           placeholder="https://buy.am/products/yum-yum-donuts/…"
-          hint="Shows an “Order on buy.am” link on the product"
+          hint={t("Shows an “Order on buy.am” link on the product")}
         />
       </Card>
       <Card className="flex flex-col gap-4">
@@ -132,23 +135,17 @@ export function ProductForm({
             ) : null}
           </span>
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold">
-              New photo (JPEG, PNG, WebP; up to 5 MB)
-              <input
-                type="file"
-                name="imageFile"
-                accept="image/jpeg,image/png,image/webp,image/avif"
-                className="mt-1 block text-sm"
-              />
-            </label>
+            <PhotoInput label={t("New photo (JPEG, PNG, WebP)")} />
             <p className="text-xs text-muted">
-              Only real photos of YUM-YUM products. We resize and clean the file automatically.
+              {t(
+                "Only real photos of YUM-YUM products. Large photos are made smaller automatically.",
+              )}
             </p>
-            {product?.image ? <Check label="Remove the photo" name="removeImage" /> : null}
+            {product?.image ? <Check label={t("Remove the photo")} name="removeImage" /> : null}
           </div>
         </div>
         <LocalizedField
-          label="Photo description for screen readers"
+          label={t("Photo description for screen readers")}
           name="imageAlt"
           value={product?.imageAlt}
         />
@@ -165,7 +162,7 @@ export function ProductForm({
         />
       </Card>
       <div>
-        <SubmitButton className="h-12 px-8">Save product</SubmitButton>
+        <SubmitButton className="h-12 px-8">{t("Save product")}</SubmitButton>
       </div>
     </form>
   );

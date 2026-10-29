@@ -55,7 +55,7 @@ say_step "3/3 Собираю быструю версию (1–2 минуты), �
     if curl -s -o /dev/null "$URL"; then
       open "$URL"
       printf '\n\033[1;32m✔ Сайт открыт: %s  (также /hy и /en)\033[0m\n' "$URL"
-      printf '\033[1;32m  Админка: /admin  логин admin@yumyum.local  пароль yumyum-demo-2026\n  Не закрывайте это окно, пока смотрите сайт.\033[0m\n\n'
+      printf '\033[1;32m  Админка: /admin  логин director  пароль yumyum-demo-2026\n  Не закрывайте это окно, пока смотрите сайт.\033[0m\n\n'
       exit 0
     fi
     sleep 2

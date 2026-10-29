@@ -12,17 +12,21 @@ import {
 } from "@/components/admin/ui";
 import { db } from "@/db";
 import { reviews, type Review } from "@/db/schema";
+import { adminT } from "@/lib/admin-lang";
 import { requireUser } from "@/lib/auth";
 import { deleteReviewAction, saveReviewAction } from "../../actions";
 
-export const metadata = { title: "Reviews" };
+export async function generateMetadata() {
+  return { title: (await adminT())("Reviews") };
+}
 
-function ReviewForm({ r }: { r?: Review }) {
+async function ReviewForm({ r }: { r?: Review }) {
+  const t = await adminT();
   return (
     <form action={saveReviewAction} className="grid grid-cols-1 gap-3 md:grid-cols-4">
       <input type="hidden" name="id" value={r?.id ?? ""} />
       <label className="block text-sm font-semibold md:col-span-4">
-        Quote, exactly as written
+        {t("Quote, exactly as written")}
         <textarea
           name="quote"
           rows={2}
@@ -32,21 +36,21 @@ function ReviewForm({ r }: { r?: Review }) {
         />
       </label>
       <Field
-        label="Author (as shown on the platform)"
+        label={t("Author (as shown on the platform)")}
         name="author"
         defaultValue={r?.author}
         required
       />
       <Field
-        label="Platform"
+        label={t("Platform")}
         name="platform"
         defaultValue={r?.platform}
-        placeholder="Google, Tripadvisor…"
+        placeholder={t("Google, Tripadvisor…")}
         required
       />
-      <Field label="Link to the review" name="url" defaultValue={r?.url} />
+      <Field label={t("Link to the review")} name="url" defaultValue={r?.url} />
       <Field
-        label="Stars (1–5)"
+        label={t("Stars (1–5)")}
         name="rating"
         type="number"
         min={1}
@@ -54,18 +58,23 @@ function ReviewForm({ r }: { r?: Review }) {
         defaultValue={r?.rating ?? ""}
       />
       <label className="text-sm font-semibold">
-        Language of the quote
+        {t("Language of the quote")}
         <select name="quoteLocale" defaultValue={r?.quoteLocale ?? "en"} className={inputCls}>
-          <option value="hy">Armenian</option>
-          <option value="ru">Russian</option>
-          <option value="en">English</option>
+          <option value="hy">{t("Armenian")}</option>
+          <option value="ru">{t("Russian")}</option>
+          <option value="en">{t("English")}</option>
         </select>
       </label>
-      <Field label="Date" name="reviewDate" defaultValue={r?.reviewDate} placeholder="2025-11" />
-      <Field label="Sort" name="sortOrder" type="number" defaultValue={r?.sortOrder ?? 0} />
+      <Field
+        label={t("Date")}
+        name="reviewDate"
+        defaultValue={r?.reviewDate}
+        placeholder="2025-11"
+      />
+      <Field label={t("Sort")} name="sortOrder" type="number" defaultValue={r?.sortOrder ?? 0} />
       <div className="flex items-end gap-4">
-        <Check label="Show on the website" name="isApproved" defaultChecked={r?.isApproved} />
-        <SubmitButton>{r ? "Save" : "Add"}</SubmitButton>
+        <Check label={t("Show on the website")} name="isApproved" defaultChecked={r?.isApproved} />
+        <SubmitButton>{r ? t("Save") : t("Add")}</SubmitButton>
       </div>
     </form>
   );
@@ -74,14 +83,16 @@ function ReviewForm({ r }: { r?: Review }) {
 export default async function ReviewsPage({ searchParams }: { searchParams: SearchParams }) {
   await requireUser(["admin"]);
   const q = await searchParams;
+  const t = await adminT();
   const rows = await db.select().from(reviews).orderBy(asc(reviews.sortOrder));
   return (
     <>
-      <PageHeader title="Reviews" />
+      <PageHeader title={t("Reviews")} />
       <Flash ok={sp(q.ok)} error={sp(q.error)} />
       <p className="mb-4 max-w-2xl text-sm text-muted">
-        Only real reviews, copied word for word, with the reviewer’s name as the platform shows it.
-        Never edit or invent a quote.
+        {t(
+          "Only real reviews, copied word for word, with the reviewer’s name as the platform shows it. Never edit or invent a quote.",
+        )}
       </p>
       <div className="flex flex-col gap-4">
         {rows.map((r) => (
@@ -90,16 +101,16 @@ export default async function ReviewsPage({ searchParams }: { searchParams: Sear
             <form action={deleteReviewAction} className="mt-2">
               <input type="hidden" name="id" value={r.id} />
               <SubmitButton
-                confirm="Delete this review?"
+                confirm={t("Delete this review?")}
                 className="h-9 bg-transparent px-0 text-magenta-ink underline hover:bg-transparent"
               >
-                Delete
+                {t("Delete")}
               </SubmitButton>
             </form>
           </Card>
         ))}
         <Card className="border-2 border-dashed border-line bg-blush">
-          <h2 className="mb-3 text-xl">Add a review</h2>
+          <h2 className="mb-3 text-xl">{t("Add a review")}</h2>
           <ReviewForm />
         </Card>
       </div>

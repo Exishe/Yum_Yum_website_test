@@ -11,15 +11,19 @@ import {
 } from "@/components/admin/ui";
 import { db } from "@/db";
 import { contactMessages, notificationLog, orders, products } from "@/db/schema";
+import { adminT } from "@/lib/admin-lang";
 import { requireUser } from "@/lib/auth";
 import { yerevanParts, yerevanToUtc } from "@/lib/time";
 import { runRetentionAction } from "../actions";
 
-export const metadata = { title: "Dashboard" };
+export async function generateMetadata() {
+  return { title: (await adminT())("Dashboard") };
+}
 
 export default async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
   const user = await requireUser();
   const q = await searchParams;
+  const t = await adminT();
   const startOfDay = yerevanToUtc(yerevanParts(new Date()).dateKey, 0);
   const count = sql<number>`count(*)::int`;
   const [[newOrders], [today], [sample], [unread], latest, notes] = await Promise.all([
@@ -34,19 +38,23 @@ export default async function Dashboard({ searchParams }: { searchParams: Search
     db.select().from(notificationLog).orderBy(desc(notificationLog.id)).limit(6),
   ]);
   const stats = [
-    { label: "New orders waiting", value: newOrders?.n ?? 0, href: "/admin/orders?status=new" },
-    { label: "Orders today", value: today?.n ?? 0, href: "/admin/orders" },
+    { label: t("New orders waiting"), value: newOrders?.n ?? 0, href: "/admin/orders?status=new" },
+    { label: t("Orders today"), value: today?.n ?? 0, href: "/admin/orders" },
     {
-      label: "Sales today, ֏",
+      label: t("Sales today, ֏"),
       value: (today?.sum ?? 0).toLocaleString("ru-RU"),
       href: "/admin/orders",
     },
-    { label: "Unconfirmed sample prices", value: sample?.n ?? 0, href: "/admin/products?sample=1" },
-    { label: "Unread messages", value: unread?.n ?? 0, href: "/admin/messages" },
+    {
+      label: t("Unconfirmed sample prices"),
+      value: sample?.n ?? 0,
+      href: "/admin/products?sample=1",
+    },
+    { label: t("Unread messages"), value: unread?.n ?? 0, href: "/admin/messages" },
   ];
   return (
     <>
-      <PageHeader title={`Hello, ${user.name}`} />
+      <PageHeader title={t("Hello, {name}", { name: user.name })} />
       <Flash
         ok={sp(q.ok)}
         error={sp(q.error) ?? (sp(q.denied) ? "Your role cannot open that page." : undefined)}
@@ -65,7 +73,7 @@ export default async function Dashboard({ searchParams }: { searchParams: Search
       </div>
       <div className="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-[1.4fr_1fr]">
         <Card>
-          <h2 className="mb-3 text-xl">Latest orders</h2>
+          <h2 className="mb-3 text-xl">{t("Latest orders")}</h2>
           <ul className="divide-y divide-line">
             {latest.map((o) => (
               <li key={o.id}>
@@ -75,7 +83,8 @@ export default async function Dashboard({ searchParams }: { searchParams: Search
                 >
                   <span className="font-semibold">#{o.shortCode}</span>
                   <span className="min-w-0 flex-1 truncate">
-                    {o.customerName} · {o.fulfilment} · {o.slotLabel}
+                    {o.customerName} · {t(o.fulfilment === "pickup" ? "Pickup" : "Delivery")} ·{" "}
+                    {o.slotLabel}
                   </span>
                   <span className="tabular-nums">{o.totalAmd.toLocaleString("ru-RU")} ֏</span>
                   <StatusBadge status={o.status} />
@@ -83,12 +92,12 @@ export default async function Dashboard({ searchParams }: { searchParams: Search
               </li>
             ))}
             {latest.length === 0 ? (
-              <li className="py-4 text-sm text-muted">No orders yet.</li>
+              <li className="py-4 text-sm text-muted">{t("No orders yet.")}</li>
             ) : null}
           </ul>
         </Card>
         <Card>
-          <h2 className="mb-3 text-xl">Notifications sent</h2>
+          <h2 className="mb-3 text-xl">{t("Notifications sent")}</h2>
           <ul className="space-y-2 text-sm">
             {notes.map((n) => (
               <li key={n.id} className="flex justify-between gap-3">
@@ -98,15 +107,16 @@ export default async function Dashboard({ searchParams }: { searchParams: Search
                 </span>
               </li>
             ))}
-            {notes.length === 0 ? <li className="text-muted">Nothing sent yet.</li> : null}
+            {notes.length === 0 ? <li className="text-muted">{t("Nothing sent yet.")}</li> : null}
           </ul>
           {user.role === "admin" ? (
             <form action={runRetentionAction} className="mt-6 border-t border-line pt-4">
               <p className="mb-2 text-sm text-muted">
-                Privacy clean-up runs every night. It removes names, phones and addresses from old
-                orders.
+                {t(
+                  "Privacy clean-up runs every night. It removes names, phones and addresses from old orders.",
+                )}
               </p>
-              <SubmitButton variant="secondary">Run privacy clean-up now</SubmitButton>
+              <SubmitButton variant="secondary">{t("Run privacy clean-up now")}</SubmitButton>
             </form>
           ) : null}
         </Card>

@@ -110,7 +110,7 @@ export async function login(email: string, password: string, ip: string): Promis
     return { ok: false, error: "Too many attempts from this network. Try again in 15 minutes." };
   }
   const [user] = await db.select().from(users).where(eq(users.email, email)).limit(1);
-  const generic = { ok: false as const, error: "Wrong email or password." };
+  const generic = { ok: false as const, error: "Wrong login or password." };
 
   if (!user || !user.isActive) {
     await bcrypt.compare(password, DUMMY_HASH);
@@ -119,7 +119,7 @@ export async function login(email: string, password: string, ip: string): Promis
   if (user.lockedUntil && user.lockedUntil > new Date()) {
     return {
       ok: false,
-      error: `Account locked after too many attempts. Try again after ${LOCK_MINUTES} minutes.`,
+      error: "Account locked after too many attempts. Try again in 15 minutes.",
     };
   }
   const valid = await bcrypt.compare(password, user.passwordHash);

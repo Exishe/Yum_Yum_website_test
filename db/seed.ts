@@ -94,7 +94,7 @@ export async function seedDatabase(
 
   // First admin. Credentials come from the environment; otherwise a random
   // password is generated and printed once.
-  const email = (process.env.SEED_ADMIN_EMAIL ?? "admin@yumyum.local").toLowerCase();
+  const email = (process.env.SEED_ADMIN_EMAIL ?? "director").toLowerCase();
   const existing = await db.select().from(s.users).where(eq(s.users.email, email));
   if (existing.length === 0) {
     const password =

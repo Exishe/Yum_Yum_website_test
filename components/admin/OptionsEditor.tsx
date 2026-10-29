@@ -2,6 +2,7 @@
 
 import { Plus, Trash } from "@phosphor-icons/react/dist/ssr";
 import { useState } from "react";
+import { useAdminT } from "./AdminLang";
 
 type Opt = {
   kind: "size" | "syrup" | "filling" | "text" | "extra";
@@ -24,12 +25,15 @@ const cell =
 
 /** Edits product options in place and sends them as JSON in a hidden field. */
 export function OptionsEditor({ initial }: { initial: Opt[] }) {
+  const t = useAdminT();
   const [opts, setOpts] = useState<Opt[]>(initial);
   const update = (i: number, patch: Partial<Opt>) =>
     setOpts((o) => o.map((x, k) => (k === i ? { ...x, ...patch } : x)));
   return (
     <fieldset className="rounded-xl border border-line p-3">
-      <legend className="px-1 text-sm font-semibold">Options (sizes, syrups, text in glaze)</legend>
+      <legend className="px-1 text-sm font-semibold">
+        {t("Options (sizes, syrups, text in glaze)")}
+      </legend>
       <input type="hidden" name="options" value={JSON.stringify(opts)} />
       <div className="space-y-3">
         {opts.map((o, i) => (
@@ -38,21 +42,21 @@ export function OptionsEditor({ initial }: { initial: Opt[] }) {
             className="grid grid-cols-2 gap-2 rounded-xl bg-blush p-2 md:grid-cols-[110px_1fr_1fr_1fr_100px_80px_auto] md:items-center"
           >
             <select
-              aria-label="Type"
+              aria-label={t("Type")}
               value={o.kind}
               onChange={(e) => update(i, { kind: e.target.value as Opt["kind"] })}
               className={cell}
             >
               {KINDS.map(([k, l]) => (
                 <option key={k} value={k}>
-                  {l}
+                  {t(l)}
                 </option>
               ))}
             </select>
             {(["hy", "ru", "en"] as const).map((l) => (
               <input
                 key={l}
-                aria-label={`Name ${l}`}
+                aria-label={t("Name ({lang})", { lang: l.toUpperCase() })}
                 placeholder={l.toUpperCase()}
                 value={o.name[l]}
                 lang={l}
@@ -62,11 +66,11 @@ export function OptionsEditor({ initial }: { initial: Opt[] }) {
             ))}
             {o.kind === "text" ? (
               <input
-                aria-label="Max characters"
+                aria-label={t("Max characters")}
                 type="number"
                 min={1}
                 max={200}
-                placeholder="max chars"
+                placeholder={t("max chars")}
                 value={o.maxLength ?? ""}
                 onChange={(e) =>
                   update(i, { maxLength: e.target.value ? Number(e.target.value) : null })
@@ -75,7 +79,7 @@ export function OptionsEditor({ initial }: { initial: Opt[] }) {
               />
             ) : (
               <input
-                aria-label="Extra price, dram"
+                aria-label={t("Extra price, dram")}
                 type="number"
                 placeholder="+ ֏"
                 value={o.priceDeltaAmd}
@@ -90,11 +94,11 @@ export function OptionsEditor({ initial }: { initial: Opt[] }) {
                 onChange={(e) => update(i, { isDefault: e.target.checked })}
                 className="accent-magenta"
               />{" "}
-              default
+              {t("default")}
             </label>
             <button
               type="button"
-              aria-label="Remove option"
+              aria-label={t("Remove option")}
               onClick={() => setOpts((x) => x.filter((_, k) => k !== i))}
               className="grid size-10 place-items-center rounded-full hover:bg-magenta-soft"
             >
@@ -119,7 +123,7 @@ export function OptionsEditor({ initial }: { initial: Opt[] }) {
         }
         className="mt-3 inline-flex h-10 items-center gap-1 rounded-full bg-white px-4 text-sm font-semibold ring-2 ring-plum/15"
       >
-        <Plus size={14} /> Add option
+        <Plus size={14} /> {t("Add option")}
       </button>
     </fieldset>
   );

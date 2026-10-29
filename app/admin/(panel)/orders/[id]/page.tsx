@@ -22,6 +22,8 @@ import {
   shops,
   users,
 } from "@/db/schema";
+import { adminLocale } from "@/lib/admin-i18n";
+import { adminT } from "@/lib/admin-lang";
 import { requireUser } from "@/lib/auth";
 import { customerHistory } from "@/lib/blocklist";
 import { districts } from "@/lib/districts";
@@ -35,7 +37,9 @@ import {
   updateOrderStatusAction,
 } from "../../../actions";
 
-export const metadata = { title: "Order" };
+export async function generateMetadata() {
+  return { title: (await adminT())("Order") };
+}
 
 export default async function OrderDetail({
   params,
@@ -47,6 +51,7 @@ export default async function OrderDetail({
   await requireUser();
   const { id } = await params;
   const q = await searchParams;
+  const t = await adminT();
   if (!/^[0-9a-f-]{36}$/.test(id)) notFound();
   const [order] = await db.select().from(orders).where(eq(orders.id, id)).limit(1);
   if (!order) notFound();
@@ -68,7 +73,7 @@ export default async function OrderDetail({
     customerHistory(order.phone, order.id),
     db.select().from(blockedPhones).where(eq(blockedPhones.phone, order.phone)).limit(1),
   ]);
-  const fmt = new Intl.DateTimeFormat("en-GB", {
+  const fmt = new Intl.DateTimeFormat(adminLocale(t.lang), {
     timeZone: "Asia/Yerevan",
     weekday: "short",
     day: "numeric",
@@ -81,7 +86,7 @@ export default async function OrderDetail({
 
   return (
     <>
-      <PageHeader title={`Order #${order.shortCode}`}>
+      <PageHeader title={t("Order #{code}", { code: order.shortCode })}>
         <StatusBadge status={order.status} />
         <PrintButton />
         <Link
@@ -89,7 +94,7 @@ export default async function OrderDetail({
           target="_blank"
           className="inline-flex h-11 items-center rounded-full border-2 border-plum/15 bg-white px-5 text-sm font-semibold"
         >
-          Customer view ↗
+          {t("Customer view ↗")}
         </Link>
       </PageHeader>
       <Flash ok={sp(q.ok)} error={sp(q.error)} />
@@ -98,11 +103,11 @@ export default async function OrderDetail({
           <Card>
             <dl className="grid grid-cols-1 gap-x-6 gap-y-3 text-sm sm:grid-cols-2">
               <div>
-                <dt className="text-muted">Customer</dt>
+                <dt className="text-muted">{t("Customer")}</dt>
                 <dd className="text-lg font-semibold">{order.customerName}</dd>
               </div>
               <div>
-                <dt className="text-muted">Phone</dt>
+                <dt className="text-muted">{t("Phone")}</dt>
                 <dd className="text-lg font-semibold">
                   {order.phone.startsWith("+") ? (
                     <a href={`tel:${order.phone}`}>{formatPhone(order.phone)}</a>
@@ -113,44 +118,44 @@ export default async function OrderDetail({
               </div>
               <div>
                 <dt className="text-muted">
-                  {order.fulfilment === "pickup" ? "Pickup at" : "Deliver to"}
+                  {order.fulfilment === "pickup" ? t("Pickup at") : t("Deliver to")}
                 </dt>
                 <dd className="font-semibold">
                   {order.fulfilment === "pickup"
-                    ? (shop?.name.en ?? "—")
+                    ? ((shop?.name[t.lang] || shop?.name.en) ?? "—")
                     : a
-                      ? `${a.street} ${a.building}${a.entrance ? `, entrance ${a.entrance}` : ""}${a.floor ? `, floor ${a.floor}` : ""}${a.apartment ? `, apt ${a.apartment}` : ""} · ${district?.name.en ?? order.district}`
-                      : "— (anonymised)"}
+                      ? `${a.street} ${a.building}${a.entrance ? `, ${t("entrance")} ${a.entrance}` : ""}${a.floor ? `, ${t("floor")} ${a.floor}` : ""}${a.apartment ? `, ${t("apt")} ${a.apartment}` : ""} · ${(district?.name[t.lang] || district?.name.en) ?? order.district}`
+                      : t("— (anonymised)")}
                 </dd>
               </div>
               <div>
-                <dt className="text-muted">When</dt>
+                <dt className="text-muted">{t("When")}</dt>
                 <dd className="font-semibold">
                   {fmt.format(order.scheduledFor).split(",").slice(0, 1)} · {order.slotLabel}
                 </dd>
               </div>
               <div>
-                <dt className="text-muted">Payment</dt>
+                <dt className="text-muted">{t("Payment")}</dt>
                 <dd className="font-semibold">
-                  {order.paymentMethod === "cash" ? "Cash" : "Card on delivery / pickup"}
+                  {order.paymentMethod === "cash" ? t("Cash") : t("Card on delivery / pickup")}
                 </dd>
               </div>
               <div>
-                <dt className="text-muted">Placed</dt>
+                <dt className="text-muted">{t("Placed")}</dt>
                 <dd>
-                  {fmt.format(order.createdAt)} · site language {order.locale.toUpperCase()}
+                  {fmt.format(order.createdAt)} · {t("site language")} {order.locale.toUpperCase()}
                 </dd>
               </div>
               {order.comment ? (
                 <div className="sm:col-span-2">
-                  <dt className="text-muted">Customer comment</dt>
+                  <dt className="text-muted">{t("Customer comment")}</dt>
                   <dd className="rounded-xl bg-sun-soft p-3">{order.comment}</dd>
                 </div>
               ) : null}
             </dl>
           </Card>
           <Card>
-            <h2 className="mb-2 text-xl">Items</h2>
+            <h2 className="mb-2 text-xl">{t("Items")}</h2>
             <table className="w-full text-sm">
               <tbody className="divide-y divide-line">
                 {items.map((i) => (
@@ -167,12 +172,12 @@ export default async function OrderDetail({
                       ) : null}
                       {i.details?.messages?.length ? (
                         <span className="block font-semibold text-magenta-ink">
-                          Write: «{i.details.messages.join(" / ")}»
+                          {t("Write")}: «{i.details.messages.join(" / ")}»
                         </span>
                       ) : null}
                       {i.details?.contents?.length ? (
                         <span className="block text-muted">
-                          Box: {i.details.contents.map((c) => c.name).join(", ")}
+                          {t("Box")}: {i.details.contents.map((c) => c.name).join(", ")}
                         </span>
                       ) : null}
                     </td>
@@ -185,17 +190,17 @@ export default async function OrderDetail({
             </table>
             <dl className="mt-3 space-y-1 border-t border-line pt-3 text-sm">
               <div className="flex justify-between">
-                <dt>Subtotal</dt>
+                <dt>{t("Subtotal")}</dt>
                 <dd>{order.subtotalAmd.toLocaleString("ru-RU")} ֏</dd>
               </div>
               {order.fulfilment === "delivery" ? (
                 <div className="flex justify-between">
-                  <dt>Delivery</dt>
+                  <dt>{t("Delivery")}</dt>
                   <dd>{order.deliveryFeeAmd.toLocaleString("ru-RU")} ֏</dd>
                 </div>
               ) : null}
               <div className="flex justify-between text-lg font-bold">
-                <dt>Total</dt>
+                <dt>{t("Total")}</dt>
                 <dd>{order.totalAmd.toLocaleString("ru-RU")} ֏</dd>
               </div>
             </dl>
@@ -204,23 +209,27 @@ export default async function OrderDetail({
         <div className="flex flex-col gap-5 print:hidden">
           {order.status === "new" ? (
             <Card className="border-2 border-magenta">
-              <h2 className="text-xl">Call the customer before preparing</h2>
+              <h2 className="text-xl">{t("Call the customer before preparing")}</h2>
               <p className="mt-1 text-sm text-muted">
-                Cash on delivery means anyone can place an order. Confirm it by phone first.
+                {t("Cash on delivery means anyone can place an order. Confirm it by phone first.")}
               </p>
               <a
                 href={`tel:${order.phone}`}
                 className="mt-4 inline-flex h-12 items-center rounded-full bg-plum px-6 text-lg font-semibold text-white"
               >
-                Call {formatPhone(order.phone)}
+                {t("Call {phone}", { phone: formatPhone(order.phone) })}
               </a>
               <p className="mt-3 text-sm">
                 {past.total === 0 ? (
-                  <strong>First order from this number.</strong>
+                  <strong>{t("First order from this number.")}</strong>
                 ) : (
                   <>
-                    Earlier orders from this number: <strong>{past.total}</strong> ({past.done}{" "}
-                    done, {past.cancelled} cancelled).
+                    {t("Earlier orders from this number:")} <strong>{past.total}</strong> (
+                    {t("{done} done, {cancelled} cancelled", {
+                      done: past.done,
+                      cancelled: past.cancelled,
+                    })}
+                    ).
                   </>
                 )}
               </p>
@@ -228,12 +237,12 @@ export default async function OrderDetail({
                 <form action={callOutcomeAction}>
                   <input type="hidden" name="orderId" value={order.id} />
                   <input type="hidden" name="outcome" value="confirmed" />
-                  <SubmitButton>Confirmed by phone</SubmitButton>
+                  <SubmitButton>{t("Confirmed by phone")}</SubmitButton>
                 </form>
                 <form action={callOutcomeAction}>
                   <input type="hidden" name="orderId" value={order.id} />
                   <input type="hidden" name="outcome" value="no_answer" />
-                  <SubmitButton variant="secondary">No answer</SubmitButton>
+                  <SubmitButton variant="secondary">{t("No answer")}</SubmitButton>
                 </form>
               </div>
               <form
@@ -242,23 +251,17 @@ export default async function OrderDetail({
               >
                 <input type="hidden" name="orderId" value={order.id} />
                 <input type="hidden" name="outcome" value="fake" />
-                <label className="flex items-center gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    name="block"
-                    defaultChecked
-                    className="size-4 accent-magenta"
-                  />
-                  Also block this number
-                </label>
-                <SubmitButton variant="danger" confirm="Cancel this order as fake?">
-                  Fake order: cancel
+                <SubmitButton variant="danger" confirm={t("Cancel this order as fake?")}>
+                  {t("Fake order: cancel")}
                 </SubmitButton>
+                <span className="text-xs text-muted">
+                  {t("The number is not blocked. To block it, use “Number” below.")}
+                </span>
               </form>
             </Card>
           ) : null}
           <Card>
-            <h2 className="mb-3 text-xl">Change status</h2>
+            <h2 className="mb-3 text-xl">{t("Change status")}</h2>
             <form action={updateOrderStatusAction} className="flex flex-col gap-3">
               <input type="hidden" name="orderId" value={order.id} />
               <div className="flex flex-wrap gap-2">
@@ -280,17 +283,17 @@ export default async function OrderDetail({
                         defaultChecked={s === order.status}
                         className="accent-magenta"
                       />
-                      {statusLabel[s]}
+                      {t(statusLabel[s] ?? s)}
                     </label>
                   ))}
               </div>
               <input
                 name="note"
-                placeholder="Note for the history (optional)"
+                placeholder={t("Note for the history (optional)")}
                 className={inputCls}
                 maxLength={300}
               />
-              <SubmitButton>Update status</SubmitButton>
+              <SubmitButton>{t("Update status")}</SubmitButton>
             </form>
             <ol className="mt-5 space-y-2 border-t border-line pt-4 text-sm">
               {history.map(({ h, by }) => (
@@ -300,24 +303,25 @@ export default async function OrderDetail({
                     {h.note ? <span className="text-muted">· {h.note}</span> : null}
                   </span>
                   <span className="text-muted">
-                    {fmt.format(h.createdAt)} · {by ?? "website"}
+                    {fmt.format(h.createdAt)} · {by ?? t("website")}
                   </span>
                 </li>
               ))}
             </ol>
           </Card>
           <Card>
-            <h2 className="mb-3 text-xl">Number</h2>
+            <h2 className="mb-3 text-xl">{t("Number")}</h2>
             {blocked ? (
               <form action={unblockPhoneAction} className="flex flex-col gap-3">
                 <input type="hidden" name="phone" value={order.phone} />
                 <input type="hidden" name="returnTo" value={`/admin/orders/${order.id}`} />
                 <p className="text-sm">
-                  <strong className="text-magenta-ink">Blocked</strong> since{" "}
-                  {fmt.format(blocked.createdAt)}
-                  {blocked.reason ? ` · ${blocked.reason}` : ""}. This number cannot order online.
+                  <strong className="text-magenta-ink">{t("Blocked")}</strong>{" "}
+                  {t("since {date}", { date: fmt.format(blocked.createdAt) })}
+                  {blocked.reason ? ` · ${blocked.reason}` : ""}.{" "}
+                  {t("This number cannot order online.")}
                 </p>
-                <SubmitButton variant="secondary">Unblock</SubmitButton>
+                <SubmitButton variant="secondary">{t("Unblock")}</SubmitButton>
               </form>
             ) : (
               <form action={blockPhoneAction} className="flex flex-col gap-3">
@@ -325,21 +329,21 @@ export default async function OrderDetail({
                 <input type="hidden" name="returnTo" value={`/admin/orders/${order.id}`} />
                 <input
                   name="reason"
-                  placeholder="Reason (optional), e.g. prank order"
+                  placeholder={t("Reason (optional), e.g. prank order")}
                   className={inputCls}
                   maxLength={200}
                 />
                 <SubmitButton
-                  variant="danger"
-                  confirm="Block this number? It will no longer be able to order online."
+                  variant="secondary"
+                  confirm={t("Block this number? It will no longer be able to order online.")}
                 >
-                  Block this number
+                  {t("Block this number")}
                 </SubmitButton>
               </form>
             )}
           </Card>
           <Card>
-            <h2 className="mb-3 text-xl">Staff note</h2>
+            <h2 className="mb-3 text-xl">{t("Staff note")}</h2>
             <form action={updateOrderNoteAction} className="flex flex-col gap-3">
               <input type="hidden" name="orderId" value={order.id} />
               <textarea
@@ -349,7 +353,7 @@ export default async function OrderDetail({
                 maxLength={1000}
                 className={`${inputCls} h-auto py-2`}
               />
-              <SubmitButton>Save note</SubmitButton>
+              <SubmitButton>{t("Save note")}</SubmitButton>
             </form>
           </Card>
         </div>

@@ -16,7 +16,7 @@ async function main() {
   await seedDatabase(conn, { demoPassword: DEMO_PASSWORD });
   await conn.close();
   const pw = process.env.SEED_ADMIN_PASSWORD || DEMO_PASSWORD;
-  const email = process.env.SEED_ADMIN_EMAIL ?? "admin@yumyum.local";
+  const email = process.env.SEED_ADMIN_EMAIL ?? "director";
   console.log(`
   ┌──────────────────────────────────────────────────────────┐
   │  YUM-YUM Donuts is starting…                              │

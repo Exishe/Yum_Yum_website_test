@@ -1,24 +1,28 @@
 "use client";
 
 import { useActionState } from "react";
+import { useAdminT } from "@/components/admin/AdminLang";
 import { loginAction } from "../actions";
 
 export function LoginForm() {
+  const t = useAdminT();
   const [state, action, pending] = useActionState(loginAction, undefined);
   return (
     <form action={action} className="mt-6 flex flex-col gap-4">
       <label className="text-sm font-semibold">
-        Email
+        {t("Login")}
         <input
-          name="email"
-          type="email"
+          name="login"
+          type="text"
           autoComplete="username"
+          autoCapitalize="none"
+          spellCheck={false}
           required
           className="mt-1 h-12 w-full rounded-xl border-2 border-line px-3 focus:border-plum focus:outline-none"
         />
       </label>
       <label className="text-sm font-semibold">
-        Password
+        {t("Password")}
         <input
           name="password"
           type="password"
@@ -29,7 +33,7 @@ export function LoginForm() {
       </label>
       {state?.error ? (
         <p role="alert" className="rounded-xl bg-magenta-soft px-3 py-2 text-sm">
-          {state.error}
+          {t(state.error)}
         </p>
       ) : null}
       <button
@@ -37,7 +41,7 @@ export function LoginForm() {
         disabled={pending}
         className="h-12 rounded-full bg-plum font-semibold text-white disabled:opacity-60"
       >
-        {pending ? "Signing in…" : "Sign in"}
+        {pending ? t("Signing in…") : t("Sign in")}
       </button>
     </form>
   );
