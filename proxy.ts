@@ -2,6 +2,7 @@ import createIntlMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
 import { routing } from "./i18n/routing";
 import { hiddenFromSearch } from "@/lib/demo-config";
+import { PREVIEW_BOTS, SITE_GATE_COOKIE, siteGateToken, sitePassword } from "@/lib/site-gate";
 
 const intl = createIntlMiddleware(routing);
 
@@ -53,19 +54,38 @@ export default function proxy(request: NextRequest) {
 
   // The admin panel is not localised and does its own auth checks.
   const isAdmin = pathname === "/admin" || pathname.startsWith("/admin/");
+  const isUnlock = pathname === "/unlock";
+
+  // Private preview: everything but the admin asks for the site password first.
+  if (
+    sitePassword() &&
+    !isAdmin &&
+    !isUnlock &&
+    request.cookies.get(SITE_GATE_COOKIE)?.value !== siteGateToken() &&
+    !PREVIEW_BOTS.test(request.headers.get("user-agent") ?? "")
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/unlock";
+    url.search = `?next=${encodeURIComponent(pathname + request.nextUrl.search)}`;
+    const res = NextResponse.redirect(url);
+    res.headers.set("Cache-Control", "no-store");
+    res.headers.set("X-Robots-Tag", "noindex, nofollow");
+    return res;
+  }
 
   request.headers.set("x-nonce", nonce);
   request.headers.set("Content-Security-Policy", csp);
   request.headers.set("x-pathname", pathname);
 
-  const response = isAdmin
-    ? NextResponse.next({ request: { headers: request.headers } })
-    : intl(request);
+  const response =
+    isAdmin || isUnlock
+      ? NextResponse.next({ request: { headers: request.headers } })
+      : intl(request);
 
   response.headers.set("Content-Security-Policy", csp);
   // The concept demo and preview links (pnpm share) must never end up in search results.
   if (hiddenFromSearch) response.headers.set("X-Robots-Tag", "noindex, nofollow");
-  if (isAdmin) {
+  if (isAdmin || isUnlock) {
     response.headers.set("X-Robots-Tag", "noindex, nofollow");
     response.headers.set("Cache-Control", "no-store");
   }
