@@ -56,7 +56,7 @@ export function CartDrawer({ defaultOpen = false }: { defaultOpen?: boolean }) {
               <Dialog.Close asChild>
                 <Link
                   href="/menu"
-                  className="inline-flex h-12 items-center gap-2 rounded-full bg-plum px-6 font-semibold text-white"
+                  className="inline-flex h-12 items-center gap-2 rounded-full bg-plum px-6 font-semibold whitespace-nowrap text-white"
                 >
                   {t("browse")} <ArrowRight size={18} weight="bold" aria-hidden />
                 </Link>

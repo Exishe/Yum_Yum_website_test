@@ -138,7 +138,7 @@ export function Hero({
           </p>
           <h1
             id="hero-title"
-            className="hero-title mt-6 text-[clamp(2.4rem,6.4vw,4.6rem)] leading-[0.92]"
+            className="hero-title mt-6 text-[clamp(2.21rem,5.44vw,3.91rem)] leading-[0.92]"
           >
             <span className="block">{t("titleA")}</span>
             <span className="block text-magenta">{t("titleB")}</span>
@@ -188,7 +188,7 @@ export function Hero({
           <div className="mt-7 flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:items-center">
             <Link
               href={choice.href}
-              className="group inline-flex h-14 items-center justify-center gap-3 rounded-full bg-plum px-7 font-semibold text-white transition-transform hover:-translate-y-0.5"
+              className="group inline-flex h-12 items-center justify-center gap-3 rounded-full bg-plum px-6 font-semibold whitespace-nowrap text-white transition-transform hover:-translate-y-0.5"
             >
               <span key={active} className="animate-rise">
                 {t(`cta.${active}`)}

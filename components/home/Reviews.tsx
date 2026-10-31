@@ -37,7 +37,7 @@ export function Reviews({ reviews, ratings }: { reviews: PublicReview[]; ratings
         ) : null}
         <blockquote
           lang={r.quoteLocale}
-          className="mt-4 font-display text-[clamp(1.6rem,3.6vw,2.59rem)] leading-tight"
+          className="mt-4 font-display text-[clamp(1.47rem,3.06vw,2.2rem)] leading-tight"
         >
           “{r.quote}”
         </blockquote>

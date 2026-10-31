@@ -18,7 +18,7 @@ export async function StorySection({
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-[0.9fr_1.1fr_0.6fr]">
         <div className="lg:pr-6">
           <p className="font-hand text-xl text-magenta-ink">{t("eyebrow")}</p>
-          <h2 id="story-title" className="mt-1 text-[clamp(1.92rem,2.59vw,2.45rem)] leading-[1.02]">
+          <h2 id="story-title" className="mt-1 text-[clamp(1.77rem,2.2vw,2.08rem)] leading-[1.02]">
             {t("title")}
           </h2>
           <p className="mt-5 text-plum/85">{t("body")}</p>

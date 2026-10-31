@@ -80,10 +80,10 @@ export default async function OrderPage({ params, searchParams }: Props) {
             {t("thanks", { name: order.anonymizedAt ? "" : order.customerName })}
           </p>
         ) : null}
-        <h1 className="text-[clamp(2.08rem,5.04vw,3.17rem)] leading-none">
+        <h1 className="text-[clamp(1.91rem,4.28vw,2.69rem)] leading-none">
           {t("number", { code })}
         </h1>
-        {isNew ? <p className="mt-3 text-lg">{t("received")}</p> : null}
+        {isNew ? <p className="mt-3">{t("received")}</p> : null}
         <p className="mt-1 text-sm text-muted">{t("track")}</p>
 
         <section
@@ -197,14 +197,14 @@ export default async function OrderPage({ params, searchParams }: Props) {
               href={wa}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#1f8f4e] px-6 font-semibold text-white"
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#1f8f4e] px-6 font-semibold whitespace-nowrap text-white"
             >
               <WhatsappLogo size={20} aria-hidden /> {t("whatsapp")}
             </a>
           ) : null}
           <a
             href={`tel:${phone}`}
-            className="inline-flex h-12 items-center justify-center rounded-full border-2 border-plum px-6 font-semibold"
+            className="inline-flex h-12 items-center justify-center rounded-full border-2 border-plum px-6 font-semibold whitespace-nowrap"
           >
             {t("call", { phone: formatPhone(phone) })}
           </a>

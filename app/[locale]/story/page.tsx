@@ -31,10 +31,10 @@ export default async function StoryPage({ params }: Props) {
     <article className="dot-grid">
       <header className="mx-auto max-w-[1440px] px-4 pt-12 sm:px-6 lg:px-8 lg:pt-16">
         <p className="font-hand text-xl text-magenta-ink">{t("eyebrow")}</p>
-        <h1 className="max-w-4xl text-[clamp(2.08rem,4.68vw,3.78rem)] leading-[0.95]">
+        <h1 className="max-w-4xl text-[clamp(1.91rem,3.98vw,3.21rem)] leading-[0.95]">
           {t("title")}
         </h1>
-        <p className="mt-6 max-w-2xl text-xl leading-relaxed">{t("page.lead")}</p>
+        <p className="mt-6 max-w-2xl text-lg leading-relaxed">{t("page.lead")}</p>
       </header>
       <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1fr_1fr] lg:px-8">
         <Photo
@@ -44,7 +44,7 @@ export default async function StoryPage({ params }: Props) {
           sizes="(min-width: 1024px) 50vw, 100vw"
           className="aspect-square w-full rounded-[var(--radius-xl2)] object-cover"
         />
-        <div className="flex flex-col gap-5 text-lg leading-relaxed text-plum/90 lg:pt-6">
+        <div className="flex flex-col gap-5 leading-relaxed text-plum/90 lg:pt-6">
           <p>{t("page.p1")}</p>
           <p>{t("page.p2")}</p>
           <p className="rounded-2xl bg-sun-soft p-5 font-hand text-xl leading-snug text-plum">

@@ -42,12 +42,12 @@ export async function GiftsSection({
         <path d="M0 40 C 240 0, 480 0, 720 26 S 1200 60, 1440 18 V60 H0Z" />
       </svg>
       <div className="mx-auto grid max-w-[1440px] gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1fr_1.1fr] lg:px-8 lg:py-20">
-        <div>
+        <div className="min-w-0">
           <p className="font-hand text-xl text-magenta-ink">{t("eyebrow")}</p>
-          <h2 id="gifts-title" className="mt-1 text-[clamp(2.24rem,4.68vw,3.6rem)] leading-[0.95]">
+          <h2 id="gifts-title" className="mt-1 text-[clamp(2.06rem,3.98vw,3.06rem)] leading-[0.95]">
             {t("title")}
           </h2>
-          <p className="mt-5 max-w-lg text-lg">
+          <p className="mt-5 max-w-lg">
             {t("lead")} <DemoNote />
           </p>
           <ul className="mt-7 flex max-w-lg flex-col gap-3">
@@ -64,16 +64,16 @@ export async function GiftsSection({
               </li>
             ))}
           </ul>
-          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Link
               href="/gifts"
-              className="inline-flex h-14 items-center justify-center gap-2 rounded-full bg-plum px-7 font-semibold text-white transition-transform hover:-translate-y-0.5"
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-plum px-5 text-sm font-semibold whitespace-nowrap text-white transition-transform hover:-translate-y-0.5 sm:px-6 sm:text-base"
             >
               {t("orderOnline")} <ArrowRight size={18} weight="bold" aria-hidden />
             </Link>
             <a
               href={`tel:${phone}`}
-              className="inline-flex h-14 items-center justify-center rounded-full border-2 border-plum px-7 font-semibold transition-colors hover:bg-plum hover:text-white"
+              className="inline-flex h-12 items-center justify-center rounded-full border-2 border-plum px-5 text-sm font-semibold whitespace-nowrap transition-colors hover:bg-plum hover:text-white sm:px-6 sm:text-base"
             >
               {t("callToOrder", { phone: phoneDisplay })}
             </a>

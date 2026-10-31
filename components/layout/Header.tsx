@@ -206,7 +206,7 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
                         i === active ? "text-sun" : "text-white hover:text-sun",
                       )}
                     >
-                      <span className="font-display text-[clamp(1.6rem,2.45vw,2.34rem)] leading-none">
+                      <span className="font-display text-[clamp(1.47rem,2.08vw,1.99rem)] leading-none">
                         {c.name}
                         <sup className="ml-2 align-super font-sans text-sm font-semibold text-white/60">
                           {t("items", { count: c.count })}

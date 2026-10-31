@@ -57,7 +57,7 @@ export default async function ShopsPage({ params }: Props) {
     <div className="mx-auto max-w-[1440px] px-4 pt-8 pb-20 sm:px-6 lg:px-8 lg:pt-12">
       <JsonLd data={organizationJsonLd(shops, settings, locale)} />
       <ShopPicker heading="h1" shops={shops.map((s) => ({ ...s, img: img(s.image) }))} />
-      <p className="mt-10 max-w-2xl text-lg">{t("pageLead")}</p>
+      <p className="mt-10 max-w-2xl">{t("pageLead")}</p>
       <ul className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {shops.map((s) => (
           <li key={s.slug} className="rounded-[var(--radius-card)] bg-white p-5 shadow-card">
