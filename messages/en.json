@@ -5,8 +5,8 @@
     "description": "Yerevan's donut and coffee shop since 1997. Donuts, iced coffee, cakes and donut bouquets. Order for pickup or delivery.",
     "menuTitle": "Menu & prices",
     "menuDescription": "Donuts, iced drinks, coffee, cakes and gifts with prices in dram. Order for pickup or delivery in Yerevan.",
-    "giftsTitle": "Donut bouquets, boxes and name donuts",
-    "giftsDescription": "Donut bouquets, birthday stacks and boxes of 6 or 12. Names written in glaze by hand. Order a day ahead.",
+    "giftsTitle": "Donut bouquets, compositions and boxes",
+    "giftsDescription": "Donut bouquets, compositions and boxes of 6. Order a day ahead.",
     "storyTitle": "Our story",
     "storyDescription": "Since 1997, the pink-and-yellow donut shop that a few generations of Yerevan grew up with.",
     "shopsTitle": "Shops and opening hours",
@@ -94,13 +94,13 @@
       "glazed": "Something glazed",
       "cold": "Something cold",
       "gift": "A gift",
-      "cake": "Cake & coffee"
+      "cake": "Coffee & dessert"
     },
     "cta": {
       "glazed": "See all donuts",
       "cold": "See iced drinks",
       "gift": "Build a gift",
-      "cake": "See cakes & bakes"
+      "cake": "See desserts & bakes"
     },
     "todaysPick": "today’s pick",
     "addPick": "Add {name} to your order",
@@ -183,20 +183,15 @@
   "gifts": {
     "eyebrow": "flowers wilt. donuts get eaten.",
     "title": "Say it with donuts.",
-    "lead": "A bouquet wrapped in pink paper, a stack for a birthday, names and little messages written in glaze on top. Order a day ahead and tell us who it’s for.",
+    "lead": "A bouquet wrapped in pink paper, a bigger composition, or a box of your favourites. Order a day ahead and tell us who it’s for.",
     "bouquet": "Donut bouquet",
     "bouquetSub": "Donuts with your messages, wrapped in pink",
-    "stack": "Birthday stack",
-    "stackSub": "Donut tower with a “Happy Birthday” topper",
-    "nameDonut": "Name donuts",
-    "nameDonutSub": "Any name or word written in glaze",
     "from": "from {price}",
     "each": "{price} each",
     "callToOrder": "Call to order · {phone}",
     "orderOnline": "Order online",
     "bouquetAlt": "Donut bouquet with messages “have a nice day” and a name, wrapped in pink paper with a yellow ribbon",
-    "stackAlt": "Stack of yellow donuts with sprinkles under a gold “Happy Birthday” topper",
-    "pageLead": "Bouquets, birthday stacks, boxes and name donuts. Everything here is made by hand on the day, so please order at least one day ahead.",
+    "pageLead": "Bouquets, compositions and boxes. Everything here is made by hand on the day, so please order at least one day ahead.",
     "bouquetsTitle": "Bouquets and compositions",
     "box": {
       "title": "Pack your box",
@@ -222,7 +217,12 @@
       "hint": "Up to {max} letters. Latin, Armenian or Cyrillic.",
       "add": "Add name donut · {price}",
       "previewAlt": "Preview of a donut with the text “{text}” written in glaze"
-    }
+    },
+    "composition": "Donut composition",
+    "compositionSub": "A big gift for a celebration",
+    "boxTitle": "Box of donuts",
+    "boxSub": "Pick any six, we pack them",
+    "boxAlt": "Chocolate and sprinkle donuts, close up"
   },
   "story": {
     "eyebrow": "about us",
@@ -540,7 +540,7 @@
       },
       {
         "h": "Made-to-order items",
-        "p": "Bouquets, birthday stacks and name donuts are made for you, so we need at least one day’s notice. You can cancel free of charge until the day before."
+        "p": "Bouquets and compositions are made for you, so we need at least one day’s notice. You can cancel free of charge until the day before."
       },
       {
         "h": "Payment",

@@ -9,36 +9,27 @@ import { DemoNote } from "@/components/AskPrice";
 
 export async function GiftsSection({
   bouquet,
-  stack,
+  box,
   prices,
   phone,
   phoneDisplay,
 }: {
   bouquet: ImageInfo;
-  stack: ImageInfo;
-  /** null hides the price; "request" shows "price on request". */
-  prices: {
-    bouquet: number | null;
-    stack: number | "request" | null;
-    name: number | "request" | null;
-  };
+  box: ImageInfo;
+  /** Starting prices; a gift without a known price is left out. */
+  prices: { bouquet: number | null; composition: number | null; box: number | null };
   phone: string;
   phoneDisplay: string;
 }) {
   const t = await getTranslations("gifts");
-  const tc = await getTranslations("common");
   const locale = (await getLocale()) as Locale;
-  const price = (n: number | "request" | null, kind: "from" | "each") =>
-    n === "request"
-      ? tc("priceOnRequest")
-      : n == null
-        ? null
-        : t(kind, { price: formatAmd(n, locale) });
   const options = [
-    { title: t("bouquet"), sub: t("bouquetSub"), price: price(prices.bouquet, "from") },
-    { title: t("stack"), sub: t("stackSub"), price: price(prices.stack, "from") },
-    { title: t("nameDonut"), sub: t("nameDonutSub"), price: price(prices.name, "each") },
-  ];
+    { title: t("bouquet"), sub: t("bouquetSub"), price: prices.bouquet },
+    { title: t("composition"), sub: t("compositionSub"), price: prices.composition },
+    { title: t("boxTitle"), sub: t("boxSub"), price: prices.box },
+  ].flatMap((o) =>
+    o.price == null ? [] : [{ ...o, price: t("from", { price: formatAmd(o.price, locale) }) }],
+  );
 
   return (
     <section aria-labelledby="gifts-title" className="relative mt-16 bg-sun">
@@ -69,7 +60,7 @@ export async function GiftsSection({
                   <span className="block font-semibold">{o.title}</span>
                   <span className="block text-sm text-muted">{o.sub}</span>
                 </span>
-                {o.price ? <span className="ml-auto shrink-0 font-bold">{o.price}</span> : null}
+                <span className="ml-auto shrink-0 font-bold">{o.price}</span>
               </li>
             ))}
           </ul>
@@ -101,8 +92,8 @@ export async function GiftsSection({
           </div>
           <figure className="relative w-[70vw] max-w-[340px] shrink-0 rotate-3 rounded-[1.75rem] bg-white p-2.5 shadow-lift transition-transform duration-500 hover:rotate-0 lg:absolute lg:top-[110px] lg:right-[2%] lg:w-[42%] xl:right-[6%]">
             <Photo
-              image={stack}
-              alt={t("stackAlt")}
+              image={box}
+              alt={t("boxAlt")}
               sizes="(min-width: 1024px) 320px, 70vw"
               className="aspect-[5/6] w-full rounded-[1.3rem] object-cover"
             />

@@ -41,17 +41,24 @@ function Row({
   locale,
   showThumb,
   onOpen,
+  onPreview,
 }: {
   p: ClientProduct;
   locale: Locale;
   showThumb: boolean;
   onOpen: (p: ClientProduct) => void;
+  /** Shows this item in the big photo next to the list (home page). */
+  onPreview?: (p: ClientProduct) => void;
 }) {
   const t = useTranslations("catalog");
   const tc = useTranslations("common");
   const name = pick(p.name, locale);
   return (
-    <li className="flex items-center gap-3 border-b border-dashed border-line py-3 last:border-0 sm:gap-4">
+    <li
+      onMouseEnter={onPreview ? () => onPreview(p) : undefined}
+      onFocus={onPreview ? () => onPreview(p) : undefined}
+      className="flex items-center gap-3 border-b border-dashed border-line py-3 last:border-0 sm:gap-4"
+    >
       {showThumb ? (
         <span className="relative hidden size-14 shrink-0 overflow-hidden rounded-xl bg-magenta-soft sm:block">
           {p.img ? (
@@ -122,6 +129,7 @@ export function Catalog({
   const [query, setQuery] = useState("");
   const deferredQuery = useDeferredValue(query);
   const [open, setOpen] = useState<ClientProduct | null>(null);
+  const [preview, setPreview] = useState<ClientProduct | null>(null);
 
   // The hero's "What are you craving?" chips pre-select a tab here.
   useEffect(() => {
@@ -160,7 +168,13 @@ export function Catalog({
   const shown =
     mode === "home" ? items.filter((p) => p.id !== featured?.id).slice(0, HOME_LIMIT) : items;
 
+  // The item under the cursor takes over the big photo while it has one.
+  const spot = preview && shown.includes(preview) ? preview : featured;
+  // Product shots are small cut-outs on white: shown whole, at their own size.
+  const spotShot = preview && spot === preview ? preview.img : null;
+
   function selectTab(next: string) {
+    setPreview(null);
     setSlug(next);
     setFilter("all");
     setQuery("");
@@ -284,9 +298,21 @@ export function Catalog({
         aria-label={q ? t("search") : undefined}
         className={cn("mt-8 grid grid-cols-1 gap-5", mode === "home" && "lg:grid-cols-[0.8fr_1fr]")}
       >
-        {mode === "home" && featured ? (
+        {mode === "home" && featured && spot ? (
           <article className="relative min-h-[320px] overflow-hidden rounded-[var(--radius-xl2)] bg-magenta-soft shadow-card lg:min-h-0">
-            {featuredPhoto ? (
+            {spotShot ? (
+              <div className="absolute inset-0 grid place-items-center bg-white px-8 pt-6 pb-24">
+                <Image
+                  key={spotShot.src}
+                  src={spotShot.src}
+                  alt={pick(spot.name, locale)}
+                  width={spotShot.w}
+                  height={spotShot.h}
+                  sizes="400px"
+                  className="h-auto w-full max-w-[400px] animate-fade"
+                />
+              </div>
+            ) : featuredPhoto ? (
               <Image
                 key={featuredPhoto.src}
                 src={featuredPhoto.src}
@@ -302,22 +328,24 @@ export function Catalog({
             )}
             <div className="absolute inset-x-3 bottom-3 flex items-center justify-between gap-3 rounded-2xl bg-white p-3 pl-4 shadow-card">
               <div className="min-w-0">
-                <p className="font-hand text-lg leading-tight text-magenta-ink">{t("featured")}</p>
+                {spot === featured ? (
+                  <p className="font-hand text-lg leading-tight text-magenta-ink">
+                    {t("featured")}
+                  </p>
+                ) : null}
                 <h3 className="mt-0.5 line-clamp-2 font-sans text-lg leading-snug font-bold">
-                  {pick(featured.name, locale)}
+                  {pick(spot.name, locale)}
                 </h3>
               </div>
               <button
                 type="button"
-                disabled={!featured.isAvailable}
+                disabled={!spot.isAvailable}
                 onClick={(e) =>
-                  needsDetails(featured) ? setOpen(featured) : addSimple(featured, e.currentTarget)
+                  needsDetails(spot) ? setOpen(spot) : addSimple(spot, e.currentTarget)
                 }
                 className="inline-flex h-11 shrink-0 items-center gap-1 rounded-full bg-magenta px-4 text-sm font-bold text-white transition-transform hover:-translate-y-0.5 disabled:opacity-50"
               >
-                {featured.priceOnRequest
-                  ? tc("priceOnRequest")
-                  : t("addPrice", { price: formatAmd(featured.priceAmd, locale) })}
+                {t("addPrice", { price: formatAmd(spot.priceAmd, locale) })}
               </button>
             </div>
           </article>
@@ -326,6 +354,7 @@ export function Catalog({
         <div className="rounded-[var(--radius-xl2)] bg-white p-4 shadow-card sm:p-6">
           {shown.length ? (
             <ul
+              onMouseLeave={() => setPreview(null)}
               className={cn(mode === "full" && "lg:columns-2 lg:gap-10 [&>li]:break-inside-avoid")}
             >
               {shown.map((p) => (
@@ -335,6 +364,7 @@ export function Catalog({
                   locale={locale}
                   showThumb={mode === "full"}
                   onOpen={setOpen}
+                  onPreview={mode === "home" ? setPreview : undefined}
                 />
               ))}
             </ul>

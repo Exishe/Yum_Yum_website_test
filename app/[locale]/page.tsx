@@ -35,11 +35,18 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     const p = all.find((x) => x.slug === slug);
     return p ? toClientProduct(p) : null;
   };
-  const priceOf = (p: ReturnType<typeof bySlug>) =>
-    p ? (p.priceOnRequest ? ("request" as const) : p.priceAmd) : null;
   const minIn = (pred: (p: (typeof all)[number]) => boolean) => {
     const prices = all.filter(pred).map((p) => p.priceAmd);
     return prices.length ? Math.min(...prices) : null;
+  };
+
+  // A box of n: the box itself plus the n cheapest donuts.
+  const boxFrom = (n: number) => {
+    const box = all.find((p) => p.boxSize === n);
+    const donuts = (menu.find((c) => c.slug === "donuts")?.products ?? [])
+      .map((p) => p.priceAmd)
+      .sort((a, b) => a - b);
+    return box && donuts.length ? box.priceAmd + n * donuts[0]! : null;
   };
 
   const choices: HeroChoice[] = [
@@ -71,7 +78,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       key: "cake",
       image: imgOrThrow(`${T}/yumyum-22.jpg`),
       thumb: imgOrThrow(`${T}/yumyum-16.jpg`),
-      product: bySlug("blackberry-cake"),
+      product: bySlug("cappuccino"),
       tab: "bakes",
       href: { pathname: "/menu", query: { category: "bakes" } },
     },
@@ -106,11 +113,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       </section>
       <GiftsSection
         bouquet={imgOrThrow(`${T}/yumyum-26.jpg`)}
-        stack={imgOrThrow(`${T}/yumyum-21.jpg`)}
+        box={imgOrThrow(`${T}/yumyum-19.jpg`)}
         prices={{
           bouquet: minIn((p) => p.slug.startsWith("bouquet")),
-          stack: priceOf(bySlug("birthday-stack")),
-          name: priceOf(bySlug("name-donut")),
+          composition: minIn((p) => p.slug.startsWith("composition")),
+          box: boxFrom(6),
         }}
         phone={phone}
         phoneDisplay={phoneDisplay}

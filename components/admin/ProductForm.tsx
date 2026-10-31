@@ -115,7 +115,7 @@ export async function ProductForm({
             label={t("Price on request")}
             name="priceOnRequest"
             defaultChecked={product?.priceOnRequest ?? false}
-            hint={t("Hides the price; customers call or write instead of adding it to the basket")}
+            hint={t("The product is hidden from the website until you set its price")}
           />
         </div>
         <Field

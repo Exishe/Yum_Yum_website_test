@@ -69,7 +69,8 @@ export const getMenu = unstable_cache(
       db
         .select()
         .from(products)
-        .where(eq(products.isPublished, true))
+        // Items whose price is not known yet stay out of the public site.
+        .where(and(eq(products.isPublished, true), eq(products.priceOnRequest, false)))
         .orderBy(asc(products.sortOrder), asc(products.id)),
       db
         .select()
