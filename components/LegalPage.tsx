@@ -18,7 +18,7 @@ export async function LegalPage({
   const sections = t.raw(kind) as Array<{ h: string; p: string }>;
   return (
     <article className="mx-auto max-w-3xl px-4 py-14 sm:px-6">
-      <h1 className="text-[clamp(1.75rem,7.5vw,4rem)] leading-none">{title}</h1>
+      <h1 className="text-[clamp(1.4rem,5.4vw,2.88rem)] leading-none">{title}</h1>
       <p className="mt-3 text-sm text-muted">
         {t("updated", { date: formatDate(UPDATED, locale, { year: "numeric" }) })}
       </p>

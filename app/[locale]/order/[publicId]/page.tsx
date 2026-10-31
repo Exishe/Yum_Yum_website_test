@@ -80,7 +80,9 @@ export default async function OrderPage({ params, searchParams }: Props) {
             {t("thanks", { name: order.anonymizedAt ? "" : order.customerName })}
           </p>
         ) : null}
-        <h1 className="text-[clamp(2.6rem,7vw,4.4rem)] leading-none">{t("number", { code })}</h1>
+        <h1 className="text-[clamp(2.08rem,5.04vw,3.17rem)] leading-none">
+          {t("number", { code })}
+        </h1>
         {isNew ? <p className="mt-3 text-lg">{t("received")}</p> : null}
         <p className="mt-1 text-sm text-muted">{t("track")}</p>
 

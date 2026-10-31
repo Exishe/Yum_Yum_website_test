@@ -43,8 +43,8 @@ export async function GiftsSection({
       </svg>
       <div className="mx-auto grid max-w-[1440px] gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1fr_1.1fr] lg:px-8 lg:py-20">
         <div>
-          <p className="font-hand text-2xl text-magenta-ink">{t("eyebrow")}</p>
-          <h2 id="gifts-title" className="mt-1 text-[clamp(2.8rem,6.5vw,5rem)] leading-[0.95]">
+          <p className="font-hand text-xl text-magenta-ink">{t("eyebrow")}</p>
+          <h2 id="gifts-title" className="mt-1 text-[clamp(2.24rem,4.68vw,3.6rem)] leading-[0.95]">
             {t("title")}
           </h2>
           <p className="mt-5 max-w-lg text-lg">

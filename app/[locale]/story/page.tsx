@@ -30,8 +30,8 @@ export default async function StoryPage({ params }: Props) {
   return (
     <article className="dot-grid">
       <header className="mx-auto max-w-[1440px] px-4 pt-12 sm:px-6 lg:px-8 lg:pt-16">
-        <p className="font-hand text-2xl text-magenta-ink">{t("eyebrow")}</p>
-        <h1 className="max-w-4xl text-[clamp(2.6rem,6.5vw,5.25rem)] leading-[0.95]">
+        <p className="font-hand text-xl text-magenta-ink">{t("eyebrow")}</p>
+        <h1 className="max-w-4xl text-[clamp(2.08rem,4.68vw,3.78rem)] leading-[0.95]">
           {t("title")}
         </h1>
         <p className="mt-6 max-w-2xl text-xl leading-relaxed">{t("page.lead")}</p>
@@ -47,7 +47,7 @@ export default async function StoryPage({ params }: Props) {
         <div className="flex flex-col gap-5 text-lg leading-relaxed text-plum/90 lg:pt-6">
           <p>{t("page.p1")}</p>
           <p>{t("page.p2")}</p>
-          <p className="rounded-2xl bg-sun-soft p-5 font-hand text-2xl leading-snug text-plum">
+          <p className="rounded-2xl bg-sun-soft p-5 font-hand text-xl leading-snug text-plum">
             {t("page.p3")}
           </p>
           <p>{t("page.p4")}</p>
@@ -56,13 +56,13 @@ export default async function StoryPage({ params }: Props) {
       </div>
       <section aria-labelledby="timeline" className="bg-plum py-14 text-white">
         <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
-          <h2 id="timeline" className="text-[clamp(1.75rem,8vw,2.25rem)]">
+          <h2 id="timeline" className="text-[clamp(1.4rem,5.76vw,1.62rem)]">
             {t("page.timeline")}
           </h2>
           <ol className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-3">
             {timeline.map((e) => (
               <li key={e.year} className="border-t-2 border-sun pt-4">
-                <p className="font-display text-5xl text-sun">{e.year}</p>
+                <p className="font-display text-4xl text-sun">{e.year}</p>
                 <p className="mt-2 text-white/85">{e.text}</p>
               </li>
             ))}

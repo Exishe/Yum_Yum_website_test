@@ -39,8 +39,8 @@ export default async function GiftsPage({ params }: Props) {
       <section className="bg-sun">
         <div className="mx-auto grid max-w-[1440px] grid-cols-1 items-center gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8 lg:py-16">
           <div>
-            <p className="font-hand text-2xl text-magenta-ink">{t("eyebrow")}</p>
-            <h1 className="text-[clamp(2.6rem,6.5vw,5rem)] leading-[0.95]">{t("title")}</h1>
+            <p className="font-hand text-xl text-magenta-ink">{t("eyebrow")}</p>
+            <h1 className="text-[clamp(2.08rem,4.68vw,3.6rem)] leading-[0.95]">{t("title")}</h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed">
               {t("pageLead")} <DemoNote />
             </p>
@@ -62,7 +62,7 @@ export default async function GiftsPage({ params }: Props) {
         {nameDonut ? <NameDonut product={nameDonut} /> : null}
         {bouquets.length ? (
           <section aria-labelledby="bouquets-title">
-            <h2 id="bouquets-title" className="mb-6 text-[clamp(2rem,4.5vw,3.2rem)]">
+            <h2 id="bouquets-title" className="mb-6 text-[clamp(1.6rem,3.24vw,2.3rem)]">
               {t("bouquetsTitle")}
             </h2>
             <GiftGrid products={bouquets} />

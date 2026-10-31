@@ -18,7 +18,7 @@ export async function PhotoStrip({ photos }: { photos: ImageInfo[] }) {
         >
           <Image src={p.src} alt="" fill sizes="190px" className="object-cover" />
         </span>
-        <span className="font-display text-[clamp(1.6rem,3vw,2.4rem)] text-magenta" lang="en">
+        <span className="font-display text-[clamp(1.28rem,2.16vw,1.73rem)] text-magenta" lang="en">
           {t("strip")}
         </span>
       </li>

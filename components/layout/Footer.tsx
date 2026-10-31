@@ -66,7 +66,7 @@ export async function Footer({
               className="size-[84px] rounded-full"
             />
             <div className="max-w-md">
-              <p className="font-display text-4xl leading-none" lang="en">
+              <p className="font-display text-3xl leading-none" lang="en">
                 Donut give up.
               </p>
               <p className="mt-4 text-white/80">{t("about")}</p>

@@ -58,14 +58,14 @@ export function TickerFlip({ items }: { items: string[] }) {
           {prev != null ? (
             <span
               key={`out-${prev}`}
-              className="ticker-out col-start-1 row-start-1 truncate py-1 font-display text-[clamp(1.4rem,4vw,2.4rem)] leading-[1.35] whitespace-nowrap text-white"
+              className="ticker-out col-start-1 row-start-1 truncate py-1 font-display text-[clamp(1.12rem,2.88vw,1.73rem)] leading-[1.35] whitespace-nowrap text-white"
             >
               {items[prev]}
             </span>
           ) : null}
           <span
             key={`in-${i}`}
-            className="ticker-in col-start-1 row-start-1 truncate py-1 font-display text-[clamp(1.4rem,4vw,2.4rem)] leading-[1.35] whitespace-nowrap text-white"
+            className="ticker-in col-start-1 row-start-1 truncate py-1 font-display text-[clamp(1.12rem,2.88vw,1.73rem)] leading-[1.35] whitespace-nowrap text-white"
           >
             {items[i]}
           </span>

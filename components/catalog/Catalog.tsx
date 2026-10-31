@@ -3,7 +3,7 @@
 import { ArrowRight, MagnifyingGlass, Plus, X } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
-import { useDeferredValue, useEffect, useMemo, useState } from "react";
+import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { PhotoSoon } from "@/components/ui/PhotoSoon";
 import { ScrollRow } from "@/components/ui/ScrollRow";
 import { Link } from "@/i18n/navigation";
@@ -130,6 +130,14 @@ export function Catalog({
   const deferredQuery = useDeferredValue(query);
   const [open, setOpen] = useState<ClientProduct | null>(null);
   const [preview, setPreview] = useState<ClientProduct | null>(null);
+  // Hover intent: a short pause before switching, so sweeping the cursor
+  // across the list does not flicker through every photo on the way.
+  const hoverTimer = useRef<number | undefined>(undefined);
+  const previewSoon = (p: ClientProduct | null, ms: number) => {
+    window.clearTimeout(hoverTimer.current);
+    hoverTimer.current = window.setTimeout(() => setPreview(p), ms);
+  };
+  useEffect(() => () => window.clearTimeout(hoverTimer.current), []);
 
   // The hero's "What are you craving?" chips pre-select a tab here.
   useEffect(() => {
@@ -174,6 +182,7 @@ export function Catalog({
   const spotShot = preview && spot === preview ? preview.img : null;
 
   function selectTab(next: string) {
+    window.clearTimeout(hoverTimer.current);
     setPreview(null);
     setSlug(next);
     setFilter("all");
@@ -189,13 +198,13 @@ export function Catalog({
     <div>
       <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <p className="font-hand text-2xl text-magenta-ink">{t("eyebrow")}</p>
+          <p className="font-hand text-xl text-magenta-ink">{t("eyebrow")}</p>
           {mode === "home" ? (
-            <h2 id="menu-title" className="text-[clamp(2.6rem,6vw,4.5rem)] leading-none">
+            <h2 id="menu-title" className="text-[clamp(2.08rem,4.32vw,3.24rem)] leading-none">
               {t("title")}
             </h2>
           ) : (
-            <h1 id="menu-title" className="text-[clamp(2.8rem,7vw,5rem)] leading-none">
+            <h1 id="menu-title" className="text-[clamp(2.24rem,5.04vw,3.6rem)] leading-none">
               {t("title")}
             </h1>
           )}
@@ -300,19 +309,7 @@ export function Catalog({
       >
         {mode === "home" && featured && spot ? (
           <article className="relative min-h-[320px] overflow-hidden rounded-[var(--radius-xl2)] bg-magenta-soft shadow-card lg:min-h-0">
-            {spotShot ? (
-              <div className="absolute inset-0 grid place-items-center bg-white px-8 pt-6 pb-24">
-                <Image
-                  key={spotShot.src}
-                  src={spotShot.src}
-                  alt={pick(spot.name, locale)}
-                  width={spotShot.w}
-                  height={spotShot.h}
-                  sizes="400px"
-                  className="h-auto w-full max-w-[400px] animate-fade"
-                />
-              </div>
-            ) : featuredPhoto ? (
+            {featuredPhoto ? (
               <Image
                 key={featuredPhoto.src}
                 src={featuredPhoto.src}
@@ -326,8 +323,38 @@ export function Catalog({
             ) : (
               <PhotoSoon name={pick(featured.name, locale)} label={tc("photoSoon")} />
             )}
+            {/* Every product shot of the list is already loaded and stacked here,
+                so moving between items is a crossfade, never a blank frame. */}
+            <div
+              aria-hidden={!spotShot}
+              className={cn(
+                "absolute inset-0 bg-white transition-opacity duration-500 ease-[var(--ease-out-soft)]",
+                spotShot ? "opacity-100" : "opacity-0",
+              )}
+            >
+              {shown.map((p) =>
+                p.img ? (
+                  <span
+                    key={p.id}
+                    className={cn(
+                      "absolute inset-0 grid place-items-center px-8 pt-6 pb-24 transition-[opacity,transform] duration-500 ease-[var(--ease-out-soft)]",
+                      spot === p && spotShot ? "scale-100 opacity-100" : "scale-[0.96] opacity-0",
+                    )}
+                  >
+                    <Image
+                      src={p.img.src}
+                      alt={spot === p ? pick(p.name, locale) : ""}
+                      width={p.img.w}
+                      height={p.img.h}
+                      sizes="400px"
+                      className="h-auto w-full max-w-[400px]"
+                    />
+                  </span>
+                ) : null,
+              )}
+            </div>
             <div className="absolute inset-x-3 bottom-3 flex items-center justify-between gap-3 rounded-2xl bg-white p-3 pl-4 shadow-card">
-              <div className="min-w-0">
+              <div key={spot.id} className="min-w-0 animate-swap">
                 {spot === featured ? (
                   <p className="font-hand text-lg leading-tight text-magenta-ink">
                     {t("featured")}
@@ -354,7 +381,7 @@ export function Catalog({
         <div className="rounded-[var(--radius-xl2)] bg-white p-4 shadow-card sm:p-6">
           {shown.length ? (
             <ul
-              onMouseLeave={() => setPreview(null)}
+              onMouseLeave={() => previewSoon(null, 250)}
               className={cn(mode === "full" && "lg:columns-2 lg:gap-10 [&>li]:break-inside-avoid")}
             >
               {shown.map((p) => (
@@ -364,7 +391,7 @@ export function Catalog({
                   locale={locale}
                   showThumb={mode === "full"}
                   onOpen={setOpen}
-                  onPreview={mode === "home" ? setPreview : undefined}
+                  onPreview={mode === "home" ? (p) => previewSoon(p, 90) : undefined}
                 />
               ))}
             </ul>

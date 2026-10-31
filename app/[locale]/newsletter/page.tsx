@@ -22,7 +22,7 @@ export default async function NewsletterPage({ params, searchParams }: Props) {
   return (
     <div className="mx-auto flex max-w-xl flex-col items-center px-4 py-24 text-center">
       <DonutIcon size={96} />
-      <h1 className="mt-6 text-4xl">{t(key)}</h1>
+      <h1 className="mt-6 text-3xl">{t(key)}</h1>
       <Link
         href="/"
         className="mt-8 inline-flex h-12 items-center rounded-full bg-plum px-6 font-semibold text-white"

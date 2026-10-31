@@ -27,7 +27,7 @@ export function NameDonut({ product }: { product: ClientProduct }) {
       className="grid grid-cols-1 items-center gap-8 rounded-[2rem] bg-magenta-soft p-5 sm:p-8 lg:grid-cols-[1fr_1fr]"
     >
       <div className="order-2 lg:order-1">
-        <h2 id="name-title" className="text-[clamp(2rem,4.5vw,3.2rem)] leading-none">
+        <h2 id="name-title" className="text-[clamp(1.6rem,3.24vw,2.3rem)] leading-none">
           {t("title")}
         </h2>
         <p className="mt-2 text-muted">{t("lead")}</p>

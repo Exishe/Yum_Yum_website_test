@@ -17,15 +17,15 @@ export async function StorySection({
     >
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-[0.9fr_1.1fr_0.6fr]">
         <div className="lg:pr-6">
-          <p className="font-hand text-2xl text-magenta-ink">{t("eyebrow")}</p>
-          <h2 id="story-title" className="mt-1 text-[clamp(2.4rem,3.6vw,3.4rem)] leading-[1.02]">
+          <p className="font-hand text-xl text-magenta-ink">{t("eyebrow")}</p>
+          <h2 id="story-title" className="mt-1 text-[clamp(1.92rem,2.59vw,2.45rem)] leading-[1.02]">
             {t("title")}
           </h2>
           <p className="mt-5 text-plum/85">{t("body")}</p>
           <dl className="mt-7 flex gap-4">
             <div>
               <dt className="sr-only">{t("statHours")}</dt>
-              <dd className="font-display text-4xl text-magenta">{t("statHoursValue")}</dd>
+              <dd className="font-display text-3xl text-magenta">{t("statHoursValue")}</dd>
               <dd className="text-sm">{t("statHours")}</dd>
             </div>
           </dl>

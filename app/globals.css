@@ -77,9 +77,16 @@
   --animate-panel: panel 0.35s var(--ease-out-soft);
   --animate-rise: rise 0.5s var(--ease-out-soft) both;
   --animate-fade: fade 0.2s ease-out;
+  --animate-swap: swap 0.35s var(--ease-out-soft);
   --animate-slide-in: slide-in 0.35s var(--ease-out-soft);
   --animate-slide-up: slide-up 0.35s var(--ease-out-soft);
 
+  @keyframes swap {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+  }
   @keyframes marquee {
     from {
       transform: translate3d(0, 0, 0);
@@ -239,7 +246,7 @@
   }
   .hero-title:lang(hy),
   .hero-title:lang(ru) {
-    font-size: clamp(2.35rem, 9.6vw, 6.4rem);
+    font-size: clamp(1.9rem, 6.9vw, 4.6rem);
   }
   .dot-grid {
     background-image: radial-gradient(rgb(222 18 129 / 0.16) 1.2px, transparent 1.3px);

@@ -138,19 +138,19 @@ export function Hero({
           </p>
           <h1
             id="hero-title"
-            className="hero-title mt-6 text-[clamp(3.4rem,10vw,7.5rem)] leading-[0.92]"
+            className="hero-title mt-6 text-[clamp(2.4rem,6.4vw,4.6rem)] leading-[0.92]"
           >
             <span className="block">{t("titleA")}</span>
             <span className="block text-magenta">{t("titleB")}</span>
           </h1>
           {tagline ? (
-            <p className="mt-4 font-hand text-2xl text-magenta-ink lg:mt-5" lang={locale}>
+            <p className="mt-4 font-hand text-xl text-magenta-ink lg:mt-5" lang={locale}>
               {tagline}
             </p>
           ) : null}
-          <p className="mt-5 max-w-[34rem] text-lg leading-relaxed text-plum/85">{t("lead")}</p>
+          <p className="mt-5 max-w-[34rem] leading-relaxed text-plum/85 sm:text-lg">{t("lead")}</p>
 
-          <p className="mt-8 font-hand text-2xl text-magenta-ink" id="craving-label">
+          <p className="mt-8 font-hand text-xl text-magenta-ink" id="craving-label">
             {t("craving")}
           </p>
           <ScrollRow
@@ -254,7 +254,7 @@ export function Hero({
 
           <p className="absolute top-[6%] right-[2%] grid size-[clamp(6rem,18vw,8.5rem)] rotate-6 place-items-center rounded-full bg-sun text-center shadow-card">
             <span>
-              <span className="shops-badge block px-2 font-display text-[clamp(1.3rem,3.6vw,1.8rem)] leading-none">
+              <span className="shops-badge block px-2 font-display text-[clamp(1.04rem,2.59vw,1.3rem)] leading-none">
                 {t("shopsBadge")}
               </span>
               <span className="text-xs font-medium">{t("shopsBadgeSub")}</span>

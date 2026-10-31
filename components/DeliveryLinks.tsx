@@ -12,7 +12,7 @@ export async function DeliveryLinks() {
   if (!links.length) return null;
   return (
     <div className="mt-10 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
-      <p className="font-hand text-2xl text-magenta-ink">{t("title")}</p>
+      <p className="font-hand text-xl text-magenta-ink">{t("title")}</p>
       <ul className="flex flex-wrap gap-2">
         {links.map((d) => (
           <li key={d.name}>

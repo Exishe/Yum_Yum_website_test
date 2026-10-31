@@ -10,7 +10,7 @@ export default async function NotFound() {
         <span className="animate-wiggle">
           <DonutIcon size={120} />
         </span>
-        <h1 className="mt-6 text-[clamp(2.6rem,7vw,4.5rem)] leading-none">{t("title")}</h1>
+        <h1 className="mt-6 text-[clamp(2.08rem,5.04vw,3.24rem)] leading-none">{t("title")}</h1>
         <p className="mt-4 text-lg text-muted">{t("lead")}</p>
         <Link
           href="/"
