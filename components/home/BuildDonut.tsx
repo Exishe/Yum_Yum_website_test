@@ -314,7 +314,7 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
           <div
             role="tablist"
             aria-label={t("title")}
-            className="grid grid-cols-3 gap-1 rounded-full bg-white/8 p-1"
+            className="flex gap-1 rounded-full bg-white/8 p-1"
           >
             {STEPS.map((s, i) => (
               <button
@@ -326,20 +326,22 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
                 aria-controls="build-panel"
                 onClick={() => setStep(i as Step)}
                 className={cn(
-                  "flex h-11 items-center justify-center gap-1.5 rounded-full text-[13px] font-semibold transition-colors duration-200 min-[400px]:gap-2 min-[400px]:text-sm",
-                  step === i ? "bg-white text-plum" : "text-white/80 hover:text-white",
+                  "group flex h-11 min-w-0 flex-auto items-center justify-center gap-1.5 rounded-full px-2.5 text-[13px] font-semibold whitespace-nowrap transition-[color,background-color,scale] duration-200 ease-out active:scale-[0.97] sm:gap-2 sm:px-3 sm:text-sm",
+                  step === i
+                    ? "bg-white text-plum shadow-sm"
+                    : "text-white/80 hover:bg-white/15 hover:text-white",
                 )}
               >
                 <span
                   aria-hidden
                   className={cn(
-                    "grid size-6 place-items-center rounded-full text-xs font-bold max-[359px]:hidden",
-                    step === i ? "bg-sun text-plum" : "bg-white/12",
+                    "grid size-5 shrink-0 place-items-center rounded-full text-[11px] font-bold transition-colors duration-200 max-[379px]:hidden sm:size-6 sm:text-xs",
+                    step === i ? "bg-sun text-plum" : "bg-white/12 group-hover:bg-white/25",
                   )}
                 >
                   {i + 1}
                 </span>
-                {t(`steps.${s}`)}
+                <span className="truncate">{t(`steps.${s}`)}</span>
               </button>
             ))}
           </div>
