@@ -370,7 +370,7 @@ export class DonutEngine {
     this.coverUniform.value = 1;
     this.layoutSprinkles();
     await this.renderer.compileAsync(this.scene, this.camera);
-    this.coverUniform.value = this.cover;
+    this.coverUniform.value = this.cover * 1.08 - 0.06;
     this.layoutSprinkles();
     this.renderer.render(this.scene, this.camera);
   }
@@ -461,7 +461,8 @@ export class DonutEngine {
       this.sprinkleT = Math.min(1, this.sprinkleT + dt * (this.calm ? 10 : 0.7));
       this.layoutSprinkles();
     }
-    this.coverUniform.value = this.cover * 1.02;
+    // Mapped so 0 hides every fragment (the drip noise dips a little below 0) and 1 shows all.
+    this.coverUniform.value = this.cover * 1.08 - 0.06;
     // The chocolate goes on once the glaze is down.
     this.parts.drizzle.obj.visible = this.cover > 0.97;
 
