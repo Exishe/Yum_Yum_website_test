@@ -1,6 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import { Catalog } from "@/components/catalog/Catalog";
-import { DonutStage } from "@/components/home/DonutStage";
+import { BuildDonut } from "@/components/home/BuildDonut";
 import { HowToOrder } from "@/components/home/HowToOrder";
 import { GiftsSection } from "@/components/home/GiftsSection";
 import { Hero, type HeroChoice } from "@/components/home/Hero";
@@ -125,7 +125,21 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       >
         <Catalog categories={toClientCategories(menu)} mode="home" />
       </section>
-      <DonutStage />
+      <BuildDonut
+        products={Object.fromEntries(
+          [
+            "donut-chocolate",
+            "donut-chocolate-rainbow",
+            "donut-caramel",
+            "donut-white-chocolate",
+            "donut-strawberry-rainbow",
+            "donut-peach-rainbow",
+            "donut-blue-bali-rainbow",
+            "donut-lemon",
+            "donut-pistachio-king",
+          ].map((slug) => [slug, bySlug(slug)]),
+        )}
+      />
       <GiftsSection
         bouquet={imgOrThrow(`${T}/yumyum-26.jpg`)}
         box={imgOrThrow(`${T}/yumyum-19.jpg`)}
