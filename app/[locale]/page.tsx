@@ -84,6 +84,17 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     },
   ];
 
+  // The rating labels name a shop in English ("Mashtots 35"); show the shop's own name.
+  const ratingsIn = (l: Locale) => {
+    const local = (label?: string) => shops.find((sh) => sh.name.en === label)?.name[l] ?? label;
+    const r = settings.ratings;
+    return {
+      ...r,
+      yandex: r.yandex && { ...r.yandex, label: local(r.yandex.label) },
+      google: r.google && { ...r.google, label: local(r.google.label) },
+    };
+  };
+
   const phone = settings.contact.phones[0] ?? "+37433301574";
   const phoneDisplay = formatPhone(phone, "local");
   const strip = [
@@ -141,7 +152,13 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           { key: "togo", image: imgOrThrow(`${T}/yumyum-24.jpg`) },
         ]}
       />
-      <Reviews reviews={reviews} ratings={settings.ratings} />
+      <Reviews
+        // Reviews written in the page's language come first.
+        reviews={[...reviews].sort(
+          (a, b) => Number(b.quoteLocale === locale) - Number(a.quoteLocale === locale),
+        )}
+        ratings={ratingsIn(locale)}
+      />
       <div className="mx-auto max-w-[1440px] px-4 pb-20 sm:px-6 lg:px-8">
         <ShopPicker shops={shops.map((s) => ({ ...s, img: img(s.image) }))} />
       </div>

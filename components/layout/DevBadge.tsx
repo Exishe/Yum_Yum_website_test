@@ -8,7 +8,8 @@ const GAP = 12;
 /*
  * The developers' badge on the concept demo (settings in lib/demo-config.ts).
  * Markup and styles (app/globals.css) are Wiymood's own and kept as supplied.
- * Open on every page; × folds it into a pill that opens again by itself.
+ * Phones: open on every page; × folds it into a pill that opens again by
+ * itself. Computers: a pill that opens while the pointer is on it.
  * It rises above the site's own floating bars (anything marked
  * data-float-bottom) instead of covering them.
  */
@@ -23,6 +24,19 @@ export function DevBadge({
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(true);
+  // On a computer the open badge would sit over the page, so there it starts
+  // as the small pill and opens while the pointer is on it.
+  const [compact, setCompact] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px) and (hover: hover)");
+    const apply = () => {
+      setCompact(mq.matches);
+      setOpen(!mq.matches);
+    };
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
   const [lift, setLift] = useState(0);
   const badgeRef = useRef<HTMLElement>(null);
   const pillRef = useRef<HTMLButtonElement>(null);
@@ -31,14 +45,14 @@ export function DevBadge({
   const [shownOn, setShownOn] = useState(pathname);
   if (shownOn !== pathname) {
     setShownOn(pathname);
-    setOpen(true);
+    setOpen(!compact);
   }
 
   useEffect(() => {
-    if (open) return;
+    if (open || compact) return;
     const timer = window.setTimeout(() => setOpen(true), reopenAfterSeconds * 1000);
     return () => window.clearTimeout(timer);
-  }, [open, reopenAfterSeconds]);
+  }, [open, compact, reopenAfterSeconds]);
 
   useEffect(() => {
     let frame = 0;
@@ -92,6 +106,7 @@ export function DevBadge({
         aria-label={texts.label}
         hidden={!open}
         style={style}
+        onMouseLeave={compact ? () => setOpen(false) : undefined}
       >
         {mark}
         <div className="demo-badge-body">
@@ -120,6 +135,7 @@ export function DevBadge({
         hidden={open}
         style={style}
         onClick={() => setOpen(true)}
+        onMouseEnter={compact ? () => setOpen(true) : undefined}
       >
         {mark}
         <span>{texts.label}</span>
