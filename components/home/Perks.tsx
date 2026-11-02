@@ -11,7 +11,7 @@ export async function Perks() {
   ];
   return (
     <section aria-label={t("label")} className="mx-auto max-w-[1440px] px-4 py-10 sm:px-6 lg:px-8">
-      <ul className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-5">
+      <ul data-reveal-group className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-5">
         {perks.map(({ icon: Icon, title, sub, tile }) => (
           <li
             key={title}

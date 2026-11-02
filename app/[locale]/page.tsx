@@ -116,15 +116,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     <>
       <JsonLd data={organizationJsonLd(shops, settings, locale)} />
       <Hero choices={choices} phone={phone} phoneDisplay={phoneDisplay} />
-      <PhotoStrip photos={strip} />
-      <Perks />
-      <HowToOrder />
-      <section
-        aria-labelledby="menu-title"
-        className="mx-auto max-w-[1440px] px-4 pt-14 pb-6 sm:px-6 lg:px-8"
-      >
-        <Catalog categories={toClientCategories(menu)} mode="home" />
-      </section>
       <BuildDonut
         products={Object.fromEntries(
           [
@@ -140,6 +131,15 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           ].map((slug) => [slug, bySlug(slug)]),
         )}
       />
+      <PhotoStrip photos={strip} />
+      <Perks />
+      <HowToOrder />
+      <section
+        aria-labelledby="menu-title"
+        className="mx-auto max-w-[1440px] px-4 pt-14 pb-6 sm:px-6 lg:px-8"
+      >
+        <Catalog categories={toClientCategories(menu)} mode="home" />
+      </section>
       <GiftsSection
         bouquet={imgOrThrow(`${T}/yumyum-26.jpg`)}
         box={imgOrThrow(`${T}/yumyum-19.jpg`)}

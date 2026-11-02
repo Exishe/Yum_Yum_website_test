@@ -12,7 +12,10 @@ export async function PhotoStrip({ photos }: { photos: ImageInfo[] }) {
       aria-label={t("stripLabel")}
     >
       {/* A row the visitor swipes or scrolls; it does not move by itself. */}
-      <ul className="no-scrollbar snap-row flex -rotate-2 scroll-px-6 gap-6 overflow-x-auto px-6 py-3">
+      <ul
+        data-reveal
+        className="no-scrollbar snap-row flex -rotate-2 scroll-px-6 gap-6 overflow-x-auto px-6 py-3"
+      >
         {photos.map((p, i) => (
           <li key={p.src} className="flex shrink-0 snap-start items-center gap-6">
             <span

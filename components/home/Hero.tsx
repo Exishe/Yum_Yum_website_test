@@ -108,7 +108,7 @@ export function Hero({
       </div>
 
       <div className="relative mx-auto grid max-w-[1440px] grid-cols-1 gap-8 px-4 pt-8 pb-10 sm:px-6 lg:grid-cols-[1fr_1.05fr] lg:gap-6 lg:px-8 lg:pt-14 lg:pb-16">
-        <div className="flex min-w-0 flex-col items-start lg:pt-6">
+        <div className="hero-copy flex min-w-0 flex-col items-start lg:pt-6">
           <p className="inline-flex items-center gap-2 rounded-full bg-white py-1.5 pr-4 pl-1.5 text-sm font-medium shadow-card">
             <span className="grid size-8 place-items-center rounded-full bg-sun-soft">
               <FreshDonutIcon size={22} />
@@ -189,7 +189,7 @@ export function Hero({
         </div>
 
         {/* Photo, rotating ring, badges */}
-        <div className="relative mx-auto aspect-square w-full max-w-[600px] lg:mr-0">
+        <div className="hero-photo-in relative mx-auto aspect-square w-full max-w-[600px] lg:mr-0">
           <svg aria-hidden viewBox="0 0 600 600" className="absolute inset-0 size-full">
             <defs>
               <path id="ring" d="M300,300 m-262,0 a262,262 0 1,1 524,0 a262,262 0 1,1 -524,0" />

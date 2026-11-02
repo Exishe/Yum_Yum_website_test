@@ -42,7 +42,7 @@ export async function GiftsSection({
         <path d="M0 40 C 240 0, 480 0, 720 26 S 1200 60, 1440 18 V60 H0Z" />
       </svg>
       <div className="mx-auto grid max-w-[1440px] gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1.15fr_1fr] lg:px-8 lg:py-20">
-        <div className="min-w-0">
+        <div data-reveal className="min-w-0">
           <p className="font-hand text-xl text-magenta-ink">{t("eyebrow")}</p>
           <h2 id="gifts-title" className="mt-1 text-[clamp(2.06rem,3.98vw,3.06rem)] leading-[0.95]">
             {t("title")}
@@ -79,7 +79,10 @@ export async function GiftsSection({
             </a>
           </div>
         </div>
-        <div className="no-scrollbar snap-row -mx-4 flex scroll-px-4 gap-4 overflow-x-auto px-4 pb-4 lg:mx-0 lg:block lg:scroll-px-0 lg:overflow-visible lg:px-0">
+        <div
+          data-reveal-group
+          className="no-scrollbar snap-row -mx-4 flex scroll-px-4 gap-4 overflow-x-auto px-4 pb-4 lg:mx-0 lg:block lg:scroll-px-0 lg:overflow-visible lg:px-0"
+        >
           <div className="relative min-h-0 lg:h-[600px]">
             <figure className="w-[78vw] max-w-[380px] shrink-0 -rotate-3 rounded-[1.75rem] bg-white p-2.5 shadow-lift transition-transform duration-300 ease-out lg:absolute lg:top-0 lg:left-[6%] lg:w-[54%]">
               <Photo

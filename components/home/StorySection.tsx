@@ -15,7 +15,7 @@ export async function StorySection({
       aria-labelledby="story-title"
       className="mx-auto max-w-[1440px] px-4 py-20 sm:px-6 lg:px-8 lg:py-24"
     >
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-[0.9fr_1.1fr_0.6fr]">
+      <div data-reveal-group className="grid grid-cols-1 gap-5 lg:grid-cols-[0.9fr_1.1fr_0.6fr]">
         <div className="lg:pr-6">
           <p className="font-hand text-xl text-magenta-ink">{t("eyebrow")}</p>
           <h2 id="story-title" className="mt-1 text-[clamp(1.77rem,2.2vw,2.08rem)] leading-[1.02]">
@@ -49,7 +49,7 @@ export async function StorySection({
           className="hidden aspect-square w-full rounded-[var(--radius-xl2)] object-cover lg:block"
         />
       </div>
-      <div className="mt-5 hidden gap-5 lg:grid lg:grid-cols-2">
+      <div data-reveal-group className="mt-5 hidden gap-5 lg:grid lg:grid-cols-2">
         <Photo
           image={photos.muffins}
           alt={t("muffinsAlt")}
@@ -64,7 +64,10 @@ export async function StorySection({
         />
       </div>
       {/* Phones and tablets: the four photos in one row to swipe, instead of four screens of scrolling. */}
-      <ul className="no-scrollbar snap-row -mx-4 mt-8 flex scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 sm:-mx-6 sm:scroll-px-6 sm:px-6 lg:hidden">
+      <ul
+        data-reveal
+        className="no-scrollbar snap-row -mx-4 mt-8 flex scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 sm:-mx-6 sm:scroll-px-6 sm:px-6 lg:hidden"
+      >
         {(
           [
             [photos.interior, t("interiorAlt")],

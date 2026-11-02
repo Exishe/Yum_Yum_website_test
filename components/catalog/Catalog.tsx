@@ -40,12 +40,14 @@ function Row({
   p,
   locale,
   showThumb,
+  index,
   onOpen,
   onPreview,
 }: {
+  index: number;
   p: ClientProduct;
   locale: Locale;
-  showThumb: boolean;
+  showThumb: "always" | "phone";
   onOpen: (p: ClientProduct) => void;
   /** Shows this item in the big photo next to the list (home page). */
   onPreview?: (p: ClientProduct) => void;
@@ -57,44 +59,75 @@ function Row({
     <li
       onMouseEnter={onPreview ? () => onPreview(p) : undefined}
       onFocus={onPreview ? () => onPreview(p) : undefined}
-      className="flex items-center gap-3 border-b border-dashed border-line py-3 last:border-0 sm:gap-4"
+      style={{ "--i": index } as React.CSSProperties}
+      className="row-in flex items-center gap-3 border-b border-dashed border-line py-3 last:border-0 sm:gap-4"
     >
-      {showThumb ? (
-        <span className="relative hidden size-14 shrink-0 overflow-hidden rounded-xl bg-magenta-soft sm:block">
+      <button
+        type="button"
+        onClick={() => onOpen(p)}
+        className="group flex min-w-0 flex-1 items-center gap-3 text-left sm:gap-4"
+      >
+        <span
+          className={cn(
+            "relative size-16 shrink-0 overflow-hidden rounded-2xl bg-white ring-1 ring-line sm:size-[4.5rem]",
+            showThumb === "phone" && "lg:hidden",
+          )}
+        >
           {p.img ? (
-            <Image src={p.img.src} alt="" fill sizes="56px" className="object-cover" />
-          ) : null}
-        </span>
-      ) : null}
-      <button type="button" onClick={() => onOpen(p)} className="group min-w-0 flex-1 text-left">
-        <span className="flex items-baseline gap-2">
-          <span className="font-semibold group-hover:text-magenta-ink">{name}</span>
-          {p.badges.map((b) => (
+            <Image
+              src={p.img.src}
+              alt=""
+              fill
+              sizes="72px"
+              className="object-contain p-1 transition-transform duration-500 ease-(--ease-out) group-hover:scale-[1.06]"
+            />
+          ) : (
             <span
-              key={b}
+              aria-hidden
+              className="grid size-full place-items-center bg-magenta-soft text-2xl"
+            >
+              🍩
+            </span>
+          )}
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="flex items-baseline gap-2">
+            <span className="font-semibold group-hover:text-magenta-ink">{name}</span>
+            {p.badges.map((b) => (
+              <span
+                key={b}
+                className={cn(
+                  "rounded-full px-2 py-0.5 text-xs font-bold tracking-wide uppercase",
+                  b === "new" ? "bg-sun text-plum" : "bg-magenta-soft text-magenta-ink",
+                )}
+              >
+                {t(`badge.${b}` as "badge.new")}
+              </span>
+            ))}
+            <span aria-hidden className="leader hidden h-3 flex-1 self-end sm:block" />
+            <span
               className={cn(
-                "rounded-full px-2 py-0.5 text-xs font-bold tracking-wide uppercase",
-                b === "new" ? "bg-sun text-plum" : "bg-magenta-soft text-magenta-ink",
+                "ml-auto hidden shrink-0 tabular-nums sm:inline",
+                p.priceOnRequest ? "text-sm font-semibold text-magenta-ink" : "font-bold",
               )}
             >
-              {t(`badge.${b}` as "badge.new")}
+              {p.priceOnRequest ? tc("onRequest") : formatAmd(p.priceAmd, locale)}
             </span>
-          ))}
-          <span aria-hidden className="leader hidden h-3 flex-1 self-end sm:block" />
+          </span>
+          {p.description || !p.isAvailable ? (
+            <span className="mt-0.5 block text-sm text-muted">
+              {!p.isAvailable ? t("soldOut") : pick(p.description, locale)}
+            </span>
+          ) : null}
           <span
             className={cn(
-              "ml-auto shrink-0 tabular-nums",
+              "mt-1 block tabular-nums sm:hidden",
               p.priceOnRequest ? "text-sm font-semibold text-magenta-ink" : "font-bold",
             )}
           >
             {p.priceOnRequest ? tc("onRequest") : formatAmd(p.priceAmd, locale)}
           </span>
         </span>
-        {p.description || !p.isAvailable ? (
-          <span className="mt-0.5 block text-sm text-muted">
-            {!p.isAvailable ? t("soldOut") : pick(p.description, locale)}
-          </span>
-        ) : null}
       </button>
       <button
         type="button"
@@ -196,7 +229,7 @@ export function Catalog({
 
   return (
     <div>
-      <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+      <div data-reveal className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="font-hand text-xl text-magenta-ink">{t("eyebrow")}</p>
           {mode === "home" ? (
@@ -303,6 +336,7 @@ export function Catalog({
       <div
         id="menu-panel"
         role="tabpanel"
+        data-reveal-group
         aria-labelledby={q ? undefined : `tab-${current?.slug}`}
         aria-label={q ? t("search") : undefined}
         className={cn("mt-8 grid grid-cols-1 gap-5", mode === "home" && "lg:grid-cols-[0.8fr_1fr]")}
@@ -381,15 +415,17 @@ export function Catalog({
         <div className="rounded-[var(--radius-xl2)] bg-white p-4 shadow-card sm:p-6">
           {shown.length ? (
             <ul
+              key={`${current?.slug}|${filter}|${q}`}
               onMouseLeave={() => previewSoon(null, 250)}
               className={cn(mode === "full" && "lg:columns-2 lg:gap-10 [&>li]:break-inside-avoid")}
             >
-              {shown.map((p) => (
+              {shown.map((p, i) => (
                 <Row
                   key={p.id}
+                  index={i}
                   p={p}
                   locale={locale}
-                  showThumb={mode === "full"}
+                  showThumb={mode === "full" ? "always" : "phone"}
                   onOpen={setOpen}
                   onPreview={mode === "home" ? (p) => previewSoon(p, 90) : undefined}
                 />

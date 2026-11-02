@@ -152,7 +152,16 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
     };
     const near = new IntersectionObserver(
       ([e]) => {
-        if (e?.isIntersecting && !booting) void boot();
+        if (!e?.isIntersecting || booting) return;
+        booting = true;
+        // Near the top of the page now: let the page and its photos load first,
+        // then build the 3D scene when the browser has a free moment.
+        const later = () =>
+          typeof window.requestIdleCallback === "function"
+            ? window.requestIdleCallback(() => void boot(), { timeout: 1500 })
+            : window.setTimeout(() => void boot(), 300);
+        if (document.readyState === "complete") later();
+        else window.addEventListener("load", later, { once: true });
       },
       { rootMargin: "100% 0px" },
     );

@@ -23,6 +23,7 @@ import { getSettings } from "@/lib/settings";
 import { SiteProvider } from "@/components/SiteContext";
 import Script from "next/script";
 import { DevBadge } from "@/components/layout/DevBadge";
+import { RevealObserver } from "@/components/ui/RevealObserver";
 import { DEMO, demoTexts, robotsFor } from "@/lib/demo-config";
 
 export const viewport: Viewport = {
@@ -151,6 +152,7 @@ export default async function LocaleLayout({
             />
             <main id="main" tabIndex={-1} className="outline-none">
               {children}
+              <RevealObserver />
             </main>
             <Footer categories={menu.filter((c) => c.inMenu)} shops={shops} settings={settings} />
             <LazyCartDrawer />

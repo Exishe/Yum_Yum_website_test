@@ -20,7 +20,7 @@ export async function Spotted({
       aria-labelledby="spotted-title"
       className="mx-auto max-w-[1440px] px-4 py-20 sm:px-6 lg:px-8"
     >
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div data-reveal className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h2 id="spotted-title" className="text-[clamp(1.91rem,3.67vw,2.75rem)] leading-[0.95]">
             <span className="block">{t("titleA")}</span>
@@ -40,7 +40,10 @@ export async function Spotted({
           </a>
         ) : null}
       </div>
-      <ul className="no-scrollbar snap-row -mx-4 mt-8 flex scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:scroll-px-0 sm:grid-cols-3 sm:px-0 lg:grid-cols-5">
+      <ul
+        data-reveal-group
+        className="no-scrollbar snap-row -mx-4 mt-8 flex scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:scroll-px-0 sm:grid-cols-3 sm:px-0 lg:grid-cols-5"
+      >
         {photos.map((p, i) => (
           <li key={p.key} className="w-[62vw] max-w-[260px] shrink-0 sm:w-auto sm:max-w-none">
             <figure className="group relative overflow-hidden rounded-[var(--radius-xl2)]">
@@ -48,7 +51,7 @@ export async function Spotted({
                 image={p.image}
                 alt={t(`alts.${p.key}`)}
                 sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 62vw"
-                className="aspect-[3/4.6] w-full object-cover transition-transform duration-300 ease-out"
+                className="aspect-[3/4.6] w-full object-cover transition-transform duration-700 ease-(--ease-out) group-hover:scale-[1.04]"
               />
               <figcaption
                 className="absolute bottom-3 left-3 rounded-lg bg-white px-3 py-1 font-hand text-lg leading-tight"

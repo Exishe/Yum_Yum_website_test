@@ -18,6 +18,7 @@ export function Reviews({ reviews, ratings }: { reviews: PublicReview[]; ratings
   return (
     <section
       aria-labelledby="reviews-title"
+      data-reveal
       className="mx-auto max-w-[1100px] px-4 py-16 text-center sm:px-6"
     >
       <h2 id="reviews-title" className="sr-only">

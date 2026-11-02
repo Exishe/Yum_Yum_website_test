@@ -39,7 +39,7 @@ export function GiftGrid({ products }: { products: ClientProduct[] }) {
                       alt=""
                       fill
                       sizes="(min-width: 1024px) 25vw, 50vw"
-                      className="object-cover transition-transform duration-300 ease-out"
+                      className="object-cover transition-transform duration-700 ease-(--ease-out) group-hover:scale-[1.04]"
                     />
                   ) : (
                     <PhotoSoon name={name} label={tc("photoSoon")} />

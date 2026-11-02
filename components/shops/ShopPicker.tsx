@@ -91,7 +91,7 @@ export function ShopPicker({
           <p className="mt-3">
             {t("lead")} <DemoNote />
           </p>
-          <ul className="mt-6 flex flex-col gap-2" aria-label={t("list")}>
+          <ul data-reveal-group className="mt-6 flex flex-col gap-2" aria-label={t("list")}>
             {shops.map((s, i) => (
               <li key={s.slug}>
                 <button

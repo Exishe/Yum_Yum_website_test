@@ -17,10 +17,10 @@ export async function HowToOrder() {
       className="mx-auto max-w-[1440px] px-4 pb-4 sm:px-6 lg:px-8"
     >
       <div className="flex flex-col gap-5 rounded-[var(--radius-xl2)] bg-plum p-5 text-white sm:p-7 lg:flex-row lg:items-center lg:gap-8">
-        <h2 id="how-title" className="text-2xl leading-tight lg:w-48 lg:shrink-0">
+        <h2 data-reveal id="how-title" className="text-2xl leading-tight lg:w-48 lg:shrink-0">
           {t("title")}
         </h2>
-        <ol className="grid flex-1 gap-3 sm:grid-cols-3">
+        <ol data-reveal-group className="grid flex-1 gap-3 sm:grid-cols-3">
           {steps.map(({ icon: Icon, title, sub }, i) => (
             <li key={title} className="flex items-start gap-3 rounded-2xl bg-white/8 p-3.5">
               <span className="relative grid size-11 shrink-0 place-items-center rounded-full bg-white">
