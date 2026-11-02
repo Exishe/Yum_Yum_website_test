@@ -130,7 +130,7 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
             />
             <span
               className={cn(
-                "relative grid size-8 place-items-center rounded-full bg-magenta-soft transition-transform duration-500 ease-(--ease-bounce)",
+                "relative grid size-8 place-items-center rounded-full bg-magenta-soft transition-transform duration-300 ease-(--ease-bounce)",
                 open && "rotate-180",
               )}
             >

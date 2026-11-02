@@ -3,7 +3,7 @@
 import { ArrowRight, Plus } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { FreshDonutIcon } from "@/components/icons/brand";
 import { ScrollRow } from "@/components/ui/ScrollRow";
 import { Link } from "@/i18n/navigation";
@@ -28,13 +28,13 @@ export type HeroChoice = {
 };
 
 const SPRINKLES = [
-  { c: "#de1281", top: "9%", left: "4%", r: "20deg", d: "0s" },
-  { c: "#5ec8f2", top: "6%", left: "38%", r: "-10deg", d: "-3s" },
-  { c: "#ff9a3d", top: "4%", left: "60%", r: "35deg", d: "-6s" },
-  { c: "#6fd3a1", top: "30%", left: "26%", r: "-30deg", d: "-2s" },
-  { c: "#ffe14d", top: "42%", left: "44%", r: "60deg", d: "-8s" },
-  { c: "#de1281", top: "86%", left: "52%", r: "10deg", d: "-5s" },
-  { c: "#5ec8f2", top: "60%", left: "95%", r: "-45deg", d: "-1s" },
+  { c: "#de1281", top: "9%", left: "4%", r: "20deg" },
+  { c: "#5ec8f2", top: "6%", left: "38%", r: "-10deg" },
+  { c: "#ff9a3d", top: "4%", left: "60%", r: "35deg" },
+  { c: "#6fd3a1", top: "30%", left: "26%", r: "-30deg" },
+  { c: "#ffe14d", top: "42%", left: "44%", r: "60deg" },
+  { c: "#de1281", top: "86%", left: "52%", r: "10deg" },
+  { c: "#5ec8f2", top: "60%", left: "95%", r: "-45deg" },
 ];
 
 export function Hero({
@@ -60,17 +60,6 @@ export function Hero({
     if (w.requestIdleCallback) w.requestIdleCallback(start, { timeout: 2500 });
     else window.setTimeout(start, 1500);
   }, []);
-  // ...and pauses while the hero is scrolled out of view.
-  const heroRef = useRef<HTMLElement>(null);
-  const [inView, setInView] = useState(true);
-  useEffect(() => {
-    const el = heroRef.current;
-    if (!el || !("IntersectionObserver" in window)) return;
-    const io = new IntersectionObserver(([e]) => setInView(!!e?.isIntersecting));
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-  const moving = lively && inView;
   const choice = choices.find((c) => c.key === active) ?? choices[0]!;
   const pickProduct = choice.product;
   const tagline = t("tagline");
@@ -98,31 +87,21 @@ export function Hero({
   }
 
   return (
-    <section
-      ref={heroRef}
-      aria-labelledby="hero-title"
-      className="dot-grid relative overflow-hidden bg-cream"
-    >
-      {/* Soft shapes that slowly change shape */}
-      <div
-        aria-hidden
-        className={cn(
-          "pointer-events-none absolute inset-0",
-          !moving && "[&_*]:[animation-play-state:paused]",
-        )}
-      >
-        <div className="blob-shape absolute -top-24 -right-24 size-[min(70vw,640px)] animate-blob bg-magenta-soft/90 lg:top-0 lg:right-[-6%]" />
-        <div className="blob-shape absolute top-[58%] -left-28 size-[min(48vw,360px)] animate-blob bg-sun-soft [animation-delay:-7s]" />
+    <section aria-labelledby="hero-title" className="dot-grid relative overflow-hidden bg-cream">
+      {/* Soft shapes and a few sprinkles. They stay still: the page has one moving
+          centrepiece (the 3D donut further down), not a background that never rests. */}
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div className="blob-shape absolute -top-24 -right-24 size-[min(70vw,640px)] bg-magenta-soft/90 lg:top-0 lg:right-[-6%]" />
+        <div className="blob-shape absolute top-[58%] -left-28 size-[min(48vw,360px)] bg-sun-soft" />
         {SPRINKLES.map((s, i) => (
           <span
             key={i}
-            className="absolute block h-[6px] w-[18px] animate-drift rounded-full"
+            className="absolute block h-[6px] w-[18px] rounded-full"
             style={{
               background: s.c,
               top: s.top,
               left: s.left,
-              ["--r" as string]: s.r,
-              animationDelay: s.d,
+              transform: `rotate(${s.r})`,
             }}
           />
         ))}
@@ -170,7 +149,7 @@ export function Hero({
                   aria-checked={selected}
                   onClick={() => choose(c.key)}
                   className={cn(
-                    "inline-flex h-12 shrink-0 items-center gap-2 rounded-full border-2 py-1 pr-4 pl-1 text-sm font-semibold transition-all duration-300",
+                    "inline-flex h-12 shrink-0 items-center gap-2 rounded-full border-2 py-1 pr-4 pl-1 text-sm font-semibold transition-[color,background-color,border-color,translate,scale] duration-200 ease-out active:scale-[0.97]",
                     selected
                       ? "border-plum bg-plum text-white"
                       : "border-line bg-white text-plum hover:-translate-y-0.5 hover:border-plum/40",
@@ -188,7 +167,7 @@ export function Hero({
           <div className="mt-7 flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:items-center">
             <Link
               href={choice.href}
-              className="group inline-flex h-12 items-center justify-center gap-3 rounded-full bg-plum px-6 font-semibold whitespace-nowrap text-white transition-transform hover:-translate-y-0.5"
+              className="group inline-flex h-12 items-center justify-center gap-3 rounded-full bg-plum px-6 font-semibold whitespace-nowrap text-white transition-transform duration-200 ease-out hover:-translate-y-0.5 active:scale-[0.97]"
             >
               <span key={active} className="animate-rise">
                 {t(`cta.${active}`)}
@@ -211,15 +190,7 @@ export function Hero({
 
         {/* Photo, rotating ring, badges */}
         <div className="relative mx-auto aspect-square w-full max-w-[600px] lg:mr-0">
-          <svg
-            aria-hidden
-            viewBox="0 0 600 600"
-            className={cn(
-              "absolute inset-0 size-full motion-reduce:animate-none",
-              lively && "animate-spin-slow",
-              !moving && "[animation-play-state:paused]",
-            )}
-          >
+          <svg aria-hidden viewBox="0 0 600 600" className="absolute inset-0 size-full">
             <defs>
               <path id="ring" d="M300,300 m-262,0 a262,262 0 1,1 524,0 a262,262 0 1,1 -524,0" />
             </defs>
@@ -244,8 +215,8 @@ export function Hero({
                     placeholder={c.image.blur ? "blur" : "empty"}
                     blurDataURL={c.image.blur}
                     className={cn(
-                      "object-cover transition-[opacity,transform] duration-700 ease-(--ease-out-soft)",
-                      c.key === active ? "scale-100 opacity-100" : "scale-110 opacity-0",
+                      "object-cover transition-[opacity,scale] duration-400 ease-(--ease-out-soft)",
+                      c.key === active ? "scale-100 opacity-100" : "scale-[1.04] opacity-0",
                     )}
                   />
                 ),

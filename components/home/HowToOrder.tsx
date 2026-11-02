@@ -38,7 +38,7 @@ export async function HowToOrder() {
         </ol>
         <Link
           href="/menu"
-          className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-full bg-sun px-6 font-bold whitespace-nowrap text-plum transition-transform hover:-translate-y-0.5"
+          className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-full bg-sun px-6 font-bold whitespace-nowrap text-plum transition-transform duration-200 ease-out hover:-translate-y-0.5 active:scale-[0.97]"
         >
           {t("cta")} <ArrowRight size={18} weight="bold" aria-hidden />
         </Link>

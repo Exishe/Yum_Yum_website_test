@@ -26,7 +26,7 @@ export function StickyOrderBar({ shops }: { shops: Array<{ id: number; name: str
       </p>
       <Link
         href="/checkout"
-        className="inline-flex h-12 shrink-0 items-center rounded-full bg-sun px-6 font-bold whitespace-nowrap text-plum"
+        className="inline-flex h-12 shrink-0 items-center rounded-full bg-sun px-6 font-bold whitespace-nowrap text-plum transition-transform duration-150 ease-out active:scale-[0.97]"
       >
         {t("barCheckout")}
       </Link>

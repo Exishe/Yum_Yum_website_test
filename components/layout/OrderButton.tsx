@@ -60,7 +60,7 @@ export function OrderButton() {
       type="button"
       onClick={openCart}
       aria-label={t("orderLabel", { count })}
-      className="group inline-flex h-11 items-center gap-1 rounded-full bg-sun pr-1.5 pl-1.5 text-sm font-bold text-plum transition-transform duration-300 hover:-translate-y-0.5 active:translate-y-0 sm:gap-2 sm:pr-1.5"
+      className="group inline-flex h-11 items-center gap-1 rounded-full bg-sun pr-1.5 pl-1.5 text-sm font-bold text-plum transition-transform duration-200 ease-out hover:-translate-y-0.5 active:scale-[0.97] sm:gap-2 sm:pr-1.5"
     >
       <span className="grid size-7 place-items-center rounded-full bg-white transition-transform duration-300 group-hover:-rotate-12 sm:size-8">
         <BagIcon size={20} />

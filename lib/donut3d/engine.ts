@@ -28,12 +28,12 @@ type Cue = { at: number; shot: Shot; timeScale: number };
 const CUES: Cue[] = [
   {
     at: 0.0,
-    shot: { frame: 10.5, elev: 38, az: 0, explode: 0, offsetX: 0.16, lookY: 0 },
+    shot: { frame: 10.5, elev: 38, az: 0, explode: 0, offsetX: -0.2, lookY: 0 },
     timeScale: 1,
   },
   {
     at: 0.25,
-    shot: { frame: 4.2, elev: 24, az: 30, explode: 0, offsetX: -0.12, lookY: 0.9 },
+    shot: { frame: 4.2, elev: 24, az: 30, explode: 0, offsetX: -0.08, lookY: 0.9 },
     timeScale: 1 / 6,
   },
   {
@@ -43,12 +43,12 @@ const CUES: Cue[] = [
   },
   {
     at: 0.75,
-    shot: { frame: 15.5, elev: 22, az: 230, explode: 1, offsetX: 0.1, lookY: 2.8 },
+    shot: { frame: 15.5, elev: 22, az: 230, explode: 1, offsetX: -0.12, lookY: 2.8 },
     timeScale: 1,
   },
   {
     at: 1.0,
-    shot: { frame: 10.5, elev: 62, az: 360, explode: 0, offsetX: 0, lookY: 0 },
+    shot: { frame: 10.5, elev: 62, az: 360, explode: 0, offsetX: -0.14, lookY: 0 },
     timeScale: 1,
   },
 ];
@@ -94,15 +94,16 @@ function buildDough() {
   const pos: number[] = [];
   const col: number[] = [];
   const idx: number[] = [];
-  const golden = new THREE.Color("#c27a36");
-  const band = new THREE.Color("#f1d3a1"); // the pale ring where a fried donut floats
+  const golden = new THREE.Color("#d99a52");
+  const band = new THREE.Color("#f6dcae"); // the pale ring where a fried donut floats
   const c = new THREE.Color();
   const p = new THREE.Vector3();
   for (let i = 0; i <= U; i++) {
     const u = (i / U) * Math.PI * 2;
     for (let j = 0; j <= V; j++) {
       const v = (j / V) * Math.PI * 2;
-      const bump = 1 + 0.025 * noise(u * 5 + v * 3) + 0.015 * noise(u * 13 - v * 7);
+      // A gentle, irregular surface; not ridges.
+      const bump = 1 + 0.012 * noise(u * 3 + v * 2) + 0.006 * noise(u * 7 - v * 5);
       torusPoint(u, v, TUBE * bump, p);
       pos.push(p.x, p.y, p.z);
       const b = Math.exp(-Math.pow(Math.sin(v) / 0.16, 2)) * (0.75 + 0.25 * noise(u * 9));
@@ -168,10 +169,10 @@ function buildDrizzle() {
   const N = 180;
   for (let k = 0; k < N; k++) {
     const u = (k / N) * Math.PI * 2;
-    const v = Math.PI / 2 + 0.95 * Math.sin(u * 11) + 0.05 * noise(u * 17);
-    pts.push(torusPoint(u, v, TUBE + 0.16));
+    const v = Math.PI / 2 + 0.72 * Math.sin(u * 11) + 0.04 * noise(u * 17);
+    pts.push(torusPoint(u, v, TUBE + 0.1)); // lies on the glaze
   }
-  return new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts, true), 900, 0.07, 8, true);
+  return new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts, true), 900, 0.042, 8, true);
 }
 
 type Sprinkle = {
@@ -461,6 +462,8 @@ export class DonutEngine {
       this.layoutSprinkles();
     }
     this.coverUniform.value = this.cover * 1.02;
+    // The chocolate goes on once the glaze is down.
+    this.parts.drizzle.obj.visible = this.cover > 0.97;
 
     // Ease toward the cue, every frame.
     const k = this.calm ? 1 : 1 - Math.exp(-dt * 4);

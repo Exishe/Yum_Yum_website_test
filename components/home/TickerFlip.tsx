@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const EVERY_MS = 2600;
+const EVERY_MS = 3400;
 
 /**
  * Brand lines roll in one at a time, like a departures board: the old line

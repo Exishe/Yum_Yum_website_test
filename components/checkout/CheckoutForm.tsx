@@ -608,7 +608,7 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
           <button
             type="submit"
             disabled={pending || !now || days.length === 0}
-            className="mt-5 flex h-14 w-full items-center justify-center gap-2 rounded-full bg-magenta text-lg font-bold text-white transition-transform hover:-translate-y-0.5 disabled:translate-y-0 disabled:opacity-60"
+            className="mt-5 flex h-14 w-full items-center justify-center gap-2 rounded-full bg-magenta text-lg font-bold text-white transition-transform duration-200 ease-out hover:-translate-y-0.5 active:scale-[0.97] disabled:translate-y-0 disabled:opacity-60"
           >
             {pending ? t("submitting") : t("submit", { price: formatAmd(total, locale) })}
           </button>

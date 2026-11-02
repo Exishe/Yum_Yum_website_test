@@ -1,5 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import { Catalog } from "@/components/catalog/Catalog";
+import { DonutStage } from "@/components/home/DonutStage";
 import { HowToOrder } from "@/components/home/HowToOrder";
 import { GiftsSection } from "@/components/home/GiftsSection";
 import { Hero, type HeroChoice } from "@/components/home/Hero";
@@ -124,6 +125,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       >
         <Catalog categories={toClientCategories(menu)} mode="home" />
       </section>
+      <DonutStage />
       <GiftsSection
         bouquet={imgOrThrow(`${T}/yumyum-26.jpg`)}
         box={imgOrThrow(`${T}/yumyum-19.jpg`)}

@@ -151,7 +151,7 @@ export function CartDrawer({ defaultOpen = false }: { defaultOpen?: boolean }) {
                 <Dialog.Close asChild>
                   <Link
                     href="/checkout"
-                    className="flex h-14 w-full items-center justify-center gap-2 rounded-full bg-plum text-lg font-semibold text-white transition-transform hover:-translate-y-0.5"
+                    className="flex h-14 w-full items-center justify-center gap-2 rounded-full bg-plum text-lg font-semibold text-white transition-transform duration-200 ease-out hover:-translate-y-0.5 active:scale-[0.97]"
                   >
                     {t("checkout")} <ArrowRight size={20} weight="bold" aria-hidden />
                   </Link>

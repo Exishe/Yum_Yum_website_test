@@ -101,7 +101,7 @@ function Row({
         disabled={!p.isAvailable}
         onClick={(e) => (needsDetails(p) ? onOpen(p) : addSimple(p, e.currentTarget))}
         aria-label={t("addNamed", { name })}
-        className="grid size-11 shrink-0 place-items-center rounded-full bg-sun transition-transform duration-300 hover:rotate-90 active:scale-90 disabled:opacity-40"
+        className="grid size-11 shrink-0 place-items-center rounded-full bg-sun transition-transform duration-300 hover:rotate-90 active:scale-[0.94] disabled:opacity-40"
       >
         <Plus size={18} weight="bold" />
       </button>

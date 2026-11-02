@@ -30,7 +30,7 @@ export function GiftGrid({ products }: { products: ClientProduct[] }) {
               <button
                 type="button"
                 onClick={() => setOpen(p)}
-                className="group block w-full overflow-hidden rounded-[var(--radius-card)] bg-white text-left shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift"
+                className="group block w-full overflow-hidden rounded-[var(--radius-card)] bg-white text-left shadow-card transition-[translate,box-shadow,scale] duration-200 ease-out hover:-translate-y-1 hover:shadow-lift active:scale-[0.98]"
               >
                 <span className="relative block aspect-square overflow-hidden bg-magenta-soft">
                   {p.img ? (
@@ -39,7 +39,7 @@ export function GiftGrid({ products }: { products: ClientProduct[] }) {
                       alt=""
                       fill
                       sizes="(min-width: 1024px) 25vw, 50vw"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.03]"
                     />
                   ) : (
                     <PhotoSoon name={name} label={tc("photoSoon")} />

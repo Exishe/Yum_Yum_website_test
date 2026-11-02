@@ -15,12 +15,12 @@ export async function Perks() {
         {perks.map(({ icon: Icon, title, sub, tile }) => (
           <li
             key={title}
-            className="group flex flex-col items-start gap-2.5 rounded-[var(--radius-card)] bg-white p-3.5 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift sm:flex-row sm:items-center sm:gap-4 sm:p-5"
+            className="flex flex-col items-start gap-2.5 rounded-[var(--radius-card)] bg-white p-3.5 shadow-card sm:flex-row sm:items-center sm:gap-4 sm:p-5"
           >
             <span
               className={`grid size-11 shrink-0 place-items-center rounded-2xl sm:size-14 ${tile}`}
             >
-              <Icon size={34} className="group-hover:animate-wiggle" />
+              <Icon size={34} />
             </span>
             <span>
               <span className="block text-[0.9375rem] leading-snug font-semibold sm:text-base">

@@ -565,5 +565,39 @@
     "s3": "Confirm",
     "s3Sub": "Leave your name and phone and we call you back. Pay when you get it.",
     "cta": "Start your order"
+  },
+  "donut3d": {
+    "label": "A donut, up close",
+    "b0Title": "Your donut, your glaze",
+    "b0Text": "Pick a colour, then press and hold.",
+    "b1Title": "The glaze",
+    "b1Text": "A smooth, glossy layer that runs a little over the edges.",
+    "b2Title": "Four layers",
+    "b2Text": "Dough, glaze, a chocolate drizzle and sprinkles.",
+    "b3Title": "From every side",
+    "b3Text": "Over 25 kinds on the menu, each with its own mix.",
+    "b4Title": "Ready",
+    "b4Text": "Pick yours and order for pickup or delivery.",
+    "cta": "Open the menu",
+    "hold": "Press and hold",
+    "holdDone": "Done",
+    "glaze": "Glaze colour",
+    "sound": "Sound",
+    "soundOn": "Turn sound on",
+    "soundOff": "Turn sound off",
+    "parts": {
+      "dough": "Dough",
+      "glaze": "Glaze",
+      "drizzle": "Chocolate drizzle",
+      "sprinkles": "Sprinkles"
+    },
+    "colors": {
+      "pink": "Strawberry",
+      "chocolate": "Chocolate",
+      "white": "White chocolate",
+      "lemon": "Lemon",
+      "blue": "Blue"
+    },
+    "noWebgl": "The 3D donut does not open on this device, but the menu is the same."
   }
 }

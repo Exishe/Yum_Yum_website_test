@@ -119,6 +119,7 @@ export default async function LocaleLayout({
     "contact",
     "shops",
     "reviews",
+    "donut3d",
   ];
   const all = messages as Record<string, unknown>;
   const clientMessages = Object.fromEntries(clientNamespaces.map((k) => [k, all[k]]));
