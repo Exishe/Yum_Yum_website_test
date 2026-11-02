@@ -101,7 +101,7 @@ function Row({
         disabled={!p.isAvailable}
         onClick={(e) => (needsDetails(p) ? onOpen(p) : addSimple(p, e.currentTarget))}
         aria-label={t("addNamed", { name })}
-        className="grid size-11 shrink-0 place-items-center rounded-full bg-sun transition-transform duration-300 hover:rotate-90 active:scale-[0.94] disabled:opacity-40"
+        className="grid size-11 shrink-0 place-items-center rounded-full bg-sun transition-transform duration-300 active:scale-[0.94] disabled:opacity-40"
       >
         <Plus size={18} weight="bold" />
       </button>
@@ -328,7 +328,7 @@ export function Catalog({
             <div
               aria-hidden={!spotShot}
               className={cn(
-                "absolute inset-0 bg-white transition-opacity duration-500 ease-[var(--ease-out-soft)]",
+                "absolute inset-0 bg-white transition-opacity duration-200 ease-out",
                 spotShot ? "opacity-100" : "opacity-0",
               )}
             >
@@ -337,8 +337,8 @@ export function Catalog({
                   <span
                     key={p.id}
                     className={cn(
-                      "absolute inset-0 grid place-items-center px-8 pt-6 pb-24 transition-[opacity,transform] duration-500 ease-[var(--ease-out-soft)]",
-                      spot === p && spotShot ? "scale-100 opacity-100" : "scale-[0.96] opacity-0",
+                      "absolute inset-0 grid place-items-center px-8 pt-6 pb-24 transition-opacity duration-200 ease-out",
+                      spot === p && spotShot ? "opacity-100" : "opacity-0",
                     )}
                   >
                     <Image
@@ -370,7 +370,7 @@ export function Catalog({
                 onClick={(e) =>
                   needsDetails(spot) ? setOpen(spot) : addSimple(spot, e.currentTarget)
                 }
-                className="inline-flex h-11 shrink-0 items-center gap-1 rounded-full bg-magenta px-4 text-sm font-bold text-white transition-transform hover:-translate-y-0.5 disabled:opacity-50"
+                className="inline-flex h-11 shrink-0 items-center gap-1 rounded-full bg-magenta px-4 text-sm font-bold text-white transition-transform disabled:opacity-50"
               >
                 {t("addPrice", { price: formatAmd(spot.priceAmd, locale) })}
               </button>

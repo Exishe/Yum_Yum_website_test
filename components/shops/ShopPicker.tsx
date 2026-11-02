@@ -135,7 +135,7 @@ export function ShopPicker({
                 sizes="(min-width: 1024px) 50vw, 100vw"
                 priority={heading === "h1" && i === 0}
                 className={cn(
-                  "object-cover transition-opacity duration-500",
+                  "object-cover transition-opacity duration-300 ease-out",
                   i === selected ? "opacity-100" : "opacity-0",
                 )}
               />

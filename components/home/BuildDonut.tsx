@@ -268,9 +268,8 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
               status === "ready" ? "opacity-100" : "opacity-0",
             )}
           />
-          <div aria-hidden className="film-grain pointer-events-none absolute inset-0" />
           {status === "ready" ? (
-            <span className="pointer-events-none absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-black/35 px-3 py-1.5 text-xs font-semibold text-white/85 backdrop-blur-sm">
+            <span className="pointer-events-none absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-black/55 px-3 py-1.5 text-xs font-semibold text-white/85">
               <HandGrabbing size={16} aria-hidden /> {t("drag")}
             </span>
           ) : null}

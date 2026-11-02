@@ -30,7 +30,7 @@ export function CartDrawer({ defaultOpen = false }: { defaultOpen?: boolean }) {
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-[60] bg-plum/50 backdrop-blur-[2px] data-[state=open]:animate-fade" />
+        <Dialog.Overlay className="fixed inset-0 z-[60] bg-plum/50 data-[state=open]:animate-fade" />
         <Dialog.Content
           className="fixed inset-y-0 right-0 z-[61] flex w-full max-w-md flex-col bg-cream shadow-2xl outline-none data-[state=open]:animate-slide-in"
           aria-describedby={undefined}
@@ -151,7 +151,7 @@ export function CartDrawer({ defaultOpen = false }: { defaultOpen?: boolean }) {
                 <Dialog.Close asChild>
                   <Link
                     href="/checkout"
-                    className="flex h-14 w-full items-center justify-center gap-2 rounded-full bg-plum text-lg font-semibold text-white transition-transform duration-200 ease-out hover:-translate-y-0.5 active:scale-[0.97]"
+                    className="flex h-14 w-full items-center justify-center gap-2 rounded-full bg-plum text-lg font-semibold text-white transition-transform duration-200 ease-out active:scale-[0.97]"
                   >
                     {t("checkout")} <ArrowRight size={20} weight="bold" aria-hidden />
                   </Link>

@@ -74,7 +74,7 @@ export function NameDonut({ product }: { product: ClientProduct }) {
               announceAdd(e.currentTarget);
               setText("");
             }}
-            className="mt-5 h-13 w-full rounded-full bg-plum px-6 py-3.5 font-semibold text-white transition-transform hover:-translate-y-0.5 disabled:translate-y-0 disabled:opacity-45 sm:w-auto"
+            className="mt-5 h-13 w-full rounded-full bg-plum px-6 py-3.5 font-semibold text-white transition-transform disabled:translate-y-0 disabled:opacity-45 sm:w-auto"
           >
             {t("add", { price: formatAmd(product.priceAmd, locale) })}
           </button>

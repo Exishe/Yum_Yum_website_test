@@ -48,7 +48,7 @@ export async function Spotted({
                 image={p.image}
                 alt={t(`alts.${p.key}`)}
                 sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 62vw"
-                className="aspect-[3/4.6] w-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.03]"
+                className="aspect-[3/4.6] w-full object-cover transition-transform duration-300 ease-out"
               />
               <figcaption
                 className="absolute bottom-3 left-3 rounded-lg bg-white px-3 py-1 font-hand text-lg leading-tight"

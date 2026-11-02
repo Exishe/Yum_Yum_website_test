@@ -19,7 +19,7 @@ export function AskPrice({ item, className }: { item: string; className?: string
       {phone ? (
         <a
           href={`tel:${phone}`}
-          className="inline-flex h-12 flex-1 basis-40 items-center justify-center gap-2 rounded-full bg-plum px-5 font-semibold whitespace-nowrap text-white transition-transform hover:-translate-y-0.5"
+          className="inline-flex h-12 flex-1 basis-40 items-center justify-center gap-2 rounded-full bg-plum px-5 font-semibold whitespace-nowrap text-white transition-transform"
         >
           <Phone size={18} weight="bold" aria-hidden /> {t("askCall")}
         </a>

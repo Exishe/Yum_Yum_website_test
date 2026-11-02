@@ -6,8 +6,8 @@ const EVERY_MS = 3400;
 
 /**
  * Brand lines roll in one at a time, like a departures board: the old line
- * tips away upwards, the new one rolls up from below, and the yellow dots on
- * either side hop as it lands. Pauses off screen and for reduced motion.
+ * tips away upwards, the new one rolls up from below. The yellow dots on either
+ * side stay still. Pauses off screen and for reduced motion.
  */
 export function TickerFlip({ items }: { items: string[] }) {
   const [[i, prev], setPos] = useState<[number, number | null]>([0, null]);
@@ -33,11 +33,7 @@ export function TickerFlip({ items }: { items: string[] }) {
   const dot = (side: "l" | "r") => (
     <span aria-hidden className="flex items-end gap-1.5">
       {[0, 1, 2].map((n) => (
-        <span
-          key={`${i}-${side}${n}`}
-          className="ticker-hop size-2.5 rounded-full bg-sun sm:size-3"
-          style={{ animationDelay: `${(side === "l" ? 2 - n : n) * 70}ms` }}
-        />
+        <span key={`${side}${n}`} className="size-2.5 rounded-full bg-sun sm:size-3" />
       ))}
     </span>
   );

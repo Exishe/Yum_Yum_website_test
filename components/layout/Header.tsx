@@ -43,17 +43,11 @@ function NavPill({
     <Link
       {...rest}
       className={cn(
-        "group relative h-11 items-center gap-2 overflow-hidden rounded-full border border-white/25 pr-4 pl-1.5 text-sm font-semibold text-white transition-colors",
+        "group relative h-11 items-center gap-2 overflow-hidden rounded-full border border-white/25 pr-4 pl-1.5 text-sm font-semibold text-white transition-colors duration-150 ease-out hover:border-magenta hover:bg-magenta",
         className,
       )}
     >
-      <span
-        aria-hidden
-        className="absolute inset-0 translate-y-full rounded-full bg-magenta transition-transform duration-300 ease-(--ease-out-soft) group-hover:translate-y-0"
-      />
-      <span className="relative grid size-8 place-items-center rounded-full bg-white transition-transform duration-300 group-hover:-rotate-12">
-        {icon}
-      </span>
+      <span className="relative grid size-8 place-items-center rounded-full bg-white">{icon}</span>
       <span className="relative">{children}</span>
     </Link>
   );
@@ -117,20 +111,15 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
             aria-controls={panelId}
             onClick={() => setOpen((v) => !v)}
             className={cn(
-              "group relative inline-flex h-11 items-center gap-2 overflow-hidden rounded-full border pr-3 pl-1.5 text-sm font-semibold transition-colors duration-300 sm:pr-4",
-              open ? "border-magenta bg-magenta" : "border-white/25 hover:border-white/50",
+              "group relative inline-flex h-11 items-center gap-2 overflow-hidden rounded-full border pr-3 pl-1.5 text-sm font-semibold transition-[color,background-color,border-color,scale] duration-150 ease-out active:scale-[0.97] sm:pr-4",
+              open
+                ? "border-magenta bg-magenta"
+                : "border-white/25 hover:border-magenta hover:bg-magenta",
             )}
           >
             <span
-              aria-hidden
               className={cn(
-                "absolute inset-0 rounded-full bg-magenta transition-transform duration-300 ease-(--ease-out-soft)",
-                open ? "translate-y-0" : "translate-y-full group-hover:translate-y-0",
-              )}
-            />
-            <span
-              className={cn(
-                "relative grid size-8 place-items-center rounded-full bg-magenta-soft transition-transform duration-300 ease-(--ease-bounce)",
+                "relative grid size-8 place-items-center rounded-full bg-magenta-soft transition-transform duration-250 ease-(--ease-out)",
                 open && "rotate-180",
               )}
             >
@@ -142,7 +131,7 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
               size={14}
               weight="bold"
               className={cn(
-                "relative hidden transition-transform duration-300 sm:block",
+                "relative hidden transition-transform duration-200 ease-(--ease-out) sm:block",
                 open && "rotate-180",
               )}
             />
@@ -162,7 +151,7 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
         <Link
           href="/"
           aria-label={t("home")}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2 ring-white/90 transition-transform duration-300 hover:scale-105 hover:-rotate-6"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2 ring-white/90"
         >
           <Image
             src="/images/brand/logo-240.png"
@@ -260,8 +249,8 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
                     placeholder={c.image.blur ? "blur" : "empty"}
                     blurDataURL={c.image.blur}
                     className={cn(
-                      "object-cover transition-[opacity,transform] duration-500",
-                      i === active ? "scale-100 opacity-100" : "scale-105 opacity-0",
+                      "object-cover transition-opacity duration-300 ease-out",
+                      i === active ? "opacity-100" : "opacity-0",
                     )}
                   />
                 ) : null,

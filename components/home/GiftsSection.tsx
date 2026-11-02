@@ -67,7 +67,7 @@ export async function GiftsSection({
           <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Link
               href="/gifts"
-              className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-plum px-5 text-sm font-semibold whitespace-nowrap text-white transition-transform duration-200 ease-out hover:-translate-y-0.5 active:scale-[0.97] sm:px-6 sm:text-base lg:px-4 lg:text-sm xl:px-6 xl:text-base"
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-plum px-5 text-sm font-semibold whitespace-nowrap text-white transition-transform duration-200 ease-out active:scale-[0.97] sm:px-6 sm:text-base lg:px-4 lg:text-sm xl:px-6 xl:text-base"
             >
               {t("orderOnline")} <ArrowRight size={18} weight="bold" aria-hidden />
             </Link>
@@ -81,7 +81,7 @@ export async function GiftsSection({
         </div>
         <div className="no-scrollbar snap-row -mx-4 flex scroll-px-4 gap-4 overflow-x-auto px-4 pb-4 lg:mx-0 lg:block lg:scroll-px-0 lg:overflow-visible lg:px-0">
           <div className="relative min-h-0 lg:h-[600px]">
-            <figure className="w-[78vw] max-w-[380px] shrink-0 -rotate-3 rounded-[1.75rem] bg-white p-2.5 shadow-lift transition-transform duration-300 ease-out hover:rotate-0 lg:absolute lg:top-0 lg:left-[6%] lg:w-[54%]">
+            <figure className="w-[78vw] max-w-[380px] shrink-0 -rotate-3 rounded-[1.75rem] bg-white p-2.5 shadow-lift transition-transform duration-300 ease-out lg:absolute lg:top-0 lg:left-[6%] lg:w-[54%]">
               <Photo
                 image={bouquet}
                 alt={t("bouquetAlt")}
@@ -90,7 +90,7 @@ export async function GiftsSection({
               />
             </figure>
           </div>
-          <figure className="relative w-[70vw] max-w-[340px] shrink-0 rotate-3 rounded-[1.75rem] bg-white p-2.5 shadow-lift transition-transform duration-300 ease-out hover:rotate-0 lg:absolute lg:top-[110px] lg:right-[2%] lg:w-[42%] xl:right-[6%]">
+          <figure className="relative w-[70vw] max-w-[340px] shrink-0 rotate-3 rounded-[1.75rem] bg-white p-2.5 shadow-lift transition-transform duration-300 ease-out lg:absolute lg:top-[110px] lg:right-[2%] lg:w-[42%] xl:right-[6%]">
             <Photo
               image={box}
               alt={t("boxAlt")}

@@ -63,12 +63,12 @@ function buildDough() {
 }
 
 /** The glaze: the top of the torus, a little thicker, with drips over both edges. */
-function buildGlaze() {
+function buildGlaze(lite: boolean) {
   const pos: number[] = [];
   const spread: number[] = [];
   const p = new THREE.Vector3();
-  const U = 240;
-  const V = 56;
+  const U = lite ? 160 : 240;
+  const V = lite ? 40 : 56;
   const idx = grid(U, V, (i, j) => {
     const u = (i / U) * Math.PI * 2;
     const drip = Math.pow(Math.max(0, Math.sin(u * 3 + 1.1) * Math.sin(u * 7 + 0.3)), 2);
@@ -91,14 +91,20 @@ function buildGlaze() {
 }
 
 /** A zigzag of chocolate lying on the glaze; `phase` sets it apart from the second one. */
-function buildDrizzle(phase: number, turns: number) {
+function buildDrizzle(phase: number, turns: number, lite: boolean) {
   const pts: THREE.Vector3[] = [];
   for (let k = 0; k < 200; k++) {
     const u = (k / 200) * Math.PI * 2;
     const v = Math.PI / 2 + 0.72 * Math.sin(u * turns + phase) + 0.04 * noise(u * 17 + phase);
     pts.push(torusPoint(u, v, TUBE + 0.1));
   }
-  return new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts, true), 1000, 0.042, 8, true);
+  return new THREE.TubeGeometry(
+    new THREE.CatmullRomCurve3(pts, true),
+    lite ? 600 : 1000,
+    0.042,
+    lite ? 6 : 8,
+    true,
+  );
 }
 
 type Bit = {
@@ -205,6 +211,23 @@ const loadImage = (src: string) =>
 
 type Shot = { frame: number; elev: number; lookY: number };
 
+/**
+ * A rough read of the device: few cores, little memory or a small phone GPU
+ * get lighter geometry, no MSAA and a lower pixel ratio. Frame times are
+ * watched as well, so a device that still struggles steps its resolution down.
+ */
+function isLowEnd(phone: boolean) {
+  const nav = navigator as Navigator & { deviceMemory?: number };
+  const cores = nav.hardwareConcurrency || 4;
+  const memory = nav.deviceMemory ?? 8;
+  return (
+    cores <= 4 || memory <= 4 || (phone && window.screen.width * window.devicePixelRatio < 900)
+  );
+}
+
+/** How long the donut keeps turning on its own after the last touch, then it rests. */
+const IDLE_SPIN_MS = 9000;
+
 export class DonutBuilder {
   private renderer: THREE.WebGLRenderer;
   private scene = new THREE.Scene();
@@ -226,7 +249,14 @@ export class DonutBuilder {
   private raf = 0;
   private last = 0;
   private running = false;
+  private looping = false;
   private readonly calm: boolean;
+  private readonly lite: boolean;
+  private dpr: number;
+  private readonly minDpr: number;
+  private frameTimes: number[] = [];
+  private spin = 0;
+  private lastTouch = 0;
 
   // Targets set by the UI, and the eased values the frame actually draws.
   private step: Step = 0;
@@ -246,13 +276,19 @@ export class DonutBuilder {
     opts: { reducedMotion: boolean; phone: boolean },
   ) {
     this.calm = opts.reducedMotion;
+    this.lite = isLowEnd(opts.phone);
+    const lite = this.lite;
+    const deviceDpr = window.devicePixelRatio || 1;
+    this.dpr = Math.min(deviceDpr, lite ? 1.25 : opts.phone ? 1.75 : 2);
+    this.minDpr = Math.min(deviceDpr, 1);
     this.renderer = new THREE.WebGLRenderer({
       canvas,
-      antialias: true,
+      // MSAA costs a lot of fill rate; at a phone's pixel density it is barely visible.
+      antialias: !lite && deviceDpr < 2.5,
       alpha: true,
-      powerPreference: "high-performance",
+      powerPreference: lite ? "default" : "high-performance",
     });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, opts.phone ? 1.75 : 2));
+    this.renderer.setPixelRatio(this.dpr);
     this.renderer.setClearColor(0x000000, 0);
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.05;
@@ -264,7 +300,7 @@ export class DonutBuilder {
       new THREE.MeshPhysicalMaterial({
         vertexColors: true,
         roughness: 0.82,
-        sheen: 0.7,
+        sheen: lite ? 0 : 0.7,
         sheenColor: new THREE.Color("#ffd7a3"),
         sheenRoughness: 0.55,
       }),
@@ -294,7 +330,7 @@ export class DonutBuilder {
           "#include <clipping_planes_fragment>\nif (vSpread > uCover) discard;",
         );
     };
-    const glaze = new THREE.Mesh(buildGlaze(), this.glazeMat);
+    const glaze = new THREE.Mesh(buildGlaze(lite), this.glazeMat);
     const drizzleMat = (color: string) =>
       new THREE.MeshPhysicalMaterial({
         color,
@@ -303,13 +339,13 @@ export class DonutBuilder {
         clearcoatRoughness: 0.15,
       });
     this.drizzles = {
-      chocolate: new THREE.Mesh(buildDrizzle(0, 11), drizzleMat("#3b1a10")),
-      white: new THREE.Mesh(buildDrizzle(Math.PI / 2, 9), drizzleMat("#f6efe4")),
+      chocolate: new THREE.Mesh(buildDrizzle(0, 11, lite), drizzleMat("#3b1a10")),
+      white: new THREE.Mesh(buildDrizzle(Math.PI / 2, 9, lite), drizzleMat("#f6efe4")),
     };
 
-    const sprinkles = scatter(opts.phone ? 170 : 230, 7, 2.1);
+    const sprinkles = scatter(lite ? 130 : opts.phone ? 170 : 230, 7, 2.1);
     const sprinkleMesh = new THREE.InstancedMesh(
-      new THREE.CapsuleGeometry(0.065, 0.3, 4, 8),
+      new THREE.CapsuleGeometry(0.065, 0.3, lite ? 2 : 4, lite ? 6 : 8),
       new THREE.MeshPhysicalMaterial({ roughness: 0.42, clearcoat: 0.5 }),
       sprinkles.length,
     );
@@ -317,7 +353,7 @@ export class DonutBuilder {
       (h) => new THREE.Color(h),
     );
     sprinkles.forEach((_, k) => sprinkleMesh.setColorAt(k, palette[k % palette.length]!));
-    const nuts = scatter(opts.phone ? 90 : 130, 31, 1.6);
+    const nuts = scatter(lite ? 70 : opts.phone ? 90 : 130, 31, 1.6);
     const nutMesh = new THREE.InstancedMesh(
       new THREE.IcosahedronGeometry(0.13, 0),
       new THREE.MeshPhysicalMaterial({ color: "#c79a5e", roughness: 0.7 }),
@@ -356,7 +392,7 @@ export class DonutBuilder {
       emissive: new THREE.Color("#5c1736"),
       emissiveIntensity: 0.35,
       roughness: 0.45,
-      sheen: 0.5,
+      sheen: lite ? 0 : 0.5,
       sheenColor: new THREE.Color("#ffd3e4"),
     });
     const W = 11.5;
@@ -375,7 +411,7 @@ export class DonutBuilder {
     wall(T, H, W, -W / 2, H / 2, 0);
     const lidTex = new THREE.TextureLoader().load("/images/3d/box-lid.jpg");
     lidTex.colorSpace = THREE.SRGBColorSpace;
-    lidTex.anisotropy = 4;
+    lidTex.anisotropy = lite ? 1 : 4;
     const lidFace = new THREE.MeshPhysicalMaterial({ map: lidTex, roughness: 0.6 });
     this.lidFace = lidFace;
     this.lidTop = new THREE.Mesh(new THREE.BoxGeometry(W + 0.3, T, W + 0.3), [
@@ -397,7 +433,7 @@ export class DonutBuilder {
       emissive: new THREE.Color("#7a5a00"),
       emissiveIntensity: 0.35,
       roughness: 0.28,
-      sheen: 0.6,
+      sheen: lite ? 0 : 0.6,
       clearcoat: 0.4,
     });
     const band = (w: number, d: number) => {
@@ -408,7 +444,10 @@ export class DonutBuilder {
     band(1.1, W + 0.42);
     band(W + 0.42, 1.1);
     for (const side of [-1, 1]) {
-      const loop = new THREE.Mesh(new THREE.TorusGeometry(1.1, 0.3, 10, 32), satin);
+      const loop = new THREE.Mesh(
+        new THREE.TorusGeometry(1.1, 0.3, lite ? 8 : 10, lite ? 24 : 32),
+        satin,
+      );
       loop.scale.set(1, 0.55, 1);
       loop.position.set(side * 1.05, H + T * 2 + 0.55, 0);
       loop.rotation.set(Math.PI / 2.4, 0, side * 0.5);
@@ -417,9 +456,11 @@ export class DonutBuilder {
     this.box.add(this.ribbon);
     this.scene.add(this.box);
 
+    lidTex.onUpdate = () => this.wake();
     void loadImage("/images/brand/logo-240.png").then((img) => {
       (this.paper.material as THREE.MeshPhysicalMaterial).map = paperTexture(img);
       (this.paper.material as THREE.MeshPhysicalMaterial).needsUpdate = true;
+      this.wake();
     });
 
     this.apply(0);
@@ -441,46 +482,48 @@ export class DonutBuilder {
 
   setStep(step: Step) {
     this.step = step;
+    this.touch();
   }
   /** A new glaze is poured again from the top. */
   setGlaze(color: string, roughness = 0.2) {
     this.glazeMat.color.set(color);
     this.glazeMat.roughness = roughness;
     this.cover = this.calm ? 1 : 0;
+    this.touch();
   }
   setToppings(list: Topping[]) {
     this.toppings = new Set(list);
+    this.touch();
   }
   setPackaging(p: Packaging) {
     this.packaging = p;
+    this.touch();
   }
   dragStart() {
     this.dragging = true;
     this.yawVel = 0;
+    this.touch();
   }
   dragBy(dxPixels: number) {
     const d = dxPixels * 0.01;
     this.yaw += d;
     this.yawVel = d * 60;
+    this.touch();
   }
   dragEnd() {
     this.dragging = false;
+    this.touch();
   }
 
+  /** Allowed to draw (on screen, tab visible). Frames are only drawn while something moves. */
   start() {
     if (this.running) return;
     this.running = true;
-    this.last = performance.now();
-    const loop = (now: number) => {
-      if (!this.running) return;
-      this.apply(Math.min(0.05, (now - this.last) / 1000));
-      this.last = now;
-      this.raf = requestAnimationFrame(loop);
-    };
-    this.raf = requestAnimationFrame(loop);
+    this.touch();
   }
   stop() {
     this.running = false;
+    this.looping = false;
     cancelAnimationFrame(this.raf);
   }
   resize() {
@@ -489,6 +532,42 @@ export class DonutBuilder {
     this.renderer.setSize(w, h, false);
     this.camera.aspect = w / h;
     this.camera.updateProjectionMatrix();
+    this.wake();
+  }
+
+  private touch() {
+    this.lastTouch = performance.now();
+    this.wake();
+  }
+  private wake() {
+    if (!this.running || this.looping) return;
+    this.looping = true;
+    this.last = performance.now();
+    this.frameTimes = [];
+    const loop = (now: number) => {
+      if (!this.looping) return;
+      const ms = now - this.last;
+      this.last = now;
+      const moving = this.apply(Math.min(0.05, ms / 1000));
+      this.adapt(ms);
+      if (moving) this.raf = requestAnimationFrame(loop);
+      else this.looping = false;
+    };
+    this.raf = requestAnimationFrame(loop);
+  }
+  /** Steps the pixel ratio down while frames keep running long (under ~40 fps). */
+  private adapt(ms: number) {
+    if (ms <= 0 || ms > 200) return; // first frame or the tab was away
+    this.frameTimes.push(ms);
+    if (this.frameTimes.length < 40) return;
+    const sorted = [...this.frameTimes].sort((a, b) => a - b);
+    const median = sorted[sorted.length >> 1]!;
+    this.frameTimes = [];
+    if (median > 25 && this.dpr > this.minDpr) {
+      this.dpr = Math.max(this.minDpr, this.dpr - 0.25);
+      this.renderer.setPixelRatio(this.dpr);
+      this.resize();
+    }
   }
   dispose() {
     this.stop();
@@ -521,7 +600,8 @@ export class DonutBuilder {
     mesh.visible = t > 0;
   }
 
-  private apply(dt: number) {
+  /** Draws one frame; returns whether anything is still on its way. */
+  private apply(dt: number): boolean {
     const step = (cur: number, want: number, rate: number) =>
       this.calm ? want : cur + Math.sign(want - cur) * Math.min(Math.abs(want - cur), dt * rate);
 
@@ -574,10 +654,15 @@ export class DonutBuilder {
     for (const i of [0, 1, 3, 4, 5]) faces[i] = mat;
     faces[2] = gift > 0.5 ? this.giftMat : this.lidFace;
 
-    // Turn: drag with a little momentum, otherwise a slow turn of its own.
+    // Turn: drag with a little momentum, otherwise a slow turn of its own for a
+    // while after the last touch; then it eases to a rest and frames stop.
+    const spinWant = this.calm || performance.now() - this.lastTouch > IDLE_SPIN_MS ? 0 : 0.18;
+    this.spin += (spinWant - this.spin) * (1 - Math.exp(-dt * 1.2));
+    if (spinWant === 0 && this.spin < 0.002) this.spin = 0;
     if (!this.dragging) {
       this.yawVel *= Math.exp(-dt * 2.5);
-      this.yaw += this.yawVel * dt + (this.calm ? 0 : dt * 0.18);
+      if (Math.abs(this.yawVel) < 0.001) this.yawVel = 0;
+      this.yaw += this.yawVel * dt + this.spin * dt;
     }
     this.donut.rotation.y = this.yaw;
     this.box.rotation.y = this.yaw * 0.25;
@@ -604,5 +689,27 @@ export class DonutBuilder {
     this.camera.lookAt(0, this.cur.lookY, 0);
 
     this.renderer.render(this.scene, this.camera);
+
+    const camSettled = (Object.keys(shot) as (keyof Shot)[]).every(
+      (key) => Math.abs(shot[key] - this.cur[key]) < 0.01,
+    );
+    const toppingsSettled = (Object.keys(this.topT) as Topping[]).every(
+      (key) => this.topT[key] === (this.toppings.has(key) ? 1 : 0),
+    );
+    const packSettled =
+      this.pack.paper === (pk === "paper" ? 1 : 0) &&
+      this.pack.box === (pk === "paper" ? 0 : 1) &&
+      this.pack.lid === lidWant &&
+      this.pack.gift === (pk === "gift" && this.pack.lid > 0.98 ? 1 : 0);
+    return (
+      this.dragging ||
+      this.spin > 0 ||
+      spinWant > 0 ||
+      this.yawVel !== 0 ||
+      this.cover < 1 ||
+      !camSettled ||
+      !toppingsSettled ||
+      !packSettled
+    );
   }
 }

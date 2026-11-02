@@ -87,7 +87,7 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
                         type="button"
                         onClick={() => setPacked((list) => list.filter((_, k) => k !== i))}
                         aria-label={t("remove", { name: pick(p.name, locale) })}
-                        className="relative block size-full animate-pop overflow-hidden rounded-full bg-white ring-2 ring-white transition-transform hover:scale-95"
+                        className="relative block size-full animate-pop overflow-hidden rounded-full bg-white ring-2 ring-white transition-transform"
                       >
                         {p.img ? (
                           <Image
@@ -149,7 +149,7 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
                     announceAdd(e.currentTarget);
                     setPacked([]);
                   }}
-                  className="h-12 rounded-full bg-plum px-6 font-semibold text-white transition-transform hover:-translate-y-0.5 disabled:translate-y-0 disabled:opacity-45"
+                  className="h-12 rounded-full bg-plum px-6 font-semibold text-white transition-transform disabled:translate-y-0 disabled:opacity-45"
                 >
                   {t("add", { price: formatAmd(total, locale) })}
                 </button>
@@ -187,7 +187,7 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
                   onClick={() => setPacked((list) => (list.length < size ? [...list, d] : list))}
                   className="group flex w-full flex-col items-center gap-1 rounded-2xl p-1 text-center disabled:opacity-50"
                 >
-                  <span className="relative block aspect-square w-full overflow-hidden rounded-full bg-magenta-soft transition-transform duration-300 group-hover:-translate-y-1 group-hover:rotate-6 group-active:scale-90">
+                  <span className="relative block aspect-square w-full overflow-hidden rounded-full bg-magenta-soft transition-transform duration-300 group-active:scale-90">
                     {d.img ? (
                       <Image src={d.img.src} alt="" fill sizes="96px" className="object-cover" />
                     ) : null}

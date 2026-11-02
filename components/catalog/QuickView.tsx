@@ -248,7 +248,7 @@ function Body({ product, onDone }: { product: ClientProduct; onDone: () => void 
               announceAdd(e.currentTarget);
               onDone();
             }}
-            className="h-12 flex-1 rounded-full bg-plum px-5 font-semibold text-white transition-transform hover:-translate-y-0.5 disabled:translate-y-0 disabled:opacity-50"
+            className="h-12 flex-1 rounded-full bg-plum px-5 font-semibold text-white transition-transform disabled:translate-y-0 disabled:opacity-50"
           >
             {product.isAvailable
               ? t("quick.addToOrder", { price: formatAmd(unit * qty, locale) })

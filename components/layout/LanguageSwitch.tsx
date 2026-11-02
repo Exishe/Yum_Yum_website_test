@@ -28,7 +28,7 @@ export function LanguageSwitch({ tone = "dark" }: { tone?: "dark" | "light" }) {
       >
         <li
           aria-hidden
-          className="absolute top-1 bottom-1 left-1 w-[calc((100%-0.5rem)/3)] rounded-full bg-white shadow-sm transition-transform duration-300 ease-(--ease-bounce)"
+          className="absolute top-1 bottom-1 left-1 w-[calc((100%-0.5rem)/3)] rounded-full bg-white shadow-sm transition-transform duration-300 ease-(--ease-out)"
           style={{ transform: `translateX(${index * 100}%)` }}
         />
         {locales.map((l) => (

@@ -65,17 +65,18 @@
   --shadow-lift: 0 2px 0 rgb(43 10 36 / 0.05), 0 22px 40px -16px rgb(43 10 36 / 0.28);
   --shadow-pop: 0 6px 0 rgb(43 10 36 / 0.9);
 
-  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 
-  --animate-wiggle: wiggle 0.6s ease-in-out;
-  --animate-pop: pop 0.45s var(--ease-bounce);
-  --animate-panel: panel 0.35s var(--ease-out-soft);
-  --animate-rise: rise 0.5s var(--ease-out-soft) both;
-  --animate-fade: fade 0.2s ease-out;
-  --animate-swap: swap 0.35s var(--ease-out-soft);
-  --animate-slide-in: slide-in 0.35s var(--ease-out-soft);
-  --animate-slide-up: slide-up 0.35s var(--ease-out-soft);
+  --animate-wiggle: wiggle 0.5s ease-in-out;
+  --animate-pop: pop 0.25s var(--ease-out);
+  --animate-panel: panel 0.2s var(--ease-out);
+  --animate-rise: rise 0.28s var(--ease-out) both;
+  --animate-fade: fade 0.18s ease-out;
+  --animate-swap: swap 0.2s var(--ease-out);
+  --animate-slide-in: slide-in 0.3s var(--ease-drawer);
+  --animate-slide-up: slide-up 0.3s var(--ease-drawer);
 
   @keyframes swap {
     from {
@@ -89,16 +90,16 @@
       transform: rotate(0);
     }
     25% {
-      transform: rotate(-10deg);
+      transform: rotate(-6deg);
     }
     60% {
-      transform: rotate(8deg);
+      transform: rotate(4deg);
     }
   }
   @keyframes panel {
     from {
       opacity: 0;
-      transform: translate3d(0, -14px, 0);
+      transform: translate3d(0, -6px, 0) scale(0.98);
     }
     to {
       opacity: 1;
@@ -123,7 +124,7 @@
   @keyframes rise {
     from {
       opacity: 0;
-      transform: translate3d(0, 18px, 0);
+      transform: translate3d(0, 8px, 0);
     }
     to {
       opacity: 1;
@@ -134,8 +135,8 @@
     0% {
       transform: scale(1);
     }
-    40% {
-      transform: scale(1.25);
+    45% {
+      transform: scale(1.12);
     }
     100% {
       transform: scale(1);
@@ -263,17 +264,6 @@
   }
   .wave-top {
     mask: radial-gradient(60% 40px at 50% 0, transparent 98%, #000) top / 100% 100% no-repeat;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
   }
 }
 
@@ -642,7 +632,8 @@
   }
 }
 
-/* Brand lines band (components/home/TickerFlip.tsx): a departures-board flip. */
+/* Brand lines band (components/home/TickerFlip.tsx): a departures-board flip.
+   Mechanical, no overshoot: the old line tips away, the new one settles. */
 .ticker-stage {
   perspective: 600px;
 }
@@ -652,13 +643,10 @@
   transform-origin: 50% 50% -0.6em;
 }
 .ticker-in {
-  animation: ticker-in 0.7s cubic-bezier(0.2, 1.3, 0.4, 1) both;
+  animation: ticker-in 0.5s cubic-bezier(0.23, 1, 0.32, 1) 0.08s both;
 }
 .ticker-out {
-  animation: ticker-out 0.45s cubic-bezier(0.5, 0, 0.8, 0.3) both;
-}
-.ticker-hop {
-  animation: ticker-hop 0.6s cubic-bezier(0.3, 1.6, 0.5, 1) 0.25s both;
+  animation: ticker-out 0.3s cubic-bezier(0.55, 0, 0.75, 0.2) both;
 }
 @keyframes ticker-in {
   from {
@@ -676,22 +664,9 @@
     transform: rotateX(90deg) translateY(-0.4em);
   }
 }
-@keyframes ticker-hop {
-  0%,
-  100% {
-    transform: none;
-  }
-  30% {
-    transform: scale(1.3, 0.7);
-  }
-  60% {
-    transform: translateY(-10px) scale(0.85, 1.15);
-  }
-}
 @media (prefers-reduced-motion: reduce) {
   .ticker-in,
-  .ticker-out,
-  .ticker-hop {
+  .ticker-out {
     animation: none;
   }
 }
@@ -705,11 +680,4 @@
     animation-duration: 1ms !important;
     scroll-behavior: auto !important;
   }
-}
-
-/* Fine film grain over the 3D donut (components/home/DonutStage.tsx). */
-.film-grain {
-  opacity: 0.08;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }

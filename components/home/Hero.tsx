@@ -149,10 +149,10 @@ export function Hero({
                   aria-checked={selected}
                   onClick={() => choose(c.key)}
                   className={cn(
-                    "inline-flex h-12 shrink-0 items-center gap-2 rounded-full border-2 py-1 pr-4 pl-1 text-sm font-semibold transition-[color,background-color,border-color,translate,scale] duration-200 ease-out active:scale-[0.97]",
+                    "inline-flex h-12 shrink-0 items-center gap-2 rounded-full border-2 py-1 pr-4 pl-1 text-sm font-semibold transition-[color,background-color,border-color,scale] duration-150 ease-out active:scale-[0.97]",
                     selected
                       ? "border-plum bg-plum text-white"
-                      : "border-line bg-white text-plum hover:-translate-y-0.5 hover:border-plum/40",
+                      : "border-line bg-white text-plum hover:border-plum/40",
                   )}
                 >
                   <span className="relative size-9 overflow-hidden rounded-full">
@@ -167,7 +167,7 @@ export function Hero({
           <div className="mt-7 flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:items-center">
             <Link
               href={choice.href}
-              className="group inline-flex h-12 items-center justify-center gap-3 rounded-full bg-plum px-6 font-semibold whitespace-nowrap text-white transition-transform duration-200 ease-out hover:-translate-y-0.5 active:scale-[0.97]"
+              className="group inline-flex h-12 items-center justify-center gap-3 rounded-full bg-plum px-6 font-semibold whitespace-nowrap text-white transition-transform duration-200 ease-out active:scale-[0.97]"
             >
               <span key={active} className="animate-rise">
                 {t(`cta.${active}`)}
@@ -176,7 +176,7 @@ export function Hero({
                 aria-hidden
                 size={18}
                 weight="bold"
-                className="transition-transform group-hover:translate-x-1"
+                className="transition-transform duration-200 ease-out group-hover:translate-x-0.5"
               />
             </Link>
             <a
@@ -215,8 +215,8 @@ export function Hero({
                     placeholder={c.image.blur ? "blur" : "empty"}
                     blurDataURL={c.image.blur}
                     className={cn(
-                      "object-cover transition-[opacity,scale] duration-400 ease-(--ease-out-soft)",
-                      c.key === active ? "scale-100 opacity-100" : "scale-[1.04] opacity-0",
+                      "object-cover transition-opacity duration-300 ease-out",
+                      c.key === active ? "opacity-100" : "opacity-0",
                     )}
                   />
                 ),
@@ -268,7 +268,7 @@ export function Hero({
                   type="button"
                   onClick={addPick}
                   aria-label={t("addPick", { name: pick(pickProduct.name, locale) })}
-                  className="grid size-11 shrink-0 place-items-center rounded-full bg-sun transition-transform hover:rotate-90"
+                  className="grid size-11 shrink-0 place-items-center rounded-full bg-sun transition-transform duration-150 ease-out active:scale-[0.94]"
                 >
                   <Plus size={18} weight="bold" />
                 </button>
