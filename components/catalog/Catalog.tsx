@@ -73,7 +73,7 @@ function Row({
             <span
               key={b}
               className={cn(
-                "rounded-full px-2 py-0.5 text-[11px] font-bold tracking-wide uppercase",
+                "rounded-full px-2 py-0.5 text-xs font-bold tracking-wide uppercase",
                 b === "new" ? "bg-sun text-plum" : "bg-magenta-soft text-magenta-ink",
               )}
             >

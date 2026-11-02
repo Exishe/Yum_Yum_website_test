@@ -73,7 +73,7 @@ export default async function StoryPage({ params }: Props) {
         {[
           [`${T}/yumyum-14.jpg`, t("counterAlt")],
           [`${T}/yumyum-15.jpg`, t("muffinsAlt")],
-          [`${T}/yumyum-16.jpg`, t("cakeAlt")],
+          [`${T}/yumyum-18.jpg`, t("cakeAlt")],
         ].map(([src, alt]) => (
           <Photo
             key={src}

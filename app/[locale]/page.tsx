@@ -76,8 +76,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     },
     {
       key: "cake",
-      image: imgOrThrow(`${T}/yumyum-22.jpg`),
-      thumb: imgOrThrow(`${T}/yumyum-16.jpg`),
+      image: imgOrThrow(`${T}/yumyum-15.jpg`),
+      thumb: imgOrThrow(`${T}/yumyum-15.jpg`),
       product: bySlug("cappuccino"),
       tab: "bakes",
       href: { pathname: "/menu", query: { category: "bakes" } },
@@ -101,13 +101,13 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     `${T}/yumyum-19.jpg`,
     `${T}/yumyum-18.jpg`,
     `${T}/yumyum-26.jpg`,
-    `${T}/yumyum-16.jpg`,
-    `${T}/yumyum-21.jpg`,
+    `${T}/yumyum-14.jpg`,
+    `${T}/yumyum-25.jpg`,
     `${T}/yumyum-13.jpg`,
     `${Y}/showcase/showcase-02.jpg`,
     `${T}/yumyum-15.jpg`,
     `${Y}/interior/interior-03.jpg`,
-    `${T}/yumyum-22.jpg`,
+    `${T}/yumyum-20.jpg`,
   ].map(imgOrThrow);
 
   return (
@@ -138,7 +138,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           interior: imgOrThrow(`${T}/yumyum-13.jpg`),
           counter: imgOrThrow(`${T}/yumyum-14.jpg`),
           muffins: imgOrThrow(`${T}/yumyum-15.jpg`),
-          cake: imgOrThrow(`${T}/yumyum-16.jpg`),
+          cake: imgOrThrow(`${T}/yumyum-18.jpg`),
         }}
       />
       <Ticker />

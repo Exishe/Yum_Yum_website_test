@@ -67,13 +67,13 @@ export async function GiftsSection({
           <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Link
               href="/gifts"
-              className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-plum px-5 text-sm font-semibold whitespace-nowrap text-white transition-transform hover:-translate-y-0.5 sm:px-6 sm:text-base"
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-plum px-5 text-sm font-semibold whitespace-nowrap text-white transition-transform hover:-translate-y-0.5 sm:px-6 sm:text-base lg:px-4 lg:text-sm xl:px-6 xl:text-base"
             >
               {t("orderOnline")} <ArrowRight size={18} weight="bold" aria-hidden />
             </Link>
             <a
               href={`tel:${phone}`}
-              className="inline-flex h-12 items-center justify-center rounded-full border-2 border-plum px-5 text-sm font-semibold whitespace-nowrap transition-colors hover:bg-plum hover:text-white sm:px-6 sm:text-base"
+              className="inline-flex h-12 items-center justify-center rounded-full border-2 border-plum px-5 text-sm font-semibold whitespace-nowrap transition-colors hover:bg-plum hover:text-white sm:px-6 sm:text-base lg:px-4 lg:text-sm xl:px-6 xl:text-base"
             >
               {t("callToOrder", { phone: phoneDisplay })}
             </a>

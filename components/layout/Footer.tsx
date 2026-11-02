@@ -10,25 +10,37 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import type { MenuCategory, PublicShop } from "@/lib/catalog";
+import { env } from "@/lib/env";
 import { formatPhone } from "@/lib/format";
 import { t as pick } from "@/lib/localized";
 import type { SiteSettings } from "@/lib/settings";
 import { CookieSettingsButton } from "./CookieConsent";
 import { LanguageSwitch } from "./LanguageSwitch";
+import { FooterSection } from "./FooterSection";
 import { NewsletterForm } from "./NewsletterForm";
 
-function hoursLabel(shop: PublicShop, mall: string, daily: string) {
+/** Usual hours, plus any day that differs: "09:00–22:00 · Կիր 10:00–22:00". */
+function hoursLabel(shop: PublicShop, mall: string, locale: string) {
   if (!shop.hours) return mall;
-  const first = shop.hours[1];
-  const same = shop.hours.every(
-    (h) => h && first && h.open === first.open && h.close === first.close,
+  const usual = shop.hours[1];
+  if (!usual) return mall;
+  const span = (h: { open: string; close: string }) => `${h.open}–${h.close}`;
+  // 2023-01-01 was a Sunday, so day i of the week is 1 January + i.
+  const day = (i: number) => {
+    const d = new Intl.DateTimeFormat(locale, { weekday: "short", timeZone: "UTC" }).format(
+      Date.UTC(2023, 0, 1 + i),
+    );
+    return d.charAt(0).toLocaleUpperCase(locale) + d.slice(1);
+  };
+  const odd = shop.hours.flatMap((h, i) =>
+    h && h.open === usual.open && h.close === usual.close ? [] : [`${day(i)} ${h ? span(h) : "—"}`],
   );
-  return same && first ? `${first.open}–${first.close}` : daily;
+  return [span(usual), ...odd].join(" · ");
 }
 
 function PayBadge({ children }: { children: React.ReactNode }) {
   return (
-    <li className="grid h-8 min-w-14 place-items-center rounded-md bg-white px-2.5 text-[11px] font-extrabold tracking-wide text-plum">
+    <li className="grid h-8 min-w-14 place-items-center rounded-md bg-white px-2.5 text-xs font-extrabold tracking-wide text-plum">
       {children}
     </li>
   );
@@ -51,7 +63,9 @@ export async function Footer({
   const { contact, legal } = settings;
   const year = new Date().getFullYear();
   const legalDetails = [legal.companyName, legal.taxId, legal.address].filter(Boolean).join(", ");
-  const link = "text-white/80 transition-colors hover:text-sun";
+  // On phones each link is a full finger-sized row; on larger screens a plain line.
+  const link =
+    "flex min-h-10 items-center text-white/80 transition-colors hover:text-sun sm:inline-flex sm:pointer-fine:min-h-0";
 
   return (
     <footer className="on-dark bg-plum text-white">
@@ -72,168 +86,164 @@ export async function Footer({
               <p className="mt-4 text-white/80">{t("about")}</p>
             </div>
           </div>
-          <div>
-            <h2 className="text-2xl">{t("newsletter")}</h2>
-            <p className="mt-2 text-sm text-white/75">{t("newsletterLead")}</p>
-            <NewsletterForm />
-          </div>
+          {/* Sign-ups need a confirmation email, so the form waits for an email service. */}
+          {env.resendKey ? (
+            <div>
+              <h2 className="text-2xl">{t("newsletter")}</h2>
+              <p className="mt-2 text-sm text-white/75">{t("newsletterLead")}</p>
+              <NewsletterForm />
+            </div>
+          ) : null}
         </div>
 
-        <div className="grid grid-cols-1 gap-10 py-12 sm:grid-cols-2 lg:grid-cols-4">
-          <nav aria-labelledby="f-shop">
-            <h2
-              id="f-shop"
-              className="mb-4 font-sans text-xs font-bold tracking-[0.18em] text-sun uppercase"
-            >
-              {t("shop")}
-            </h2>
-            <ul className="flex flex-col gap-2.5">
-              {categories.map((c) => (
-                <li key={c.slug}>
-                  <Link href={{ pathname: "/menu", query: { category: c.slug } }} className={link}>
-                    {pick(c.name, locale)}
+        <div className="grid grid-cols-1 py-6 sm:grid-cols-2 sm:gap-10 sm:py-12 lg:grid-cols-4">
+          <FooterSection id="f-shop" title={t("shop")}>
+            <nav aria-labelledby="f-shop">
+              <ul className="flex flex-col sm:gap-2.5">
+                {categories.map((c) => (
+                  <li key={c.slug}>
+                    <Link
+                      href={{ pathname: "/menu", query: { category: c.slug } }}
+                      className={link}
+                    >
+                      {pick(c.name, locale)}
+                    </Link>
+                  </li>
+                ))}
+                <li>
+                  <Link href="/gifts" className={link}>
+                    {tn("bouquets")}
                   </Link>
                 </li>
-              ))}
-              <li>
-                <Link href="/gifts" className={link}>
-                  {tn("bouquets")}
-                </Link>
-              </li>
-            </ul>
-          </nav>
+              </ul>
+            </nav>
+          </FooterSection>
 
-          <div>
-            <h2 className="mb-4 font-sans text-xs font-bold tracking-[0.18em] text-sun uppercase">
-              {t("visit")}
-            </h2>
-            <ul className="flex flex-col gap-3 text-sm">
-              {shops.map((s) => (
-                <li key={s.slug} className="flex items-baseline justify-between gap-3">
-                  <span>
-                    <span className="block font-semibold text-white">{pick(s.name, locale)}</span>
-                    <span className="text-white/70">
-                      {hoursLabel(s, tc("mallHours"), tc("everyDay"))}
+          <FooterSection id="f-visit" title={t("visit")}>
+            <div>
+              <ul className="flex flex-col gap-3 text-sm">
+                {shops.map((s) => (
+                  <li key={s.slug} className="flex items-baseline justify-between gap-3">
+                    <span>
+                      <span className="block font-semibold text-white">{pick(s.name, locale)}</span>
+                      <span className="text-white/70">
+                        {hoursLabel(s, tc("mallHours"), locale)}
+                      </span>
                     </span>
-                  </span>
-                  {s.googleMapsUrl ? (
+                    {s.googleMapsUrl ? (
+                      <a
+                        href={s.googleMapsUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex min-h-11 shrink-0 items-center gap-1 text-white/80 hover:text-sun"
+                        aria-label={`${ts("directionsTo", { name: pick(s.name, locale) })} (${tc("newTab")})`}
+                      >
+                        {ts("directions")} <ArrowUpRight size={14} aria-hidden />
+                      </a>
+                    ) : null}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </FooterSection>
+
+          <FooterSection id="f-contact" title={t("contact")}>
+            <div>
+              <ul className="flex flex-col sm:gap-2.5">
+                {contact.phones.map((p) => (
+                  <li key={p}>
+                    <a href={`tel:${p}`} className={`${link} tabular-nums`}>
+                      {formatPhone(p)}
+                    </a>
+                  </li>
+                ))}
+                <li>
+                  <Link href="/contact" className={link}>
+                    {t("contactForm")}
+                  </Link>
+                </li>
+              </ul>
+              <p className="mt-6 mb-3 text-xs font-bold tracking-[0.18em] text-white/60 uppercase">
+                {t("social")}
+              </p>
+              <ul className="flex gap-2">
+                {contact.instagram ? (
+                  <li>
                     <a
-                      href={s.googleMapsUrl}
+                      href={`https://www.instagram.com/${contact.instagram}/`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex min-h-11 shrink-0 items-center gap-1 text-white/80 hover:text-sun"
-                      aria-label={`${ts("directionsTo", { name: pick(s.name, locale) })} (${tc("newTab")})`}
+                      aria-label={`Instagram @${contact.instagram} (${tc("newTab")})`}
+                      className="grid size-11 place-items-center rounded-full bg-white/10 hover:bg-magenta"
                     >
-                      {ts("directions")} <ArrowUpRight size={14} aria-hidden />
+                      <InstagramLogo size={22} />
                     </a>
-                  ) : null}
-                </li>
-              ))}
-            </ul>
-          </div>
+                  </li>
+                ) : null}
+                {contact.facebook ? (
+                  <li>
+                    <a
+                      href={`https://www.facebook.com/${contact.facebook}/`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Facebook ${contact.facebook} (${tc("newTab")})`}
+                      className="grid size-11 place-items-center rounded-full bg-white/10 hover:bg-magenta"
+                    >
+                      <FacebookLogo size={22} />
+                    </a>
+                  </li>
+                ) : null}
+                {contact.whatsapp ? (
+                  <li>
+                    <a
+                      href={`https://wa.me/${contact.whatsapp}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`WhatsApp (${tc("newTab")})`}
+                      className="grid size-11 place-items-center rounded-full bg-white/10 hover:bg-magenta"
+                    >
+                      <WhatsappLogo size={22} />
+                    </a>
+                  </li>
+                ) : null}
+                {contact.tiktok ? (
+                  <li>
+                    <a
+                      href={`https://www.tiktok.com/@${contact.tiktok}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`TikTok (${tc("newTab")})`}
+                      className="grid size-11 place-items-center rounded-full bg-white/10 hover:bg-magenta"
+                    >
+                      <TiktokLogo size={22} />
+                    </a>
+                  </li>
+                ) : null}
+              </ul>
+            </div>
+          </FooterSection>
 
-          <div>
-            <h2 className="mb-4 font-sans text-xs font-bold tracking-[0.18em] text-sun uppercase">
-              {t("contact")}
-            </h2>
-            <ul className="flex flex-col gap-2.5">
-              {contact.phones.map((p) => (
-                <li key={p}>
-                  <a href={`tel:${p}`} className={`${link} tabular-nums`}>
-                    {formatPhone(p)}
-                  </a>
-                </li>
-              ))}
-              <li>
-                <Link href="/contact" className={link}>
-                  {t("contactForm")}
-                </Link>
-              </li>
-            </ul>
-            <p className="mt-6 mb-3 text-xs font-bold tracking-[0.18em] text-white/60 uppercase">
-              {t("social")}
-            </p>
-            <ul className="flex gap-2">
-              {contact.instagram ? (
+          <FooterSection id="f-company" title={t("company")}>
+            <nav aria-labelledby="f-company">
+              <ul className="flex flex-col sm:gap-2.5">
                 <li>
-                  <a
-                    href={`https://www.instagram.com/${contact.instagram}/`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Instagram @${contact.instagram} (${tc("newTab")})`}
-                    className="grid size-11 place-items-center rounded-full bg-white/10 hover:bg-magenta"
-                  >
-                    <InstagramLogo size={22} />
-                  </a>
+                  <Link href="/story" className={link}>
+                    {t("storyLink")}
+                  </Link>
                 </li>
-              ) : null}
-              {contact.facebook ? (
                 <li>
-                  <a
-                    href={`https://www.facebook.com/${contact.facebook}/`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Facebook ${contact.facebook} (${tc("newTab")})`}
-                    className="grid size-11 place-items-center rounded-full bg-white/10 hover:bg-magenta"
-                  >
-                    <FacebookLogo size={22} />
-                  </a>
+                  <Link href="/shops" className={link}>
+                    {t("allShops")}
+                  </Link>
                 </li>
-              ) : null}
-              {contact.whatsapp ? (
                 <li>
-                  <a
-                    href={`https://wa.me/${contact.whatsapp}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`WhatsApp (${tc("newTab")})`}
-                    className="grid size-11 place-items-center rounded-full bg-white/10 hover:bg-magenta"
-                  >
-                    <WhatsappLogo size={22} />
-                  </a>
+                  <Link href="/contact" className={link}>
+                    {t("press")}
+                  </Link>
                 </li>
-              ) : null}
-              {contact.tiktok ? (
-                <li>
-                  <a
-                    href={`https://www.tiktok.com/@${contact.tiktok}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`TikTok (${tc("newTab")})`}
-                    className="grid size-11 place-items-center rounded-full bg-white/10 hover:bg-magenta"
-                  >
-                    <TiktokLogo size={22} />
-                  </a>
-                </li>
-              ) : null}
-            </ul>
-          </div>
-
-          <nav aria-labelledby="f-company">
-            <h2
-              id="f-company"
-              className="mb-4 font-sans text-xs font-bold tracking-[0.18em] text-sun uppercase"
-            >
-              {t("company")}
-            </h2>
-            <ul className="flex flex-col gap-2.5">
-              <li>
-                <Link href="/story" className={link}>
-                  {t("storyLink")}
-                </Link>
-              </li>
-              <li>
-                <Link href="/shops" className={link}>
-                  {t("allShops")}
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className={link}>
-                  {t("press")}
-                </Link>
-              </li>
-            </ul>
-          </nav>
+              </ul>
+            </nav>
+          </FooterSection>
         </div>
 
         <div className="flex flex-col gap-6 border-t border-white/12 pt-8 lg:flex-row lg:items-center lg:justify-between">
@@ -260,12 +270,18 @@ export async function Footer({
           </p>
           <ul className="flex flex-wrap gap-x-5 gap-y-2">
             <li>
-              <Link href="/privacy" className="hover:text-white">
+              <Link
+                href="/privacy"
+                className="inline-flex min-h-10 items-center hover:text-white sm:pointer-fine:min-h-0"
+              >
                 {t("privacy")}
               </Link>
             </li>
             <li>
-              <Link href="/terms" className="hover:text-white">
+              <Link
+                href="/terms"
+                className="inline-flex min-h-10 items-center hover:text-white sm:pointer-fine:min-h-0"
+              >
                 {t("terms")}
               </Link>
             </li>

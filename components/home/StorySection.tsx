@@ -39,30 +39,50 @@ export async function StorySection({
         <Photo
           image={photos.interior}
           alt={t("interiorAlt")}
-          sizes="(min-width: 1024px) 40vw, 100vw"
-          className="aspect-square w-full rounded-[var(--radius-xl2)] object-cover"
+          sizes="40vw"
+          className="hidden aspect-square w-full rounded-[var(--radius-xl2)] object-cover lg:block"
         />
         <Photo
           image={photos.counter}
           alt={t("counterAlt")}
-          sizes="(min-width: 1024px) 22vw, 100vw"
-          className="aspect-[4/3] w-full rounded-[var(--radius-xl2)] object-cover lg:aspect-square"
+          sizes="22vw"
+          className="hidden aspect-square w-full rounded-[var(--radius-xl2)] object-cover lg:block"
         />
       </div>
-      <div className="mt-5 grid gap-5 sm:grid-cols-2">
+      <div className="mt-5 hidden gap-5 lg:grid lg:grid-cols-2">
         <Photo
           image={photos.muffins}
           alt={t("muffinsAlt")}
-          sizes="(min-width: 640px) 50vw, 100vw"
+          sizes="50vw"
           className="aspect-[2/1] w-full rounded-[var(--radius-xl2)] object-cover"
         />
         <Photo
           image={photos.cake}
           alt={t("cakeAlt")}
-          sizes="(min-width: 640px) 50vw, 100vw"
+          sizes="50vw"
           className="aspect-[2/1] w-full rounded-[var(--radius-xl2)] object-cover"
         />
       </div>
+      {/* Phones and tablets: the four photos in one row to swipe, instead of four screens of scrolling. */}
+      <ul className="no-scrollbar snap-row -mx-4 mt-8 flex scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 sm:-mx-6 sm:scroll-px-6 sm:px-6 lg:hidden">
+        {(
+          [
+            [photos.interior, t("interiorAlt")],
+            [photos.counter, t("counterAlt")],
+            [photos.muffins, t("muffinsAlt")],
+            [photos.cake, t("cakeAlt")],
+          ] as const
+        ).map(([image, alt]) => (
+          <li key={image.src} className="w-[72vw] max-w-[320px] shrink-0">
+            <Photo
+              image={image}
+              alt={alt}
+              sizes="(min-width: 640px) 320px, 72vw"
+              className="aspect-[4/5] w-full rounded-[var(--radius-xl2)] object-cover"
+            />
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }

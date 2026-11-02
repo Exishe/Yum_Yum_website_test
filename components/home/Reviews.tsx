@@ -47,7 +47,7 @@ export function Reviews({ reviews, ratings }: { reviews: PublicReview[]; ratings
               href={r.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="underline-offset-2 hover:underline"
+              className="inline-flex min-h-10 items-center underline-offset-2 hover:underline"
             >
               {t("on", { author: r.author, platform: r.platform })}
             </a>

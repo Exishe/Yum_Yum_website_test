@@ -22,7 +22,7 @@ export function LanguageSwitch({ tone = "dark" }: { tone?: "dark" | "light" }) {
     <nav aria-label={t("label")}>
       <ul
         className={cn(
-          "relative grid h-11 grid-cols-3 items-center rounded-full p-1 text-xs font-bold tracking-wide",
+          "relative grid h-12 grid-cols-3 items-center rounded-full p-1 text-xs font-bold tracking-wide",
           tone === "dark" ? "bg-white/12" : "bg-plum/8",
         )}
       >
@@ -43,7 +43,7 @@ export function LanguageSwitch({ tone = "dark" }: { tone?: "dark" | "light" }) {
               aria-label={t(`${l}Full`)}
               onClick={() => setSelected(l)}
               className={cn(
-                "grid h-9 min-w-11 place-items-center rounded-full px-2 transition-colors duration-300",
+                "grid h-10 min-w-11 place-items-center rounded-full px-2 transition-colors duration-300",
                 l === selected
                   ? "text-plum"
                   : tone === "dark"

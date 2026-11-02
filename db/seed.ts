@@ -101,7 +101,7 @@ export async function seedDatabase(
       process.env.SEED_ADMIN_PASSWORD || opts.demoPassword || randomBytes(12).toString("base64url");
     await db.insert(s.users).values({
       email,
-      name: "Admin",
+      name: "Ղեկավար",
       role: "admin",
       passwordHash: await bcrypt.hash(password, 12),
       mustChangePassword: !process.env.SEED_ADMIN_PASSWORD && !opts.demoPassword,

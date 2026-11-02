@@ -73,7 +73,7 @@ export function DemoNote({ className }: { className?: string }) {
     <span
       title={t("demoNoteHint")}
       className={cn(
-        "inline-flex items-center gap-1 rounded-full border border-dashed border-magenta-ink/50 bg-white px-2 py-0.5 align-middle text-[11px] font-semibold whitespace-nowrap text-magenta-ink",
+        "inline-flex items-center gap-1 rounded-full border border-dashed border-magenta-ink/50 bg-white px-2 py-0.5 align-middle text-xs font-semibold whitespace-nowrap text-magenta-ink",
         className,
       )}
     >

@@ -8,8 +8,8 @@ const GAP = 12;
 /*
  * The developers' badge on the concept demo (settings in lib/demo-config.ts).
  * Markup and styles (app/globals.css) are Wiymood's own and kept as supplied.
- * Phones: open on every page; × folds it into a pill that opens again by
- * itself. Computers: a pill that opens while the pointer is on it.
+ * Phones: open when a page loads; scrolling on or × folds it into a pill,
+ * which opens again by itself unless the order bar is showing. Computers: a pill that opens while the pointer is on it.
  * It rises above the site's own floating bars (anything marked
  * data-float-bottom) instead of covering them.
  */
@@ -48,9 +48,27 @@ export function DevBadge({
     setOpen(!compact);
   }
 
+  // Phones: it folds away once the visitor scrolls on, so it never sits over
+  // the menu or the order bar for long.
+  useEffect(() => {
+    if (!open || compact) return;
+    const start = window.scrollY;
+    const onScroll = () => {
+      if (Math.abs(window.scrollY - start) > 320) setOpen(false);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [open, compact, shownOn]);
+
   useEffect(() => {
     if (open || compact) return;
-    const timer = window.setTimeout(() => setOpen(true), reopenAfterSeconds * 1000);
+    const timer = window.setTimeout(() => {
+      // Not over the order bar: the pill stays a pill while one is showing.
+      const barShowing = [...document.querySelectorAll<HTMLElement>("[data-float-bottom]")].some(
+        (el) => el.getBoundingClientRect().height > 0,
+      );
+      if (!barShowing) setOpen(true);
+    }, reopenAfterSeconds * 1000);
     return () => window.clearTimeout(timer);
   }, [open, compact, reopenAfterSeconds]);
 
