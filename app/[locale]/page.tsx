@@ -1,5 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import { Catalog } from "@/components/catalog/Catalog";
+import { HowToOrder } from "@/components/home/HowToOrder";
 import { GiftsSection } from "@/components/home/GiftsSection";
 import { Hero, type HeroChoice } from "@/components/home/Hero";
 import { Perks } from "@/components/home/Perks";
@@ -116,6 +117,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <Hero choices={choices} phone={phone} phoneDisplay={phoneDisplay} />
       <PhotoStrip photos={strip} />
       <Perks />
+      <HowToOrder />
       <section
         aria-labelledby="menu-title"
         className="mx-auto max-w-[1440px] px-4 pt-14 pb-6 sm:px-6 lg:px-8"

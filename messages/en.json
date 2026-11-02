@@ -555,5 +555,15 @@
         "p": "Call the shop or use the contact form. We answer every message."
       }
     ]
+  },
+  "howTo": {
+    "title": "How to order",
+    "s1": "Pick",
+    "s1Sub": "Tap “+” next to anything you like on the menu.",
+    "s2": "Pickup or delivery",
+    "s2Sub": "Choose a shop or your address, and a time.",
+    "s3": "Confirm",
+    "s3Sub": "Leave your name and phone and we call you back. Pay when you get it.",
+    "cta": "Start your order"
   }
 }

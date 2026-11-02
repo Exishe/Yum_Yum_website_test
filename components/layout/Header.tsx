@@ -14,6 +14,7 @@ import {
 import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
 import type { ImageInfo } from "@/lib/images";
+import { LanguageMenu } from "./LanguageMenu";
 import { LanguageSwitch } from "./LanguageSwitch";
 import { OrderButton } from "./OrderButton";
 
@@ -61,6 +62,7 @@ function NavPill({
 export function Header({ categories, phone, phoneDisplay }: Props) {
   const t = useTranslations("nav");
   const tc = useTranslations("common");
+  const tl = useTranslations("lang");
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
@@ -134,7 +136,7 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
             >
               <DonutIcon size={22} />
             </span>
-            <span className="relative">{t("menu")}</span>
+            <span className="relative max-[359px]:sr-only">{t("menu")}</span>
             <CaretDown
               aria-hidden
               size={14}
@@ -168,16 +170,20 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
             width={60}
             height={60}
             priority
-            className="size-[52px] rounded-full lg:size-[60px]"
+            className="size-11 rounded-full sm:size-[52px] lg:size-[60px]"
           />
         </Link>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           <NavPill href="/shops" icon={<PinIcon size={22} />} className="hidden lg:inline-flex">
             {t("findShop")}
           </NavPill>
           <div className="hidden lg:block">
             <LanguageSwitch />
+          </div>
+          {/* Phones: the language is one tap away next to the basket (in the menu on the smallest screens). */}
+          <div className="hidden min-[360px]:block lg:hidden">
+            <LanguageMenu />
           </div>
           <OrderButton />
         </div>
@@ -270,6 +276,10 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
 
           {/* Phone menu */}
           <div className="flex flex-col gap-6 px-4 pt-5 pb-8 sm:px-6 lg:hidden">
+            <div className="flex items-center justify-between gap-4 rounded-2xl bg-white/8 py-2 pr-2 pl-4">
+              <span className="text-sm font-semibold text-white/85">{tl("label")}</span>
+              <LanguageSwitch />
+            </div>
             <ul className="flex flex-col gap-1">
               {categories.map((c) => (
                 <li key={c.slug}>
@@ -323,10 +333,7 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
                 {t("callUs")}
               </a>
             </nav>
-            <div className="flex items-center justify-between gap-4">
-              <LanguageSwitch />
-              <span className="text-sm text-white/75">{tc("hoursDaily")}</span>
-            </div>
+            <p className="text-sm text-white/75">{tc("hoursDaily")}</p>
           </div>
         </div>
       ) : null}

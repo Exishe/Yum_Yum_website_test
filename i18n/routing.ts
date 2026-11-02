@@ -8,6 +8,8 @@ export const routing = defineRouting({
   locales,
   defaultLocale,
   localePrefix: "always",
+  // Armenian first for everyone; a visitor who picks another language is remembered (cookie).
+  localeDetection: false,
   localeCookie: { name: "NEXT_LOCALE", maxAge: 60 * 60 * 24 * 365, sameSite: "lax" },
   pathnames: {
     "/": "/",

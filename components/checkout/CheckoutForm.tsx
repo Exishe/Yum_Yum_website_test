@@ -192,6 +192,15 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
 
   const section = "rounded-[var(--radius-xl2)] bg-white p-5 shadow-card sm:p-6";
   const legend = "font-display text-2xl";
+  // Each section is a numbered step, so it is clear how much is left.
+  const step = (n: number) => (
+    <span
+      aria-hidden
+      className="mr-2.5 inline-grid size-8 place-items-center rounded-full bg-sun align-[0.15em] font-sans text-base font-bold text-plum"
+    >
+      {n}
+    </span>
+  );
 
   return (
     <form
@@ -204,7 +213,10 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
         {/* How */}
         <div className={section}>
           <fieldset className="m-0 min-w-0 border-0 p-0">
-            <legend className={cn(legend, "mb-4 p-0")}>{t("how")}</legend>
+            <legend className={cn(legend, "mb-4 p-0")}>
+              {step(1)}
+              {t("how")}
+            </legend>
             <div className="grid grid-cols-2 gap-3">
               {(
                 [
@@ -258,6 +270,7 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
         {fulfilment === "pickup" ? (
           <div className={section}>
             <label htmlFor="shopId" className={legend}>
+              {step(2)}
               {t("shop")}
             </label>
             <select
@@ -282,6 +295,7 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
           <div className={section}>
             <fieldset className="m-0 min-w-0 border-0 p-0">
               <legend className={cn(legend, "mb-4 p-0")}>
+                {step(2)}
                 {t("address")} <DemoNote className="ml-1" />
               </legend>
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-6">
@@ -348,7 +362,10 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
         {/* When */}
         <div className={section}>
           <fieldset className="m-0 min-w-0 border-0 p-0">
-            <legend className={cn(legend, "mb-4 p-0")}>{t("when")}</legend>
+            <legend className={cn(legend, "mb-4 p-0")}>
+              {step(3)}
+              {t("when")}
+            </legend>
             <div>
               {leadDays > 0 ? (
                 <p className="mb-3 flex items-center gap-2 rounded-2xl bg-sun-soft px-4 py-3 text-sm">
@@ -422,7 +439,10 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
         {/* You */}
         <div className={section}>
           <fieldset className="m-0 min-w-0 border-0 p-0">
-            <legend className={cn(legend, "mb-4 p-0")}>{t("you")}</legend>
+            <legend className={cn(legend, "mb-4 p-0")}>
+              {step(4)}
+              {t("you")}
+            </legend>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <label className="font-semibold">
                 {t("name")}
@@ -472,6 +492,7 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
         <div className={section}>
           <fieldset className="m-0 min-w-0 border-0 p-0">
             <legend className={cn(legend, "mb-4 p-0")}>
+              {step(5)}
               {t("payment")} <DemoNote className="ml-1" />
             </legend>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">

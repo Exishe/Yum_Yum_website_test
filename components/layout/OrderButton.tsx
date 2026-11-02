@@ -60,16 +60,16 @@ export function OrderButton() {
       type="button"
       onClick={openCart}
       aria-label={t("orderLabel", { count })}
-      className="group inline-flex h-11 items-center gap-2 rounded-full bg-sun pr-1.5 pl-1.5 text-sm font-bold text-plum transition-transform duration-300 hover:-translate-y-0.5 active:translate-y-0 sm:pr-1.5"
+      className="group inline-flex h-11 items-center gap-1 rounded-full bg-sun pr-1.5 pl-1.5 text-sm font-bold text-plum transition-transform duration-300 hover:-translate-y-0.5 active:translate-y-0 sm:gap-2 sm:pr-1.5"
     >
-      <span className="grid size-8 place-items-center rounded-full bg-white transition-transform duration-300 group-hover:-rotate-12">
+      <span className="grid size-7 place-items-center rounded-full bg-white transition-transform duration-300 group-hover:-rotate-12 sm:size-8">
         <BagIcon size={20} />
       </span>
       <span className="hidden sm:inline">{t("order")}</span>
       <span
         key={bump}
         className={cn(
-          "grid h-8 min-w-8 place-items-center rounded-full bg-magenta px-2 text-xs text-white tabular-nums",
+          "grid h-7 min-w-7 place-items-center rounded-full bg-magenta px-2 text-xs text-white tabular-nums sm:h-8 sm:min-w-8",
           bump > 0 && "animate-pop",
         )}
       >
