@@ -58,22 +58,39 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
   const tc = useTranslations("common");
   const tl = useTranslations("lang");
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
+  // "closing" keeps the panel on screen while it animates away.
+  const [phase, setPhase] = useState<"closed" | "open" | "closing">("closed");
+  const open = phase === "open";
+  const setOpen = useCallback((next: boolean | ((was: boolean) => boolean)) => {
+    setPhase((p) => {
+      const want = typeof next === "function" ? next(p === "open") : next;
+      if (want) return "open";
+      return p === "closed" ? "closed" : "closing";
+    });
+  }, []);
+  useEffect(() => {
+    if (phase !== "closing") return;
+    const id = window.setTimeout(() => setPhase("closed"), 190);
+    return () => window.clearTimeout(id);
+  }, [phase]);
   const [active, setActive] = useState(0);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const panelId = useId();
 
-  const close = useCallback((returnFocus = true) => {
-    setOpen(false);
-    if (returnFocus) buttonRef.current?.focus();
-  }, []);
+  const close = useCallback(
+    (returnFocus = true) => {
+      setOpen(false);
+      if (returnFocus) buttonRef.current?.focus();
+    },
+    [setOpen],
+  );
 
   // Close on route change (adjusting state during render, not in an effect).
   const [lastPath, setLastPath] = useState(pathname);
   if (lastPath !== pathname) {
     setLastPath(pathname);
-    setOpen(false);
+    setPhase("closed");
   }
 
   useEffect(() => {
@@ -178,20 +195,32 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
         </div>
       </div>
 
-      {open ? (
+      {phase !== "closed" ? (
+        <div
+          aria-hidden
+          data-state={phase}
+          className="menu-scrim fixed inset-x-0 top-[68px] bottom-0 -z-10 bg-black/45 lg:top-[76px]"
+        />
+      ) : null}
+      {phase !== "closed" ? (
         <div
           id={panelId}
           ref={panelRef}
           role="region"
           aria-label={t("menuPanel")}
-          className="absolute inset-x-0 top-full max-h-[calc(100dvh-68px)] origin-top animate-panel overflow-y-auto bg-plum-2 shadow-2xl lg:max-h-none lg:overflow-visible"
+          data-state={phase}
+          className="menu-panel absolute inset-x-0 top-full max-h-[calc(100dvh-68px)] overflow-y-auto bg-plum-2 shadow-2xl lg:max-h-none lg:overflow-visible"
         >
           {/* Desktop mega-menu */}
           <div className="mx-auto hidden max-w-[1440px] grid-cols-[1.1fr_1fr] gap-10 px-8 py-10 lg:grid">
             <div className="flex flex-col">
               <ul className="flex flex-col">
                 {categories.map((c, i) => (
-                  <li key={c.slug}>
+                  <li
+                    key={c.slug}
+                    className="menu-item"
+                    style={{ "--i": i } as React.CSSProperties}
+                  >
                     <Link
                       href={{ pathname: "/menu", query: { category: c.slug } }}
                       onMouseEnter={() => setActive(i)}
@@ -216,7 +245,10 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
                   </li>
                 ))}
               </ul>
-              <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-white/85">
+              <div
+                className="menu-item mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-white/85"
+                style={{ "--i": categories.length } as React.CSSProperties}
+              >
                 <Link
                   href="/gifts"
                   className="inline-flex items-center gap-2 font-semibold text-white hover:text-sun"
@@ -237,7 +269,10 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
                 </Link>
               </div>
             </div>
-            <div className="relative aspect-[5/4] overflow-hidden rounded-[2rem] bg-plum-3">
+            <div
+              className="menu-item relative aspect-[5/4] overflow-hidden rounded-[2rem] bg-plum-3"
+              style={{ "--i": 1 } as React.CSSProperties}
+            >
               {categories.map((c, i) =>
                 c.image ? (
                   <Image
@@ -249,7 +284,7 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
                     placeholder={c.image.blur ? "blur" : "empty"}
                     blurDataURL={c.image.blur}
                     className={cn(
-                      "object-cover transition-opacity duration-300 ease-out",
+                      "menu-photo object-cover transition-opacity duration-300 ease-out",
                       i === active ? "opacity-100" : "opacity-0",
                     )}
                   />
@@ -265,13 +300,17 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
 
           {/* Phone menu */}
           <div className="flex flex-col gap-6 px-4 pt-5 pb-8 sm:px-6 lg:hidden">
-            <div className="flex items-center justify-between gap-4 rounded-2xl bg-white/8 py-2 pr-2 pl-4">
+            <div className="menu-item flex items-center justify-between gap-4 rounded-2xl bg-white/8 py-2 pr-2 pl-4">
               <span className="text-sm font-semibold text-white/85">{tl("label")}</span>
               <LanguageSwitch />
             </div>
             <ul className="flex flex-col gap-1">
-              {categories.map((c) => (
-                <li key={c.slug}>
+              {categories.map((c, i) => (
+                <li
+                  key={c.slug}
+                  className="menu-item"
+                  style={{ "--i": i + 1 } as React.CSSProperties}
+                >
                   <Link
                     href={{ pathname: "/menu", query: { category: c.slug } }}
                     className="flex min-h-14 items-center gap-3 rounded-2xl px-2 py-2 hover:bg-white/5"
@@ -295,7 +334,11 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
                 </li>
               ))}
             </ul>
-            <nav aria-label={t("quick")} className="grid grid-cols-2 gap-3">
+            <nav
+              aria-label={t("quick")}
+              className="menu-item grid grid-cols-2 gap-3"
+              style={{ "--i": categories.length + 1 } as React.CSSProperties}
+            >
               {[
                 { href: "/gifts" as const, label: t("bouquets"), icon: <FlowerIcon size={26} /> },
                 { href: "/shops" as const, label: t("findShop"), icon: <PinIcon size={26} /> },
@@ -322,7 +365,12 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
                 {t("callUs")}
               </a>
             </nav>
-            <p className="text-sm text-white/75">{tc("hoursDaily")}</p>
+            <p
+              className="menu-item text-sm text-white/75"
+              style={{ "--i": categories.length + 2 } as React.CSSProperties}
+            >
+              {tc("hoursDaily")}
+            </p>
           </div>
         </div>
       ) : null}

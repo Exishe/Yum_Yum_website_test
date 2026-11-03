@@ -389,7 +389,7 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
                 <span
                   aria-hidden
                   className={cn(
-                    "grid size-5 shrink-0 place-items-center rounded-full text-[11px] font-bold transition-colors duration-200 max-[379px]:hidden sm:size-6 sm:text-xs",
+                    "grid size-5 shrink-0 place-items-center rounded-full text-xs font-bold transition-colors duration-200 max-[379px]:hidden sm:size-6 sm:text-xs",
                     step === i ? "bg-sun text-plum" : "bg-white/12 group-hover:bg-white/25",
                   )}
                 >

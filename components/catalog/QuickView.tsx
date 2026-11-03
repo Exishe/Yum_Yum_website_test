@@ -56,7 +56,7 @@ function Body({ product, onDone }: { product: ClientProduct; onDone: () => void 
             sizes="(min-width: 640px) 480px, 100vw"
             placeholder={product.img.blur ? "blur" : "empty"}
             blurDataURL={product.img.blur}
-            className="object-cover"
+            className="photo-settle object-cover"
           />
         ) : (
           <PhotoSoon name={name} label={t("quick.title")} />

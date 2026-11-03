@@ -37,12 +37,14 @@ export async function StorySection({
           </Link>
         </div>
         <Photo
+          zoom
           image={photos.interior}
           alt={t("interiorAlt")}
           sizes="40vw"
           className="hidden aspect-square w-full rounded-[var(--radius-xl2)] object-cover lg:block"
         />
         <Photo
+          zoom
           image={photos.counter}
           alt={t("counterAlt")}
           sizes="22vw"
@@ -51,12 +53,14 @@ export async function StorySection({
       </div>
       <div data-reveal-group className="mt-5 hidden gap-5 lg:grid lg:grid-cols-2">
         <Photo
+          zoom
           image={photos.muffins}
           alt={t("muffinsAlt")}
           sizes="50vw"
           className="aspect-[2/1] w-full rounded-[var(--radius-xl2)] object-cover"
         />
         <Photo
+          zoom
           image={photos.cake}
           alt={t("cakeAlt")}
           sizes="50vw"
@@ -78,6 +82,7 @@ export async function StorySection({
         ).map(([image, alt]) => (
           <li key={image.src} className="w-[72vw] max-w-[320px] shrink-0">
             <Photo
+              zoom
               image={image}
               alt={alt}
               sizes="(min-width: 640px) 320px, 72vw"

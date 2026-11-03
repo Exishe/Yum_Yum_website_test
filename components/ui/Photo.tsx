@@ -10,6 +10,11 @@ type Props = Omit<ImageProps, "src" | "width" | "height" | "placeholder" | "blur
    * file than the box width; without this it is upscaled and looks soft.
    */
   cover?: number;
+  /**
+   * Wrap the photo in a clipping frame that takes `className` (size, shape,
+   * corners), so it can zoom out into place on reveal and zoom in on hover.
+   */
+  zoom?: boolean;
 };
 
 /** Scales each width in a `sizes` list (not the media queries) by `factor`. */
@@ -38,7 +43,21 @@ function aspectOf(className: string | undefined): number | undefined {
 }
 
 /** next/image with the blur placeholder and intrinsic size from the manifest. */
-export function Photo({ image, fill, alt, cover, sizes, quality = 85, ...rest }: Props) {
+export function Photo({ zoom, ...props }: Props) {
+  if (!zoom) return <PhotoImage {...props} />;
+  const { className, ...rest } = props;
+  return (
+    <span className={`zoom-frame ${className ?? ""}`}>
+      <PhotoImage
+        {...rest}
+        cover={rest.cover ?? aspectOf(className)}
+        className="zoom-photo size-full object-cover"
+      />
+    </span>
+  );
+}
+
+function PhotoImage({ image, fill, alt, cover, sizes, quality = 85, ...rest }: Props) {
   const blur = image.blur ? { placeholder: "blur" as const, blurDataURL: image.blur } : {};
   const box = cover ?? aspectOf(rest.className);
   const factor = box ? Math.max(1, image.w / image.h / box) : 1;

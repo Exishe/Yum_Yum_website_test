@@ -47,6 +47,7 @@ export default async function GiftsPage({ params }: Props) {
           </div>
           <figure className="mx-auto w-full max-w-[380px] rotate-2 rounded-[1.75rem] bg-white p-2.5 shadow-lift">
             <Photo
+              zoom
               image={imgOrThrow("/images/source/tomsarkgh/yumyum-26.jpg")}
               alt={t("bouquetAlt")}
               loading="eager"

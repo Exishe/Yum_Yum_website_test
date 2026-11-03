@@ -42,7 +42,27 @@ export function RevealObserver() {
     }
     for (const el of targets) if (el.hasAttribute("data-reveal")) el.setAttribute("data-armed", "");
 
+    // Photos settle from a slight zoom when they come into view.
+    const photos = Array.from(document.querySelectorAll<HTMLElement>(".zoom-photo"));
+    const settle = (el: Element) => el.classList.add("zoom-settled");
+
     const fold = window.innerHeight;
+    for (const img of photos) {
+      if (img.getBoundingClientRect().top < fold * 0.92) settle(img);
+      img.setAttribute("data-zoom-armed", "");
+    }
+    const photoIo = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          settle(e.target);
+          photoIo.unobserve(e.target);
+        }
+      },
+      { rootMargin: "0px 0px -6% 0px" },
+    );
+    for (const img of photos) if (!img.classList.contains("zoom-settled")) photoIo.observe(img);
+
     for (const el of targets) if (el.getBoundingClientRect().top < fold * 0.92) show(el);
     root.classList.add("js-reveal");
 
@@ -73,6 +93,7 @@ export function RevealObserver() {
     if (pending.size) window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       io.disconnect();
+      photoIo.disconnect();
       window.removeEventListener("scroll", onScroll);
       cancelAnimationFrame(frame);
     };

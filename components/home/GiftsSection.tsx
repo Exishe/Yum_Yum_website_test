@@ -86,6 +86,7 @@ export async function GiftsSection({
           <div className="relative min-h-0 lg:h-[600px]">
             <figure className="w-[78vw] max-w-[380px] shrink-0 -rotate-3 rounded-[1.75rem] bg-white p-2.5 shadow-lift transition-transform duration-300 ease-out lg:absolute lg:top-0 lg:left-[6%] lg:w-[54%]">
               <Photo
+                zoom
                 image={bouquet}
                 alt={t("bouquetAlt")}
                 sizes="(min-width: 1024px) 380px, 78vw"
@@ -95,6 +96,7 @@ export async function GiftsSection({
           </div>
           <figure className="relative w-[70vw] max-w-[340px] shrink-0 rotate-3 rounded-[1.75rem] bg-white p-2.5 shadow-lift transition-transform duration-300 ease-out lg:absolute lg:top-[110px] lg:right-[2%] lg:w-[42%] xl:right-[6%]">
             <Photo
+              zoom
               image={box}
               alt={t("boxAlt")}
               sizes="(min-width: 1024px) 320px, 70vw"

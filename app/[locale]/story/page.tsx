@@ -38,6 +38,7 @@ export default async function StoryPage({ params }: Props) {
       </header>
       <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1fr_1fr] lg:px-8">
         <Photo
+          zoom
           image={imgOrThrow(`${T}/yumyum-13.jpg`)}
           alt={t("interiorAlt")}
           priority
@@ -76,6 +77,7 @@ export default async function StoryPage({ params }: Props) {
           [`${T}/yumyum-18.jpg`, t("cakeAlt")],
         ].map(([src, alt]) => (
           <Photo
+            zoom
             key={src}
             image={imgOrThrow(src!)}
             alt={alt!}

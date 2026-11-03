@@ -738,3 +738,90 @@
     animation-delay: calc(min(var(--i, 0), 10) * 35ms);
   }
 }
+
+/* Photos: they settle from a slight zoom as they come into view (RevealObserver
+   arms them), and lean in a little under the cursor. transform and scale are
+   separate properties, so the two never fight. */
+@layer components {
+  .zoom-frame {
+    display: block;
+    overflow: hidden;
+    isolation: isolate; /* keeps rounded corners clipping in Safari */
+  }
+}
+.zoom-photo {
+  transition:
+    transform 1.3s cubic-bezier(0.23, 1, 0.32, 1),
+    scale 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+}
+@media (hover: hover) and (pointer: fine) {
+  .zoom-frame:hover .zoom-photo,
+  .group:hover .zoom-photo {
+    scale: 1.05;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .zoom-photo[data-zoom-armed]:not(.zoom-settled) {
+    transform: scale(1.12);
+  }
+  .photo-settle {
+    animation: photo-settle 0.9s cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+}
+@keyframes photo-settle {
+  from {
+    transform: scale(1.08);
+  }
+}
+
+/* The header menu: drops in with its rows following one by one, and leaves
+   quicker than it came. Only transform and opacity. */
+.menu-panel[data-state="open"] {
+  animation: menu-in 0.3s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+.menu-panel[data-state="closing"] {
+  animation: menu-out 0.18s cubic-bezier(0.4, 0, 1, 1) both;
+  pointer-events: none;
+}
+.menu-panel[data-state="open"] .menu-item {
+  animation: menu-item-in 0.42s cubic-bezier(0.23, 1, 0.32, 1) both;
+  animation-delay: calc(50ms + var(--i, 0) * 28ms);
+}
+.menu-panel[data-state="open"] .menu-photo {
+  animation: photo-settle 0.9s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+.menu-scrim[data-state="open"] {
+  animation: fade 0.25s ease-out both;
+}
+.menu-scrim[data-state="closing"] {
+  animation: menu-scrim-out 0.18s ease-in both;
+}
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -12px, 0);
+  }
+}
+@keyframes menu-out {
+  to {
+    opacity: 0;
+    transform: translate3d(0, -8px, 0);
+  }
+}
+@keyframes menu-item-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+}
+@keyframes menu-scrim-out {
+  to {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .menu-panel[data-state] .menu-item,
+  .menu-panel[data-state] .menu-photo {
+    animation: none;
+  }
+}
