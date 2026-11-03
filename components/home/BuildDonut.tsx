@@ -17,6 +17,7 @@ import { announceAdd, cart } from "@/lib/cart-store";
 import type { ClientProduct } from "@/lib/client-types";
 import { cn } from "@/lib/cn";
 import type { DonutBuilder, Packaging, Step, Topping } from "@/lib/donut3d/builder";
+import { detectQuality } from "@/lib/donut3d/quality";
 import { formatAmd } from "@/lib/format";
 import { t as pick } from "@/lib/localized";
 
@@ -82,6 +83,13 @@ function makeTaps() {
  * 3D donut change; the closest donut on the menu goes into the basket. The
  * 3D code loads only when the section comes near the screen.
  */
+/** ?debug=1&q=low|medium|high forces a quality level, to check it on a real device. */
+function forcedQuality() {
+  const q = new URLSearchParams(window.location.search);
+  const v = q.get("q");
+  return q.get("debug") === "1" && (v === "low" || v === "medium" || v === "high") ? v : null;
+}
+
 export function BuildDonut({ products }: { products: Record<string, ClientProduct | null> }) {
   const t = useTranslations("builder");
   const locale = useLocale() as Locale;
@@ -98,6 +106,22 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
   const [pack, setPack] = useState<Packaging>("paper");
   const [sound, setSound] = useState(true);
   const [added, setAdded] = useState(false);
+  const gpuRef = useRef("");
+  const [debug, setDebug] = useState<string | null>(null);
+
+  // ?debug=1 shows what the 3D engine is doing on this very device.
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("debug") !== "1") return;
+    const id = window.setInterval(() => {
+      const st = engineRef.current?.stats();
+      setDebug(
+        st
+          ? `${st.quality} · ${gpuRef.current}\n${st.fps} fps · ${st.frameMs} ms/frame · dpr ${st.dpr}\n${st.calls} draws · ${st.triangles.toLocaleString()} tris`
+          : "3D: not running",
+      );
+    }, 500);
+    return () => window.clearInterval(id);
+  }, []);
 
   // Keep the engine in step with the choices.
   useEffect(() => engineRef.current?.setStep(step), [step, status]);
@@ -114,6 +138,7 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
     if (!section || !canvas) return;
     let disposed = false;
     let booting = false;
+    let lostTimer: number | undefined;
     let visible = false;
 
     const supported = (() => {
@@ -132,14 +157,29 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
     const boot = async () => {
       booting = true;
       try {
-        const { DonutBuilder } = await import("@/lib/donut3d/builder");
+        const phone = window.matchMedia("(pointer: coarse)").matches;
+        const [{ DonutBuilder }, tier] = await Promise.all([
+          import("@/lib/donut3d/builder"),
+          detectQuality(phone),
+        ]);
         if (disposed) return;
         const engine = new DonutBuilder(canvas, {
           reducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-          phone: window.matchMedia("(pointer: coarse)").matches,
+          phone,
+          quality: forcedQuality() ?? tier.quality,
         });
+        gpuRef.current = `${tier.gpu} · tier ${tier.tier}`;
         engine.onDrop = () => {
           if (soundOn.current) tapsRef.current?.tap();
+        };
+        // The browser may take the GPU away (low memory, long in the background).
+        // Build the scene again when it gives it back; show the photo if it does not.
+        engine.onContextLost = () => {
+          engineRef.current = null;
+          engine.dispose();
+          setStatus("waiting");
+          window.clearTimeout(lostTimer);
+          lostTimer = window.setTimeout(() => !disposed && setStatus("fallback"), 5000);
         };
         await engine.ready();
         if (disposed) return engine.dispose();
@@ -150,6 +190,13 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
         setStatus("fallback");
       }
     };
+    // Listened to here, not in the engine: the engine is gone by the time
+    // the browser hands the GPU back.
+    const onRestored = () => {
+      window.clearTimeout(lostTimer);
+      if (!disposed) void boot();
+    };
+    canvas.addEventListener("webglcontextrestored", onRestored);
     const near = new IntersectionObserver(
       ([e]) => {
         if (!e?.isIntersecting || booting) return;
@@ -181,6 +228,8 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
     document.addEventListener("visibilitychange", onVisibility);
     return () => {
       disposed = true;
+      window.clearTimeout(lostTimer);
+      canvas.removeEventListener("webglcontextrestored", onRestored);
       near.disconnect();
       onScreen.disconnect();
       resize.disconnect();
@@ -277,6 +326,11 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
               status === "ready" ? "opacity-100" : "opacity-0",
             )}
           />
+          {debug ? (
+            <pre className="pointer-events-none absolute top-2 left-2 z-10 rounded-lg bg-black/70 px-2 py-1 font-mono text-[10px] leading-tight whitespace-pre text-lime-300">
+              {debug}
+            </pre>
+          ) : null}
           {status === "ready" ? (
             <span className="pointer-events-none absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-black/55 px-3 py-1.5 text-xs font-semibold text-white/85">
               <HandGrabbing size={16} aria-hidden /> {t("drag")}

@@ -6,6 +6,7 @@
  * toppings and the packaging; the engine animates each change.
  */
 import * as THREE from "three";
+import type { Quality } from "./quality";
 
 export type Topping = "sprinkles" | "chocolate" | "white" | "nuts";
 export type Packaging = "paper" | "box" | "gift";
@@ -41,6 +42,7 @@ function grid(U: number, V: number, at: (i: number, j: number) => void) {
 function buildDough() {
   const pos: number[] = [];
   const col: number[] = [];
+  const uv: number[] = [];
   const golden = new THREE.Color("#d99a52");
   const band = new THREE.Color("#f6dcae"); // the pale ring where a fried donut floats
   const c = new THREE.Color();
@@ -53,10 +55,14 @@ function buildDough() {
     const b = Math.exp(-Math.pow(Math.sin(v) / 0.16, 2)) * (0.75 + 0.25 * noise(u * 9));
     c.copy(golden).lerp(band, clamp01(b));
     col.push(c.r, c.g, c.b);
+    // About 19 cm around the ring and 9 cm around the tube: the pore texture
+    // repeats so that its specks stay the same size in both directions.
+    uv.push((i / 160) * 8, (j / 64) * 4);
   });
   const g = new THREE.BufferGeometry();
   g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
   g.setAttribute("color", new THREE.Float32BufferAttribute(col, 3));
+  g.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2));
   g.setIndex(idx);
   g.computeVertexNormals();
   return g;
@@ -211,19 +217,109 @@ const loadImage = (src: string) =>
 
 type Shot = { frame: number; elev: number; lookY: number };
 
-/**
- * A rough read of the device: few cores, little memory or a small phone GPU
- * get lighter geometry, no MSAA and a lower pixel ratio. Frame times are
- * watched as well, so a device that still struggles steps its resolution down.
- */
-function isLowEnd(phone: boolean) {
-  const nav = navigator as Navigator & { deviceMemory?: number };
-  const cores = nav.hardwareConcurrency || 4;
-  const memory = nav.deviceMemory ?? 8;
-  return (
-    cores <= 4 || memory <= 4 || (phone && window.screen.width * window.devicePixelRatio < 900)
-  );
+/** Fine pores of fried dough, as a tiling bump map. */
+function poreTexture() {
+  const N = 256;
+  const c = document.createElement("canvas");
+  c.width = c.height = N;
+  const g = c.getContext("2d")!;
+  g.fillStyle = "#808080";
+  g.fillRect(0, 0, N, N);
+  let seed = 11;
+  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  for (let k = 0; k < 1400; k++) {
+    const x = rnd() * N;
+    const y = rnd() * N;
+    const r = 0.6 + rnd() * 1.6;
+    g.fillStyle = `rgba(0,0,0,${0.25 + rnd() * 0.35})`;
+    // Draw across the edges too, so the tile repeats without a seam.
+    for (const dx of [-N, 0, N])
+      for (const dy of [-N, 0, N]) {
+        g.beginPath();
+        g.arc(x + dx, y + dy, r, 0, Math.PI * 2);
+        g.fill();
+      }
+  }
+  const t = new THREE.CanvasTexture(c);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  return t;
 }
+
+/**
+ * A soft shadow drawn into a texture: a ring for the donut (darker under the
+ * dough, lighter in the hole) or a rounded square for the box.
+ */
+function shadowTexture(kind: "ring" | "square") {
+  const N = 256;
+  const c = document.createElement("canvas");
+  c.width = c.height = N;
+  const g = c.getContext("2d")!;
+  if (kind === "ring") {
+    const grad = g.createRadialGradient(N / 2, N / 2, 0, N / 2, N / 2, N / 2);
+    grad.addColorStop(0, "rgba(0,0,0,0.12)");
+    grad.addColorStop(0.27, "rgba(0,0,0,0.3)");
+    grad.addColorStop(0.52, "rgba(0,0,0,0.62)");
+    grad.addColorStop(0.74, "rgba(0,0,0,0.3)");
+    grad.addColorStop(1, "rgba(0,0,0,0)");
+    g.fillStyle = grad;
+    g.fillRect(0, 0, N, N);
+  } else {
+    // Blur through shadowBlur, which every browser supports on a canvas.
+    g.shadowColor = "rgba(0,0,0,0.75)";
+    g.shadowBlur = 26;
+    g.shadowOffsetX = N * 2;
+    g.fillRect(-N * 2 + N * 0.16, N * 0.16, N * 0.68, N * 0.68);
+  }
+  return new THREE.CanvasTexture(c);
+}
+
+function shadowPlane(kind: "ring" | "square", size: number) {
+  const m = new THREE.Mesh(
+    new THREE.PlaneGeometry(size, size),
+    new THREE.MeshBasicMaterial({
+      map: shadowTexture(kind),
+      transparent: true,
+      depthWrite: false,
+      toneMapped: false,
+    }),
+  );
+  m.rotation.x = -Math.PI / 2;
+  m.renderOrder = 1;
+  return m;
+}
+
+type Tune = {
+  maxDpr: number;
+  antialias: boolean;
+  lite: boolean;
+  sprinkles: number;
+  nuts: number;
+};
+
+function tune(quality: Quality, phone: boolean, deviceDpr: number): Tune {
+  // Never above the screen itself; a phone at 2x looks as sharp as at 3x here.
+  const cap = (n: number) => Math.min(deviceDpr, n);
+  if (quality === "high")
+    return { maxDpr: cap(2), antialias: true, lite: false, sprinkles: 230, nuts: 130 };
+  if (quality === "medium")
+    return {
+      maxDpr: cap(phone ? 1.6 : 1.75),
+      antialias: true,
+      lite: false,
+      sprinkles: phone ? 170 : 200,
+      nuts: phone ? 90 : 110,
+    };
+  return { maxDpr: cap(1.25), antialias: false, lite: true, sprinkles: 130, nuts: 70 };
+}
+
+export type EngineStats = {
+  fps: number;
+  frameMs: number;
+  dpr: number;
+  quality: Quality;
+  calls: number;
+  triangles: number;
+};
 
 /** How long the donut keeps turning on its own after the last touch, then it rests. */
 const IDLE_SPIN_MS = 9000;
@@ -251,10 +347,19 @@ export class DonutBuilder {
   private running = false;
   private looping = false;
   private readonly calm: boolean;
-  private readonly lite: boolean;
+  private readonly quality: Quality;
   private dpr: number;
   private readonly minDpr: number;
+  private readonly maxDpr: number;
   private frameTimes: number[] = [];
+  private workTimes: number[] = [];
+  private stepsDown = 0;
+  private goodWindows = 0;
+  private lastStats = { fps: 0, frameMs: 0 };
+  private donutShadow: THREE.Mesh;
+  private boxShadow: THREE.Mesh;
+  private listeners = new AbortController();
+  private envOverride: string | null = null;
   private spin = 0;
   private lastTouch = 0;
 
@@ -270,36 +375,64 @@ export class DonutBuilder {
   private yawVel = 0;
   private dragging = false;
   onDrop?: () => void;
+  /** The browser took the GPU away (memory pressure, long time in the background). */
+  onContextLost?: () => void;
 
   constructor(
     private canvas: HTMLCanvasElement,
-    opts: { reducedMotion: boolean; phone: boolean },
+    opts: { reducedMotion: boolean; phone: boolean; quality: Quality },
   ) {
     this.calm = opts.reducedMotion;
-    this.lite = isLowEnd(opts.phone);
-    const lite = this.lite;
+    this.quality = opts.quality;
     const deviceDpr = window.devicePixelRatio || 1;
-    this.dpr = Math.min(deviceDpr, lite ? 1.25 : opts.phone ? 1.75 : 2);
+    const q = tune(opts.quality, opts.phone, deviceDpr);
+    const lite = q.lite;
+    this.maxDpr = q.maxDpr;
+    this.dpr = q.maxDpr;
     this.minDpr = Math.min(deviceDpr, 1);
     this.renderer = new THREE.WebGLRenderer({
       canvas,
-      // MSAA costs a lot of fill rate; at a phone's pixel density it is barely visible.
-      antialias: !lite && deviceDpr < 2.5,
+      antialias: q.antialias,
       alpha: true,
       powerPreference: lite ? "default" : "high-performance",
     });
     this.renderer.setPixelRatio(this.dpr);
     this.renderer.setClearColor(0x000000, 0);
-    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.05;
+    // ?debug=1 also lets the look be compared on a device:
+    // &tm=neutral|aces|agx, &env=studio|baked, &envi=0.5 (studio strength), &exp=1.
+    const dbg = new URLSearchParams(window.location.search);
+    const debugOn = dbg.get("debug") === "1";
+    this.envOverride = debugOn ? dbg.get("env") : null;
+    const tm = debugOn ? dbg.get("tm") : null;
+    // Khronos PBR Neutral keeps the glaze colours true, as product photos should be.
+    this.renderer.toneMapping =
+      tm === "aces"
+        ? THREE.ACESFilmicToneMapping
+        : tm === "agx"
+          ? THREE.AgXToneMapping
+          : THREE.NeutralToneMapping;
+    this.renderer.toneMappingExposure = Number(dbg.get("exp")) || 1;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.scene.environment = studioEnvironment(this.renderer);
+
+    const signal = this.listeners.signal;
+    canvas.addEventListener(
+      "webglcontextlost",
+      (e) => {
+        e.preventDefault(); // ask the browser to give the context back
+        this.stop();
+        this.onContextLost?.();
+      },
+      { signal },
+    );
 
     const dough = new THREE.Mesh(
       buildDough(),
       new THREE.MeshPhysicalMaterial({
         vertexColors: true,
         roughness: 0.82,
+        bumpMap: lite ? null : poreTexture(),
+        bumpScale: 0.6,
         sheen: lite ? 0 : 0.7,
         sheenColor: new THREE.Color("#ffd7a3"),
         sheenRoughness: 0.55,
@@ -343,7 +476,7 @@ export class DonutBuilder {
       white: new THREE.Mesh(buildDrizzle(Math.PI / 2, 9, lite), drizzleMat("#f6efe4")),
     };
 
-    const sprinkles = scatter(lite ? 130 : opts.phone ? 170 : 230, 7, 2.1);
+    const sprinkles = scatter(q.sprinkles, 7, 2.1);
     const sprinkleMesh = new THREE.InstancedMesh(
       new THREE.CapsuleGeometry(0.065, 0.3, lite ? 2 : 4, lite ? 6 : 8),
       new THREE.MeshPhysicalMaterial({ roughness: 0.42, clearcoat: 0.5 }),
@@ -353,7 +486,7 @@ export class DonutBuilder {
       (h) => new THREE.Color(h),
     );
     sprinkles.forEach((_, k) => sprinkleMesh.setColorAt(k, palette[k % palette.length]!));
-    const nuts = scatter(lite ? 70 : opts.phone ? 90 : 130, 31, 1.6);
+    const nuts = scatter(q.nuts, 31, 1.6);
     const nutMesh = new THREE.InstancedMesh(
       new THREE.IcosahedronGeometry(0.13, 0),
       new THREE.MeshPhysicalMaterial({ color: "#c79a5e", roughness: 0.7 }),
@@ -385,12 +518,17 @@ export class DonutBuilder {
     this.paper.rotation.z = 0.35;
     this.scene.add(this.paper);
 
+    // Soft contact shadows: without them the donut and the box float.
+    this.donutShadow = shadowPlane("ring", (R + TUBE) * 2 * 1.3);
+    this.boxShadow = shadowPlane("square", 11.5 * 1.5);
+    this.scene.add(this.donutShadow, this.boxShadow);
+
     // The YUM-YUM box: an open tray and a lid hinged at the back.
     this.cardMat = new THREE.MeshPhysicalMaterial({ color: "#fbf8f4", roughness: 0.75 });
     this.giftMat = new THREE.MeshPhysicalMaterial({
       color: "#ff9fc8",
-      emissive: new THREE.Color("#5c1736"),
-      emissiveIntensity: 0.35,
+      emissive: new THREE.Color("#8a2350"),
+      emissiveIntensity: 0.6,
       roughness: 0.45,
       sheen: lite ? 0 : 0.5,
       sheenColor: new THREE.Color("#ffd3e4"),
@@ -429,10 +567,10 @@ export class DonutBuilder {
 
     // Gift: a yellow ribbon across the closed box, and a bow.
     const satin = new THREE.MeshPhysicalMaterial({
-      color: "#ffdf4f",
-      emissive: new THREE.Color("#7a5a00"),
-      emissiveIntensity: 0.35,
-      roughness: 0.28,
+      color: "#ffd83a",
+      emissive: new THREE.Color("#a87a00"),
+      emissiveIntensity: 0.55,
+      roughness: 0.4,
       sheen: lite ? 0 : 0.6,
       clearcoat: 0.4,
     });
@@ -465,6 +603,32 @@ export class DonutBuilder {
 
     this.apply(0);
     this.resize();
+    const useStudio =
+      this.envOverride === "studio" || (opts.quality === "high" && this.envOverride !== "baked");
+    if (useStudio) void this.loadStudioHdr();
+  }
+
+  /** A real photo studio (Poly Haven, CC0) for crisper, natural highlights; high tier only. */
+  private async loadStudioHdr() {
+    try {
+      const { RGBELoader } = await import("three/examples/jsm/loaders/RGBELoader.js");
+      const hdr = await new RGBELoader().loadAsync("/3d/studio.hdr");
+      hdr.mapping = THREE.EquirectangularReflectionMapping;
+      const pmrem = new THREE.PMREMGenerator(this.renderer);
+      const env = pmrem.fromEquirectangular(hdr).texture;
+      pmrem.dispose();
+      hdr.dispose();
+      if (!this.listeners.signal.aborted) {
+        this.scene.environment?.dispose();
+        this.scene.environment = env;
+        this.scene.environmentIntensity = Number(
+          new URLSearchParams(window.location.search).get("envi") || 0.5,
+        );
+        this.wake();
+      } else env.dispose();
+    } catch {
+      // The baked studio stays.
+    }
   }
 
   /** Builds every shader before the first frame, so the first change does not stutter. */
@@ -548,34 +712,76 @@ export class DonutBuilder {
       if (!this.looping) return;
       const ms = now - this.last;
       this.last = now;
+      const t0 = performance.now();
       const moving = this.apply(Math.min(0.05, ms / 1000));
-      this.adapt(ms);
+      this.adapt(ms, performance.now() - t0);
       if (moving) this.raf = requestAnimationFrame(loop);
       else this.looping = false;
     };
     this.raf = requestAnimationFrame(loop);
   }
-  /** Steps the pixel ratio down while frames keep running long (under ~40 fps). */
-  private adapt(ms: number) {
-    if (ms <= 0 || ms > 200) return; // first frame or the tab was away
+  /**
+   * Resolution follows the frame rate both ways. A steady ~30 fps is a cap
+   * the phone sets itself (iPhone Low Power Mode), not a struggle, and it
+   * is left alone. After three steps down it stops trying to climb back.
+   */
+  private adapt(ms: number, workMs: number) {
+    if (ms <= 0 || ms > 200) return; // first frame, or the tab was away
     this.frameTimes.push(ms);
-    if (this.frameTimes.length < 40) return;
+    this.workTimes.push(workMs);
+    if (this.frameTimes.length < 30) return;
     const sorted = [...this.frameTimes].sort((a, b) => a - b);
     const median = sorted[sorted.length >> 1]!;
+    const p90 = sorted[Math.floor(sorted.length * 0.9)]!;
+    this.lastStats = {
+      fps: Math.round(1000 / median),
+      frameMs: +(this.workTimes.reduce((a, b) => a + b, 0) / this.workTimes.length).toFixed(1),
+    };
     this.frameTimes = [];
-    if (median > 25 && this.dpr > this.minDpr) {
-      this.dpr = Math.max(this.minDpr, this.dpr - 0.25);
+    this.workTimes = [];
+    const cappedAt30 = median > 31 && median < 36 && p90 < 40;
+    let next = this.dpr;
+    if (median > 25 && !cappedAt30 && this.dpr > this.minDpr) {
+      next = Math.max(this.minDpr, this.dpr - 0.25);
+      this.stepsDown++;
+      this.goodWindows = 0;
+    } else if (median < 19 && this.dpr < this.maxDpr && this.stepsDown < 3) {
+      // Two good windows in a row before going up, so it does not flicker.
+      if (++this.goodWindows >= 2) {
+        next = Math.min(this.maxDpr, this.dpr + 0.25);
+        this.goodWindows = 0;
+      }
+    } else this.goodWindows = 0;
+    if (next !== this.dpr) {
+      this.dpr = next;
       this.renderer.setPixelRatio(this.dpr);
       this.resize();
     }
   }
+
+  /** For the ?debug=1 overlay. */
+  stats(): EngineStats {
+    const info = this.renderer.info.render;
+    return {
+      ...this.lastStats,
+      dpr: this.dpr,
+      quality: this.quality,
+      calls: info.calls,
+      triangles: info.triangles,
+    };
+  }
+
   dispose() {
     this.stop();
+    this.listeners.abort();
     this.scene.traverse((o) => {
       if (o instanceof THREE.Mesh) {
         o.geometry.dispose();
         const m = o.material as THREE.Material | THREE.Material[];
-        (Array.isArray(m) ? m : [m]).forEach((x) => x.dispose());
+        (Array.isArray(m) ? m : [m]).forEach((x) => {
+          for (const v of Object.values(x)) if (v instanceof THREE.Texture) v.dispose();
+          x.dispose();
+        });
       }
     });
     this.scene.environment?.dispose();
@@ -643,6 +849,12 @@ export class DonutBuilder {
     this.box.visible = this.pack.box > 0.01;
     this.box.position.y = -6 * (1 - ease(this.pack.box));
     this.donut.position.y = REST_Y + 0.18 * ease(this.pack.box);
+    this.donutShadow.position.y = this.donut.position.y - REST_Y + 0.02;
+    (this.donutShadow.material as THREE.MeshBasicMaterial).opacity = 0.75;
+    const boxShade = this.boxShadow.material as THREE.MeshBasicMaterial;
+    boxShade.opacity = 0.7 * ease(this.pack.box);
+    this.boxShadow.visible = boxShade.opacity > 0.01;
+    this.boxShadow.position.y = 0.01;
     this.lid.rotation.x = -(Math.PI * 0.62) * (1 - ease(this.pack.lid));
     const gift = ease(this.pack.gift);
     this.ribbon.visible = gift > 0.01;
@@ -666,6 +878,7 @@ export class DonutBuilder {
     }
     this.donut.rotation.y = this.yaw;
     this.box.rotation.y = this.yaw * 0.25;
+    this.boxShadow.rotation.z = this.yaw * 0.25;
     this.paper.rotation.z = 0.35 + this.yaw * 0.25;
 
     // Camera shot for the step, eased every frame; framed by size so it fits any screen.

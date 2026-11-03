@@ -97,7 +97,7 @@ export const config = {
   matcher: [
     {
       source:
-        "/((?!api|_next/static|_next/image|images|uploads|fonts|icon.png|apple-icon.png|favicon.ico|robots.txt|sitemap.xml|manifest.webmanifest|.*\\.(?:png|jpg|jpeg|webp|avif|svg|ico|txt|xml|webmanifest)$).*)",
+        "/((?!api|_next/static|_next/image|images|uploads|fonts|gpu-benchmarks|3d/|icon.png|apple-icon.png|favicon.ico|robots.txt|sitemap.xml|manifest.webmanifest|.*\\.(?:png|jpg|jpeg|webp|avif|svg|ico|txt|xml|webmanifest)$).*)",
     },
   ],
 };
