@@ -855,3 +855,74 @@
     display: none;
   }
 }
+
+/* Hero mascot (HeroMascot.tsx): steps up from behind the photo, waves once,
+   and the speech bubble opens from its corner. Playful, so a little overshoot. */
+.mascot-stage[data-state="open"] .mascot-figure {
+  transform-origin: 50% 100%;
+  animation:
+    mascot-in 0.55s cubic-bezier(0.34, 1.45, 0.64, 1) both,
+    mascot-wave 0.7s ease-in-out 0.55s;
+}
+.mascot-stage[data-state="open"] .mascot-bubble {
+  transform-origin: 0% 100%;
+  animation: mascot-bubble-in 0.35s cubic-bezier(0.23, 1, 0.32, 1) 0.2s both;
+}
+.mascot-stage[data-state="leaving"] {
+  animation: mascot-out 0.18s ease-in both;
+}
+@keyframes mascot-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 35%, 0) scale(0.6) rotate(-10deg);
+  }
+}
+@keyframes mascot-wave {
+  30% {
+    transform: rotate(-5deg);
+  }
+  65% {
+    transform: rotate(4deg);
+  }
+}
+@keyframes mascot-bubble-in {
+  from {
+    opacity: 0;
+    transform: scale(0.85) translate3d(-8px, 8px, 0);
+  }
+}
+@keyframes mascot-out {
+  to {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+}
+
+/* Gift box builder (BoxBuilder.tsx): the donut being carried. */
+.box-ghost {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  border-radius: 9999px;
+  background: #fff center / cover no-repeat;
+  box-shadow:
+    0 18px 30px -10px rgb(43 10 36 / 0.45),
+    0 0 0 3px #fff;
+  pointer-events: none;
+  will-change: transform;
+}
+.box-ghost-settle {
+  transition:
+    transform 0.2s cubic-bezier(0.23, 1, 0.32, 1),
+    opacity 0.2s ease-out;
+}
+/* While the mascot is out, the "today's pick" card steps aside. */
+.pick-card {
+  transition: opacity 0.2s ease-out;
+}
+.hero-photo-in:has(.mascot-stage[data-state="open"]) .pick-card {
+  animation: none;
+  opacity: 0;
+  pointer-events: none;
+}

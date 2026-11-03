@@ -114,7 +114,20 @@
       "cake": "Chocolate muffins and an espresso"
     },
     "stripLabel": "Photos from our shops",
-    "strip": "yum"
+    "strip": "yum",
+    "mascot": {
+      "open": "Say hello to our donut",
+      "hint": "Tap me",
+      "alt": "The smiling YUM-YUM donut holding a sign",
+      "hello": "Hi! I'm the YUM-YUM donut",
+      "ask": "Have you tried our donuts yet?",
+      "yes": "Yes, of course!",
+      "no": "Not yet",
+      "afterYes": "Lovely! Which one is your favourite? Pick it and order again.",
+      "afterNo": "Then it's time! Start with a classic: the chocolate donut.",
+      "toMenu": "See the menu",
+      "close": "Close"
+    }
   },
   "perks": {
     "label": "Why people come back",
@@ -199,7 +212,7 @@
       "size": "Box size",
       "six": "Box of 6",
       "twelve": "Box of 12",
-      "pick": "Tap a donut to add it",
+      "pick": "Drag a donut into the box, or just tap it (on a phone: hold for a moment, then move)",
       "left": "{count, plural, =0 {Box is full!} one {# space left} other {# spaces left}}",
       "remove": "Take out {name}",
       "clear": "Empty the box",

@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { FreshDonutIcon } from "@/components/icons/brand";
 import { ScrollRow } from "@/components/ui/ScrollRow";
+import { HeroMascot } from "./HeroMascot";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { announceAdd, cart } from "@/lib/cart-store";
@@ -223,6 +224,8 @@ export function Hero({
             )}
           </div>
 
+          <HeroMascot />
+
           <p className="absolute top-[6%] right-[2%] grid size-[clamp(6rem,18vw,8.5rem)] rotate-6 place-items-center rounded-full bg-sun text-center shadow-card">
             <span>
               <span className="shops-badge block px-2 font-display text-[clamp(1.04rem,2.59vw,1.3rem)] leading-none">
@@ -236,7 +239,7 @@ export function Hero({
             <div
               key={pickProduct.id}
               aria-live="polite"
-              className="absolute bottom-[6%] left-0 flex max-w-[92%] animate-rise items-center gap-3 rounded-2xl bg-white p-2 pr-3 shadow-lift sm:left-[-4%]"
+              className="pick-card absolute bottom-[6%] left-0 flex max-w-[92%] animate-rise items-center gap-3 rounded-2xl bg-white p-2 pr-3 shadow-lift sm:left-[-4%]"
             >
               <span className="relative size-14 shrink-0 overflow-hidden rounded-xl bg-magenta-soft">
                 {pickProduct.img ? (
