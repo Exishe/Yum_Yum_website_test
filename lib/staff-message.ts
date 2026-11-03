@@ -135,6 +135,46 @@ export function orderMessage(o: StaffOrder): { subject: string; text: string } {
   return { subject: `${L.newOrder} #${o.shortCode} · ${amd(o.totalAmd)}`, text };
 }
 
+const KIND_HY: Record<string, string> = {
+  office: "Գրասենյակ / Office",
+  birthday: "Ծննդյան տոն / Birthday",
+  wedding: "Հարսանիք / Wedding",
+  other: "Այլ / Other",
+};
+const ITEM_HY: Record<string, string> = {
+  donuts: "դոնաթներ",
+  boxes: "տուփեր",
+  bouquets: "փնջեր",
+  drinks: "ըմպելիքներ",
+};
+
+/** A corporate or event request, for the staff chat. */
+export function eventMessage(m: {
+  name: string;
+  phone: string;
+  company?: string;
+  kind: string;
+  date?: string;
+  guests?: number;
+  items: string[];
+  message?: string;
+}) {
+  const lines = [
+    `${KIND_HY[m.kind] ?? m.kind}`,
+    `${L.name}: ${m.name}${m.company ? ` (${m.company})` : ""}`,
+    `${L.phone}: ${m.phone}`,
+    m.date ? `${L.when}: ${m.date}` : "",
+    m.guests ? `Հյուրեր / Guests: ${m.guests}` : "",
+    m.items.length ? `Ինչ / What: ${m.items.map((i) => ITEM_HY[i] ?? i).join(", ")}` : "",
+    m.message ? `\n${m.message}` : "",
+    `\n${L.callFirst}`,
+  ].filter(Boolean);
+  return {
+    subject: `Միջոցառման հայտ / Event request: ${m.name}`,
+    text: lines.join("\n"),
+  };
+}
+
 export function contactMessage(m: { name: string; contact: string; message: string }) {
   return {
     subject: `${L.newMessage}: ${m.name}`,

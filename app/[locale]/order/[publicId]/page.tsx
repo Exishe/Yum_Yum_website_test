@@ -1,5 +1,6 @@
 import { Check, WhatsappLogo } from "@phosphor-icons/react/dist/ssr";
 import type { Metadata } from "next";
+import Image from "next/image";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { AutoRefresh } from "@/components/AutoRefresh";
 import { DonutIcon } from "@/components/icons/brand";
@@ -76,9 +77,24 @@ export default async function OrderPage({ params, searchParams }: Props) {
       {!finished ? <AutoRefresh /> : null}
       <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
         {isNew ? (
-          <p className="font-hand text-3xl text-magenta-ink">
-            {t("thanks", { name: order.anonymizedAt ? "" : order.customerName })}
-          </p>
+          <div className="flex items-end gap-3">
+            {/* The YUM-YUM donut waves thank you. */}
+            <div className="mascot-stage shrink-0" data-state="open">
+              <Image
+                src="/images/brand/mascot.webp"
+                alt=""
+                width={864}
+                height={739}
+                quality={85}
+                sizes="128px"
+                priority
+                className="mascot-figure w-24 sm:w-32"
+              />
+            </div>
+            <p className="pb-2 font-hand text-3xl text-magenta-ink">
+              {t("thanks", { name: order.anonymizedAt ? "" : order.customerName })}
+            </p>
+          </div>
         ) : null}
         <h1 className="text-[clamp(1.91rem,4.28vw,2.69rem)] leading-none">
           {t("number", { code })}

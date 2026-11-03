@@ -59,13 +59,13 @@ export function OrderButton() {
       ref={ref}
       type="button"
       onClick={openCart}
-      aria-label={t("orderLabel", { count })}
       className="group inline-flex h-11 items-center gap-1 rounded-full bg-sun pr-1.5 pl-1.5 text-sm font-bold text-plum transition-transform duration-200 ease-out active:scale-[0.97] sm:gap-2 sm:pr-1.5"
     >
       <span className="grid size-7 place-items-center rounded-full bg-white transition-transform duration-300 sm:size-8">
         <BagIcon size={20} />
       </span>
-      <span className="hidden sm:inline">{t("order")}</span>
+      {/* The visible words are the button's name: "Order 2 items". */}
+      <span className="sr-only sm:not-sr-only sm:inline">{t("order")}</span>
       <span
         key={bump}
         className={cn(
@@ -75,6 +75,7 @@ export function OrderButton() {
       >
         {count}
       </span>
+      <span className="sr-only">{t("orderItems", { count })}</span>
     </button>
   );
 }

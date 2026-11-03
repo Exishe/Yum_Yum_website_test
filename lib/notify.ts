@@ -12,13 +12,13 @@ function escapeHtml(s: string) {
   );
 }
 
-async function sendTelegram(m: Message) {
-  if (!env.telegramToken || !env.telegramChatId) throw new Error("Telegram is not configured");
+async function sendTelegram(m: Message, chatId = env.telegramChatId) {
+  if (!env.telegramToken || !chatId) throw new Error("Telegram is not configured");
   const res = await fetch(`${env.telegramApi}/bot${env.telegramToken}/sendMessage`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      chat_id: env.telegramChatId,
+      chat_id: chatId,
       text: `<b>${escapeHtml(m.subject)}</b>\n\n${escapeHtml(m.text)}`,
       parse_mode: "HTML",
       disable_web_page_preview: true,
@@ -81,5 +81,19 @@ async function log(channel: string, m: Message, ok: boolean, error?: string) {
     });
   } catch (err) {
     console.error("[notify] could not write log", err);
+  }
+}
+
+/**
+ * A site error, for the developer (TELEGRAM_ALERT_CHAT_ID, or the order chat
+ * in the demo). Always written to the server log; never throws.
+ */
+export async function notifyDeveloper(subject: string, text: string) {
+  console.error(`[alert] ${subject}\n${text}`);
+  if (!env.telegramToken || !env.alertChatId) return;
+  try {
+    await sendTelegram({ subject: `⚠️ ${subject}`, text: text.slice(0, 3500) }, env.alertChatId);
+  } catch (err) {
+    console.error("[alert] Telegram failed", err);
   }
 }

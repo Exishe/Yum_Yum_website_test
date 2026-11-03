@@ -13,11 +13,11 @@ import { isPhoneBlocked } from "./blocklist";
 import { env } from "./env";
 import { formatPhone } from "./format";
 import { notifyShop, sendEmail } from "./notify";
-import { contactMessage } from "./staff-message";
+import { contactMessage, eventMessage } from "./staff-message";
 import { createOrder, orderNotification } from "./orders";
 import { clientIp, hashValue, rateLimit, sha256, verifyTurnstile } from "./security";
 import { getSettings } from "./settings";
-import { checkoutSchema, contactSchema, newsletterSchema } from "./validation";
+import { checkoutSchema, contactSchema, eventSchema, newsletterSchema } from "./validation";
 
 export type ActionResult<T = object> =
   | ({ ok: true } & T)
@@ -102,6 +102,39 @@ export async function sendContact(input: unknown): Promise<ActionResult> {
     return { ok: true };
   } catch (err) {
     console.error("[sendContact]", err);
+    return { ok: false, error: "generic" };
+  }
+}
+
+/** Corporate and event requests: stored with the website messages, sent to the staff chat. */
+export async function sendEventRequest(input: unknown): Promise<ActionResult> {
+  const parsed = eventSchema.safeParse(input);
+  if (!parsed.success) {
+    const fields = fieldErrors(parsed.error.issues);
+    return { ok: false, error: Object.values(fields)[0] ?? "generic", fields };
+  }
+  const data = parsed.data;
+  if (data.website) return { ok: false, error: "spam" };
+  if (data.date && data.date < new Date().toISOString().slice(0, 10)) {
+    return { ok: false, error: "date", fields: { date: "date" } };
+  }
+  const ip = await clientIp();
+  if (!(await rateLimit(`event:${ip}`, 5, 3600))) return { ok: false, error: "rateLimit" };
+  if (!(await verifyTurnstile(data.turnstileToken, ip))) return { ok: false, error: "turnstile" };
+
+  const note = eventMessage({ ...data, date: data.date || undefined });
+  try {
+    await db.insert(contactMessages).values({
+      name: data.company ? `${data.name} (${data.company})` : data.name,
+      contact: data.phone,
+      message: note.text,
+      locale: data.locale,
+      ipHash: hashValue(ip),
+    });
+    after(() => notifyShop(note));
+    return { ok: true };
+  } catch (err) {
+    console.error("[sendEventRequest]", err);
     return { ok: false, error: "generic" };
   }
 }

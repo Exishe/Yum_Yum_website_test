@@ -288,6 +288,14 @@ function shadowPlane(kind: "ring" | "square", size: number) {
   return m;
 }
 
+/** Lets the browser handle input and paint before the next piece of work. */
+const pause = () =>
+  new Promise<void>((resolve) => {
+    const s = (globalThis as { scheduler?: { yield?: () => Promise<void> } }).scheduler;
+    if (s?.yield) void s.yield().then(resolve);
+    else setTimeout(resolve, 0);
+  });
+
 type Tune = {
   maxDpr: number;
   antialias: boolean;
@@ -326,19 +334,19 @@ export class DonutBuilder {
   private scene = new THREE.Scene();
   private camera = new THREE.PerspectiveCamera(32, 1, 0.1, 300);
   private donut = new THREE.Group();
-  private glazeMat: THREE.MeshPhysicalMaterial;
+  private glazeMat!: THREE.MeshPhysicalMaterial;
   private coverUniform = { value: 1 };
-  private drizzles: Record<"chocolate" | "white", THREE.Mesh>;
-  private bits: Record<"sprinkles" | "nuts", { mesh: THREE.InstancedMesh; list: Bit[] }>;
-  private paper: THREE.Mesh;
+  private drizzles!: Record<"chocolate" | "white", THREE.Mesh>;
+  private bits!: Record<"sprinkles" | "nuts", { mesh: THREE.InstancedMesh; list: Bit[] }>;
+  private paper!: THREE.Mesh;
   private box = new THREE.Group();
   private tray: THREE.Mesh[] = [];
   private lid = new THREE.Group();
   private lidTop!: THREE.Mesh;
   private lidFace!: THREE.Material;
   private ribbon = new THREE.Group();
-  private cardMat: THREE.MeshPhysicalMaterial;
-  private giftMat: THREE.MeshPhysicalMaterial;
+  private cardMat!: THREE.MeshPhysicalMaterial;
+  private giftMat!: THREE.MeshPhysicalMaterial;
   private raf = 0;
   private last = 0;
   private running = false;
@@ -353,10 +361,12 @@ export class DonutBuilder {
   private stepsDown = 0;
   private goodWindows = 0;
   private lastStats = { fps: 0, frameMs: 0 };
-  private donutShadow: THREE.Mesh;
-  private boxShadow: THREE.Mesh;
+  private donutShadow!: THREE.Mesh;
+  private boxShadow!: THREE.Mesh;
   private listeners = new AbortController();
   private envOverride: string | null = null;
+  private tune!: Tune;
+  private useStudio = false;
   private spin = 0;
   private lastTouch = 0;
   private idleOnly = false;
@@ -413,7 +423,6 @@ export class DonutBuilder {
           : THREE.NeutralToneMapping;
     this.renderer.toneMappingExposure = Number(dbg.get("exp")) || 1;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
-    this.scene.environment = studioEnvironment(this.renderer);
 
     const signal = this.listeners.signal;
     window.addEventListener("scroll", this.onScroll, { passive: true, signal });
@@ -427,6 +436,20 @@ export class DonutBuilder {
       { signal },
     );
 
+    this.tune = q;
+    this.useStudio =
+      this.envOverride === "studio" || (opts.quality === "high" && this.envOverride !== "baked");
+  }
+
+  /**
+   * Builds the scene in short steps, handing the main thread back to the
+   * browser between them, so scrolling and taps never wait for the 3D.
+   */
+  private async build() {
+    const q = this.tune;
+    const lite = q.lite;
+    this.scene.environment = studioEnvironment(this.renderer);
+    await pause();
     const dough = new THREE.Mesh(
       buildDough(),
       new THREE.MeshPhysicalMaterial({
@@ -439,6 +462,7 @@ export class DonutBuilder {
         sheenRoughness: 0.55,
       }),
     );
+    await pause();
     this.glazeMat = new THREE.MeshPhysicalMaterial({
       color: "#4a2414",
       roughness: 0.2,
@@ -465,6 +489,7 @@ export class DonutBuilder {
         );
     };
     const glaze = new THREE.Mesh(buildGlaze(lite), this.glazeMat);
+    await pause();
     const drizzleMat = (color: string) =>
       new THREE.MeshPhysicalMaterial({
         color,
@@ -477,6 +502,7 @@ export class DonutBuilder {
       white: new THREE.Mesh(buildDrizzle(Math.PI / 2, 9, lite), drizzleMat("#f6efe4")),
     };
 
+    await pause();
     const sprinkles = scatter(q.sprinkles, 7, 2.1);
     const sprinkleMesh = new THREE.InstancedMesh(
       new THREE.CapsuleGeometry(0.065, 0.3, lite ? 2 : 4, lite ? 6 : 8),
@@ -510,6 +536,7 @@ export class DonutBuilder {
     this.donut.position.y = REST_Y;
     this.scene.add(this.donut);
 
+    await pause();
     // Paper under the donut.
     this.paper = new THREE.Mesh(
       new THREE.PlaneGeometry(13, 13, 1, 1),
@@ -566,6 +593,7 @@ export class DonutBuilder {
     this.lid.position.set(0, H + T / 2, -(W + 0.3) / 2);
     this.box.add(this.lid);
 
+    await pause();
     // Gift: a yellow ribbon across the closed box, and a bow.
     const satin = new THREE.MeshPhysicalMaterial({
       color: "#ffd83a",
@@ -604,9 +632,7 @@ export class DonutBuilder {
 
     this.apply(0);
     this.resize();
-    const useStudio =
-      this.envOverride === "studio" || (opts.quality === "high" && this.envOverride !== "baked");
-    if (useStudio) void this.loadStudioHdr();
+    if (this.useStudio) void this.loadStudioHdr();
   }
 
   /** A real photo studio (Poly Haven, CC0) for crisper, natural highlights; high tier only. */
@@ -634,6 +660,8 @@ export class DonutBuilder {
 
   /** Builds every shader before the first frame, so the first change does not stutter. */
   async ready() {
+    await this.build();
+    await pause();
     const keep = { ...this.topT };
     this.topT = { sprinkles: 1, chocolate: 1, white: 1, nuts: 1 };
     this.pack = { paper: 1, box: 1, lid: 0.5, gift: 1 };

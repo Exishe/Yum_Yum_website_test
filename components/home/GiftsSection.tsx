@@ -22,6 +22,7 @@ export async function GiftsSection({
   phoneDisplay: string;
 }) {
   const t = await getTranslations("gifts");
+  const te = await getTranslations("events");
   const locale = (await getLocale()) as Locale;
   const options = [
     { title: t("bouquet"), sub: t("bouquetSub"), price: prices.bouquet },
@@ -78,9 +79,18 @@ export async function GiftsSection({
               {t("callToOrder", { phone: phoneDisplay })}
             </a>
           </div>
+          <Link
+            href="/events"
+            className="mt-4 inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold underline decoration-2 underline-offset-4 hover:text-magenta-ink"
+          >
+            {te("cta")} <ArrowRight size={16} weight="bold" aria-hidden />
+          </Link>
         </div>
         <div
           data-reveal-group
+          tabIndex={0}
+          role="group"
+          aria-labelledby="gifts-title"
           className="no-scrollbar snap-row -mx-4 flex scroll-px-4 gap-4 overflow-x-auto px-4 pb-4 lg:mx-0 lg:block lg:scroll-px-0 lg:overflow-visible lg:px-0"
         >
           <div className="relative min-h-0 lg:h-[600px]">

@@ -201,8 +201,8 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
       ([e]) => {
         if (!e?.isIntersecting || booting) return;
         booting = true;
-        // Near the top of the page now: let the page and its photos load first,
-        // then build the 3D scene when the browser has a free moment.
+        // Only once the studio is really on screen, and after the page and its
+        // photos have loaded: until then a still picture stands in for it.
         const later = () =>
           typeof window.requestIdleCallback === "function"
             ? window.requestIdleCallback(() => void boot(), { timeout: 1500 })
@@ -210,7 +210,7 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
         if (document.readyState === "complete") later();
         else window.addEventListener("load", later, { once: true });
       },
-      { rootMargin: "100% 0px" },
+      { threshold: 0.3 },
     );
     const onScreen = new IntersectionObserver(([e]) => {
       visible = !!e?.isIntersecting;
@@ -305,6 +305,19 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
         {/* Phones: the studio stays pinned under the header while the choices scroll
             beneath it, so every change is seen as it happens. */}
         <div className="relative z-10 w-full overflow-hidden rounded-[var(--radius-xl2)] bg-[radial-gradient(70%_60%_at_50%_45%,#5a1846_0%,#2b0a24_65%,#1a0616_100%)] shadow-[0_18px_30px_-12px_rgb(26_6_22/0.9)] max-lg:sticky max-lg:top-[76px] max-lg:h-[min(44svh,420px)] lg:aspect-[5/4]">
+          {/* A still of the donut stands in until the live 3D is ready. */}
+          {status !== "fallback" ? (
+            <Image
+              src="/images/3d/poster.webp"
+              alt=""
+              fill
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className={cn(
+                "object-cover transition-opacity duration-500 ease-out",
+                status === "ready" ? "opacity-0" : "opacity-100",
+              )}
+            />
+          ) : null}
           {status === "fallback" ? (
             <Image
               src={match?.img?.src ?? "/images/source/tomsarkgh/yumyum-19.jpg"}

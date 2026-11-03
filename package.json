@@ -43,7 +43,9 @@
     "@electric-sql/pglite": "0.5.8",
     "@hookform/resolvers": "6.0.0",
     "@phosphor-icons/react": "2.1.10",
+    "@vercel/analytics": "1.5.0",
     "@vercel/blob": "^2.8.2",
+    "@vercel/speed-insights": "1.2.0",
     "bcryptjs": "3.0.3",
     "clsx": "^2.1.1",
     "detect-gpu": "5.0.70",
@@ -61,6 +63,7 @@
     "zod": "4.6.7"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.10.2",
     "@playwright/test": "1.56.1",
     "@tailwindcss/postcss": "4.3.3",
     "@types/bcryptjs": "^3.0.0",

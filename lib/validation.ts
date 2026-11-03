@@ -119,6 +119,29 @@ export const contactSchema = z.object({
 });
 export type ContactInput = z.input<typeof contactSchema>;
 
+export const EVENT_KINDS = ["office", "birthday", "wedding", "other"] as const;
+export const EVENT_ITEMS = ["donuts", "boxes", "bouquets", "drinks"] as const;
+
+/** Corporate and event requests: the shop calls back with options and a price. */
+export const eventSchema = z.object({
+  name: text(2, 60),
+  phone: text(5, 40),
+  company: z.string().max(80).optional().default(""),
+  kind: z.enum(EVENT_KINDS),
+  date: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, { message: "date" })
+    .optional()
+    .or(z.literal("")),
+  guests: z.coerce.number().int().min(1, { message: "guests" }).max(5000).optional(),
+  items: z.array(z.enum(EVENT_ITEMS)).max(4).default([]),
+  message: z.string().max(1500).optional().default(""),
+  locale: localeSchema,
+  website: z.string().max(0, { message: "spam" }).optional().default(""),
+  turnstileToken: z.string().max(4096).optional(),
+});
+export type EventInput = z.input<typeof eventSchema>;
+
 export const newsletterSchema = z.object({
   email: z
     .string()

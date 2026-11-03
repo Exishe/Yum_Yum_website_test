@@ -42,6 +42,8 @@ export async function Spotted({
       </div>
       <ul
         data-reveal-group
+        tabIndex={0}
+        aria-labelledby="spotted-title"
         className="no-scrollbar snap-row -mx-4 mt-8 flex scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:scroll-px-0 sm:grid-cols-3 sm:px-0 lg:grid-cols-5"
       >
         {photos.map((p, i) => (

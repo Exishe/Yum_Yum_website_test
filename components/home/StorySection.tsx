@@ -70,6 +70,8 @@ export async function StorySection({
       {/* Phones and tablets: the four photos in one row to swipe, instead of four screens of scrolling. */}
       <ul
         data-reveal
+        tabIndex={0}
+        aria-labelledby="story-title"
         className="no-scrollbar snap-row -mx-4 mt-8 flex scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 sm:-mx-6 sm:scroll-px-6 sm:px-6 lg:hidden"
       >
         {(

@@ -10,6 +10,7 @@ const pages: AppPathname[] = [
   "/story",
   "/shops",
   "/contact",
+  "/events",
   "/privacy",
   "/terms",
 ];

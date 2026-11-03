@@ -17,7 +17,8 @@
     "termsTitle": "Terms of sale and delivery",
     "orderTitle": "Order status",
     "newsletterTitle": "Newsletter",
-    "ogAlt": "Chocolate, sprinkle and glazed donuts at YUM-YUM Donuts"
+    "ogAlt": "Chocolate, sprinkle and glazed donuts at YUM-YUM Donuts",
+    "eventsTitle": "Corporate and event orders"
   },
   "common": {
     "skip": "Skip to content",
@@ -68,7 +69,8 @@
     "shops": "Shops",
     "contact": "Contact",
     "callUs": "Call us",
-    "quick": "Quick links"
+    "quick": "Quick links",
+    "orderItems": "{count, plural, one {item} other {items}}"
   },
   "lang": {
     "label": "Language",
@@ -495,7 +497,8 @@
     "noZone": "We don’t deliver to this district yet.",
     "leadTime": "Some items are made to order. Please choose tomorrow or later.",
     "closed": "That shop is closed at that time.",
-    "slotPast": "That time has passed. Please pick a later one."
+    "slotPast": "That time has passed. Please pick a later one.",
+    "guests": "Please enter a number above zero."
   },
   "notFound": {
     "title": "This page was eaten.",
@@ -632,5 +635,56 @@
     "soundOn": "Turn sound on",
     "soundOff": "Turn sound off",
     "noWebgl": "The 3D donut does not open on this device, but choosing and ordering still work."
+  },
+  "events": {
+    "eyebrow": "For the office and celebrations",
+    "title": "Corporate and event orders",
+    "lead": "Office treats, a birthday, a wedding or a company event. Tell us the date and roughly how many guests: we'll call back with options and a price.",
+    "cards": {
+      "boxes": {
+        "title": "Donut boxes",
+        "text": "6 or 12 donuts of your choice, for the team or your guests."
+      },
+      "bouquets": {
+        "title": "Donut bouquets",
+        "text": "A gift people remember: for a celebration, a congratulation or a thank-you."
+      },
+      "table": {
+        "title": "Sweet table",
+        "text": "Donuts, bakes and iced drinks for your event."
+      }
+    },
+    "how": "How it works",
+    "steps": [
+      "Fill in the request: 1 minute",
+      "We call you back to agree the details",
+      "We prepare everything for your day"
+    ],
+    "formTitle": "Request",
+    "name": "Your name",
+    "phone": "Phone",
+    "company": "Company (optional)",
+    "kind": "Occasion",
+    "kinds": {
+      "office": "Office",
+      "birthday": "Birthday",
+      "wedding": "Wedding",
+      "other": "Other"
+    },
+    "date": "Date",
+    "guests": "Roughly how many guests",
+    "items": "What you need",
+    "itemNames": {
+      "donuts": "Donuts",
+      "boxes": "Boxes",
+      "bouquets": "Bouquets",
+      "drinks": "Drinks"
+    },
+    "message": "Anything else (optional)",
+    "send": "Send request",
+    "sent": "Thank you! We'll call you shortly.",
+    "note": "The price depends on quantity and date: we'll tell you on the phone.",
+    "footerLink": "Corporate orders",
+    "cta": "Order for an event"
   }
 }

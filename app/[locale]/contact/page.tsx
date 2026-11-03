@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import { ContactForm } from "@/components/ContactForm";
+import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { formatPhone } from "@/lib/format";
 import { alternates } from "@/lib/seo";
@@ -18,6 +20,7 @@ export default async function ContactPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("contact");
+  const te = await getTranslations("events");
   const { contact } = await getSettings();
   return (
     <div className="dot-grid">
@@ -70,7 +73,15 @@ export default async function ContactPage({ params }: Props) {
             ) : null}
           </ul>
         </div>
-        <ContactForm />
+        <div className="flex flex-col gap-4">
+          <ContactForm />
+          <Link
+            href="/events"
+            className="inline-flex min-h-11 items-center gap-2 self-start font-semibold underline decoration-2 underline-offset-4 hover:text-magenta-ink"
+          >
+            {te("cta")} <ArrowRight size={16} weight="bold" aria-hidden />
+          </Link>
+        </div>
       </div>
     </div>
   );

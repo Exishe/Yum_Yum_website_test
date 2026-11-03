@@ -15,7 +15,7 @@ for (const locale of ["hy", "ru", "en"] as const) {
     await page.reload();
     const add = page.locator("#menu-panel li button[aria-label]").first();
     await add.click();
-    await expect(page.locator("header button[aria-label*='1']")).toBeVisible();
+    await expect(page.locator("header").getByRole("button", { name: / 1 / })).toBeVisible();
 
     await page.goto(`/${locale}/checkout`);
     await page.locator("input[name='name']").fill("Test Ani");
@@ -56,7 +56,10 @@ test("the order button opens the basket on the first tap", async ({ page }) => {
   await dismissCookies(page);
   await page.reload();
   await page.locator("#menu-panel li button[aria-label]").first().click();
-  await page.locator("header button[aria-label*='Your order']").click();
+  await page
+    .locator("header")
+    .getByRole("button", { name: /^Order\b/ })
+    .click();
   await expect(page.getByRole("dialog", { name: "Your order" })).toBeVisible();
   await expect(page.getByRole("link", { name: /Checkout/ })).toBeVisible();
 });

@@ -12,6 +12,8 @@ export const env = {
   /** Only for tests against a local stand-in for Telegram. */
   telegramApi: (process.env.TELEGRAM_API ?? "https://api.telegram.org").replace(/\/$/, ""),
   telegramChatId: process.env.TELEGRAM_CHAT_ID ?? "",
+  /** Where site errors go (the developer); falls back to the order chat. */
+  alertChatId: process.env.TELEGRAM_ALERT_CHAT_ID ?? process.env.TELEGRAM_CHAT_ID ?? "",
   resendKey: process.env.RESEND_API_KEY ?? "",
   emailFrom: process.env.EMAIL_FROM ?? "YUM-YUM Donuts <orders@example.com>",
   orderEmailTo: process.env.ORDER_EMAIL_TO ?? "",

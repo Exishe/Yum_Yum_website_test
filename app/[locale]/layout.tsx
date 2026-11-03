@@ -21,9 +21,11 @@ import { t as pick } from "@/lib/localized";
 import { alternates } from "@/lib/seo";
 import { getSettings } from "@/lib/settings";
 import { SiteProvider } from "@/components/SiteContext";
-import Script from "next/script";
 import { DevBadge } from "@/components/layout/DevBadge";
 import { RevealObserver } from "@/components/ui/RevealObserver";
+import { ErrorReporter } from "@/components/ErrorReporter";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { DEMO, demoTexts, robotsFor } from "@/lib/demo-config";
 
 export const viewport: Viewport = {
@@ -121,6 +123,7 @@ export default async function LocaleLayout({
     "shops",
     "reviews",
     "builder",
+    "events",
   ];
   const all = messages as Record<string, unknown>;
   const clientMessages = Object.fromEntries(clientNamespaces.map((k) => [k, all[k]]));
@@ -153,6 +156,7 @@ export default async function LocaleLayout({
             <main id="main" tabIndex={-1} className="outline-none">
               {children}
               <RevealObserver />
+              <ErrorReporter />
             </main>
             <Footer categories={menu.filter((c) => c.inMenu)} shops={shops} settings={settings} />
             <LazyCartDrawer />
@@ -175,10 +179,13 @@ export default async function LocaleLayout({
             ) : null}
           </SiteProvider>
         </NextIntlClientProvider>
-        {/* Concept demo: Vercel Web Analytics shows whether the client opened the site.
-            Cookieless; the script only exists on Vercel. */}
-        {DEMO.enabled && process.env.VERCEL === "1" ? (
-          <Script src="/_vercel/insights/script.js" strategy="afterInteractive" nonce={nonce} />
+        {/* Cookieless: no consent needed. Counts visits and Core Web Vitals in
+            Vercel; the scripts only exist there. */}
+        {process.env.VERCEL === "1" ? (
+          <>
+            <Analytics />
+            <SpeedInsights />
+          </>
         ) : null}
       </body>
     </html>

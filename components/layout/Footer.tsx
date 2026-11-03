@@ -60,6 +60,7 @@ export async function Footer({
   const tn = await getTranslations("nav");
   const tc = await getTranslations("common");
   const ts = await getTranslations("shops");
+  const tev = await getTranslations("events");
   const { contact, legal } = settings;
   const year = new Date().getFullYear();
   const legalDetails = [legal.companyName, legal.taxId, legal.address].filter(Boolean).join(", ");
@@ -234,6 +235,11 @@ export async function Footer({
                 <li>
                   <Link href="/shops" className={link}>
                     {t("allShops")}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/events" className={link}>
+                    {tev("footerLink")}
                   </Link>
                 </li>
                 <li>

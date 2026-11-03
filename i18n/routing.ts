@@ -20,6 +20,7 @@ export const routing = defineRouting({
     "/checkout": { en: "/checkout", ru: "/oformlenie", hy: "/patver" },
     "/order/[publicId]": "/order/[publicId]",
     "/contact": { en: "/contact", ru: "/kontakty", hy: "/kap" },
+    "/events": { en: "/events", ru: "/meropriyatiya", hy: "/mijocarumner" },
     "/privacy": { en: "/privacy", ru: "/konfidencialnost", hy: "/gaghtniutyun" },
     "/terms": { en: "/terms", ru: "/usloviya", hy: "/paymanner" },
     "/newsletter": "/newsletter",
