@@ -53,6 +53,51 @@ function NavPill({
   );
 }
 
+const SPRINKLE_COLOURS = ["#ffd84a", "#e5197b", "#5ec6e8", "#7ed957", "#ffffff", "#ff7a59"];
+
+/**
+ * A small hello when the menu opens: a handful of sprinkles bursts from the
+ * donut on the button and falls away. Fixed pattern (no randomness, so server
+ * and client agree), transform and opacity only, about 0.8 s; none with
+ * reduced motion.
+ */
+const SPRINKLES = Array.from({ length: 16 }, (_, k) => {
+  // Spread around the donut, more of them sideways and down where the menu opens.
+  const angle = ((k / 16) * 360 + ((k * 47) % 23) - 11) * (Math.PI / 180);
+  const dist = 34 + ((k * 37) % 26);
+  return {
+    x: Math.round(Math.cos(angle) * dist),
+    y: Math.round(Math.sin(angle) * dist * 0.8 + 12), // a little gravity
+    r0: (k * 67) % 180,
+    r1: ((k * 67) % 180) + (k % 2 ? 160 : -160),
+    delay: (k % 4) * 18,
+    colour: SPRINKLE_COLOURS[k % SPRINKLE_COLOURS.length]!,
+  };
+});
+
+function Salute() {
+  return (
+    <span aria-hidden className="salute pointer-events-none absolute top-1/2 left-[22px] z-20">
+      {SPRINKLES.map((b, k) => (
+        <span
+          key={k}
+          className="salute-bit"
+          style={
+            {
+              "--x": `${b.x}px`,
+              "--y": `${b.y}px`,
+              "--r0": `${b.r0}deg`,
+              "--r1": `${b.r1}deg`,
+              animationDelay: `${b.delay}ms`,
+              background: b.colour,
+            } as React.CSSProperties
+          }
+        />
+      ))}
+    </span>
+  );
+}
+
 export function Header({ categories, phone, phoneDisplay }: Props) {
   const t = useTranslations("nav");
   const tc = useTranslations("common");
@@ -74,6 +119,7 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
     return () => window.clearTimeout(id);
   }, [phase]);
   const [active, setActive] = useState(0);
+  const [salute, setSalute] = useState(0);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const panelId = useId();
@@ -120,13 +166,17 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
   return (
     <header className="on-dark sticky top-0 z-50 bg-black text-white">
       <div className="relative mx-auto flex h-[68px] max-w-[1440px] items-center justify-between gap-3 px-4 sm:px-6 lg:h-[76px] lg:px-8">
-        <nav aria-label={t("mainNav")} className="flex items-center gap-2">
+        <nav aria-label={t("mainNav")} className="relative flex items-center gap-2">
+          {salute ? <Salute key={salute} /> : null}
           <button
             ref={buttonRef}
             type="button"
             aria-expanded={open}
             aria-controls={panelId}
-            onClick={() => setOpen((v) => !v)}
+            onClick={() => {
+              if (!open) setSalute((n) => n + 1);
+              setOpen((v) => !v);
+            }}
             className={cn(
               "group relative inline-flex h-11 items-center gap-2 overflow-hidden rounded-full border pr-3 pl-1.5 text-sm font-semibold transition-[color,background-color,border-color,scale] duration-150 ease-out active:scale-[0.97] sm:pr-4",
               open

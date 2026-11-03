@@ -825,3 +825,33 @@
     animation: none;
   }
 }
+
+/* Menu hello (Header.tsx): sprinkles burst from the donut on the button. */
+.salute-bit {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 11px;
+  border-radius: 2px;
+  opacity: 0;
+  animation: salute 0.8s cubic-bezier(0.17, 0.84, 0.3, 1) both;
+}
+@keyframes salute {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(var(--r0)) scale(0.3);
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) rotate(var(--r1)) scale(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .salute {
+    display: none;
+  }
+}
