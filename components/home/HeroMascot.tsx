@@ -71,9 +71,10 @@ export function HeroMascot() {
           <Image
             src="/images/brand/mascot.webp"
             alt={t("alt")}
-            width={520}
-            height={444}
-            sizes="(min-width: 1024px) 260px, 44vw"
+            width={864}
+            height={739}
+            quality={85}
+            sizes="(min-width: 1024px) 280px, 46vw"
             className="mascot-figure absolute bottom-[2%] left-[-2%] w-[46%] drop-shadow-xl"
           />
           <div
