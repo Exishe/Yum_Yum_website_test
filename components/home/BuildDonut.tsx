@@ -356,7 +356,9 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
         </div>
 
         {/* The choices. */}
-        <div className="flex min-w-0 flex-col gap-5">
+        {/* Phones: room at the end, so every line has passed below the pinned
+            studio before the section ends and the studio leaves with it. */}
+        <div className="flex min-w-0 flex-col gap-5 max-lg:pb-[min(44svh,420px)]">
           <div>
             <p className="font-hand text-xl text-sun">{t("eyebrow")}</p>
             <h2 id="build-title" className="text-[clamp(1.9rem,3.6vw,2.8rem)] leading-tight">

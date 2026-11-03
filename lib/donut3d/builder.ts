@@ -321,9 +321,6 @@ export type EngineStats = {
   triangles: number;
 };
 
-/** How long the donut keeps turning on its own after the last touch, then it rests. */
-const IDLE_SPIN_MS = 9000;
-
 export class DonutBuilder {
   private renderer: THREE.WebGLRenderer;
   private scene = new THREE.Scene();
@@ -362,6 +359,8 @@ export class DonutBuilder {
   private envOverride: string | null = null;
   private spin = 0;
   private lastTouch = 0;
+  private idleOnly = false;
+  private readonly idleFrameMs: number;
 
   // Targets set by the UI, and the eased values the frame actually draws.
   private step: Step = 0;
@@ -397,6 +396,7 @@ export class DonutBuilder {
       powerPreference: lite ? "default" : "high-performance",
     });
     this.renderer.setPixelRatio(this.dpr);
+    this.idleFrameMs = lite ? 45 : 31;
     this.renderer.setClearColor(0x000000, 0);
     // ?debug=1 also lets the look be compared on a device:
     // &tm=neutral|aces|agx, &env=studio|baked, &envi=0.5 (studio strength), &exp=1.
@@ -416,6 +416,7 @@ export class DonutBuilder {
     this.scene.environment = studioEnvironment(this.renderer);
 
     const signal = this.listeners.signal;
+    window.addEventListener("scroll", this.onScroll, { passive: true, signal });
     canvas.addEventListener(
       "webglcontextlost",
       (e) => {
@@ -710,16 +711,35 @@ export class DonutBuilder {
     this.frameTimes = [];
     const loop = (now: number) => {
       if (!this.looping) return;
-      const ms = now - this.last;
-      this.last = now;
-      const t0 = performance.now();
-      const moving = this.apply(Math.min(0.05, ms / 1000));
-      this.adapt(ms, performance.now() - t0);
+      // Only the slow idle turn left: about 30 frames a second is plenty.
+      if (this.idleOnly && now - this.last < this.idleFrameMs) {
+        this.raf = requestAnimationFrame(loop);
+        return;
+      }
+      const moving = this.frame(now);
       if (moving) this.raf = requestAnimationFrame(loop);
       else this.looping = false;
     };
     this.raf = requestAnimationFrame(loop);
   }
+  /** Draws one frame at time `now`; returns whether anything is still moving. */
+  private frame(now: number) {
+    const ms = now - this.last;
+    this.last = now;
+    const t0 = performance.now();
+    const moving = this.apply(Math.min(0.05, Math.max(0, ms) / 1000));
+    this.adapt(ms, performance.now() - t0);
+    return moving;
+  }
+  /**
+   * Some phone browsers (in-app ones especially) stop animation frames while
+   * the page scrolls. Scroll events still arrive, so they draw the frame.
+   */
+  private onScroll = () => {
+    if (!this.running || !this.looping) return;
+    const now = performance.now();
+    if (now - this.last > 90) this.frame(now);
+  };
   /**
    * Resolution follows the frame rate both ways. A steady ~30 fps is a cap
    * the phone sets itself (iPhone Low Power Mode), not a struggle, and it
@@ -868,7 +888,8 @@ export class DonutBuilder {
 
     // Turn: drag with a little momentum, otherwise a slow turn of its own for a
     // while after the last touch; then it eases to a rest and frames stop.
-    const spinWant = this.calm || performance.now() - this.lastTouch > IDLE_SPIN_MS ? 0 : 0.18;
+    // A slow turn of its own whenever it is on screen (the loop stops off screen).
+    const spinWant = this.calm ? 0 : 0.18;
     this.spin += (spinWant - this.spin) * (1 - Math.exp(-dt * 1.2));
     if (spinWant === 0 && this.spin < 0.002) this.spin = 0;
     if (!this.dragging) {
@@ -914,6 +935,14 @@ export class DonutBuilder {
       this.pack.box === (pk === "paper" ? 0 : 1) &&
       this.pack.lid === lidWant &&
       this.pack.gift === (pk === "gift" && this.pack.lid > 0.98 ? 1 : 0);
+    const busy =
+      this.dragging ||
+      this.yawVel !== 0 ||
+      this.cover < 1 ||
+      !camSettled ||
+      !toppingsSettled ||
+      !packSettled;
+    this.idleOnly = !busy && Math.abs(this.spin - spinWant) < 0.002;
     return (
       this.dragging ||
       this.spin > 0 ||
