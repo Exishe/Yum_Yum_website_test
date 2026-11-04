@@ -1,13 +1,17 @@
 import type { Locale } from "@/i18n/routing";
 import { intlLocale } from "./localized";
 
-/** "1 500 ֏". Dram has no minor units on menus. */
-export function formatAmd(amount: number, locale: Locale): string {
-  const n = new Intl.NumberFormat(intlLocale[locale], { maximumFractionDigits: 0 })
-    .format(amount)
-    // Use a thin non-breaking space as the group separator in every locale.
-    .replace(/[\s,.  ]/g, " ");
-  return `${n} ֏`;
+/**
+ * "1 500 ֏". Dram has no minor units on menus. Digits are grouped by hand with
+ * a thin non-breaking space in every locale: Intl's Armenian rules leave
+ * 4-digit numbers ungrouped in some ICU versions and not in others, so the
+ * server printed "1000 ֏", the browser "1 000 ֏", and React hydration failed.
+ */
+// The locale is kept in the signature for callers; the format is the same in all.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function formatAmd(amount: number, _locale: Locale): string {
+  const n = String(Math.abs(Math.round(amount))).replace(/\B(?=(\d{3})+(?!\d))/g, "\u202f");
+  return `${amount < 0 ? "-" : ""}${n} ֏`;
 }
 
 /** Normalises any Armenian number to +374XXXXXXXX, or returns null. */

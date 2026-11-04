@@ -314,168 +314,184 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
         </div>
       </div>
 
-      <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[1fr_1.1fr]">
+      {/*
+        Phones and tablets: the helper and the box, then one row of donuts to
+        swipe sideways, then the total, so a donut and the box are on screen
+        together and can be carried straight up into a place. Wide screens:
+        the box stays beside a grid of all donuts. The left column "dissolves"
+        (display: contents) below lg so its parts can be ordered around the row.
+      */}
+      <div className="mt-5 flex flex-col gap-4 sm:mt-8 lg:grid lg:grid-cols-[1fr_1.1fr] lg:gap-8">
         {/* The box */}
-        <div className="lg:sticky lg:top-28 lg:self-start">
-          {/* The YUM-YUM donut keeps the visitor company and talks about each pick. */}
-          <div className="mb-3 flex items-end gap-2">
-            <Image
-              key={say?.n ?? 0}
-              src="/images/brand/mascot.webp"
-              alt=""
-              width={864}
-              height={739}
-              quality={85}
-              sizes="88px"
-              className="helper-hop w-16 shrink-0 sm:w-[88px]"
-            />
-            <p
-              aria-live="polite"
-              className="relative mb-3 flex h-[5.5rem] flex-1 items-center overflow-hidden rounded-2xl rounded-bl-sm bg-magenta-soft px-4 py-2 text-sm leading-snug font-semibold text-plum sm:h-[4.75rem]"
-            >
-              <span key={say?.n ?? 0} className="line-clamp-4 animate-swap">
-                {helperText}
-              </span>
-            </p>
-          </div>
-          <div className="rounded-[1.5rem] bg-magenta p-3 shadow-lift sm:p-4">
-            <ol
-              ref={boxRef}
-              className={cn(
-                "grid gap-2 rounded-2xl bg-magenta-soft p-3 transition-[background-color,box-shadow] duration-150",
-                size === 6 ? "grid-cols-3" : "grid-cols-4",
-                carrying && "bg-white shadow-[inset_0_0_0_3px_var(--color-sun)]",
-              )}
-              aria-label={t("left", { count: left })}
-            >
-              {cells.map((p, i) => {
-                return (
-                  <li key={i} data-free={p ? undefined : "1"} className="aspect-square">
-                    {p ? (
-                      <button
-                        type="button"
-                        onPointerDown={(e) => onPointerDown(e, p, i)}
-                        onPointerMove={onPointerMove}
-                        onPointerUp={onPointerEnd}
-                        onPointerCancel={onPointerEnd}
-                        onContextMenu={(e) => e.preventDefault()}
-                        onClick={() => {
-                          if (justDragged.current) {
-                            justDragged.current = false;
-                            return;
-                          }
-                          removeAt(i);
-                        }}
-                        aria-label={t("remove", { name: pick(p.name, locale) })}
-                        className={cn(
-                          "group/slot relative block size-full animate-pop cursor-grab touch-manipulation select-none [-webkit-touch-callout:none] active:cursor-grabbing",
-                          lifted === i && "opacity-30",
-                        )}
-                      >
-                        {p.img ? (
-                          <Image
-                            src={cutout(p.img.src)!}
-                            alt=""
-                            fill
-                            sizes="(min-width: 1024px) 160px, 30vw"
-                            draggable={false}
-                            className="object-contain drop-shadow-[0_6px_8px_rgb(43_10_36/0.25)]"
-                          />
-                        ) : null}
-                        {/* Always visible on phones, on hover with a mouse. */}
-                        <span
-                          aria-hidden
-                          className="absolute top-0 right-0 grid size-7 place-items-center rounded-full bg-white text-magenta-ink shadow-card transition-[opacity,scale] duration-150 ease-out sm:size-8 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover/slot:opacity-100 [@media(hover:hover)]:group-focus-visible/slot:opacity-100"
+        <div className="contents lg:sticky lg:top-28 lg:block lg:self-start">
+          <div className="order-1">
+            {/* The YUM-YUM donut keeps the visitor company and talks about each pick. */}
+            <div className="mb-3 flex items-end gap-2">
+              <Image
+                key={say?.n ?? 0}
+                src="/images/brand/mascot.webp"
+                alt=""
+                width={864}
+                height={739}
+                quality={85}
+                sizes="88px"
+                className="helper-hop w-14 shrink-0 sm:w-[88px]"
+              />
+              <p
+                aria-live="polite"
+                className="relative mb-2 flex h-[5.25rem] flex-1 items-center overflow-hidden rounded-2xl rounded-bl-sm bg-magenta-soft px-3.5 py-2 text-[0.8125rem] leading-snug font-semibold text-plum sm:mb-3 sm:h-[4.75rem] sm:px-4 sm:text-sm"
+              >
+                <span key={say?.n ?? 0} className="line-clamp-4 animate-swap">
+                  {helperText}
+                </span>
+              </p>
+            </div>
+            <div className="mx-auto max-w-[17.5rem] rounded-[1.5rem] bg-magenta p-2.5 shadow-lift sm:max-w-sm sm:p-4 lg:max-w-none">
+              <ol
+                ref={boxRef}
+                className={cn(
+                  "grid gap-1.5 rounded-2xl bg-magenta-soft p-2 transition-[background-color,box-shadow] duration-150 sm:gap-2 sm:p-3",
+                  size === 6 ? "grid-cols-3" : "grid-cols-4",
+                  carrying && "bg-white shadow-[inset_0_0_0_3px_var(--color-sun)]",
+                )}
+                aria-label={t("left", { count: left })}
+              >
+                {cells.map((p, i) => {
+                  return (
+                    <li key={i} data-free={p ? undefined : "1"} className="aspect-square">
+                      {p ? (
+                        <button
+                          type="button"
+                          onPointerDown={(e) => onPointerDown(e, p, i)}
+                          onPointerMove={onPointerMove}
+                          onPointerUp={onPointerEnd}
+                          onPointerCancel={onPointerEnd}
+                          onContextMenu={(e) => e.preventDefault()}
+                          onClick={() => {
+                            if (justDragged.current) {
+                              justDragged.current = false;
+                              return;
+                            }
+                            removeAt(i);
+                          }}
+                          aria-label={t("remove", { name: pick(p.name, locale) })}
+                          className={cn(
+                            "group/slot relative block size-full animate-pop cursor-grab touch-manipulation select-none [-webkit-touch-callout:none] active:cursor-grabbing",
+                            lifted === i && "opacity-30",
+                          )}
                         >
-                          <X size={14} weight="bold" />
+                          {p.img ? (
+                            <Image
+                              src={cutout(p.img.src)!}
+                              alt=""
+                              fill
+                              sizes="(min-width: 1024px) 160px, 30vw"
+                              draggable={false}
+                              className="object-contain drop-shadow-[0_6px_8px_rgb(43_10_36/0.25)]"
+                            />
+                          ) : null}
+                          {/* Always visible on phones, on hover with a mouse. */}
+                          <span
+                            aria-hidden
+                            className="absolute top-0 right-0 grid size-7 place-items-center rounded-full bg-white text-magenta-ink shadow-card transition-[opacity,scale] duration-150 ease-out sm:size-8 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover/slot:opacity-100 [@media(hover:hover)]:group-focus-visible/slot:opacity-100"
+                          >
+                            <X size={14} weight="bold" />
+                          </span>
+                        </button>
+                      ) : (
+                        <span
+                          className={cn(
+                            "grid size-full place-items-center rounded-full border-2 border-dashed border-magenta/40 text-xs text-magenta-ink transition-[scale,background-color,border-color] duration-150 ease-out",
+                            over === i && "scale-105 border-solid border-magenta bg-magenta/10",
+                          )}
+                          aria-label={t("slot", { n: i + 1 })}
+                        >
+                          {i + 1}
                         </span>
-                      </button>
-                    ) : (
-                      <span
-                        className={cn(
-                          "grid size-full place-items-center rounded-full border-2 border-dashed border-magenta/40 text-xs text-magenta-ink transition-[scale,background-color,border-color] duration-150 ease-out",
-                          over === i && "scale-105 border-solid border-magenta bg-magenta/10",
-                        )}
-                        aria-label={t("slot", { n: i + 1 })}
-                      >
-                        {i + 1}
-                      </span>
-                    )}
-                  </li>
-                );
-              })}
-            </ol>
-          </div>
-          {packed.length ? <p className="mt-2 text-sm text-muted">{t("removeHint")}</p> : null}
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-            <p className="font-semibold" aria-live="polite">
-              {t("left", { count: left })}
-            </p>
-            <div className="flex items-center gap-2">
-              {packed.length ? (
-                <button
-                  type="button"
-                  onClick={() => setSlots([])}
-                  className="inline-flex h-11 items-center gap-1 rounded-full px-3 text-sm font-semibold text-muted hover:text-plum"
-                >
-                  <ArrowCounterClockwise size={16} aria-hidden /> {t("clear")}
-                </button>
-              ) : null}
-              {box.priceOnRequest ? null : (
-                <button
-                  type="button"
-                  disabled={left !== 0}
-                  onClick={(e) => {
-                    cart.add({
-                      productId: box.id,
-                      quantity: 1,
-                      optionIds: [],
-                      messages: [],
-                      contents: packed.map((p) => p.id),
-                      name: box.name,
-                      unitPriceAmd: total,
-                      image: packed[0]?.img?.src ?? box.img?.src ?? null,
-                      detail: { contents: packed.map((p) => p.name) },
-                      leadTimeDays: Math.max(
-                        box.leadTimeDays,
-                        ...packed.map((p) => p.leadTimeDays),
-                      ),
-                    });
-                    announceAdd(e.currentTarget);
-                    setSlots([]);
-                  }}
-                  className="h-12 rounded-full bg-plum px-6 font-semibold text-white transition-transform disabled:translate-y-0 disabled:opacity-45"
-                >
-                  {t("add", { price: formatAmd(total, locale) })}
-                </button>
-              )}
+                      )}
+                    </li>
+                  );
+                })}
+              </ol>
             </div>
           </div>
-          {box.priceOnRequest ? (
-            <>
-              <p className="mt-1 text-sm text-muted">
-                {t("boxFeeOnRequest", { price: formatAmd(donutsTotal, locale) })}
+          <div className="order-3">
+            {packed.length ? <p className="mt-2 text-sm text-muted">{t("removeHint")}</p> : null}
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+              <p className="font-semibold" aria-live="polite">
+                {t("left", { count: left })}
               </p>
-              <AskPrice
-                className="mt-4"
-                item={`${pick(box.name, locale)}${
-                  packed.length ? `: ${packed.map((p) => pick(p.name, locale)).join(", ")}` : ""
-                }`}
-              />
-            </>
-          ) : (
-            <p className="mt-1 text-sm text-muted">
-              {t("boxFee", { price: formatAmd(box.priceAmd, locale) })}
-            </p>
-          )}
+              <div className="flex items-center gap-2">
+                {packed.length ? (
+                  <button
+                    type="button"
+                    onClick={() => setSlots([])}
+                    className="inline-flex h-11 items-center gap-1 rounded-full px-3 text-sm font-semibold text-muted hover:text-plum"
+                  >
+                    <ArrowCounterClockwise size={16} aria-hidden /> {t("clear")}
+                  </button>
+                ) : null}
+                {box.priceOnRequest ? null : (
+                  <button
+                    type="button"
+                    disabled={left !== 0}
+                    onClick={(e) => {
+                      cart.add({
+                        productId: box.id,
+                        quantity: 1,
+                        optionIds: [],
+                        messages: [],
+                        contents: packed.map((p) => p.id),
+                        name: box.name,
+                        unitPriceAmd: total,
+                        image: packed[0]?.img?.src ?? box.img?.src ?? null,
+                        detail: { contents: packed.map((p) => p.name) },
+                        leadTimeDays: Math.max(
+                          box.leadTimeDays,
+                          ...packed.map((p) => p.leadTimeDays),
+                        ),
+                      });
+                      announceAdd(e.currentTarget);
+                      setSlots([]);
+                    }}
+                    className="h-12 rounded-full bg-plum px-6 font-semibold text-white transition-transform disabled:translate-y-0 disabled:opacity-45"
+                  >
+                    {t("add", { price: formatAmd(total, locale) })}
+                  </button>
+                )}
+              </div>
+            </div>
+            {box.priceOnRequest ? (
+              <>
+                <p className="mt-1 text-sm text-muted">
+                  {t("boxFeeOnRequest", { price: formatAmd(donutsTotal, locale) })}
+                </p>
+                <AskPrice
+                  className="mt-4"
+                  item={`${pick(box.name, locale)}${
+                    packed.length ? `: ${packed.map((p) => pick(p.name, locale)).join(", ")}` : ""
+                  }`}
+                />
+              </>
+            ) : (
+              <p className="mt-1 text-sm text-muted">
+                {t("boxFee", { price: formatAmd(box.priceAmd, locale) })}
+              </p>
+            )}
+          </div>
         </div>
 
         {/* The donuts to choose from */}
-        <div>
-          <p className="mb-3 font-hand text-xl text-magenta-ink">{t("pick")}</p>
-          <ul ref={listRef} className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-4">
+        <div className="order-2 min-w-0">
+          <p className="mb-1 font-hand text-[0.9375rem] leading-tight text-magenta-ink sm:text-base lg:mb-3 lg:text-xl lg:leading-snug">
+            {t("pick")}
+          </p>
+          <ul
+            ref={listRef}
+            className="-mx-5 flex snap-x scroll-px-5 [scrollbar-width:thin] gap-2 overflow-x-auto px-5 pb-2 sm:-mx-8 sm:scroll-px-8 sm:px-8 lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-3 lg:overflow-visible lg:px-0 lg:pb-0"
+          >
             {available.map((d) => (
-              <li key={d.id}>
+              <li key={d.id} className="w-[4.75rem] shrink-0 snap-start sm:w-24 lg:w-auto">
                 <button
                   type="button"
                   disabled={left === 0}
@@ -499,16 +515,18 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
                         src={cutout(d.img.src)!}
                         alt=""
                         fill
-                        sizes="(min-width: 1024px) 140px, 30vw"
+                        sizes="(min-width: 1024px) 140px, 96px"
                         draggable={false}
                         className="object-contain drop-shadow-[0_6px_8px_rgb(43_10_36/0.18)]"
                       />
                     ) : null}
                   </span>
-                  <span className="text-xs leading-tight font-semibold">
+                  <span className="line-clamp-2 text-[0.6875rem] leading-tight font-semibold sm:text-xs lg:line-clamp-none">
                     {pick(d.name, locale)}
                   </span>
-                  <span className="text-xs text-muted">{formatAmd(d.priceAmd, locale)}</span>
+                  <span className="text-[0.6875rem] text-muted sm:text-xs">
+                    {formatAmd(d.priceAmd, locale)}
+                  </span>
                 </button>
               </li>
             ))}
