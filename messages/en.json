@@ -224,7 +224,8 @@
       "boxFee": "box {price}",
       "boxFeeOnRequest": "donuts {price} + box, price on request",
       "full": "Box is full",
-      "slot": "Empty space {n}"
+      "slot": "Empty space {n}",
+      "removeHint": "To take a donut out, tap it in the box or carry it out of the box."
     },
     "name": {
       "title": "Try your name donut",

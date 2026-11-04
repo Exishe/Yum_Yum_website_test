@@ -1,8 +1,10 @@
-import { setRequestLocale } from "next-intl/server";
+import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { BoxBuilder } from "@/components/gifts/BoxBuilder";
+import { Link } from "@/i18n/navigation";
 import { Catalog } from "@/components/catalog/Catalog";
 import { BuildDonut } from "@/components/home/BuildDonut";
 import { HowToOrder } from "@/components/home/HowToOrder";
-import { GiftsSection } from "@/components/home/GiftsSection";
 import { Hero, type HeroChoice } from "@/components/home/Hero";
 import { Perks } from "@/components/home/Perks";
 import { PhotoStrip } from "@/components/home/PhotoStrip";
@@ -37,19 +39,17 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     const p = all.find((x) => x.slug === slug);
     return p ? toClientProduct(p) : null;
   };
-  const minIn = (pred: (p: (typeof all)[number]) => boolean) => {
-    const prices = all.filter(pred).map((p) => p.priceAmd);
-    return prices.length ? Math.min(...prices) : null;
-  };
 
-  // A box of n: the box itself plus the n cheapest donuts.
-  const boxFrom = (n: number) => {
-    const box = all.find((p) => p.boxSize === n);
-    const donuts = (menu.find((c) => c.slug === "donuts")?.products ?? [])
-      .map((p) => p.priceAmd)
-      .sort((a, b) => a - b);
-    return box && donuts.length ? box.priceAmd + n * donuts[0]! : null;
-  };
+  // The gift box builder: boxes from the gifts category, donuts to fill them.
+  const giftBoxes = (menu.find((c) => c.slug === "gifts")?.products ?? [])
+    .filter((p) => p.boxSize)
+    .map(toClientProduct);
+  const boxDonuts = (menu.find((c) => c.slug === "donuts")?.products ?? []).map(toClientProduct);
+  const [tg, tn, te] = await Promise.all([
+    getTranslations("gifts"),
+    getTranslations("nav"),
+    getTranslations("events"),
+  ]);
 
   const choices: HeroChoice[] = [
     {
@@ -140,17 +140,28 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       >
         <Catalog categories={toClientCategories(menu)} mode="home" />
       </section>
-      <GiftsSection
-        bouquet={imgOrThrow(`${T}/yumyum-26.jpg`)}
-        box={imgOrThrow(`${T}/yumyum-19.jpg`)}
-        prices={{
-          bouquet: minIn((p) => p.slug.startsWith("bouquet")),
-          composition: minIn((p) => p.slug.startsWith("composition")),
-          box: boxFrom(6),
-        }}
-        phone={phone}
-        phoneDisplay={phoneDisplay}
-      />
+      {/* Gifts: pack your own box, with the YUM-YUM donut keeping you company. */}
+      <section aria-label={tg("title")} className="bg-sun">
+        <div className="mx-auto max-w-[1440px] px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+          {giftBoxes.length && boxDonuts.length ? (
+            <BoxBuilder boxes={giftBoxes} donuts={boxDonuts} />
+          ) : null}
+          <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
+            <Link
+              href="/gifts"
+              className="inline-flex min-h-11 items-center gap-1.5 font-semibold underline decoration-2 underline-offset-4 hover:text-magenta-ink"
+            >
+              {tn("bouquets")} <ArrowRight size={16} weight="bold" aria-hidden />
+            </Link>
+            <Link
+              href="/events"
+              className="inline-flex min-h-11 items-center gap-1.5 font-semibold underline decoration-2 underline-offset-4 hover:text-magenta-ink"
+            >
+              {te("cta")} <ArrowRight size={16} weight="bold" aria-hidden />
+            </Link>
+          </div>
+        </div>
+      </section>
       <StorySection
         photos={{
           interior: imgOrThrow(`${T}/yumyum-13.jpg`),

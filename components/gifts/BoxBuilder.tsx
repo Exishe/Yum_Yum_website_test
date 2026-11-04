@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowCounterClockwise } from "@phosphor-icons/react/dist/ssr";
+import { ArrowCounterClockwise, X } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
@@ -11,6 +11,8 @@ import type { ClientProduct } from "@/lib/client-types";
 import { cn } from "@/lib/cn";
 import { formatAmd } from "@/lib/format";
 import { t as pick } from "@/lib/localized";
+import { BOX_LINES, donutLine } from "@/lib/box-helper";
+import { cutout } from "@/lib/cutouts";
 
 /**
  * The free box place nearest the pointer, in the box or its floating copy:
@@ -46,6 +48,8 @@ function slotAt(
 
 type Drag = {
   product: ClientProduct;
+  /** Set when the donut is picked up from the box itself. */
+  fromSlot?: number;
   pointerId: number;
   touch: boolean;
   x0: number;
@@ -75,6 +79,9 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
   const [carrying, setCarrying] = useState(false);
   // Phones: when the box is off screen, a small copy of it floats at the top while carrying.
   const [tray, setTray] = useState(false);
+  const [lifted, setLifted] = useState<number | null>(null);
+  // What the YUM-YUM donut beside the box is saying, and a counter to replay its hop.
+  const [say, setSay] = useState<{ text: string; n: number } | null>(null);
   const trayRef = useRef<HTMLOListElement>(null);
   const boxRef = useRef<HTMLOListElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
@@ -85,13 +92,14 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
 
   // While a donut is carried on a phone, the finger must not scroll the page.
   useEffect(() => {
-    const list = listRef.current;
-    if (!list) return;
+    const areas = [listRef.current, boxRef.current].filter(Boolean) as HTMLElement[];
     const stop = (e: TouchEvent) => {
       if (drag.current?.active) e.preventDefault();
     };
-    list.addEventListener("touchmove", stop, { passive: false });
-    return () => list.removeEventListener("touchmove", stop);
+    for (const a of areas) a.addEventListener("touchmove", stop, { passive: false });
+    return () => {
+      for (const a of areas) a.removeEventListener("touchmove", stop);
+    };
   }, []);
 
   // Near the top or bottom of the screen the page scrolls by itself.
@@ -128,6 +136,11 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
   const total = box.priceAmd + donutsTotal;
   const available = donuts.filter((d) => d.isAvailable && !d.priceOnRequest);
 
+  const loc = (["hy", "ru", "en"].includes(locale) ? locale : "en") as "hy" | "ru" | "en";
+  const speak = (text: string) => setSay((s) => ({ text, n: (s?.n ?? 0) + 1 }));
+  const aboutDonut = (p: ClientProduct) => speak(donutLine(p.slug, pick(p.name, locale), loc));
+  const helperText = say?.text ?? BOX_LINES.hello[loc];
+
   function chooseBox(id: number) {
     const next = sorted.find((b) => b.id === id);
     setBoxId(id);
@@ -136,22 +149,30 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
   }
 
   /** Puts a donut in place `at` if it is free, otherwise in the first free place. */
-  function put(p: ClientProduct, at?: number | null) {
+  function put(p: ClientProduct, at?: number | null, from?: number) {
+    const willBeFull = from == null && packed.length + 1 === size;
     setSlots((s) => {
       const next = Array.from({ length: size }, (_, i) => s[i] ?? null);
+      if (from != null) next[from] = null;
       const i = at != null && at >= 0 && !next[at] ? at : next.findIndex((c) => !c);
       if (i < 0) return s;
       next[i] = p;
       return next;
     });
+    if (from != null) speak(BOX_LINES.moved[loc]);
+    else if (willBeFull) speak(BOX_LINES.full[loc]);
+    else aboutDonut(p);
   }
   function removeAt(i: number) {
     setSlots((s) => s.map((c, k) => (k === i ? null : c)));
+    speak(BOX_LINES.removed[loc]);
   }
 
   function lift(d: Drag, img: HTMLImageElement | null) {
     d.active = true;
     setCarrying(true);
+    if (d.fromSlot != null) setLifted(d.fromSlot);
+    else aboutDonut(d.product);
     const r = boxRef.current?.getBoundingClientRect();
     if (r && (r.bottom < 160 || r.top > innerHeight - 120)) setTray(true);
     const g = document.createElement("div");
@@ -176,15 +197,22 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
     setOver(null);
     setCarrying(false);
     setTray(false);
+    setLifted(null);
     if (!g) return;
     g.classList.add("box-ghost-settle");
     if (target) {
       const s = target.width / d.size;
       g.style.transform = `translate3d(${target.left + target.width / 2 - d.size / 2}px, ${target.top + target.height / 2 - d.size / 2}px, 0) scale(${s})`;
       window.setTimeout(() => {
-        put(d.product, at);
+        put(d.product, at, d.fromSlot);
         g.remove();
       }, 200);
+    } else if (d.fromSlot != null && !hit) {
+      // Carried out of the box: it is taken out.
+      g.style.transform = `translate3d(${d.x - d.size / 2}px, ${d.y - d.size / 2 + 30}px, 0) scale(0.6)`;
+      g.style.opacity = "0";
+      removeAt(d.fromSlot);
+      window.setTimeout(() => g.remove(), 220);
     } else {
       // Not over the box: it goes back where it came from.
       g.style.transform = `translate3d(${d.from.left}px, ${d.from.top}px, 0) scale(${d.from.width / d.size})`;
@@ -193,8 +221,12 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
     }
   }
 
-  function onPointerDown(e: React.PointerEvent<HTMLButtonElement>, p: ClientProduct) {
-    if (left === 0 || drag.current || e.button > 0) return;
+  function onPointerDown(
+    e: React.PointerEvent<HTMLButtonElement>,
+    p: ClientProduct,
+    fromSlot?: number,
+  ) {
+    if ((fromSlot == null && left === 0) || drag.current || e.button > 0) return;
     const pic = e.currentTarget.querySelector("span");
     const from = (pic ?? e.currentTarget).getBoundingClientRect();
     const d: Drag = {
@@ -208,6 +240,7 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
       active: false,
       size: Math.max(64, Math.min(110, from.width)),
       from,
+      fromSlot,
     };
     drag.current = d;
     const img = e.currentTarget.querySelector("img");
@@ -284,6 +317,27 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
       <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[1fr_1.1fr]">
         {/* The box */}
         <div className="lg:sticky lg:top-28 lg:self-start">
+          {/* The YUM-YUM donut keeps the visitor company and talks about each pick. */}
+          <div className="mb-3 flex items-end gap-2">
+            <Image
+              key={say?.n ?? 0}
+              src="/images/brand/mascot.webp"
+              alt=""
+              width={864}
+              height={739}
+              quality={85}
+              sizes="88px"
+              className="helper-hop w-16 shrink-0 sm:w-[88px]"
+            />
+            <p
+              aria-live="polite"
+              className="relative mb-3 flex h-[5.5rem] flex-1 items-center overflow-hidden rounded-2xl rounded-bl-sm bg-magenta-soft px-4 py-2 text-sm leading-snug font-semibold text-plum sm:h-[4.75rem]"
+            >
+              <span key={say?.n ?? 0} className="line-clamp-4 animate-swap">
+                {helperText}
+              </span>
+            </p>
+          </div>
           <div className="rounded-[1.5rem] bg-magenta p-3 shadow-lift sm:p-4">
             <ol
               ref={boxRef}
@@ -300,19 +354,41 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
                     {p ? (
                       <button
                         type="button"
-                        onClick={() => removeAt(i)}
+                        onPointerDown={(e) => onPointerDown(e, p, i)}
+                        onPointerMove={onPointerMove}
+                        onPointerUp={onPointerEnd}
+                        onPointerCancel={onPointerEnd}
+                        onContextMenu={(e) => e.preventDefault()}
+                        onClick={() => {
+                          if (justDragged.current) {
+                            justDragged.current = false;
+                            return;
+                          }
+                          removeAt(i);
+                        }}
                         aria-label={t("remove", { name: pick(p.name, locale) })}
-                        className="relative block size-full animate-pop overflow-hidden rounded-full bg-white ring-2 ring-white transition-transform"
+                        className={cn(
+                          "group/slot relative block size-full animate-pop cursor-grab touch-manipulation select-none [-webkit-touch-callout:none] active:cursor-grabbing",
+                          lifted === i && "opacity-30",
+                        )}
                       >
                         {p.img ? (
                           <Image
-                            src={p.img.src}
+                            src={cutout(p.img.src)!}
                             alt=""
                             fill
-                            sizes="96px"
-                            className="object-cover"
+                            sizes="(min-width: 1024px) 160px, 30vw"
+                            draggable={false}
+                            className="object-contain drop-shadow-[0_6px_8px_rgb(43_10_36/0.25)]"
                           />
                         ) : null}
+                        {/* Always visible on phones, on hover with a mouse. */}
+                        <span
+                          aria-hidden
+                          className="absolute top-0 right-0 grid size-7 place-items-center rounded-full bg-white text-magenta-ink shadow-card transition-[opacity,scale] duration-150 ease-out sm:size-8 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover/slot:opacity-100 [@media(hover:hover)]:group-focus-visible/slot:opacity-100"
+                        >
+                          <X size={14} weight="bold" />
+                        </span>
                       </button>
                     ) : (
                       <span
@@ -330,6 +406,7 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
               })}
             </ol>
           </div>
+          {packed.length ? <p className="mt-2 text-sm text-muted">{t("removeHint")}</p> : null}
           <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
             <p className="font-semibold" aria-live="polite">
               {t("left", { count: left })}
@@ -416,15 +493,15 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
                   }}
                   className="group flex w-full cursor-grab touch-manipulation flex-col items-center gap-1 rounded-2xl p-1 text-center select-none [-webkit-touch-callout:none] active:cursor-grabbing disabled:cursor-default disabled:opacity-50"
                 >
-                  <span className="relative block aspect-square w-full overflow-hidden rounded-full bg-magenta-soft transition-transform duration-200 ease-out group-hover:scale-[1.04] group-active:scale-95">
+                  <span className="relative block aspect-square w-full transition-transform duration-200 ease-out group-hover:scale-[1.05] group-active:scale-95">
                     {d.img ? (
                       <Image
-                        src={d.img.src}
+                        src={cutout(d.img.src)!}
                         alt=""
                         fill
                         sizes="(min-width: 1024px) 140px, 30vw"
                         draggable={false}
-                        className="object-cover"
+                        className="object-contain drop-shadow-[0_6px_8px_rgb(43_10_36/0.18)]"
                       />
                     ) : null}
                   </span>
@@ -460,7 +537,13 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
                 )}
               >
                 {p?.img ? (
-                  <Image src={p.img.src} alt="" fill sizes="48px" className="object-cover" />
+                  <Image
+                    src={cutout(p.img.src)!}
+                    alt=""
+                    fill
+                    sizes="48px"
+                    className="object-contain"
+                  />
                 ) : null}
               </li>
             ))}
