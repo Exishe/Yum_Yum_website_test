@@ -7,7 +7,7 @@ type Lines = { hy: string; ru: string; en: string };
 
 export const DONUT_LINES: Record<string, Lines> = {
   "donut-chocolate": {
-    hy: "Շոկոլադեն մեզ մոտ ամենաշատն են գնում։ Դասականը դասական է։",
+    hy: "Մեզ մոտ ամենաշատը շոկոլադեն են գնում։ Իսկական դասական է։",
     ru: "Шоколадный — наш бестселлер. Классика!",
     en: "The chocolate one is our bestseller. A classic!",
   },
@@ -27,7 +27,7 @@ export const DONUT_LINES: Record<string, Lines> = {
     en: "White chocolate: the gentle choice.",
   },
   "donut-strawberry-rainbow": {
-    hy: "Վարդագույն ելակ ու ցողիկներ․ տուփը միանգամից պայծառացավ։",
+    hy: "Ելակի վարդագույն գլազուր ու ցողիկներ․ տուփն ավելի վառ դարձավ։",
     ru: "Розовая клубника с посыпкой — в коробке стало ярче.",
     en: "Pink strawberry with sprinkles: the box just got brighter.",
   },
@@ -47,7 +47,7 @@ export const DONUT_LINES: Record<string, Lines> = {
     en: "Bubble tastes like bubble gum. Tried it yet?",
   },
   "donut-lemon": {
-    hy: "Կիտրոնային է, մի քիչ թթվաշ։ Սուրճի հետ հիանալի է։",
+    hy: "Կիտրոնային է, մի քիչ թթվաշ։ Սուրճի հետ շատ համով է։",
     ru: "Лимонный, с лёгкой кислинкой. Отлично с кофе.",
     en: "Lemon, with a little tang. Lovely with coffee.",
   },
@@ -62,17 +62,17 @@ export const DONUT_LINES: Record<string, Lines> = {
     en: "Banana and Nutella: a winning pair.",
   },
   "donut-oreo": {
-    hy: "Օրեոյի փշրանքով է, խրթխրթում է։",
+    hy: "Օրեոյի փշրանքով է՝ խրթխրթան։",
     ru: "С крошкой Oreo — хрустит!",
     en: "Oreo crumbs on top: crunchy!",
   },
   "donut-american-flag": {
-    hy: "Աստղեր ու գծեր՝ գլազուրով։ Շատ տոնական է։",
+    hy: "Գլազուրից աստղեր ու շերտեր։ Շատ տոնական է։",
     ru: "Звёзды и полосы из глазури. Очень празднично.",
     en: "Stars and stripes in glaze. Very festive.",
   },
   "donut-kinder-bueno": {
-    hy: "Վրան Կինդեր Բուենո է՝ քաղցրակերների համար։",
+    hy: "Վրան Կինդեր Բուենո է՝ քաղցրասերների համար։",
     ru: "Киндер Буэно сверху — для сладкоежек.",
     en: "Kinder Bueno on top, for the sweet tooth.",
   },
@@ -92,7 +92,7 @@ export const DONUT_LINES: Record<string, Lines> = {
     en: "Coffee and caramel, in donut form.",
   },
   "donut-frowny": {
-    hy: "Կեսը բրաունի է, կեսը՝ դոնաթ։ Ինչո՞ւ ընտրել։",
+    hy: "Կեսը բրաունի է, կեսը՝ դոնաթ։ Ընտրելու կարիք չկա։",
     ru: "Наполовину брауни, наполовину донат. Зачем выбирать?",
     en: "Half brownie, half donut. Why choose?",
   },
@@ -127,7 +127,7 @@ export const DONUT_LINES: Record<string, Lines> = {
     en: "Chocolate inside and out, for chocolate lovers.",
   },
   "long-john-bavarian-chocolate": {
-    hy: "Լոնգ ջոնը երկար է, ներսը՝ լիքը կրեմ։",
+    hy: "Լոնգ ջոնը երկար է, ներսն էլ լիքը կրեմ է։",
     ru: "Лонг-джон: длинный и с кремом.",
     en: "Long John: long and full of cream.",
   },
@@ -140,7 +140,7 @@ export const DONUT_LINES: Record<string, Lines> = {
 
 export const BOX_LINES: Record<"hello" | "fallback" | "full" | "removed" | "moved", Lines> = {
   hello: {
-    hy: "Ընտրեք դոնաթներ ու տեղավորեք տուփում, իսկ ես կպատմեմ ամեն մեկի մասին։",
+    hy: "Ընտրեք դոնաթներ ու դրեք տուփի մեջ, իսկ ես ամեն մեկի մասին կպատմեմ։",
     ru: "Выбирайте донаты и несите в коробку — расскажу о каждом.",
     en: "Pick donuts and carry them into the box. I'll tell you about each one.",
   },
@@ -150,7 +150,7 @@ export const BOX_LINES: Record<"hello" | "fallback" | "full" | "removed" | "move
     en: "{name}: good choice!",
   },
   full: {
-    hy: "Տուփը լցվեց։ Կարող եք ավելացնել պատվերին։",
+    hy: "Տուփը լցվեց։ Մնում է ավելացնել պատվերին։",
     ru: "Коробка полная! Добавляйте в заказ.",
     en: "The box is full! Add it to your order.",
   },
