@@ -5,6 +5,7 @@ import { OptionsEditor } from "./OptionsEditor";
 import { saveProductAction } from "@/app/admin/actions";
 import { adminT } from "@/lib/admin-lang";
 import { PhotoInput } from "./PhotoInput";
+import { MAX_BOX_SIZE } from "@/lib/box-layout";
 
 export async function ProductForm({
   product,
@@ -84,9 +85,9 @@ export async function ProductForm({
             name="boxSize"
             type="number"
             min={0}
-            max={12}
+            max={MAX_BOX_SIZE}
             defaultValue={product?.boxSize ?? ""}
-            hint={t("Only for 'pack your box' boxes")}
+            hint={t("How many donuts fit (6, 12, 18 …). Leave empty for other products.")}
           />
         </div>
         <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-2 lg:grid-cols-4">

@@ -212,10 +212,9 @@
     "bouquetsTitle": "Bouquets and compositions",
     "box": {
       "title": "Pack your box",
-      "lead": "Pick 6 or 12 and watch them fill the box. Mix as you like.",
+      "lead": "Pick a box size and watch it fill up. Mix as you like.",
       "size": "Box size",
-      "six": "Box of 6",
-      "twelve": "Box of 12",
+      "sizeName": "Box of {count}",
       "pick": "Drag a donut into the box, or just tap it (on a phone: hold for a moment, then move)",
       "left": "{count, plural, =0 {Box is full!} one {# space left} other {# spaces left}}",
       "remove": "Take out {name}",

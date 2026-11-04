@@ -12,6 +12,7 @@ import { cn } from "@/lib/cn";
 import { formatAmd } from "@/lib/format";
 import { t as pick } from "@/lib/localized";
 import { BOX_LINES, donutLine } from "@/lib/box-helper";
+import { boxColumns } from "@/lib/box-layout";
 import { cutout } from "@/lib/cutouts";
 
 /**
@@ -89,6 +90,8 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
   const justDragged = useRef(false);
   const box = sorted.find((b) => b.id === boxId) ?? sorted[0];
   const size = box?.boxSize ?? 0;
+  // Any size the admin sets: 6 → 3×2, 12 → 4×3, 18 → 6×3, 24 → 6×4 …
+  const cols = boxColumns(size);
 
   // While a donut is carried on a phone, the finger must not scroll the page.
   useEffect(() => {
@@ -293,7 +296,7 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
           </h2>
           <p className="mt-2 max-w-lg text-muted">{t("lead")}</p>
         </div>
-        <div role="radiogroup" aria-label={t("size")} className="flex gap-2">
+        <div role="radiogroup" aria-label={t("size")} className="flex flex-wrap gap-2">
           {sorted.map((b) => (
             <button
               key={b.id}
@@ -302,13 +305,13 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
               aria-checked={b.id === box.id}
               onClick={() => chooseBox(b.id)}
               className={cn(
-                "h-12 rounded-full border-2 px-5 text-sm font-semibold",
+                "h-11 rounded-full border-2 px-4 text-sm font-semibold sm:h-12 sm:px-5",
                 b.id === box.id
                   ? "border-plum bg-plum text-white"
                   : "border-line bg-white hover:border-plum/40",
               )}
             >
-              {b.boxSize === 6 ? t("six") : t("twelve")}
+              {t("sizeName", { count: b.boxSize ?? 0 })}
             </button>
           ))}
         </div>
@@ -346,14 +349,24 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
                 </span>
               </p>
             </div>
-            <div className="mx-auto max-w-[17.5rem] rounded-[1.5rem] bg-magenta p-2.5 shadow-lift sm:max-w-sm sm:p-4 lg:max-w-none">
+            <div
+              className={cn(
+                // Small boxes stay compact on phones; wider ones get more room.
+                "mx-auto rounded-[1.5rem] bg-magenta p-2.5 shadow-lift sm:p-4 lg:max-w-none",
+                cols <= 3
+                  ? "max-w-[17.5rem] sm:max-w-sm"
+                  : cols === 4
+                    ? "max-w-[21rem] sm:max-w-md"
+                    : "sm:max-w-xl",
+              )}
+            >
               <ol
                 ref={boxRef}
                 className={cn(
                   "grid gap-1.5 rounded-2xl bg-magenta-soft p-2 transition-[background-color,box-shadow] duration-150 sm:gap-2 sm:p-3",
-                  size === 6 ? "grid-cols-3" : "grid-cols-4",
                   carrying && "bg-white shadow-[inset_0_0_0_3px_var(--color-sun)]",
                 )}
+                style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
                 aria-label={t("left", { count: left })}
               >
                 {cells.map((p, i) => {
@@ -539,10 +552,7 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
           <ol
             ref={trayRef}
             aria-hidden
-            className={cn(
-              "grid gap-1.5 rounded-xl bg-white p-2",
-              size === 6 ? "grid-cols-6" : "grid-cols-6 grid-rows-2",
-            )}
+            className={cn("grid gap-1.5 rounded-xl bg-white p-2", "grid-cols-6")}
           >
             {cells.map((p, i) => (
               <li

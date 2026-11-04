@@ -48,6 +48,7 @@ import { anonymizeOldOrders } from "@/lib/retention";
 import { saveImage } from "@/lib/storage";
 import { normalizeArmenianPhone } from "@/lib/format";
 import { clean, loginName, loginSchema, passwordSchema } from "@/lib/validation";
+import { MAX_BOX_SIZE } from "@/lib/box-layout";
 
 /* ── helpers ── */
 
@@ -314,7 +315,8 @@ export async function saveProductAction(fd: FormData) {
     isPublished: bool(fd, "isPublished"),
     isFeatured: bool(fd, "isFeatured"),
     leadTimeDays: Math.max(0, Math.min(14, num(fd, "leadTimeDays") || 0)),
-    boxSize: Number.isFinite(boxSize) && boxSize > 0 ? boxSize : null,
+    boxSize:
+      Number.isFinite(boxSize) && boxSize > 0 ? Math.min(MAX_BOX_SIZE, Math.round(boxSize)) : null,
     sortOrder: num(fd, "sortOrder") || 0,
     ...(image ? { image } : {}),
     ...(bool(fd, "removeImage") ? { image: null } : {}),
