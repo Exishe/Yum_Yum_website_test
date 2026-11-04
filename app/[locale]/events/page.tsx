@@ -13,7 +13,11 @@ const T = "/images/source/tomsarkgh";
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta" });
-  return { title: t("eventsTitle"), alternates: alternates(locale as Locale, "/events") };
+  return {
+    title: t("eventsTitle"),
+    description: t("eventsDescription"),
+    alternates: alternates(locale as Locale, "/events"),
+  };
 }
 
 export default async function EventsPage({ params }: Props) {

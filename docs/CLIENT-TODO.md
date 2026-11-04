@@ -14,7 +14,8 @@ Tick each item. Most can be done by the client directly in the admin panel.
 - [ ] **Instagram** — is `@yumyum_donut` the official account? Is there a TikTok? A public email?
 - [ ] **Legal details for the footer**: company name, tax ID (ՀՎՀՀ), registered address.
 - [ ] **Delivery**: zones, fees, minimum order, delivery hours, who delivers (own courier or buy.am only?). Current values are placeholders.
-- [ ] **Delivery apps**: are you on Glovo or Yandex Eats? Send the links, or we keep only buy.am.
+- [ ] **Delivery apps**: are you on Glovo or Yandex Eats? Send the links, or we keep only buy.am. (A web search in Nov 2026 found no listing.)
+- [ ] **Corporate and event orders** (new page `/events`): is the wording right? Do you offer a logo on boxes, an office delivery minimum, a sweet table? We only describe products that exist today.
 - [ ] **Who receives orders**: a Telegram group for the staff (preferred) and/or an email address. For the demo, `YumYum-Telegram.command` connects a bot in two minutes.
 - [ ] **Who calls to confirm orders**, and how fast (e.g. within 10 minutes during opening hours). Every new order waits for that call before it is prepared.
 - [ ] **Turn off the demo notes** (Admin → Settings → _Demo notes_) once delivery terms, payment methods, lead time and the WhatsApp number are confirmed. Until then the site marks them “example, to confirm”.
@@ -24,7 +25,7 @@ Tick each item. Most can be done by the client directly in the admin panel.
 
 ## Nice to have
 
-- [ ] Larger product photos (ours are 400 px from buy.am) — ideally square, on a plain background.
+- [ ] Your own product photos. Ours are now the 1000 px originals from buy.am; your own (ideally square, on a plain background) would look better still and need no permission.
 - [ ] More real reviews you are happy to quote (with name and platform).
 - [ ] Official Visa / Mastercard / ArCa logo files.
 - [ ] A decision on the loyalty stamp card idea (DECISIONS.md → Extras).

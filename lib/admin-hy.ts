@@ -222,6 +222,7 @@ export const hy: Record<string, string> = {
   "Order days ahead": "Քանի օր առաջ պատվիրել",
   Box: "Տուփ",
   "Only for 'pack your box' boxes": "Միայն «հավաքիր քո տուփը» տուփերի համար",
+  "1 for bouquets and name donuts": "Փնջերի և անվանական դոնաթների համար՝ 1",
   "Same product on buy.am (optional)": "Նույն ապրանքը buy.am-ում (ըստ ցանկության)",
   "Shows an “Order on buy.am” link on the product":
     "Ապրանքի վրա կհայտնվի «Պատվիրել buy.am-ում» հղումը",

@@ -13,7 +13,11 @@ type Props = { params: Promise<{ locale: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta" });
-  return { title: t("contactTitle"), alternates: alternates(locale as Locale, "/contact") };
+  return {
+    title: t("contactTitle"),
+    description: t("contactDescription"),
+    alternates: alternates(locale as Locale, "/contact"),
+  };
 }
 
 export default async function ContactPage({ params }: Props) {

@@ -18,7 +18,9 @@
     "orderTitle": "Order status",
     "newsletterTitle": "Newsletter",
     "ogAlt": "Chocolate, sprinkle and glazed donuts at YUM-YUM Donuts",
-    "eventsTitle": "Corporate and event orders"
+    "eventsTitle": "Corporate and event orders",
+    "eventsDescription": "Donut boxes, donut bouquets and a sweet table for the office, birthdays and weddings. Leave a request: we'll call back with a price.",
+    "contactDescription": "Call or write to YUM-YUM Donuts about orders, gifts and partnerships."
   },
   "common": {
     "skip": "Skip to content",

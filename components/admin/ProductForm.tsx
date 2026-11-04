@@ -58,7 +58,7 @@ export async function ProductForm({
             min={0}
             max={14}
             defaultValue={product?.leadTimeDays ?? 0}
-            hint="1 for bouquets and name donuts"
+            hint={t("1 for bouquets and name donuts")}
           />
           <Field
             label={t("Sort order")}
