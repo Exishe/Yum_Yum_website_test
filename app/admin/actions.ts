@@ -46,7 +46,7 @@ import { SETTINGS_TAG } from "@/lib/settings";
 import { TEXTS_TAG } from "@/lib/site-texts";
 import { anonymizeOldOrders } from "@/lib/retention";
 import { saveImage } from "@/lib/storage";
-import { normalizeArmenianPhone } from "@/lib/format";
+import { normalizePhone } from "@/lib/phone";
 import { clean, loginName, loginSchema, passwordSchema } from "@/lib/validation";
 import { MAX_BOX_SIZE } from "@/lib/box-layout";
 
@@ -221,8 +221,8 @@ function blockReturn(fd: FormData) {
 export async function blockPhoneAction(fd: FormData) {
   const user = await requireUser();
   const to = blockReturn(fd);
-  const phone = normalizeArmenianPhone(str(fd, "phone", 25));
-  if (!phone) back(to, "error", "Check the number: +374 and 8 digits.");
+  const phone = normalizePhone(str(fd, "phone", 25));
+  if (!phone) back(to, "error", "Check the number, with the country code (+374, +7 …).");
   await db
     .insert(blockedPhones)
     .values({ phone, reason: str(fd, "reason", 200) || null, blockedBy: user.id })
@@ -234,7 +234,7 @@ export async function blockPhoneAction(fd: FormData) {
 export async function unblockPhoneAction(fd: FormData) {
   const user = await requireUser();
   const to = blockReturn(fd);
-  const phone = normalizeArmenianPhone(str(fd, "phone", 25));
+  const phone = normalizePhone(str(fd, "phone", 25));
   if (!phone) back(to, "error", "Unknown number.");
   await db.delete(blockedPhones).where(eq(blockedPhones.phone, phone));
   await audit(user, "unblock_phone", "phone", phone);

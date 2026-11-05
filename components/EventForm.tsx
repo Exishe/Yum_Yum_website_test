@@ -3,6 +3,7 @@
 import { CheckCircle } from "@phosphor-icons/react/dist/ssr";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useState, useTransition } from "react";
+import { PhoneField } from "@/components/ui/PhoneField";
 import { Turnstile } from "@/components/ui/Turnstile";
 import { sendEventRequest } from "@/lib/actions";
 import { cn } from "@/lib/cn";
@@ -98,21 +99,19 @@ export function EventForm() {
           />
           {err("name")}
         </label>
-        <label className="font-semibold">
-          {t("phone")}
-          <input
+        <div className="font-semibold">
+          <label htmlFor="event-phone">{t("phone")}</label>
+          <PhoneField
+            id="event-phone"
             name="phone"
-            type="tel"
-            inputMode="tel"
-            autoComplete="tel"
             required
-            maxLength={40}
-            aria-invalid={!!fields.phone}
-            aria-describedby={fields.phone ? "e-phone-err" : undefined}
-            className={input}
+            locale={locale}
+            countryLabel={tc("country")}
+            invalid={!!fields.phone}
+            describedBy={fields.phone ? "e-phone-err" : undefined}
           />
           {err("phone")}
-        </label>
+        </div>
       </div>
       <label className="font-semibold">
         {t("company")}

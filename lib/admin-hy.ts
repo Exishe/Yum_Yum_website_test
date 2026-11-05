@@ -184,7 +184,8 @@ export const hy: Record<string, string> = {
   "Number blocked. It can no longer order online.":
     "Համարն արգելափակված է։ Այլևս հնարավոր չէ առցանց պատվիրել։",
   "Number unblocked.": "Համարը հանված է արգելափակումից։",
-  "Check the number: +374 and 8 digits.": "Ստուգեք համարը՝ +374 և 8 թվանշան։",
+  "Check the number, with the country code (+374, +7 …).":
+    "Ստուգեք համարը՝ երկրի կոդով (+374, +7…)։",
   "Unknown number.": "Համարը չի գտնվել։",
 
   // Products

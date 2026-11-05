@@ -8,12 +8,14 @@ test.describe.configure({ mode: "serial" });
 /** Fills the real checkout with one donut for pickup and presses "Place order". */
 async function submitPickupOrder(page: Page, phone: string) {
   await page.goto("/en/menu?category=donuts");
-  await page.evaluate(() => localStorage.setItem("yy-consent-v1", "essential"));
+  await page.evaluate(() =>
+    localStorage.setItem("yy-consent-v2", JSON.stringify({ c: "essential", t: Date.now() })),
+  );
   await page.reload();
   await page.locator("#menu-panel li button[aria-label]").first().click();
   await page.goto("/en/checkout");
   await page.locator("input[name='name']").fill("Test Admin");
-  await page.locator("input[name='phone']").fill(phone);
+  await page.locator("#checkout-phone").fill(phone);
   await page.locator("input[name='consent']").check();
   await page.locator("#checkout-form button[type='submit']").click();
 }

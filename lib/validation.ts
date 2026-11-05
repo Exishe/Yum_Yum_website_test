@@ -4,7 +4,7 @@
  */
 import { z } from "zod";
 import { districtKeys } from "./districts";
-import { normalizeArmenianPhone } from "./format";
+import { normalizePhone } from "./phone";
 
 // Our Content-Security-Policy forbids eval. Without this, zod probes for it with
 // `new Function` on first use and the browser logs a CSP violation.
@@ -40,7 +40,7 @@ export const phoneSchema = z
   .string()
   .max(25, { message: "phone" })
   .transform((v, ctx) => {
-    const phone = normalizeArmenianPhone(v);
+    const phone = normalizePhone(v);
     if (!phone) {
       ctx.addIssue({ code: "custom", message: "phone" });
       return z.NEVER;
@@ -125,7 +125,7 @@ export const EVENT_ITEMS = ["donuts", "boxes", "bouquets", "drinks"] as const;
 /** Corporate and event requests: the shop calls back with options and a price. */
 export const eventSchema = z.object({
   name: text(2, 60),
-  phone: text(5, 40),
+  phone: phoneSchema,
   company: z.string().max(80).optional().default(""),
   kind: z.enum(EVENT_KINDS),
   date: z

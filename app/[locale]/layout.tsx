@@ -24,8 +24,6 @@ import { SiteProvider } from "@/components/SiteContext";
 import { DevBadge } from "@/components/layout/DevBadge";
 import { RevealObserver } from "@/components/ui/RevealObserver";
 import { ErrorReporter } from "@/components/ErrorReporter";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { DEMO, demoTexts, robotsFor } from "@/lib/demo-config";
 
 export const viewport: Viewport = {
@@ -161,15 +159,13 @@ export default async function LocaleLayout({
             <Footer categories={menu.filter((c) => c.inMenu)} shops={shops} settings={settings} />
             <LazyCartDrawer />
             <StickyOrderBar shops={shops.map((s) => ({ id: s.id, name: pick(s.name, locale) }))} />
-            {/* The site sets only essential cookies, so there is nothing to ask about.
-                The consent window returns only if an optional analytics script is set. */}
-            {process.env.NEXT_PUBLIC_ANALYTICS_SCRIPT ? (
-              <CookieConsent
-                nonce={nonce}
-                analyticsSrc={process.env.NEXT_PUBLIC_ANALYTICS_SCRIPT}
-                analyticsDomain={process.env.NEXT_PUBLIC_ANALYTICS_DOMAIN}
-              />
-            ) : null}
+            {/* Asks before any visit counting; essential storage needs no consent. */}
+            <CookieConsent
+              nonce={nonce}
+              vercel={process.env.VERCEL === "1"}
+              analyticsSrc={process.env.NEXT_PUBLIC_ANALYTICS_SCRIPT}
+              analyticsDomain={process.env.NEXT_PUBLIC_ANALYTICS_DOMAIN}
+            />
             {DEMO.enabled ? (
               <DevBadge
                 texts={demoTexts(locale)}
@@ -179,14 +175,6 @@ export default async function LocaleLayout({
             ) : null}
           </SiteProvider>
         </NextIntlClientProvider>
-        {/* Cookieless: no consent needed. Counts visits and Core Web Vitals in
-            Vercel; the scripts only exist there. */}
-        {process.env.VERCEL === "1" ? (
-          <>
-            <Analytics />
-            <SpeedInsights />
-          </>
-        ) : null}
       </body>
     </html>
   );

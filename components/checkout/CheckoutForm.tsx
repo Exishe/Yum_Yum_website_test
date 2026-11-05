@@ -21,6 +21,7 @@ import { quoteDelivery } from "@/lib/pricing";
 import { addDays, yerevanParts } from "@/lib/time";
 import { checkoutSchema, type CheckoutInput } from "@/lib/validation";
 import { DemoNote } from "@/components/AskPrice";
+import { PhoneField } from "@/components/ui/PhoneField";
 
 type Props = {
   shops: PublicShop[];
@@ -99,6 +100,10 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
     },
   });
 
+  // The phone box is a custom control: it reports the full number through setValue.
+  useEffect(() => {
+    register("phone");
+  }, [register]);
   const fulfilment = watch("fulfilment");
   const shopId = watch("shopId");
   const district = watch("district");
@@ -455,25 +460,24 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
                 />
                 {err("name")}
               </label>
-              <label className="font-semibold">
-                {t("phone")}
-                <input
-                  {...register("phone")}
-                  type="tel"
-                  inputMode="tel"
-                  autoComplete="tel"
-                  placeholder="+374 "
-                  maxLength={25}
-                  className={field}
-                  aria-invalid={!!errors.phone}
-                  aria-describedby={errors.phone ? "phone-err" : "phone-hint"}
+              <div className="font-semibold">
+                <label htmlFor="checkout-phone">{t("phone")}</label>
+                <PhoneField
+                  id="checkout-phone"
+                  locale={locale}
+                  countryLabel={tco("country")}
+                  invalid={!!errors.phone}
+                  describedBy={errors.phone ? "phone-err" : "phone-hint"}
+                  onValueChange={(v) =>
+                    setValue("phone", v, { shouldValidate: !!errors.phone, shouldDirty: true })
+                  }
                 />
                 {err("phone") ?? (
                   <span id="phone-hint" className="mt-1 block text-sm font-normal text-muted">
                     {t("phoneHint")}
                   </span>
                 )}
-              </label>
+              </div>
               <label className="font-semibold sm:col-span-2">
                 {t("comment")}
                 <textarea

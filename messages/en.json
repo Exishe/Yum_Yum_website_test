@@ -23,6 +23,7 @@
     "contactDescription": "Call or write to YUM-YUM Donuts about orders, gifts and partnerships."
   },
   "common": {
+    "country": "Country",
     "skip": "Skip to content",
     "close": "Close",
     "back": "Back",
@@ -361,7 +362,7 @@
     "you": "Your details",
     "name": "Name",
     "phone": "Phone",
-    "phoneHint": "+374 XX XXX XXX. We call this number to confirm your order.",
+    "phoneHint": "We call this number to confirm your order.",
     "address": "Address",
     "district": "District",
     "districtPlaceholder": "Choose a district",
@@ -444,20 +445,21 @@
     "legal": "Company details: {details}",
     "legalPending": "to be added",
     "allShops": "All shops",
-    "social": "Follow us",
-    "cookiesNote": "This site uses only essential cookies"
+    "social": "Follow us"
   },
   "cookies": {
-    "text": "We only use the cookies the site needs to work (your language and your order). Analytics are off unless you allow them, and they never track you personally.",
-    "accept": "Allow analytics",
+    "text": "The site uses essential cookies to remember your language and your order. With your permission we also count visits anonymously, to make the site better.",
+    "accept": "Allow all",
     "essential": "Only essential",
     "settings": "Cookie settings",
     "title": "Cookies",
     "essentialTitle": "Essential",
-    "essentialText": "Language, order basket, admin sign-in. Always on.",
-    "analyticsTitle": "Anonymous analytics",
-    "analyticsText": "Counts visits without cookies or personal data. Helps us see which pages work.",
-    "save": "Save"
+    "essentialText": "Language, basket, site password, your cookie choice and spam protection on forms. The site can’t work without them, so they’re always on.",
+    "analyticsTitle": "Visit statistics",
+    "analyticsText": "Vercel Analytics and Speed Insights count visits and page speed, without cookies or personal data. On only if you allow it.",
+    "save": "Save",
+    "customize": "Customize",
+    "policy": "Privacy policy"
   },
   "contact": {
     "title": "Write to us",
@@ -477,7 +479,7 @@
   "errors": {
     "required": "Please fill this in.",
     "tooLong": "That’s a bit too long.",
-    "phone": "Please enter an Armenian phone number, e.g. +374 94 30 15 74.",
+    "phone": "Check the number: pick the country and type the number, e.g. 94 30 15 74.",
     "email": "Please check the email address.",
     "consent": "Please agree to the privacy policy.",
     "shop": "Please choose a shop.",
@@ -532,7 +534,7 @@
       },
       {
         "h": "Cookies",
-        "p": "We use only essential cookies: your language and the staff sign-in. Your basket stays in your browser. We may count visits anonymously, without cookies or personal data."
+        "p": "Essential cookies and browser storage: your language, the site password, the staff sign-in, your basket and your cookie choice. Cloudflare Turnstile protects the forms from spam. Only if you allow it, Vercel Analytics and Speed Insights count visits and page speed anonymously, without cookies. You can change your choice at any time with “Cookie settings” at the bottom of every page. We ask again after 12 months."
       },
       {
         "h": "Your rights",

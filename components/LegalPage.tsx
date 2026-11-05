@@ -3,7 +3,7 @@ import type { Locale } from "@/i18n/routing";
 import { env } from "@/lib/env";
 import { formatDate } from "@/lib/format";
 
-const UPDATED = new Date("2026-10-23T12:00:00Z");
+const UPDATED = new Date("2026-11-05T12:00:00Z");
 
 export async function LegalPage({
   kind,

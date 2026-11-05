@@ -292,13 +292,9 @@ export async function Footer({
               </Link>
             </li>
             <li>
-              {process.env.NEXT_PUBLIC_ANALYTICS_SCRIPT ? (
-                <CookieSettingsButton className="hover:text-white">
-                  {t("cookies")}
-                </CookieSettingsButton>
-              ) : (
-                t("cookiesNote")
-              )}
+              <CookieSettingsButton className="hover:text-white">
+                {t("cookies")}
+              </CookieSettingsButton>
             </li>
           </ul>
         </div>

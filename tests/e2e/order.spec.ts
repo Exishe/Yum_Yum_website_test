@@ -1,7 +1,9 @@
 import { expect, test, type Page } from "@playwright/test";
 
 async function dismissCookies(page: Page) {
-  await page.evaluate(() => localStorage.setItem("yy-consent-v1", "essential"));
+  await page.evaluate(() =>
+    localStorage.setItem("yy-consent-v2", JSON.stringify({ c: "essential", t: Date.now() })),
+  );
 }
 
 /** A different valid phone per test so the per-phone limit is not hit. */
@@ -19,7 +21,7 @@ for (const locale of ["hy", "ru", "en"] as const) {
 
     await page.goto(`/${locale}/checkout`);
     await page.locator("input[name='name']").fill("Test Ani");
-    await page.locator("input[name='phone']").fill(phone());
+    await page.locator("#checkout-phone").fill(phone());
     await page.locator("input[name='consent']").check();
     await page.locator("#checkout-form button[type='submit']").click();
 
@@ -38,7 +40,7 @@ test("delivery needs a district and shows the fee", async ({ page }) => {
   await page.goto("/en/checkout");
   await page.getByText("Delivery", { exact: true }).click();
   await page.locator("input[name='name']").fill("Test Delivery");
-  await page.locator("input[name='phone']").fill(phone());
+  await page.locator("#checkout-phone").fill(phone());
   await page.locator("input[name='consent']").check();
   await page.locator("#checkout-form button[type='submit']").click();
   await expect(page.getByText("Please choose a district.")).toBeVisible();
