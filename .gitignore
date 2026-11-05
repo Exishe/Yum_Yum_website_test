@@ -15,3 +15,6 @@ test-results
 .vercel
 .DS_Store
 Thumbs.db
+
+# Portfolio screenshots (scripts/portfolio-shots.mjs)
+portfolio-shots/

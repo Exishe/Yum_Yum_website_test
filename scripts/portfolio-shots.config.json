@@ -1,0 +1,167 @@
+{
+  "description": "Donut shop website with online ordering",
+  "about": "A website in three languages (Armenian, Russian, English) for a chain of donut and coffee shops. Visitors browse the menu with prices from the database, open any item for its details, design a donut in 3D, fill a gift box by dragging donuts into it, and order for pickup or delivery with a chosen day and time; payment is cash or card when the order is handed over. There are also shop pages with a map, an events request form, phone numbers from any country and a cookie consent banner that only loads statistics after the visitor agrees. Staff use an admin panel to manage orders and their status, the menu and prices, shops, delivery zones, site texts, reviews and staff accounts, and new orders are sent to Telegram or email.",
+  "stack": [
+    "Next.js 16 (App Router), React 19, TypeScript",
+    "Tailwind CSS 4, Radix UI",
+    "next-intl (3 languages)",
+    "Drizzle ORM, PostgreSQL (Neon; PGlite for the local demo)",
+    "React Hook Form, Zod, libphonenumber-js",
+    "Three.js (3D donut designer)",
+    "Vercel hosting, Vercel Blob for uploaded photos",
+    "Telegram bot and email notifications",
+    "Vitest and Playwright tests"
+  ],
+  "url": "http://127.0.0.1:3000",
+  "chromiumPath": "",
+  "sitePassword": "",
+  "localStorage": {},
+  "hideSelectors": [".demo-badge", ".demo-pill", "nextjs-portal"],
+  "pages": [
+    {
+      "name": "home",
+      "path": "/en"
+    },
+    {
+      "name": "menu",
+      "path": "/en/menu"
+    },
+    {
+      "name": "product",
+      "path": "/en/menu",
+      "click": "#menu-panel li > button",
+      "waitFor": "[role=dialog]"
+    },
+    {
+      "name": "gifts",
+      "path": "/en/gifts"
+    },
+    {
+      "name": "checkout",
+      "path": "/en/checkout",
+      "prepare": [
+        {
+          "goto": "/en/menu"
+        },
+        {
+          "click": "#menu-panel li button[aria-label]"
+        },
+        {
+          "click": "#menu-panel li:nth-child(3) button[aria-label]"
+        }
+      ]
+    },
+    {
+      "name": "admin",
+      "path": "/admin/orders",
+      "login": {
+        "path": "/admin/login",
+        "userField": "login",
+        "passwordField": "password",
+        "user": "director",
+        "password": "yumyum-demo-2026"
+      },
+      "cookies": [
+        {
+          "name": "yy_admin_lang",
+          "value": "en"
+        }
+      ]
+    }
+  ],
+  "hideNames": [
+    "YUM-YUM DONUTS",
+    "YUM-YUM",
+    "YUM YUM",
+    "YumYum",
+    "Yum_Yum",
+    "yum-yum-donuts",
+    "yumyum-donuts",
+    "Yum",
+    "Յամ-Յամ",
+    "Յամ",
+    "Ям-Ям",
+    "Ям"
+  ],
+  "hideTexts": [
+    "34/3 Arshakunyats Ave, Yerevan Mall, 2nd floor",
+    "Արշակունյաց պող. 34/3, Yerevan Mall, 2-րդ հարկ",
+    "пр. Аршакуняц, 34/3, Yerevan Mall, 2 этаж",
+    "пр. Гая, 16, ТЦ Megamall, 2 этаж",
+    "Գայի պող. 16, Մեգամոլ, 2-րդ հարկ",
+    "16 Gai Ave, Megamall, 2nd floor",
+    "пр. Комитаса, 20/2, Ереван",
+    "Մաշտոցի պող. 5, 2-րդ հարկ",
+    "20/2 Komitas Ave, Yerevan",
+    "5 Mashtots Ave, 2nd floor",
+    "Կոմիտասի պող. 20/2, Երևան",
+    "35 Mashtots Ave, Yerevan",
+    "48 Mashtots Ave, Yerevan",
+    "ул. Абовяна, 2/5, Ереван",
+    "пр. Маштоца, 48, Ереван",
+    "ул. Абовяна, 25, Ереван",
+    "пр. Маштоца, 35, Ереван",
+    "2/5 Abovyan St, Yerevan",
+    "пр. Маштоца, 5, 2 этаж",
+    "Մաշտոցի պող. 35, Երևան",
+    "25 Abovyan St, Yerevan",
+    "Mashtots 5 (Pak Shuka)",
+    "Մաշտոցի պող. 48, Երևան",
+    "Աբովյան փ. 2/5, Երևան",
+    "Մաշտոց 5 (Պակ Շուկա)",
+    "Маштоца 5 (Пак Шука)",
+    "Աբովյան փ. 25, Երևան",
+    "ул. Московяна, 10",
+    "Հեռավոր թաղամասեր",
+    "+374 33 30 15 74",
+    "Մոտակա թաղամասեր",
+    "+374 94 30 15 74",
+    "Մոսկովյան փ. 10",
+    "10 Moskovyan St",
+    "Outer districts",
+    "Inner districts",
+    "Дальние районы",
+    "+374 91 707407",
+    "Ближние районы",
+    "YumYumYerevan",
+    "Moskovyan 10",
+    "yumyum_donut",
+    "Московяна 10",
+    "Մոսկովյան 10",
+    "Yerevan Mall",
+    "094 30 15 74",
+    "033 30 15 74",
+    "Abovyan 2/5",
+    "Комитаса 20",
+    "Ереван Молл",
+    "Mashtots 35",
+    "Абовяна 2/5",
+    "Mashtots 48",
+    "Աբովյան 2/5",
+    "Աբովյան 25",
+    "Абовяна 25",
+    "Komitas 20",
+    "Կոմիտաս 20",
+    "Маштоца 48",
+    "Маштоца 35",
+    "Abovyan 25",
+    "Մաշտոց 48",
+    "Մաշտոց 35",
+    "Երևան Մոլ",
+    "Мегамолл",
+    "Megamall",
+    "Մեգամոլ",
+    "Կենտրոն",
+    "Centre",
+    "Центр"
+  ],
+  "cover": {
+    "desktop": "home",
+    "mobile": "gifts"
+  },
+  "overview": {
+    "desktop": ["menu", "gifts", "admin"],
+    "mobile": "product"
+  },
+  "mobileTrio": ["home", "menu", "checkout"]
+}
