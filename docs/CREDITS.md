@@ -52,3 +52,5 @@ No code was copied from other companies' websites.
 - Fonts: Sofia Sans (Lettersoup: Botio Nikoltchev, Ani Petrova; SIL OFL 1.1, `public/fonts/LICENSE-Sofia-Sans-OFL.txt`) replaces Onest and Rubik; WM Hayk Sans (derived from Arian AMU by Ruben Hakobyan/Tarumian, see `public/fonts/NOTICE-WM-Hayk.md`) replaces Noto Sans Armenian.
 - Gift box pictures in `public/images/box/`: supplied by the team (the shop's box artwork) on 11 Nov 2026. Origin and rights to confirm with the client before launch.
 - Guest quotes on the gifts page: the same real, verbatim reviews as on the home page (Yandex Maps, Tripadvisor), from the reviews table.
+- Hero headline marker stroke: Rough Notation by Preet Shihn (MIT, https://github.com/rough-stuff/rough-notation), `components/home/HandMark.tsx`.
+- Gift box picture `public/images/box/box-gift.webp`: supplied by the team on 11 Nov 2026 (client box artwork); background removed with rembg (isnet-general-use, MIT/Apache). `pack-paper.webp` is cut from the site's own 3D poster.

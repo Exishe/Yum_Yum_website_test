@@ -229,15 +229,15 @@ export function Catalog({
 
   return (
     <div>
-      <div data-reveal className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+      <div data-reveal className="flex flex-col gap-5">
         <div>
           <p className="font-hand text-xl text-magenta-ink">{t("eyebrow")}</p>
           {mode === "home" ? (
-            <h2 id="menu-title" className="text-[clamp(1.6rem,3vw,2.4rem)] leading-none">
+            <h2 id="menu-title" className="text-[clamp(1.5rem,2.4vw,2rem)] leading-none">
               {t("title")}
             </h2>
           ) : (
-            <h1 id="menu-title" className="text-[clamp(1.6rem,3vw,2.4rem)] leading-none">
+            <h1 id="menu-title" className="text-[clamp(1.5rem,2.4vw,2rem)] leading-none">
               {t("title")}
             </h1>
           )}
@@ -246,8 +246,8 @@ export function Catalog({
           role="tablist"
           aria-label={t("tabs")}
           watch={current?.slug}
-          className="-mx-4 sm:mx-0 lg:max-w-[min(62%,56rem)]"
-          rowClassName="snap-row gap-2 scroll-px-4 px-4 pb-1 sm:scroll-px-0 sm:px-0"
+          className="-mx-4 sm:mx-0"
+          rowClassName="snap-row gap-2 scroll-px-4 px-4 pb-1 sm:scroll-px-0 sm:px-0 lg:flex-wrap"
         >
           {visible.map((c) => {
             const selected = c.slug === current?.slug && !q;

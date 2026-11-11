@@ -2,7 +2,7 @@ import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import type { ImageInfo } from "@/lib/images";
 
-/** A slightly tilted strip of real photos to swipe through. */
+/** A row of real photos to swipe through; it does not move by itself. */
 export async function PhotoStrip({ photos }: { photos: ImageInfo[] }) {
   const t = await getTranslations("hero");
   return (
@@ -11,27 +11,16 @@ export async function PhotoStrip({ photos }: { photos: ImageInfo[] }) {
       role="region"
       aria-label={t("stripLabel")}
     >
-      {/* A row the visitor swipes or scrolls; it does not move by itself. */}
       <ul
         data-reveal
         tabIndex={0}
         aria-label={t("stripLabel")}
-        className="no-scrollbar snap-row flex -rotate-2 scroll-px-6 gap-6 overflow-x-auto px-6 py-3 focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-magenta"
+        className="no-scrollbar snap-row flex scroll-px-6 gap-4 overflow-x-auto px-6 py-3 focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-magenta"
       >
-        {photos.map((p, i) => (
-          <li key={p.src} className="flex shrink-0 snap-start items-center gap-6">
-            <span
-              className="zoom-frame relative block h-[clamp(1.6rem,3vw,2.4rem)] w-[clamp(1.6rem,3vw,2.4rem)] overflow-hidden rounded-2xl shadow-card"
-              style={{ transform: `rotate(${i % 2 ? 3 : -2}deg)` }}
-            >
-              <Image src={p.src} alt="" fill sizes="190px" className="zoom-photo object-cover" />
-            </span>
-            <span
-              aria-hidden
-              className="font-display text-[clamp(1.12rem,2.16vw,1.73rem)] text-magenta-ink"
-              lang="en"
-            >
-              {t("strip")}
+        {photos.map((p) => (
+          <li key={p.src} className="shrink-0 snap-start">
+            <span className="zoom-frame relative block h-[clamp(7rem,13vw,10rem)] w-[clamp(9.5rem,18vw,14rem)] overflow-hidden rounded-2xl shadow-card">
+              <Image src={p.src} alt="" fill sizes="224px" className="zoom-photo object-cover" />
             </span>
           </li>
         ))}

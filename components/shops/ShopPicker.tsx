@@ -85,7 +85,7 @@ export function ShopPicker({
     >
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[0.9fr_1.1fr]">
         <div>
-          <H id="shops-title" className="text-[clamp(1.6rem,3vw,2.4rem)] leading-[0.95]">
+          <H id="shops-title" className="text-[clamp(1.5rem,2.4vw,2rem)] leading-[0.95]">
             {t("title")}
           </H>
           <p className="mt-3">

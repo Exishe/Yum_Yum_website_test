@@ -291,7 +291,7 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
     >
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <h2 id="box-title" className="text-[clamp(1.3rem,2.2vw,1.75rem)] leading-none">
+          <h2 id="box-title" className="text-[clamp(1.2rem,1.8vw,1.5rem)] leading-none">
             {t("title")}
           </h2>
           <p className="mt-2 max-w-lg text-muted">{t("lead")}</p>

@@ -44,7 +44,7 @@ export default async function GiftsPage({ params }: Props) {
         <div className="mx-auto grid max-w-[1440px] grid-cols-1 items-center gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8 lg:py-16">
           <div>
             <p className="font-hand text-xl text-magenta-ink">{t("eyebrow")}</p>
-            <h1 className="text-[clamp(1.6rem,3vw,2.4rem)] leading-[1.05]">{t("title")}</h1>
+            <h1 className="text-[clamp(1.5rem,2.4vw,2rem)] leading-[1.05]">{t("title")}</h1>
             <p className="mt-4 max-w-xl leading-relaxed">
               {t("pageLead")} <DemoNote />
             </p>
@@ -120,7 +120,7 @@ export default async function GiftsPage({ params }: Props) {
         {nameDonut ? <NameDonut product={nameDonut} /> : null}
         {bouquets.length ? (
           <section aria-labelledby="bouquets-title">
-            <h2 id="bouquets-title" className="mb-6 text-[clamp(1.3rem,2.2vw,1.75rem)]">
+            <h2 id="bouquets-title" className="mb-6 text-[clamp(1.2rem,1.8vw,1.5rem)]">
               {t("bouquetsTitle")}
             </h2>
             <GiftGrid products={bouquets} />

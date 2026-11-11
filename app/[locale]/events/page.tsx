@@ -36,7 +36,7 @@ export default async function EventsPage({ params }: Props) {
       <div className="mx-auto grid max-w-[1300px] grid-cols-1 gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:px-8">
         <div className="min-w-0">
           <p className="font-hand text-xl text-magenta-ink">{t("eyebrow")}</p>
-          <h1 className="mt-1 text-[clamp(1.6rem,3vw,2.4rem)] leading-none">{t("title")}</h1>
+          <h1 className="mt-1 text-[clamp(1.5rem,2.4vw,2rem)] leading-none">{t("title")}</h1>
           <p className="mt-4 max-w-xl leading-relaxed text-plum/85">{t("lead")}</p>
 
           <ul data-reveal-group className="mt-8 grid gap-4 sm:grid-cols-3">

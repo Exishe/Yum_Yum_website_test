@@ -22,7 +22,7 @@ export async function Spotted({
     >
       <div data-reveal className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h2 id="spotted-title" className="text-[clamp(1.6rem,3vw,2.4rem)] leading-[0.95]">
+          <h2 id="spotted-title" className="text-[clamp(1.5rem,2.4vw,2rem)] leading-[0.95]">
             <span className="block">{t("titleA")}</span>
             <span className="block text-magenta">{t("titleB")}</span>
           </h2>

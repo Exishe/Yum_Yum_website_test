@@ -47,6 +47,12 @@ const TOPPINGS: { key: Topping; dots: string[] }[] = [
   { key: "nuts", dots: ["#c79a5e", "#9db25a"] },
 ];
 const PACKS: Packaging[] = ["paper", "box", "gift"];
+/** Each packaging choice shows its real look: the shop's paper, its box and its gift box (client artwork). */
+const PACK_IMG: Record<Packaging, string> = {
+  paper: "/images/box/pack-paper.webp",
+  box: "/images/box/box-closed.webp",
+  gift: "/images/box/box-gift.webp",
+};
 const STEPS = ["taste", "toppings", "pack"] as const;
 
 /** Soft taps as toppings land; synthesized, no audio files. */
@@ -140,7 +146,7 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
     engineRef.current?.setGlaze(f.color, f.rough);
   }, [flavour, status]);
   useEffect(() => engineRef.current?.setToppings(toppings), [toppings, status]);
-  useEffect(() => engineRef.current?.setPackaging(pack === "box" ? "paper" : pack), [pack, status]);
+  useEffect(() => engineRef.current?.setPackaging("paper"), [pack, status]);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -306,6 +312,7 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
   }
 
   const showBox = step === 2 && pack === "box";
+  const showGift = step === 2 && pack === "gift";
 
   // Every choice is a key: it lifts a little on hover and goes down when pressed.
   const chip =
@@ -385,6 +392,23 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
               </span>
             </button>
           ) : null}
+          {step === 2 ? (
+            <div
+              aria-hidden
+              hidden={!showGift}
+              className="pointer-events-none absolute inset-0 z-[5] grid place-items-center bg-[radial-gradient(70%_60%_at_50%_45%,#5a1846_0%,#2b0a24_65%,#1a0616_100%)] [&[hidden]]:hidden"
+            >
+              <Image
+                src="/images/box/box-gift.webp"
+                alt=""
+                width={1100}
+                height={733}
+                sizes="(min-width: 1024px) 45vw, 90vw"
+                loading="eager"
+                className={cn("k-box-img", showGift ? "is-on" : "")}
+              />
+            </div>
+          ) : null}
           {debug ? (
             <pre className="pointer-events-none absolute top-2 left-2 z-10 rounded-lg bg-black/70 px-2 py-1 font-mono text-[10px] leading-tight whitespace-pre text-lime-300">
               {debug}
@@ -420,7 +444,7 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
         <div className="flex min-w-0 flex-col gap-5 max-lg:pb-[min(44svh,420px)]">
           <div>
             <p className="font-hand text-xl text-sun">{t("eyebrow")}</p>
-            <h2 id="build-title" className="text-[clamp(1.6rem,3vw,2.4rem)] leading-tight">
+            <h2 id="build-title" className="text-[clamp(1.5rem,2.4vw,2rem)] leading-tight">
               {t("title")}
             </h2>
             <p className="mt-2 max-w-md text-white/75">{t("lead")}</p>
@@ -558,15 +582,13 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
                         : "border-white/10 bg-white/6 hover:border-white/45 hover:bg-white/14",
                     )}
                   >
-                    {p === "box" ? (
-                      <Image
-                        src="/images/box/box-closed.webp"
-                        alt=""
-                        width={120}
-                        height={80}
-                        className="k-swatch mb-1.5 h-12 w-auto self-start object-contain"
-                      />
-                    ) : null}
+                    <Image
+                      src={PACK_IMG[p]}
+                      alt=""
+                      width={120}
+                      height={80}
+                      className="k-swatch mb-1.5 h-12 w-auto self-start object-contain"
+                    />
                     <span className="text-sm font-semibold">{t(`packs.${p}`)}</span>
                     <span className="text-xs text-white/65">{t(`packSub.${p}`)}</span>
                   </button>

@@ -54,15 +54,8 @@ export function HeroMascot() {
         aria-label={t("open")}
         aria-expanded={shown && stage !== "leaving"}
         onClick={() => setStage((s) => (s === "hidden" || s === "leaving" ? "ask" : "leaving"))}
-        className="group absolute inset-[13%] z-[5] cursor-pointer rounded-full focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-magenta"
-      >
-        <span
-          aria-hidden
-          className={`pointer-events-none absolute top-[9%] left-[40%] inline-flex -translate-x-1/2 items-center gap-1.5 rounded-xl bg-white/90 px-3 py-1.5 text-xs font-semibold whitespace-nowrap text-plum shadow-card transition-[opacity,scale] duration-200 ease-out group-hover:scale-105 ${shown ? "opacity-0" : "opacity-100"}`}
-        >
-          <span aria-hidden>👋</span> {t("hint")}
-        </span>
-      </button>
+        className="group absolute inset-[7%] z-[5] cursor-pointer rounded-full focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-magenta"
+      ></button>
 
       {shown ? (
         <div

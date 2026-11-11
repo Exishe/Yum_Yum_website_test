@@ -30,7 +30,7 @@ export default async function ContactPage({ params }: Props) {
     <div className="dot-grid">
       <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
         <div>
-          <h1 className="text-[clamp(1.6rem,3vw,2.4rem)] leading-none">{t("title")}</h1>
+          <h1 className="text-[clamp(1.5rem,2.4vw,2rem)] leading-none">{t("title")}</h1>
           <p className="mt-4">{t("lead")}</p>
           <h2 className="mt-8 font-sans text-sm font-bold tracking-[0.18em] text-magenta-ink uppercase">
             {t("phones")}

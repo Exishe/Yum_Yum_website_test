@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { FreshDonutIcon } from "@/components/icons/brand";
 import { ScrollRow } from "@/components/ui/ScrollRow";
 import { HeroMascot } from "./HeroMascot";
+import { HandMark } from "./HandMark";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { announceAdd, cart } from "@/lib/cart-store";
@@ -118,10 +119,9 @@ export function Hero({
           </p>
           <h1
             id="hero-title"
-            className="hero-title mt-6 text-[clamp(1.7rem,3.2vw,2.5rem)] leading-[1.08]"
+            className="hero-title mt-6 text-[clamp(1.3rem,2.1vw,2rem)] leading-[1.2] lg:whitespace-nowrap"
           >
-            <span className="block">{t("titleA")}</span>
-            <span className="block text-magenta">{t("titleB")}</span>
+            {t("titleA")} <HandMark>{t("titleB")}</HandMark>
           </h1>
           {tagline ? (
             <p className="mt-4 font-hand text-xl text-magenta-ink lg:mt-5" lang={locale}>
@@ -189,19 +189,9 @@ export function Hero({
           </div>
         </div>
 
-        {/* Photo, rotating ring, badges */}
+        {/* Photo (tap it: the mascot says hello) */}
         <div className="hero-photo-in relative mx-auto aspect-square w-full max-w-[600px] lg:mr-0">
-          <svg aria-hidden viewBox="0 0 600 600" className="absolute inset-0 size-full">
-            <defs>
-              <path id="ring" d="M300,300 m-262,0 a262,262 0 1,1 524,0 a262,262 0 1,1 -524,0" />
-            </defs>
-            <text className="fill-plum font-sans text-[25px] font-semibold tracking-[0.42em]">
-              <textPath href="#ring" textLength="1630" lengthAdjust="spacing">
-                {t("ring") + t("ring")}
-              </textPath>
-            </text>
-          </svg>
-          <div className="absolute inset-[13%] overflow-hidden rounded-full bg-magenta-soft shadow-lift">
+          <div className="absolute inset-[7%] overflow-hidden rounded-full bg-magenta-soft shadow-lift">
             {choices.map(
               (c, i) =>
                 (i === 0 || lively || c.key === active) && (
@@ -225,15 +215,6 @@ export function Hero({
           </div>
 
           <HeroMascot />
-
-          <p className="absolute top-[6%] right-[2%] grid size-[clamp(1.6rem,3vw,2.4rem)] rotate-6 place-items-center rounded-full bg-sun text-center shadow-card">
-            <span>
-              <span className="shops-badge block px-2 font-display text-[clamp(1.04rem,2.59vw,1.3rem)] leading-none">
-                {t("shopsBadge")}
-              </span>
-              <span className="text-xs font-medium">{t("shopsBadgeSub")}</span>
-            </span>
-          </p>
 
           {pickProduct ? (
             <div

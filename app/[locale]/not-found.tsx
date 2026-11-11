@@ -19,7 +19,7 @@ export default async function NotFound() {
             className="mascot-figure w-44 sm:w-52"
           />
         </div>
-        <h1 className="mt-6 text-[clamp(1.6rem,3vw,2.4rem)] leading-none">{t("title")}</h1>
+        <h1 className="mt-6 text-[clamp(1.5rem,2.4vw,2rem)] leading-none">{t("title")}</h1>
         <p className="mt-4 text-muted">{t("lead")}</p>
         <Link
           href="/"
