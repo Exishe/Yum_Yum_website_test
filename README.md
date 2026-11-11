@@ -27,7 +27,7 @@ shop staff.
 You need Node.js 22 and Git. In PowerShell (Windows) or Terminal (macOS):
 
 ```powershell
-git clone -b claude/stoic-dijkstra-kmom5z https://github.com/Exishe/Yum_Yum_website_test.git
+git clone https://github.com/Exishe/Yum_Yum_website_test.git
 cd Yum_Yum_website_test
 corepack enable
 pnpm install

@@ -22,7 +22,7 @@ export default async function CheckoutPage({ params }: Props) {
   return (
     <div className="dot-grid">
       <div className="mx-auto max-w-[1280px] px-4 pt-10 pb-20 sm:px-6 lg:px-8">
-        <h1 className="text-[clamp(1.91rem,3.67vw,2.57rem)] leading-none">{t("title")}</h1>
+        <h1 className="text-[clamp(1.6rem,3vw,2.4rem)] leading-none">{t("title")}</h1>
         <p className="mt-3 max-w-xl text-plum/85">{t("lead")}</p>
         <div className="mt-8">
           <CheckoutForm shops={shops} zones={zones} rules={settings.ordering} />

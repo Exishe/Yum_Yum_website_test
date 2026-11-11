@@ -118,7 +118,7 @@ export function Hero({
           </p>
           <h1
             id="hero-title"
-            className="hero-title mt-6 text-[clamp(2.21rem,5.44vw,3.91rem)] leading-[0.92]"
+            className="hero-title mt-6 text-[clamp(1.7rem,3.2vw,2.5rem)] leading-[1.08]"
           >
             <span className="block">{t("titleA")}</span>
             <span className="block text-magenta">{t("titleB")}</span>
@@ -226,7 +226,7 @@ export function Hero({
 
           <HeroMascot />
 
-          <p className="absolute top-[6%] right-[2%] grid size-[clamp(6rem,18vw,8.5rem)] rotate-6 place-items-center rounded-full bg-sun text-center shadow-card">
+          <p className="absolute top-[6%] right-[2%] grid size-[clamp(1.6rem,3vw,2.4rem)] rotate-6 place-items-center rounded-full bg-sun text-center shadow-card">
             <span>
               <span className="shops-badge block px-2 font-display text-[clamp(1.04rem,2.59vw,1.3rem)] leading-none">
                 {t("shopsBadge")}

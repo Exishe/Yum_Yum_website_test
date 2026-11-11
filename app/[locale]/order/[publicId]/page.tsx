@@ -96,9 +96,7 @@ export default async function OrderPage({ params, searchParams }: Props) {
             </p>
           </div>
         ) : null}
-        <h1 className="text-[clamp(1.91rem,4.28vw,2.69rem)] leading-none">
-          {t("number", { code })}
-        </h1>
+        <h1 className="text-[clamp(1.6rem,3vw,2.4rem)] leading-none">{t("number", { code })}</h1>
         {isNew ? <p className="mt-3">{t("received")}</p> : null}
         <p className="mt-1 text-sm text-muted">{t("track")}</p>
 

@@ -139,7 +139,7 @@
     "fresh": "Since 1997",
     "freshSub": "First café on Mashtots Ave",
     "shops": "Shops all over town",
-    "shopsSub": "In the centre and in malls",
+    "shopsSub": "Always close to you",
     "takeaway": "Take it with you",
     "takeawaySub": "Boxes and bouquets to go",
     "cards": "Cards welcome",
@@ -257,7 +257,7 @@
       "lead": "On 9 December 1997, when Yerevan was still cold and dark most evenings, a small café with yellow walls and pink tables opened on Mashtots Avenue.",
       "p1": "It was started by Toros, an Armenian from New Jersey, with his sister Nune Sahakyan running the place. The idea was simple: Yerevan had no fast-service café, and everyone in the world loves a donut.",
       "p2": "Coffee cost 250 dram, and takeaway food was still a rarity in Yerevan. Students from the art, architecture and polytechnic schools and the conservatory, painters, actors and embassy staff came every day. People wrote their theses here, met, fell in love.",
-      "p3": "When it got too crowded, a sign appeared: 30 minutes per table. Guests kept correcting it to 130, then 230. One regular later called it “a living Facebook” of its day.",
+      "p3": "When it got too crowded, a sign appeared: 30 minutes per table. Guests kept correcting it to 130, then 230.",
       "p4": "The first café closed in 2010 and moved to Northern Avenue. Today the same pink-and-yellow sign hangs over shops across the city.",
       "source": "History from “Donatanots”, ԵՐԵՎԱՆ magazine no. 18, 2013, by Lena Gevorgyan.",
       "timeline": "Timeline",
@@ -623,7 +623,7 @@
     },
     "packSub": {
       "paper": "To eat here or on the go",
-      "box": "Our box, #madeinarmenia",
+      "box": "Our pink box",
       "gift": "Pink paper, yellow ribbon"
     },
     "next": "Next",
@@ -638,7 +638,9 @@
     "drag": "Drag to turn",
     "soundOn": "Turn sound on",
     "soundOff": "Turn sound off",
-    "noWebgl": "The 3D donut does not open on this device, but choosing and ordering still work."
+    "noWebgl": "The 3D donut does not open on this device, but choosing and ordering still work.",
+    "boxOpen": "Open the box",
+    "boxClose": "Close the box"
   },
   "events": {
     "eyebrow": "For the office and celebrations",

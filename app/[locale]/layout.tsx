@@ -71,9 +71,9 @@ export default async function LocaleLayout({
 
   // Preload only the font files this language needs.
   const fontFiles: Record<string, string[]> = {
-    hy: ["/fonts/noto-sans-armenian-v47.woff2"],
-    ru: ["/fonts/rubik-cyrillic-v31.woff2", "/fonts/onest-cyrillic-v11.woff2"],
-    en: [],
+    hy: ["/fonts/WMHaykSans-Regular.woff2", "/fonts/WMHaykSans-Bold.woff2"],
+    ru: ["/fonts/sofia-sans-cyrillic-wght-normal.woff2"],
+    en: ["/fonts/sofia-sans-latin-wght-normal.woff2"],
   };
   for (const href of fontFiles[locale] ?? []) {
     preload(href, { as: "font", type: "font/woff2", crossOrigin: "anonymous" });

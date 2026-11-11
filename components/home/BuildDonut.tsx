@@ -98,6 +98,16 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
   const engineRef = useRef<DonutBuilder | null>(null);
   const tapsRef = useRef<ReturnType<typeof makeTaps> | null>(null);
   const soundOn = useRef(true);
+  const [boxOpen, setBoxOpen] = useState(true);
+  const boxTimer = useRef(0);
+  /** Choosing the box: show it open with donuts, then close the lid (at once with reduced motion). */
+  function packBox() {
+    window.clearTimeout(boxTimer.current);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return setBoxOpen(false);
+    setBoxOpen(true);
+    boxTimer.current = window.setTimeout(() => setBoxOpen(false), 1100);
+  }
+  useEffect(() => () => window.clearTimeout(boxTimer.current), []);
   const drag = useRef<{ id: number; x: number } | null>(null);
   const [status, setStatus] = useState<"waiting" | "ready" | "fallback">("waiting");
   const [step, setStep] = useState<Step>(0);
@@ -130,7 +140,7 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
     engineRef.current?.setGlaze(f.color, f.rough);
   }, [flavour, status]);
   useEffect(() => engineRef.current?.setToppings(toppings), [toppings, status]);
-  useEffect(() => engineRef.current?.setPackaging(pack), [pack, status]);
+  useEffect(() => engineRef.current?.setPackaging(pack === "box" ? "paper" : pack), [pack, status]);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -295,8 +305,11 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
     setAdded(true);
   }
 
+  const showBox = step === 2 && pack === "box";
+
+  // Every choice is a key: it lifts a little on hover and goes down when pressed.
   const chip =
-    "transition-[background-color,border-color,scale] duration-150 ease-out active:scale-[0.97]";
+    "k-key transition-[background-color,border-color,translate,box-shadow] duration-150 ease-out";
 
   return (
     <section ref={sectionRef} aria-labelledby="build-title" className="on-dark bg-plum text-white">
@@ -339,6 +352,39 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
               status === "ready" ? "opacity-100" : "opacity-0",
             )}
           />
+          {/* The shop's own box (client artwork). Chosen on the last step: the open box with donuts
+              shows first, then the lid closes; a tap opens it again. */}
+          {step === 2 ? (
+            <button
+              type="button"
+              hidden={!showBox}
+              onClick={() => setBoxOpen((o) => !o)}
+              aria-label={t(boxOpen ? "boxClose" : "boxOpen")}
+              className="k-box absolute inset-0 z-[5] grid place-items-center bg-[radial-gradient(70%_60%_at_50%_45%,#5a1846_0%,#2b0a24_65%,#1a0616_100%)] [&[hidden]]:hidden"
+            >
+              <Image
+                src="/images/box/box-open-donuts.webp"
+                alt=""
+                width={1005}
+                height={1100}
+                sizes="(min-width: 1024px) 40vw, 80vw"
+                loading="eager"
+                className={cn("k-box-img k-box-open", boxOpen ? "is-on" : "")}
+              />
+              <Image
+                src="/images/box/box-closed.webp"
+                alt=""
+                width={1100}
+                height={733}
+                sizes="(min-width: 1024px) 45vw, 90vw"
+                loading="eager"
+                className={cn("k-box-img k-box-closed", boxOpen ? "" : "is-on")}
+              />
+              <span className="pointer-events-none absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-lg bg-black/55 px-3 py-1.5 text-xs font-semibold text-white/90">
+                {t(boxOpen ? "boxClose" : "boxOpen")}
+              </span>
+            </button>
+          ) : null}
           {debug ? (
             <pre className="pointer-events-none absolute top-2 left-2 z-10 rounded-lg bg-black/70 px-2 py-1 font-mono text-[10px] leading-tight whitespace-pre text-lime-300">
               {debug}
@@ -374,7 +420,7 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
         <div className="flex min-w-0 flex-col gap-5 max-lg:pb-[min(44svh,420px)]">
           <div>
             <p className="font-hand text-xl text-sun">{t("eyebrow")}</p>
-            <h2 id="build-title" className="text-[clamp(1.9rem,3.6vw,2.8rem)] leading-tight">
+            <h2 id="build-title" className="text-[clamp(1.6rem,3vw,2.4rem)] leading-tight">
               {t("title")}
             </h2>
             <p className="mt-2 max-w-md text-white/75">{t("lead")}</p>
@@ -438,13 +484,13 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
                       "flex min-h-20 flex-col items-center justify-center gap-1.5 rounded-2xl border-2 px-1 py-2 text-center text-xs leading-tight font-semibold",
                       chip,
                       flavour === x.key
-                        ? "border-sun bg-white/12"
-                        : "border-transparent bg-white/6 hover:bg-white/10",
+                        ? "border-sun bg-white/16"
+                        : "border-white/10 bg-white/6 hover:border-white/45 hover:bg-white/14",
                     )}
                   >
                     <span
                       aria-hidden
-                      className="size-8 rounded-full shadow-[inset_0_-3px_0_rgb(0_0_0/0.18)] ring-2 ring-white/25"
+                      className="k-swatch size-8 rounded-full shadow-[inset_0_-3px_0_rgb(0_0_0/0.18)] ring-2 ring-white/25"
                       style={{ background: x.color }}
                     />
                     {t(`flavours.${x.key}`)}
@@ -465,8 +511,8 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
                         "flex min-h-14 items-center gap-3 rounded-2xl border-2 px-3 text-left text-sm font-semibold",
                         chip,
                         on
-                          ? "border-sun bg-white/12"
-                          : "border-transparent bg-white/6 hover:bg-white/10",
+                          ? "border-sun bg-white/16"
+                          : "border-white/10 bg-white/6 hover:border-white/45 hover:bg-white/14",
                       )}
                     >
                       <span aria-hidden className="flex shrink-0 -space-x-1">
@@ -502,15 +548,25 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
                     onClick={() => {
                       touch();
                       setPack(p);
+                      if (p === "box") packBox();
                     }}
                     className={cn(
                       "flex min-h-14 flex-col justify-center rounded-2xl border-2 px-4 py-2.5 text-left",
                       chip,
                       pack === p
-                        ? "border-sun bg-white/12"
-                        : "border-transparent bg-white/6 hover:bg-white/10",
+                        ? "border-sun bg-white/16"
+                        : "border-white/10 bg-white/6 hover:border-white/45 hover:bg-white/14",
                     )}
                   >
+                    {p === "box" ? (
+                      <Image
+                        src="/images/box/box-closed.webp"
+                        alt=""
+                        width={120}
+                        height={80}
+                        className="k-swatch mb-1.5 h-12 w-auto self-start object-contain"
+                      />
+                    ) : null}
                     <span className="text-sm font-semibold">{t(`packs.${p}`)}</span>
                     <span className="text-xs text-white/65">{t(`packSub.${p}`)}</span>
                   </button>
@@ -524,7 +580,7 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
               <button
                 type="button"
                 onClick={() => setStep((step - 1) as Step)}
-                className="inline-flex h-12 items-center gap-2 rounded-full border-2 border-white/25 px-5 font-semibold transition-[border-color,scale] duration-150 ease-out hover:border-white/60 active:scale-[0.97]"
+                className="k-key inline-flex h-12 items-center gap-2 rounded-xl border-2 border-white/25 px-5 font-semibold transition-[border-color,background-color,translate,box-shadow] duration-150 ease-out hover:border-white/70 hover:bg-white/10"
               >
                 <ArrowLeft size={18} weight="bold" aria-hidden /> {t("back")}
               </button>
@@ -533,7 +589,7 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
               <button
                 type="button"
                 onClick={() => setStep((step + 1) as Step)}
-                className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-full bg-white px-5 font-bold text-plum transition-transform duration-150 ease-out active:scale-[0.97] sm:flex-none"
+                className="k-key k-key--light inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-white px-6 font-bold text-plum transition-[background-color,translate,box-shadow] duration-150 ease-out hover:bg-sun sm:flex-none"
               >
                 {t("next")} <ArrowRight size={18} weight="bold" aria-hidden />
               </button>
@@ -565,7 +621,7 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
                   type="button"
                   disabled={!match.isAvailable}
                   onClick={addMatch}
-                  className="inline-flex h-11 shrink-0 items-center justify-center rounded-full bg-magenta px-4 text-sm font-bold whitespace-nowrap text-white transition-transform duration-150 ease-out active:scale-[0.97] disabled:opacity-50 max-[420px]:w-full"
+                  className="k-key k-key--magenta inline-flex h-11 shrink-0 items-center justify-center rounded-xl bg-magenta px-4 text-sm font-bold whitespace-nowrap text-white transition-[background-color,translate,box-shadow] duration-150 ease-out hover:bg-[#c40f72] disabled:opacity-50 max-[420px]:w-full"
                 >
                   {added ? t("added") : t("add", { price: formatAmd(match.priceAmd, locale) })}
                 </button>

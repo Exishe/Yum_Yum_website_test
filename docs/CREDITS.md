@@ -46,3 +46,9 @@ self-hosted: Bagel, Onest (Latin) and Pangolin through `next/font`; Rubik (Cyril
 
 All third-party packages and their licences: [TECH-STACK.md](TECH-STACK.md).
 No code was copied from other companies' websites.
+
+## Added 11 November 2026 (WiyMood team rules pass)
+
+- Fonts: Sofia Sans (Lettersoup: Botio Nikoltchev, Ani Petrova; SIL OFL 1.1, `public/fonts/LICENSE-Sofia-Sans-OFL.txt`) replaces Onest and Rubik; WM Hayk Sans (derived from Arian AMU by Ruben Hakobyan/Tarumian, see `public/fonts/NOTICE-WM-Hayk.md`) replaces Noto Sans Armenian.
+- Gift box pictures in `public/images/box/`: supplied by the team (the shop's box artwork) on 11 Nov 2026. Origin and rights to confirm with the client before launch.
+- Guest quotes on the gifts page: the same real, verbatim reviews as on the home page (Yandex Maps, Tripadvisor), from the reviews table.

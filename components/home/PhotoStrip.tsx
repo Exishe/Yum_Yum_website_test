@@ -21,7 +21,7 @@ export async function PhotoStrip({ photos }: { photos: ImageInfo[] }) {
         {photos.map((p, i) => (
           <li key={p.src} className="flex shrink-0 snap-start items-center gap-6">
             <span
-              className="zoom-frame relative block h-[clamp(5.5rem,11vw,8rem)] w-[clamp(8rem,15vw,11.5rem)] overflow-hidden rounded-2xl shadow-card"
+              className="zoom-frame relative block h-[clamp(1.6rem,3vw,2.4rem)] w-[clamp(1.6rem,3vw,2.4rem)] overflow-hidden rounded-2xl shadow-card"
               style={{ transform: `rotate(${i % 2 ? 3 : -2}deg)` }}
             >
               <Image src={p.src} alt="" fill sizes="190px" className="zoom-photo object-cover" />

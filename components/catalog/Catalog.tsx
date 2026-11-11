@@ -233,11 +233,11 @@ export function Catalog({
         <div>
           <p className="font-hand text-xl text-magenta-ink">{t("eyebrow")}</p>
           {mode === "home" ? (
-            <h2 id="menu-title" className="text-[clamp(1.91rem,3.67vw,2.75rem)] leading-none">
+            <h2 id="menu-title" className="text-[clamp(1.6rem,3vw,2.4rem)] leading-none">
               {t("title")}
             </h2>
           ) : (
-            <h1 id="menu-title" className="text-[clamp(2.06rem,4.28vw,3.06rem)] leading-none">
+            <h1 id="menu-title" className="text-[clamp(1.6rem,3vw,2.4rem)] leading-none">
               {t("title")}
             </h1>
           )}
