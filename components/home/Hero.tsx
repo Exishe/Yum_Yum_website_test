@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { FreshDonutIcon } from "@/components/icons/brand";
 import { ScrollRow } from "@/components/ui/ScrollRow";
 import { HeroMascot } from "./HeroMascot";
-import { HandMark } from "./HandMark";
+import { NegativeTitle } from "./NegativeTitle";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { announceAdd, cart } from "@/lib/cart-store";
@@ -121,7 +121,7 @@ export function Hero({
             id="hero-title"
             className="hero-title mt-6 text-[clamp(1.3rem,2.1vw,2rem)] leading-[1.2] lg:whitespace-nowrap"
           >
-            {t("titleA")} <HandMark>{t("titleB")}</HandMark>
+            <NegativeTitle a={t("titleA")} b={t("titleB")} />
           </h1>
           {tagline ? (
             <p className="mt-4 font-hand text-xl text-magenta-ink lg:mt-5" lang={locale}>

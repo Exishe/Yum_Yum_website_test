@@ -1052,3 +1052,39 @@
   translate: 0 2px;
   filter: brightness(0.86) saturate(1.15);
 }
+
+/* Negative mask headline (components/home/NegativeTitle.tsx, after Jitter's free "Negative mask effect" template) */
+.nm-w {
+  position: relative;
+  display: inline-block;
+}
+.nm-win {
+  position: absolute;
+  inset: -0.06em -0.16em -0.02em;
+  padding: 0.06em 0.16em 0.02em;
+  border-radius: 0.22em;
+  background: var(--color-magenta);
+  color: var(--color-cream);
+  white-space: nowrap;
+  pointer-events: none;
+  clip-path: inset(0 100% 0 0 round 0.22em);
+}
+.nm-win.is-on {
+  animation: nm-reveal 0.7s cubic-bezier(0.7, 0, 0.2, 1) both;
+}
+@keyframes nm-reveal {
+  0% {
+    clip-path: inset(0 100% 0 0 round 0.22em);
+  }
+  100% {
+    clip-path: inset(0 0 0 0 round 0.22em);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nm-win {
+    clip-path: none;
+  }
+  .nm-win.is-on {
+    animation: none;
+  }
+}
