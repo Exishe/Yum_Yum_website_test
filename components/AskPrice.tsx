@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpRight, Info, Phone, WhatsappLogo } from "@phosphor-icons/react/dist/ssr";
+import { ArrowUpRight, Phone, WhatsappLogo } from "@phosphor-icons/react/dist/ssr";
 import { useLocale, useTranslations } from "next-intl";
 import { useSite } from "@/components/SiteContext";
 import type { Locale } from "@/i18n/routing";
@@ -10,7 +10,7 @@ import { cn } from "@/lib/cn";
 /** Call / WhatsApp buttons for an item whose price is on request. `item` pre-fills the message. */
 export function AskPrice({ item, className }: { item: string; className?: string }) {
   const t = useTranslations("common");
-  const { phone, whatsapp, whatsappConfirmed } = useSite();
+  const { phone, whatsapp } = useSite();
   const wa = whatsapp
     ? `https://wa.me/${whatsapp}?text=${encodeURIComponent(t("askText", { item }))}`
     : null;
@@ -35,11 +35,6 @@ export function AskPrice({ item, className }: { item: string; className?: string
           <span className="sr-only">({t("newTab")})</span>
         </a>
       ) : null}
-      {wa && !whatsappConfirmed ? (
-        <p className="basis-full text-xs text-muted">
-          WhatsApp <DemoNote />
-        </p>
-      ) : null}
     </div>
   );
 }
@@ -61,25 +56,5 @@ export function BuyamButton({ url, className }: { url: string; className?: strin
       {t("buyam")} <ArrowUpRight size={14} weight="bold" aria-hidden />
       <span className="sr-only">({t("newTab")})</span>
     </a>
-  );
-}
-
-/** Small "example, to confirm" tag for values the client has not confirmed. Hidden when switched off. */
-export function DemoNote({ className }: { className?: string }) {
-  const t = useTranslations("common");
-  const { demoNotes } = useSite();
-  if (!demoNotes) return null;
-  return (
-    <span
-      title={t("demoNoteHint")}
-      className={cn(
-        "inline-flex items-center gap-1 rounded-xl border border-dashed border-magenta-ink/50 bg-white px-2 py-0.5 align-middle text-xs font-semibold whitespace-nowrap text-magenta-ink",
-        className,
-      )}
-    >
-      <Info size={12} weight="bold" aria-hidden />
-      {t("demoNote")}
-      <span className="sr-only">. {t("demoNoteHint")}</span>
-    </span>
   );
 }

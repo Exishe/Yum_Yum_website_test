@@ -1,5 +1,5 @@
 import "server-only";
-import { and, asc, eq } from "drizzle-orm";
+import { and, asc, eq, isNotNull, or } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 import { db } from "@/db";
 import {
@@ -58,6 +58,11 @@ export type MenuCategory = {
   products: MenuProduct[];
 };
 
+const MALL_HOURS: WeekHours = Array.from({ length: 7 }, () => ({
+  open: "10:00",
+  close: "22:00",
+}));
+
 export const getMenu = unstable_cache(
   async (): Promise<MenuCategory[]> => {
     const [cats, prods, opts] = await Promise.all([
@@ -69,8 +74,14 @@ export const getMenu = unstable_cache(
       db
         .select()
         .from(products)
-        // Items whose price is not known yet stay out of the public site.
-        .where(and(eq(products.isPublished, true), eq(products.priceOnRequest, false)))
+        // Items whose price is not known yet stay out of the public site, except
+        // boxes: their size is still worth offering, priced on request.
+        .where(
+          and(
+            eq(products.isPublished, true),
+            or(eq(products.priceOnRequest, false), isNotNull(products.boxSize)),
+          ),
+        )
         .orderBy(asc(products.sortOrder), asc(products.id)),
       db
         .select()
@@ -166,7 +177,9 @@ export const getShops = unstable_cache(
       lat: s.lat,
       lng: s.lng,
       phone: s.phone,
-      hours: s.hours,
+      // Yerevan malls are open 10:00–22:00 every day; mall shops without their
+      // own hours follow that, so the open/closed status works for them too.
+      hours: s.hours ?? (s.isMall ? MALL_HOURS : null),
       hoursNote: s.hoursNote,
       isMall: s.isMall,
       image: s.image,

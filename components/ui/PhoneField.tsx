@@ -1,9 +1,9 @@
 "use client";
 
-import { CaretDown } from "@phosphor-icons/react/dist/ssr";
 import { parsePhoneNumberFromString } from "libphonenumber-js/min";
 import { useMemo, useState } from "react";
 import { cn } from "@/lib/cn";
+import { Select } from "@/components/ui/Select";
 import { COUNTRY_NAMES } from "@/lib/country-names";
 import { TOP_COUNTRIES, countryOf, dialCode, flag, type CountryCode } from "@/lib/phone";
 
@@ -46,14 +46,17 @@ export function PhoneField({
   const options = useMemo(() => {
     const list = COUNTRY_NAMES[locale as keyof typeof COUNTRY_NAMES] ?? COUNTRY_NAMES.en;
     const name = new Map(list);
-    const label = (c: string) =>
-      `${flag(c as CountryCode)} ${name.get(c) ?? c} (${dialCode(c as CountryCode)})`;
-    return {
-      top: TOP_COUNTRIES.map((c) => ({ c, l: label(c) })),
-      rest: list
-        .filter(([c]) => !TOP_COUNTRIES.includes(c as CountryCode))
-        .map(([c]) => ({ c, l: label(c) })),
-    };
+    // Labels start with the name (not the flag), so typing a letter jumps to a country.
+    const opt = (c: string) => ({
+      value: c,
+      prefix: flag(c as CountryCode),
+      label: `${name.get(c) ?? c} (${dialCode(c as CountryCode)})`,
+    });
+    return [
+      ...TOP_COUNTRIES.map(opt),
+      { value: "", label: "", disabled: true },
+      ...list.filter(([c]) => !TOP_COUNTRIES.includes(c as CountryCode)).map(([c]) => opt(c)),
+    ];
   }, [locale]);
 
   const update = (c: CountryCode, n: string) => {
@@ -65,36 +68,28 @@ export function PhoneField({
   return (
     <div
       className={cn(
-        "mt-1 flex h-12 w-full overflow-hidden rounded-2xl border-2 bg-white font-normal transition-colors focus-within:border-plum",
+        "mt-1 flex h-12 w-full rounded-2xl border-2 bg-white font-normal transition-colors focus-within:border-plum",
         invalid ? "border-magenta" : "border-line",
       )}
     >
-      <div className="relative flex shrink-0 items-center gap-1.5 border-r-2 border-line pr-2.5 pl-3 focus-within:bg-cream">
-        <span aria-hidden className="text-lg leading-none">
-          {flag(country)}
-        </span>
-        <span aria-hidden className="text-base font-semibold tabular-nums">
-          {dialCode(country)}
-        </span>
-        <CaretDown aria-hidden size={14} weight="bold" className="text-muted" />
-        <select
-          aria-label={countryLabel}
+      <div className="shrink-0 border-r-2 border-line">
+        <Select
+          bare
+          className="h-full"
+          label={countryLabel}
           value={country}
-          onChange={(e) => update(e.target.value as CountryCode, national)}
-          className="absolute inset-0 cursor-pointer opacity-0"
-        >
-          {options.top.map(({ c, l }) => (
-            <option key={c} value={c}>
-              {l}
-            </option>
-          ))}
-          <option disabled>──────────</option>
-          {options.rest.map(({ c, l }) => (
-            <option key={c} value={c}>
-              {l}
-            </option>
-          ))}
-        </select>
+          onChange={(v) => update(v as CountryCode, national)}
+          options={options}
+          listClassName="right-auto w-[min(22rem,calc(100vw-3rem))]"
+          trigger={
+            <span className="flex items-center gap-1.5">
+              <span aria-hidden className="text-lg leading-none">
+                {flag(country)}
+              </span>
+              <span className="text-base font-semibold tabular-nums">{dialCode(country)}</span>
+            </span>
+          }
+        />
       </div>
       <input
         id={id}

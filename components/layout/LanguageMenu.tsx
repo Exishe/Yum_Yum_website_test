@@ -1,6 +1,7 @@
 "use client";
 
-import { CaretDown, Check, Globe } from "@phosphor-icons/react/dist/ssr";
+import { CaretDown, Check } from "@phosphor-icons/react/dist/ssr";
+import { GlobeIcon } from "@/components/icons/brand";
 import { useLocale, useTranslations } from "next-intl";
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
@@ -45,13 +46,13 @@ export function LanguageMenu() {
         aria-label={`${t("label")}: ${t(`${current}Full`)}`}
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          "inline-flex h-11 items-center gap-0.5 rounded-xl border px-1.5 text-xs font-bold transition-colors sm:gap-1 sm:px-2.5",
+          "inline-flex h-11 items-center gap-1.5 rounded-xl border px-2 text-xs font-bold transition-colors sm:px-2.5",
           open
             ? "border-white bg-white text-plum"
             : "border-white/30 text-white hover:border-white/60",
         )}
       >
-        <Globe size={16} weight="bold" aria-hidden />
+        <GlobeIcon size={20} />
         {t(current)}
         <CaretDown
           size={11}

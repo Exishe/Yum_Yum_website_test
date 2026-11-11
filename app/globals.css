@@ -1053,38 +1053,136 @@
   filter: brightness(0.86) saturate(1.15);
 }
 
-/* Negative mask headline (components/home/NegativeTitle.tsx, after Jitter's free "Negative mask effect" template) */
-.nm-w {
-  position: relative;
-  display: inline-block;
+/* Negative mask headline (components/home/NegativeTitle.tsx), after Jitter's free
+   "Negative mask effect" template. One magenta strip runs over the whole phrase,
+   left to right, then leaves the same way. Inline backgrounds are "sliced" by
+   default, so on a phone the strip continues from the first line onto the
+   second as one shape. The letters are painted with a 3-part gradient
+   (plum | cream | plum) clipped to the text and moved in step with the strip,
+   so every letter under the strip is cream and every letter outside is plum. */
+.nm-b {
+  padding-block: 0.06em;
+  -webkit-box-decoration-break: slice;
+  box-decoration-break: slice;
+  background: linear-gradient(var(--color-magenta), var(--color-magenta)) no-repeat 0 0 / 0% 100%;
 }
-.nm-win {
-  position: absolute;
-  inset: -0.06em -0.16em -0.02em;
-  padding: 0.06em 0.16em 0.02em;
-  border-radius: 0.22em;
-  background: var(--color-magenta);
-  color: var(--color-cream);
-  white-space: nowrap;
-  pointer-events: none;
-  clip-path: inset(0 100% 0 0 round 0.22em);
+.nm-t {
+  /* Inline padding widens both the strip and the letter paint equally, so they stay in step. */
+  padding-inline: 0.14em;
+  -webkit-box-decoration-break: slice;
+  box-decoration-break: slice;
+  color: transparent;
+  background: linear-gradient(
+      90deg,
+      var(--color-plum) 33.34%,
+      var(--color-cream) 33.34% 66.66%,
+      var(--color-plum) 66.66%
+    )
+    no-repeat 100% 0 / 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
 }
-.nm-win.is-on {
-  animation: nm-reveal 0.7s cubic-bezier(0.7, 0, 0.2, 1) both;
+.nm-b.is-on {
+  animation: nm-strip 2.4s cubic-bezier(0.7, 0, 0.2, 1) 0.3s both;
 }
-@keyframes nm-reveal {
+.nm-b.is-on .nm-t {
+  animation: nm-ink 2.4s cubic-bezier(0.7, 0, 0.2, 1) 0.3s both;
+}
+@keyframes nm-strip {
   0% {
-    clip-path: inset(0 100% 0 0 round 0.22em);
+    background-position: 0 0;
+    background-size: 0% 100%;
+  }
+  38% {
+    background-position: 0 0;
+    background-size: 100% 100%;
+  }
+  /* Fully covered, the anchor moves to the right edge (no visible change). */
+  62% {
+    background-position: 100% 0;
+    background-size: 100% 100%;
   }
   100% {
-    clip-path: inset(0 0 0 0 round 0.22em);
+    background-position: 100% 0;
+    background-size: 0% 100%;
+  }
+}
+@keyframes nm-ink {
+  0% {
+    background-position: 100% 0;
+  }
+  38%,
+  62% {
+    background-position: 50% 0;
+  }
+  100% {
+    background-position: 0% 0;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .nm-win {
-    clip-path: none;
-  }
-  .nm-win.is-on {
+  .nm-b.is-on,
+  .nm-b.is-on .nm-t {
     animation: none;
   }
+}
+
+/* The hero headline wraps to two lines on phones: room between them so the mask strip of one line never touches the other. */
+.hero-title:is(h1) {
+  line-height: 1.5;
+}
+@media (min-width: 1024px) {
+  .hero-title:is(h1) {
+    line-height: 1.25;
+  }
+}
+
+/* Hero photo: a touch warmer and crisper, framed on the glazes rather than the plate edge. */
+.hero-photo {
+  filter: saturate(1.12) contrast(1.06) brightness(1.03);
+  object-position: 58% 40%;
+  scale: 1.08;
+}
+
+/* Donuts dropping into the cells of the open box (components/home/BuildDonut.tsx). */
+.k-cell {
+  translate: -50% -50%;
+}
+.k-box-img.is-on .k-cell {
+  animation: k-drop 0.42s cubic-bezier(0.3, 1.4, 0.5, 1) both;
+}
+@keyframes k-drop {
+  from {
+    opacity: 0;
+    translate: -50% -110%;
+    scale: 1.15;
+  }
+  to {
+    opacity: 1;
+    translate: -50% -50%;
+    scale: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .k-box-img.is-on .k-cell {
+    animation: none;
+  }
+}
+
+/* Custom dropdown list (components/ui/Select.tsx): a short drop from the button. */
+.yy-select-list:not([hidden]) {
+  animation: yy-select-in 0.16s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+}
+@keyframes yy-select-in {
+  from {
+    opacity: 0;
+    scale: 0.97 0.9;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .yy-select-list:not([hidden]) {
+    animation: none;
+  }
+}
+.yy-select:active {
+  translate: 0 1px;
 }

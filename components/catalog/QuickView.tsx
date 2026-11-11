@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { Dialog } from "radix-ui";
 import { useState } from "react";
-import { AskPrice, BuyamButton, DemoNote } from "@/components/AskPrice";
+import { AskPrice, BuyamButton } from "@/components/AskPrice";
 import { PhotoSoon } from "@/components/ui/PhotoSoon";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
@@ -184,9 +184,7 @@ function Body({ product, onDone }: { product: ClientProduct; onDone: () => void 
         {product.leadTimeDays > 0 ? (
           <p className="mt-5 flex items-center gap-2 rounded-2xl bg-sun-soft px-4 py-3 text-sm">
             <CalendarBlank size={20} aria-hidden className="shrink-0" />
-            <span>
-              {t("quick.leadTime")} <DemoNote />
-            </span>
+            <span>{t("quick.leadTime")}</span>
           </p>
         ) : null}
       </div>

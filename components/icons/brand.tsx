@@ -3,9 +3,40 @@
  * round joins. Drawn for this project (see docs/CREDITS.md).
  * Utility icons (arrows, close, plus) come from Phosphor.
  */
+import Image from "next/image";
 import type { SVGProps } from "react";
 
 type IconProps = SVGProps<SVGSVGElement> & { size?: number; title?: string };
+
+/**
+ * The team's own 3D menu icons (renders made for YUM-YUM, backgrounds cut
+ * out; public/images/icons). They replace the drawn icons in the menus.
+ */
+type Icon3DProps = { size?: number; className?: string; title?: string };
+function Icon3D({ src, size = 24, className, title }: Icon3DProps & { src: string }) {
+  // The renders fill their square less than a line icon does, so they are drawn a touch larger.
+  const px = Math.round(size * 1.18);
+  return (
+    <Image
+      src={src}
+      alt={title ?? ""}
+      aria-hidden={title ? undefined : true}
+      width={px}
+      height={px}
+      className={className}
+      style={{ width: px, height: px, maxWidth: "none", margin: -(px - size) / 2 }}
+    />
+  );
+}
+export const DonutIcon = (p: Icon3DProps) => <Icon3D src="/images/icons/donut.webp" {...p} />;
+export const PinIcon = (p: Icon3DProps) => <Icon3D src="/images/icons/pin.webp" {...p} />;
+export const BagIcon = (p: Icon3DProps) => <Icon3D src="/images/icons/bag.webp" {...p} />;
+export const FlowerIcon = (p: Icon3DProps) => <Icon3D src="/images/icons/bouquet.webp" {...p} />;
+export const GlobeIcon = (p: Icon3DProps) => <Icon3D src="/images/icons/globe.webp" {...p} />;
+/** "About us": the shop's own round logo, until the team adds a render for it. */
+export const LogoIcon = ({ size = 24, ...p }: Icon3DProps) => (
+  <Icon3D src="/images/brand/logo-240.png" size={Math.round(size * 0.92)} {...p} />
+);
 
 const PLUM = "#2b0a24";
 const MAGENTA = "#de1281";
@@ -33,26 +64,6 @@ function Svg({ size = 24, title, children, ...rest }: IconProps & { children: Re
   );
 }
 
-/** Glazed donut seen from above, with sprinkles. */
-export function DonutIcon(props: IconProps) {
-  return (
-    <Svg {...props}>
-      <circle cx="16" cy="16" r="12" fill={SUN} />
-      <path
-        d="M6.2 13.5c1.2-4.6 5-7.5 9.8-7.5 5.3 0 9.6 3.6 9.9 8.5-.8 1.6-2.1 1.2-2.9 2.5-.9 1.4.1 2.7-1.3 3.4-1.5.7-2.2-.8-3.8-.3-1.5.5-1.4 2.1-3.1 2-1.6-.1-1.6-1.8-3.1-2.3-1.4-.5-2.6.6-3.6-.5-.9-1-.4-2.6-1.9-3.8"
-        fill={MAGENTA}
-      />
-      <circle cx="16" cy="16" r="3.6" fill="#fff8f2" />
-      <circle cx="16" cy="16" r="12" />
-      <path
-        d="M11 10.2l1.4.6M19.6 9.2l.4 1.4M22.4 13l1.3-.7M9 15.2l.2-1.4"
-        stroke="#fff"
-        strokeWidth={1.6}
-      />
-    </Svg>
-  );
-}
-
 /** Donut with morning rays, for "fresh at 9:00". */
 export function FreshDonutIcon(props: IconProps) {
   return (
@@ -69,32 +80,6 @@ export function FreshDonutIcon(props: IconProps) {
   );
 }
 
-export function PinIcon(props: IconProps) {
-  return (
-    <Svg {...props}>
-      <path d="M16 29s-9-8.2-9-15.2A9 9 0 0 1 25 13.8C25 20.8 16 29 16 29Z" fill={MAGENTA} />
-      <circle cx="16" cy="13.6" r="4" fill={SUN} />
-    </Svg>
-  );
-}
-
-export function BagIcon(props: IconProps) {
-  return (
-    <Svg {...props}>
-      <path
-        d="M6.5 11h19l-1.6 15.2a2.2 2.2 0 0 1-2.2 2H10.3a2.2 2.2 0 0 1-2.2-2L6.5 11Z"
-        fill={PINK}
-      />
-      <path d="M11.5 13.5V9.6a4.5 4.5 0 0 1 9 0v3.9" />
-      <path
-        d="M11.6 19.5c1.2 1.6 2.7 2.4 4.4 2.4s3.2-.8 4.4-2.4"
-        stroke={MAGENTA}
-        strokeWidth={2.2}
-      />
-    </Svg>
-  );
-}
-
 export function CardIcon(props: IconProps) {
   return (
     <Svg {...props}>
@@ -103,23 +88,6 @@ export function CardIcon(props: IconProps) {
       <path d="M8 18.5h5" />
       <circle cx="24.5" cy="9" r="4.6" fill={MAGENTA} />
       <circle cx="24.5" cy="9" r="1.4" fill="#fff8f2" />
-    </Svg>
-  );
-}
-
-export function FlowerIcon(props: IconProps) {
-  return (
-    <Svg {...props}>
-      <path
-        d="M16 18v10.5M16 24c-2.8-.2-5-1.8-5.8-4.4 2.8-.3 5 1 5.8 4.4ZM16 22.2c2.4-.4 4.4-2 5-4.3-2.5-.1-4.4 1.2-5 4.3Z"
-        fill="#7bd389"
-      />
-      <circle cx="16" cy="7.8" r="3.6" fill={MAGENTA} />
-      <circle cx="10.8" cy="11.6" r="3.6" fill={MAGENTA} />
-      <circle cx="21.2" cy="11.6" r="3.6" fill={MAGENTA} />
-      <circle cx="12.8" cy="16.6" r="3.6" fill={MAGENTA} />
-      <circle cx="19.2" cy="16.6" r="3.6" fill={MAGENTA} />
-      <circle cx="16" cy="12.8" r="3" fill={SUN} />
     </Svg>
   );
 }

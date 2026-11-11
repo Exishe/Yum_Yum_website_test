@@ -11,7 +11,6 @@ import { getSettings } from "@/lib/settings";
 import { toClientProduct } from "@/lib/client-products";
 import { imgOrThrow } from "@/lib/images";
 import { alternates } from "@/lib/seo";
-import { DemoNote } from "@/components/AskPrice";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -40,14 +39,12 @@ export default async function GiftsPage({ params }: Props) {
 
   return (
     <div className="bg-cream">
-      <section className="bg-sun">
+      <section className="border-b border-line bg-white">
         <div className="mx-auto grid max-w-[1440px] grid-cols-1 items-center gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8 lg:py-16">
           <div>
             <p className="font-hand text-xl text-magenta-ink">{t("eyebrow")}</p>
             <h1 className="text-[clamp(1.5rem,2.4vw,2rem)] leading-[1.05]">{t("title")}</h1>
-            <p className="mt-4 max-w-xl leading-relaxed">
-              {t("pageLead")} <DemoNote />
-            </p>
+            <p className="mt-4 max-w-xl leading-relaxed">{t("pageLead")}</p>
             <div className="mt-6 flex flex-wrap gap-3">
               <a
                 href="#box"
@@ -70,7 +67,7 @@ export default async function GiftsPage({ params }: Props) {
             {reviews.length ? (
               <ul className="mt-8 grid max-w-xl gap-3 sm:grid-cols-2">
                 {reviews.slice(0, 2).map((r) => (
-                  <li key={r.id} className="rounded-xl bg-white/70 px-4 py-3">
+                  <li key={r.id} className="rounded-xl bg-cream px-4 py-3">
                     <blockquote
                       lang={r.quoteLocale}
                       className="text-[15px] leading-snug font-semibold"

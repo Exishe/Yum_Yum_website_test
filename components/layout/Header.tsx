@@ -4,13 +4,7 @@ import { CaretDown, ArrowRight, Phone, Clock } from "@phosphor-icons/react/dist/
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
-import {
-  DonutIcon,
-  FlowerIcon,
-  HeartDonutIcon,
-  PhoneIcon,
-  PinIcon,
-} from "@/components/icons/brand";
+import { DonutIcon, FlowerIcon, LogoIcon, PhoneIcon, PinIcon } from "@/components/icons/brand";
 import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
 import type { ImageInfo } from "@/lib/images";
@@ -206,11 +200,7 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
           <NavPill href="/gifts" icon={<FlowerIcon size={22} />} className="hidden lg:inline-flex">
             {t("bouquets")}
           </NavPill>
-          <NavPill
-            href="/story"
-            icon={<HeartDonutIcon size={22} />}
-            className="hidden lg:inline-flex"
-          >
+          <NavPill href="/story" icon={<LogoIcon size={22} />} className="hidden lg:inline-flex">
             {t("story")}
           </NavPill>
         </nav>
@@ -392,7 +382,7 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
               {[
                 { href: "/gifts" as const, label: t("bouquets"), icon: <FlowerIcon size={26} /> },
                 { href: "/shops" as const, label: t("findShop"), icon: <PinIcon size={26} /> },
-                { href: "/story" as const, label: t("story"), icon: <HeartDonutIcon size={26} /> },
+                { href: "/story" as const, label: t("story"), icon: <LogoIcon size={26} /> },
               ].map((q) => (
                 <Link
                   key={q.href}

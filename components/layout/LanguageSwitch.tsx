@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { locales, type Locale } from "@/i18n/routing";
 import { cn } from "@/lib/cn";
+import { GlobeIcon } from "@/components/icons/brand";
 
 /** HY · RU · EN segmented control with a sliding highlight. Plain links, so it works without JS. */
 export function LanguageSwitch({ tone = "dark" }: { tone?: "dark" | "light" }) {
@@ -19,7 +20,10 @@ export function LanguageSwitch({ tone = "dark" }: { tone?: "dark" | "light" }) {
   const query = Object.fromEntries(search.entries());
 
   return (
-    <nav aria-label={t("label")}>
+    <nav aria-label={t("label")} className="flex items-center gap-2">
+      <span aria-hidden className="grid size-9 shrink-0 place-items-center rounded-full bg-white">
+        <GlobeIcon size={24} />
+      </span>
       <ul
         className={cn(
           "relative grid h-12 grid-cols-3 items-center rounded-xl p-1 text-xs font-bold tracking-wide",

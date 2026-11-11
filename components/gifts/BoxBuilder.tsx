@@ -305,12 +305,22 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
               aria-checked={b.id === box.id}
               onClick={() => chooseBox(b.id)}
               className={cn(
-                "h-11 rounded-xl border-2 px-4 text-sm font-semibold sm:h-12 sm:px-5",
+                "inline-flex h-11 items-center gap-2.5 rounded-xl border-2 px-4 text-sm font-semibold transition-[transform,border-color,background-color] duration-150 active:translate-y-px active:scale-[0.97] sm:h-12 sm:px-5",
                 b.id === box.id
                   ? "border-plum bg-plum text-white"
-                  : "border-line bg-white hover:border-plum/40",
+                  : "border-line bg-white hover:-translate-y-0.5 hover:border-plum/50 hover:bg-magenta-soft/40",
               )}
             >
+              {/* A tiny drawing of the box layout, so the sizes read at a glance. */}
+              <span
+                aria-hidden
+                className="grid gap-[2px]"
+                style={{ gridTemplateColumns: `repeat(${boxColumns(b.boxSize ?? 0)}, 5px)` }}
+              >
+                {Array.from({ length: b.boxSize ?? 0 }, (_, i) => (
+                  <span key={i} className="size-[5px] rounded-full bg-current opacity-70" />
+                ))}
+              </span>
               {t("sizeName", { count: b.boxSize ?? 0 })}
             </button>
           ))}

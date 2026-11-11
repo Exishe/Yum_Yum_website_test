@@ -5,7 +5,8 @@ import { ArrowRight, Storefront, Moped, CalendarBlank } from "@phosphor-icons/re
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useState, useTransition } from "react";
-import { useForm, type Resolver } from "react-hook-form";
+import { Controller, useForm, type Resolver } from "react-hook-form";
+import { Select } from "@/components/ui/Select";
 import { Turnstile } from "@/components/ui/Turnstile";
 import { Link, useRouter } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
@@ -20,7 +21,6 @@ import { availableDays, type OrderingRules } from "@/lib/ordering";
 import { quoteDelivery } from "@/lib/pricing";
 import { addDays, yerevanParts } from "@/lib/time";
 import { checkoutSchema, type CheckoutInput } from "@/lib/validation";
-import { DemoNote } from "@/components/AskPrice";
 import { PhoneField } from "@/components/ui/PhoneField";
 
 type Props = {
@@ -86,6 +86,7 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
     watch,
     setValue,
     setError,
+    control,
     formState: { errors },
   } = useForm<FormValues>({
     resolver,
@@ -278,22 +279,29 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
               {step(2)}
               {t("shop")}
             </label>
-            <select
-              id="shopId"
-              {...register("shopId", {
-                setValueAs: (v) => (v ? Number(v) : undefined),
-                onChange: (e) => cart.setShop(Number(e.target.value)),
-              })}
-              className={cn(field, "mt-3")}
-              {...aria("shopId")}
-            >
-              <option value="">{t("shopPlaceholder")}</option>
-              {pickupShops.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {pick(s.name, locale)} · {pick(s.address, locale)}
-                </option>
-              ))}
-            </select>
+            <Controller
+              control={control}
+              name="shopId"
+              render={({ field: f }) => (
+                <Select
+                  id="shopId"
+                  className="mt-3"
+                  value={f.value ? String(f.value) : ""}
+                  onChange={(v) => {
+                    f.onChange(v ? Number(v) : undefined);
+                    if (v) cart.setShop(Number(v));
+                  }}
+                  onBlur={f.onBlur}
+                  placeholder={t("shopPlaceholder")}
+                  options={pickupShops.map((s) => ({
+                    value: String(s.id),
+                    label: `${pick(s.name, locale)} · ${pick(s.address, locale)}`,
+                  }))}
+                  invalid={!!errors.shopId}
+                  describedBy={errors.shopId ? "shopId-err" : undefined}
+                />
+              )}
+            />
             {err("shopId")}
           </div>
         ) : (
@@ -301,26 +309,33 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
             <fieldset className="m-0 min-w-0 border-0 p-0">
               <legend className={cn(legend, "mb-4 p-0")}>
                 {step(2)}
-                {t("address")} <DemoNote className="ml-1" />
+                {t("address")}
               </legend>
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-6">
-                <label className="col-span-2 font-semibold sm:col-span-6">
-                  {t("district")}
-                  <select
-                    {...register("district")}
-                    className={field}
-                    {...aria("district")}
-                    autoComplete="address-level3"
-                  >
-                    <option value="">{t("districtPlaceholder")}</option>
-                    {districts.map((d) => (
-                      <option key={d.key} value={d.key}>
-                        {pick(d.name, locale)}
-                      </option>
-                    ))}
-                  </select>
+                <div className="col-span-2 font-semibold sm:col-span-6">
+                  <label htmlFor="district">{t("district")}</label>
+                  <Controller
+                    control={control}
+                    name="district"
+                    render={({ field: f }) => (
+                      <Select
+                        id="district"
+                        value={f.value ?? ""}
+                        onChange={f.onChange}
+                        onBlur={f.onBlur}
+                        placeholder={t("districtPlaceholder")}
+                        autoComplete="address-level3"
+                        options={districts.map((d) => ({
+                          value: d.key,
+                          label: pick(d.name, locale),
+                        }))}
+                        invalid={!!errors.district}
+                        describedBy={errors.district ? "district-err" : undefined}
+                      />
+                    )}
+                  />
                   {err("district")}
-                </label>
+                </div>
                 <label className="col-span-2 font-semibold sm:col-span-4">
                   {t("street")}
                   <input
@@ -356,8 +371,7 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
                   {t("minOrder", {
                     zone: pick(quote.zone.name, locale),
                     price: formatAmd(quote.minOrderAmd, locale),
-                  })}{" "}
-                  <DemoNote />
+                  })}
                 </p>
               ) : null}
             </fieldset>
@@ -375,9 +389,7 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
               {leadDays > 0 ? (
                 <p className="mb-3 flex items-center gap-2 rounded-2xl bg-sun-soft px-4 py-3 text-sm">
                   <CalendarBlank size={20} aria-hidden className="shrink-0" />
-                  <span>
-                    {t("leadNote")} <DemoNote />
-                  </span>
+                  <span>{t("leadNote")}</span>
                 </p>
               ) : null}
               {!now ? (
@@ -427,13 +439,24 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
                   <label className="mt-4 block font-semibold" htmlFor="slot">
                     {t("slot")}
                   </label>
-                  <select id="slot" {...register("slot")} className={field} {...aria("slot")}>
-                    {day?.slots.map((s) => (
-                      <option key={s.value} value={s.value}>
-                        {s.label}
-                      </option>
-                    ))}
-                  </select>
+                  <Controller
+                    control={control}
+                    name="slot"
+                    render={({ field: f }) => (
+                      <Select
+                        id="slot"
+                        value={f.value ?? ""}
+                        onChange={f.onChange}
+                        onBlur={f.onBlur}
+                        options={(day?.slots ?? []).map((s) => ({
+                          value: s.value,
+                          label: s.label,
+                        }))}
+                        invalid={!!errors.slot}
+                        describedBy={errors.slot ? "slot-err" : undefined}
+                      />
+                    )}
+                  />
                   {err("slot")}
                 </>
               )}
@@ -497,7 +520,7 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
           <fieldset className="m-0 min-w-0 border-0 p-0">
             <legend className={cn(legend, "mb-4 p-0")}>
               {step(5)}
-              {t("payment")} <DemoNote className="ml-1" />
+              {t("payment")}
             </legend>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {(["cash", "card_on_delivery"] as const).map((m) => (
@@ -558,9 +581,7 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
             </div>
             {fulfilment === "delivery" ? (
               <div className="flex justify-between">
-                <dt>
-                  {t("deliveryFee")} {fulfilment === "delivery" ? <DemoNote /> : null}
-                </dt>
+                <dt>{t("deliveryFee")}</dt>
                 <dd className="tabular-nums">
                   {quote?.ok ? (fee === 0 ? t("free") : formatAmd(fee, locale)) : "—"}
                 </dd>

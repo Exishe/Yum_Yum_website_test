@@ -10,6 +10,7 @@ import type { Locale } from "@/i18n/routing";
 import type { ClientProduct } from "@/lib/client-types";
 import { formatAmd } from "@/lib/format";
 import { t as pick } from "@/lib/localized";
+import { BOUQUET_PARTS } from "@/lib/bouquets";
 
 const QuickView = dynamic(() => import("@/components/catalog/QuickView").then((m) => m.QuickView), {
   ssr: false,
@@ -25,6 +26,7 @@ export function GiftGrid({ products }: { products: ClientProduct[] }) {
       <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
         {products.map((p) => {
           const name = pick(p.name, locale);
+          const parts = BOUQUET_PARTS[p.slug];
           return (
             <li key={p.id}>
               <button
@@ -44,13 +46,26 @@ export function GiftGrid({ products }: { products: ClientProduct[] }) {
                   ) : (
                     <PhotoSoon name={name} label={tc("photoSoon")} />
                   )}
-                  <span className="absolute right-3 bottom-3 grid size-11 place-items-center rounded-full bg-sun shadow-card transition-transform">
+                  <span className="absolute right-3 bottom-3 grid size-11 place-items-center rounded-full bg-white text-plum shadow-card transition-transform duration-150 ease-out group-hover:scale-110 group-active:scale-95">
                     <Plus size={18} weight="bold" aria-hidden />
                   </span>
                 </span>
                 <span className="block p-4">
                   <span className="block font-semibold">{name}</span>
-                  <span className="block text-sm text-muted">
+                  {parts ? (
+                    <span className="mt-1.5 block space-y-0.5 text-[0.8125rem] leading-snug text-plum/80">
+                      {parts.map((part, i) => (
+                        <span key={i} className="flex gap-1.5">
+                          <span
+                            aria-hidden
+                            className="mt-[0.45em] size-1 shrink-0 rounded-full bg-magenta"
+                          />
+                          {pick(part, locale)}
+                        </span>
+                      ))}
+                    </span>
+                  ) : null}
+                  <span className="mt-2 block text-sm font-semibold">
                     {p.priceOnRequest ? tc("priceOnRequest") : formatAmd(p.priceAmd, locale)}
                   </span>
                   <span className="sr-only">{t("addNamed", { name })}</span>

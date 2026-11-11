@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowRight, Plus } from "@phosphor-icons/react/dist/ssr";
+import { useAnimate, useReducedMotion } from "motion/react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
@@ -66,7 +67,30 @@ export function Hero({
   const pickProduct = choice.product;
   const tagline = t("tagline");
 
+  // A small "plate turn" when the photo changes: the photo settles on a spring and the
+  // pink plate under it answers a moment later. Motion (motion.dev, MIT, Matt Perry).
+  const [plate, animatePlate] = useAnimate<HTMLDivElement>();
+  const still = useReducedMotion();
+  function turnPlate() {
+    if (still || !plate.current) return;
+    const photo = plate.current.querySelector("[data-photo]");
+    const disc = plate.current.querySelector("[data-disc]");
+    if (photo)
+      animatePlate(
+        photo,
+        { rotate: [-9, 0], scale: [0.94, 1] },
+        { type: "spring", stiffness: 210, damping: 15 },
+      );
+    if (disc)
+      animatePlate(
+        disc,
+        { scale: [1, 1.035, 1] },
+        { duration: 0.55, delay: 0.06, ease: [0.3, 0, 0.2, 1] },
+      );
+  }
+
   function choose(key: Craving) {
+    if (key !== active) turnPlate();
     setActive(key);
     const tab = choices.find((c) => c.key === key)?.tab;
     if (tab) window.dispatchEvent(new CustomEvent("yy:craving", { detail: { tab } }));
@@ -93,7 +117,6 @@ export function Hero({
       {/* Soft shapes and a few sprinkles. They stay still: the page has one moving
           centrepiece (the 3D donut further down), not a background that never rests. */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="blob-shape absolute -top-24 -right-24 size-[min(70vw,640px)] bg-magenta-soft/90 lg:top-0 lg:right-[-6%]" />
         <div className="blob-shape absolute top-[58%] -left-28 size-[min(48vw,360px)] bg-sun-soft" />
         {SPRINKLES.map((s, i) => (
           <span
@@ -190,8 +213,18 @@ export function Hero({
         </div>
 
         {/* Photo (tap it: the mascot says hello) */}
-        <div className="hero-photo-in relative mx-auto aspect-square w-full max-w-[600px] lg:mr-0">
-          <div className="absolute inset-[7%] overflow-hidden rounded-full bg-magenta-soft shadow-lift">
+        <div
+          ref={plate}
+          className="hero-photo-in relative mx-auto aspect-square w-full max-w-[600px] lg:mr-0"
+        >
+          {/* The pink plate: centred on the photo, a little larger, with a thin ring. */}
+          <div aria-hidden data-disc className="absolute inset-0 rounded-full bg-magenta-soft">
+            <div className="absolute inset-[3.2%] rounded-full border-2 border-dashed border-magenta/25" />
+          </div>
+          <div
+            data-photo
+            className="absolute inset-[7%] overflow-hidden rounded-full bg-magenta-soft shadow-[0_24px_48px_-18px_rgb(43_10_36/0.45),0_0_0_6px_#fff]"
+          >
             {choices.map(
               (c, i) =>
                 (i === 0 || lively || c.key === active) && (
@@ -206,7 +239,7 @@ export function Hero({
                     placeholder={c.image.blur ? "blur" : "empty"}
                     blurDataURL={c.image.blur}
                     className={cn(
-                      "object-cover transition-opacity duration-300 ease-out",
+                      "hero-photo object-cover transition-opacity duration-300 ease-out",
                       c.key === active ? "opacity-100" : "opacity-0",
                     )}
                   />

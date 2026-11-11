@@ -20,6 +20,7 @@ import type { DonutBuilder, Packaging, Step, Topping } from "@/lib/donut3d/build
 import { detectQuality } from "@/lib/donut3d/quality";
 import { formatAmd } from "@/lib/format";
 import { t as pick } from "@/lib/localized";
+import { cutout } from "@/lib/cutouts";
 
 // Glazes that exist on the menu, with the menu donut each one leads to.
 const FLAVOURS = [
@@ -48,6 +49,16 @@ const TOPPINGS: { key: Topping; dots: string[] }[] = [
 ];
 const PACKS: Packaging[] = ["paper", "box", "gift"];
 /** Each packaging choice shows its real look: the shop's paper, its box and its gift box (client artwork). */
+/** The six cells of the open box photo (box-open.webp), as % of its width/height: back row, then front. */
+const CELLS = [
+  { x: 32.7, y: 58, w: 12.5 },
+  { x: 48.2, y: 58, w: 12.5 },
+  { x: 63.6, y: 58, w: 12.5 },
+  { x: 36.8, y: 73, w: 14.5 },
+  { x: 53.6, y: 73, w: 14.5 },
+  { x: 69.6, y: 73, w: 14.5 },
+];
+
 const PACK_IMG: Record<Packaging, string> = {
   paper: "/images/box/pack-paper.webp",
   box: "/images/box/box-closed.webp",
@@ -111,7 +122,7 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
     window.clearTimeout(boxTimer.current);
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return setBoxOpen(false);
     setBoxOpen(true);
-    boxTimer.current = window.setTimeout(() => setBoxOpen(false), 1100);
+    boxTimer.current = window.setTimeout(() => setBoxOpen(false), 1700);
   }
   useEffect(() => () => window.clearTimeout(boxTimer.current), []);
   const drag = useRef<{ id: number; x: number } | null>(null);
@@ -359,27 +370,65 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
               status === "ready" ? "opacity-100" : "opacity-0",
             )}
           />
-          {/* The shop's own box (client artwork). Chosen on the last step: the open box with donuts
-              shows first, then the lid closes; a tap opens it again. */}
+          {/* The shop's own box (client artwork). Chosen on the last step: the open box shows
+              the donut the visitor built (its closest menu donut) in every cell, then the lid
+              closes, or for a gift, it becomes the gift box. A tap opens it again. */}
           {step === 2 ? (
             <button
               type="button"
-              hidden={!showBox}
+              hidden={!showBox && !showGift}
               onClick={() => setBoxOpen((o) => !o)}
               aria-label={t(boxOpen ? "boxClose" : "boxOpen")}
-              className="k-box absolute inset-0 z-[5] grid place-items-center bg-[radial-gradient(70%_60%_at_50%_45%,#5a1846_0%,#2b0a24_65%,#1a0616_100%)] [&[hidden]]:hidden"
+              className="k-box [container-type:size] absolute inset-0 z-[5] grid place-items-center bg-[radial-gradient(70%_60%_at_50%_45%,#5a1846_0%,#2b0a24_65%,#1a0616_100%)] [&[hidden]]:hidden"
             >
+              {match?.img ? (
+                <span
+                  className={cn("k-box-img k-box-open block", boxOpen ? "is-on" : "")}
+                  style={{ width: "min(86%, 129cqh)", aspectRatio: "1100 / 733" }}
+                >
+                  <Image
+                    src="/images/box/box-open.webp"
+                    alt=""
+                    fill
+                    sizes="(min-width: 1024px) 45vw, 90vw"
+                    loading="eager"
+                    className="object-contain"
+                  />
+                  {CELLS.map((c, i) => (
+                    <span
+                      key={i}
+                      className="k-cell absolute aspect-square"
+                      style={{
+                        left: `${c.x}%`,
+                        top: `${c.y}%`,
+                        width: `${c.w}%`,
+                        animationDelay: `${i * 70}ms`,
+                        rotate: `${(i % 3) * 23 - 20}deg`,
+                      }}
+                    >
+                      <Image
+                        src={cutout(match.img!.src)!}
+                        alt=""
+                        fill
+                        sizes="90px"
+                        className="object-contain drop-shadow-[0_5px_5px_rgb(43_10_36/0.35)]"
+                      />
+                    </span>
+                  ))}
+                </span>
+              ) : (
+                <Image
+                  src="/images/box/box-open-donuts.webp"
+                  alt=""
+                  width={1005}
+                  height={1100}
+                  sizes="(min-width: 1024px) 40vw, 80vw"
+                  loading="eager"
+                  className={cn("k-box-img k-box-open", boxOpen ? "is-on" : "")}
+                />
+              )}
               <Image
-                src="/images/box/box-open-donuts.webp"
-                alt=""
-                width={1005}
-                height={1100}
-                sizes="(min-width: 1024px) 40vw, 80vw"
-                loading="eager"
-                className={cn("k-box-img k-box-open", boxOpen ? "is-on" : "")}
-              />
-              <Image
-                src="/images/box/box-closed.webp"
+                src={showGift ? "/images/box/box-gift.webp" : "/images/box/box-closed.webp"}
                 alt=""
                 width={1100}
                 height={733}
@@ -391,23 +440,6 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
                 {t(boxOpen ? "boxClose" : "boxOpen")}
               </span>
             </button>
-          ) : null}
-          {step === 2 ? (
-            <div
-              aria-hidden
-              hidden={!showGift}
-              className="pointer-events-none absolute inset-0 z-[5] grid place-items-center bg-[radial-gradient(70%_60%_at_50%_45%,#5a1846_0%,#2b0a24_65%,#1a0616_100%)] [&[hidden]]:hidden"
-            >
-              <Image
-                src="/images/box/box-gift.webp"
-                alt=""
-                width={1100}
-                height={733}
-                sizes="(min-width: 1024px) 45vw, 90vw"
-                loading="eager"
-                className={cn("k-box-img", showGift ? "is-on" : "")}
-              />
-            </div>
           ) : null}
           {debug ? (
             <pre className="pointer-events-none absolute top-2 left-2 z-10 rounded-lg bg-black/70 px-2 py-1 font-mono text-[10px] leading-tight whitespace-pre text-lime-300">
@@ -572,7 +604,7 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
                     onClick={() => {
                       touch();
                       setPack(p);
-                      if (p === "box") packBox();
+                      if (p === "box" || p === "gift") packBox();
                     }}
                     className={cn(
                       "flex min-h-14 flex-col justify-center rounded-2xl border-2 px-4 py-2.5 text-left",
