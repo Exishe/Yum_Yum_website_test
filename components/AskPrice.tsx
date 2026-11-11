@@ -19,7 +19,7 @@ export function AskPrice({ item, className }: { item: string; className?: string
       {phone ? (
         <a
           href={`tel:${phone}`}
-          className="inline-flex h-12 flex-1 basis-40 items-center justify-center gap-2 rounded-full bg-plum px-5 font-semibold whitespace-nowrap text-white transition-transform"
+          className="inline-flex h-12 flex-1 basis-40 items-center justify-center gap-2 rounded-xl bg-plum px-5 font-semibold whitespace-nowrap text-white transition-transform"
         >
           <Phone size={18} weight="bold" aria-hidden /> {t("askCall")}
         </a>
@@ -29,7 +29,7 @@ export function AskPrice({ item, className }: { item: string; className?: string
           href={wa}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex h-12 flex-1 basis-52 items-center justify-center gap-2 rounded-full border-2 border-plum px-5 font-semibold whitespace-nowrap transition-colors hover:bg-plum hover:text-white"
+          className="inline-flex h-12 flex-1 basis-52 items-center justify-center gap-2 rounded-xl border-2 border-plum px-5 font-semibold whitespace-nowrap transition-colors hover:bg-plum hover:text-white"
         >
           <WhatsappLogo size={18} weight="bold" aria-hidden /> {t("askWhatsapp")}
           <span className="sr-only">({t("newTab")})</span>
@@ -73,7 +73,7 @@ export function DemoNote({ className }: { className?: string }) {
     <span
       title={t("demoNoteHint")}
       className={cn(
-        "inline-flex items-center gap-1 rounded-full border border-dashed border-magenta-ink/50 bg-white px-2 py-0.5 align-middle text-xs font-semibold whitespace-nowrap text-magenta-ink",
+        "inline-flex items-center gap-1 rounded-xl border border-dashed border-magenta-ink/50 bg-white px-2 py-0.5 align-middle text-xs font-semibold whitespace-nowrap text-magenta-ink",
         className,
       )}
     >

@@ -169,7 +169,7 @@ export function ShopPicker({
                     href={shop.googleMapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex h-11 items-center gap-1 rounded-full bg-sun px-5 text-sm font-bold"
+                    className="inline-flex h-11 items-center gap-1 rounded-xl bg-sun px-5 text-sm font-bold"
                   >
                     {t("directions")} <ArrowUpRight size={14} weight="bold" aria-hidden />
                     <span className="sr-only">({tc("newTab")})</span>

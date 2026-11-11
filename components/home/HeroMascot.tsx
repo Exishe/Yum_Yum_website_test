@@ -58,7 +58,7 @@ export function HeroMascot() {
       >
         <span
           aria-hidden
-          className={`pointer-events-none absolute top-[9%] left-[40%] inline-flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-xs font-semibold whitespace-nowrap text-plum shadow-card transition-[opacity,scale] duration-200 ease-out group-hover:scale-105 ${shown ? "opacity-0" : "opacity-100"}`}
+          className={`pointer-events-none absolute top-[9%] left-[40%] inline-flex -translate-x-1/2 items-center gap-1.5 rounded-xl bg-white/90 px-3 py-1.5 text-xs font-semibold whitespace-nowrap text-plum shadow-card transition-[opacity,scale] duration-200 ease-out group-hover:scale-105 ${shown ? "opacity-0" : "opacity-100"}`}
         >
           <span aria-hidden>👋</span> {t("hint")}
         </span>
@@ -102,14 +102,14 @@ export function HeroMascot() {
                     ref={firstAnswer}
                     type="button"
                     onClick={() => setStage("yes")}
-                    className="h-10 rounded-full bg-plum px-3 text-sm font-semibold text-white transition-transform duration-150 ease-out active:scale-[0.97] sm:px-4"
+                    className="h-10 rounded-xl bg-plum px-3 text-sm font-semibold text-white transition-transform duration-150 ease-out active:scale-[0.97] sm:px-4"
                   >
                     {t("yes")}
                   </button>
                   <button
                     type="button"
                     onClick={() => setStage("no")}
-                    className="h-10 rounded-full border-2 border-plum px-3 text-sm font-semibold transition-[background-color,scale] duration-150 ease-out hover:bg-plum/5 active:scale-[0.97] sm:px-4"
+                    className="h-10 rounded-xl border-2 border-plum px-3 text-sm font-semibold transition-[background-color,scale] duration-150 ease-out hover:bg-plum/5 active:scale-[0.97] sm:px-4"
                   >
                     {t("no")}
                   </button>
@@ -124,7 +124,7 @@ export function HeroMascot() {
                   href={
                     stage === "no" ? { pathname: "/menu", query: { category: "donuts" } } : "/menu"
                   }
-                  className="mt-3 inline-flex h-10 items-center rounded-full bg-magenta px-4 text-sm font-semibold text-white transition-transform duration-150 ease-out active:scale-[0.97]"
+                  className="mt-3 inline-flex h-10 items-center rounded-xl bg-magenta px-4 text-sm font-semibold text-white transition-transform duration-150 ease-out active:scale-[0.97]"
                 >
                   {t("toMenu")}
                 </Link>

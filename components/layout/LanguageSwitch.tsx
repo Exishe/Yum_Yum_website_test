@@ -22,13 +22,13 @@ export function LanguageSwitch({ tone = "dark" }: { tone?: "dark" | "light" }) {
     <nav aria-label={t("label")}>
       <ul
         className={cn(
-          "relative grid h-12 grid-cols-3 items-center rounded-full p-1 text-xs font-bold tracking-wide",
+          "relative grid h-12 grid-cols-3 items-center rounded-xl p-1 text-xs font-bold tracking-wide",
           tone === "dark" ? "bg-white/12" : "bg-plum/8",
         )}
       >
         <li
           aria-hidden
-          className="absolute top-1 bottom-1 left-1 w-[calc((100%-0.5rem)/3)] rounded-full bg-white shadow-sm transition-transform duration-300 ease-(--ease-out)"
+          className="absolute top-1 bottom-1 left-1 w-[calc((100%-0.5rem)/3)] rounded-xl bg-white shadow-sm transition-transform duration-300 ease-(--ease-out)"
           style={{ transform: `translateX(${index * 100}%)` }}
         />
         {locales.map((l) => (
@@ -43,7 +43,7 @@ export function LanguageSwitch({ tone = "dark" }: { tone?: "dark" | "light" }) {
               aria-label={t(`${l}Full`)}
               onClick={() => setSelected(l)}
               className={cn(
-                "grid h-10 min-w-11 place-items-center rounded-full px-2 transition-colors duration-300",
+                "grid h-10 min-w-11 place-items-center rounded-xl px-2 transition-colors duration-300",
                 l === selected
                   ? "text-plum"
                   : tone === "dark"

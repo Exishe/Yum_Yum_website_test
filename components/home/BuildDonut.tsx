@@ -391,7 +391,7 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
             </pre>
           ) : null}
           {status === "ready" ? (
-            <span className="pointer-events-none absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-black/55 px-3 py-1.5 text-xs font-semibold text-white/85">
+            <span className="pointer-events-none absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-xl bg-black/55 px-3 py-1.5 text-xs font-semibold text-white/85">
               <HandGrabbing size={16} aria-hidden /> {t("drag")}
             </span>
           ) : null}
@@ -429,7 +429,7 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
           <div
             role="tablist"
             aria-label={t("title")}
-            className="flex gap-1 rounded-full bg-white/8 p-1"
+            className="flex gap-1 rounded-xl bg-white/8 p-1"
           >
             {STEPS.map((s, i) => (
               <button
@@ -441,7 +441,7 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
                 aria-controls="build-panel"
                 onClick={() => setStep(i as Step)}
                 className={cn(
-                  "group flex h-11 min-w-0 flex-auto items-center justify-center gap-1.5 rounded-full px-2.5 text-[13px] font-semibold whitespace-nowrap transition-[color,background-color,scale] duration-200 ease-out active:scale-[0.97] sm:gap-2 sm:px-3 sm:text-sm",
+                  "group flex h-11 min-w-0 flex-auto items-center justify-center gap-1.5 rounded-xl px-2.5 text-[13px] font-semibold whitespace-nowrap transition-[color,background-color,scale] duration-200 ease-out active:scale-[0.97] sm:gap-2 sm:px-3 sm:text-sm",
                   step === i
                     ? "bg-white text-plum shadow-sm"
                     : "text-white/80 hover:bg-white/15 hover:text-white",

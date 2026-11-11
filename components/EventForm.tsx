@@ -46,7 +46,7 @@ export function EventForm() {
     ) : null;
   const chip = (on: boolean) =>
     cn(
-      "inline-flex h-11 items-center rounded-full border-2 px-4 text-sm font-semibold transition-[background-color,border-color,color,scale] duration-150 ease-out active:scale-[0.97]",
+      "inline-flex h-11 items-center rounded-xl border-2 px-4 text-sm font-semibold transition-[background-color,border-color,color,scale] duration-150 ease-out active:scale-[0.97]",
       on ? "border-plum bg-plum text-white" : "border-line bg-white hover:border-plum/40",
     );
 
@@ -208,7 +208,7 @@ export function EventForm() {
       <button
         type="submit"
         disabled={pending}
-        className="h-13 rounded-full bg-plum py-3.5 font-semibold text-white transition-transform duration-150 ease-out active:scale-[0.98] disabled:opacity-60"
+        className="h-13 rounded-xl bg-plum py-3.5 font-semibold text-white transition-transform duration-150 ease-out active:scale-[0.98] disabled:opacity-60"
       >
         {pending ? tc("sending") : t("send")}
       </button>

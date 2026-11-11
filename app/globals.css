@@ -1042,3 +1042,13 @@
     transition: none;
   }
 }
+
+/* Every button-shaped link or button outside the builder: a hover you can see and a press you can feel
+   (team rule 11). Low specificity, so a component's own hover colours still win. */
+:where(a, button):where([class*="rounded-xl"]):where(:not(.k-key)):hover {
+  filter: brightness(0.93) saturate(1.12);
+}
+:where(a, button):where([class*="rounded-xl"]):where(:not(.k-key)):active {
+  translate: 0 2px;
+  filter: brightness(0.86) saturate(1.15);
+}

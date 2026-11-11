@@ -44,7 +44,7 @@ export default async function OrderPage({ params, searchParams }: Props) {
         <p className="mt-6 text-xl">{t("notFound")}</p>
         <a
           href={`tel:${phone}`}
-          className="mt-6 inline-flex h-12 items-center rounded-full bg-plum px-6 font-semibold text-white"
+          className="mt-6 inline-flex h-12 items-center rounded-xl bg-plum px-6 font-semibold text-white"
         >
           {formatPhone(phone)}
         </a>
@@ -211,14 +211,14 @@ export default async function OrderPage({ params, searchParams }: Props) {
               href={wa}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#1f8f4e] px-6 font-semibold whitespace-nowrap text-white"
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-[#1f8f4e] px-6 font-semibold whitespace-nowrap text-white"
             >
               <WhatsappLogo size={20} aria-hidden /> {t("whatsapp")}
             </a>
           ) : null}
           <a
             href={`tel:${phone}`}
-            className="inline-flex h-12 items-center justify-center rounded-full border-2 border-plum px-6 font-semibold whitespace-nowrap"
+            className="inline-flex h-12 items-center justify-center rounded-xl border-2 border-plum px-6 font-semibold whitespace-nowrap"
           >
             {t("call", { phone: formatPhone(phone) })}
           </a>

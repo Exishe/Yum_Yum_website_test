@@ -305,7 +305,7 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
               aria-checked={b.id === box.id}
               onClick={() => chooseBox(b.id)}
               className={cn(
-                "h-11 rounded-full border-2 px-4 text-sm font-semibold sm:h-12 sm:px-5",
+                "h-11 rounded-xl border-2 px-4 text-sm font-semibold sm:h-12 sm:px-5",
                 b.id === box.id
                   ? "border-plum bg-plum text-white"
                   : "border-line bg-white hover:border-plum/40",
@@ -439,7 +439,7 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
                   <button
                     type="button"
                     onClick={() => setSlots([])}
-                    className="inline-flex h-11 items-center gap-1 rounded-full px-3 text-sm font-semibold text-muted hover:text-plum"
+                    className="inline-flex h-11 items-center gap-1 rounded-xl px-3 text-sm font-semibold text-muted hover:text-plum"
                   >
                     <ArrowCounterClockwise size={16} aria-hidden /> {t("clear")}
                   </button>
@@ -467,7 +467,7 @@ export function BoxBuilder({ boxes, donuts }: { boxes: ClientProduct[]; donuts: 
                       announceAdd(e.currentTarget);
                       setSlots([]);
                     }}
-                    className="h-12 rounded-full bg-plum px-6 font-semibold text-white transition-transform disabled:translate-y-0 disabled:opacity-45"
+                    className="h-12 rounded-xl bg-plum px-6 font-semibold text-white transition-transform disabled:translate-y-0 disabled:opacity-45"
                   >
                     {t("add", { price: formatAmd(total, locale) })}
                   </button>

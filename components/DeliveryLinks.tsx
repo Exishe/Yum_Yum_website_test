@@ -20,7 +20,7 @@ export async function DeliveryLinks() {
               href={d.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-11 items-center gap-1 rounded-full border-2 border-plum/20 bg-white px-5 text-sm font-semibold hover:border-plum"
+              className="inline-flex h-11 items-center gap-1 rounded-xl border-2 border-plum/20 bg-white px-5 text-sm font-semibold hover:border-plum"
             >
               {t("on", { name: d.name })} <ArrowUpRight size={14} weight="bold" aria-hidden />
               <span className="sr-only">({tc("newTab")})</span>

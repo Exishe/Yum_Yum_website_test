@@ -41,7 +41,7 @@ export function NameDonut({ product }: { product: ClientProduct }) {
           onChange={(e) => setText(e.target.value)}
           placeholder={t("placeholder")}
           aria-describedby="name-hint"
-          className="mt-2 h-14 w-full rounded-full border-2 border-white bg-white px-5 text-lg focus:border-plum focus:outline-none"
+          className="mt-2 h-14 w-full rounded-xl border-2 border-white bg-white px-5 text-lg focus:border-plum focus:outline-none"
         />
         <p id="name-hint" className="mt-1 text-sm text-muted">
           {t("hint", { max })} {text.length}/{max}
@@ -74,7 +74,7 @@ export function NameDonut({ product }: { product: ClientProduct }) {
               announceAdd(e.currentTarget);
               setText("");
             }}
-            className="mt-5 h-13 w-full rounded-full bg-plum px-6 py-3.5 font-semibold text-white transition-transform disabled:translate-y-0 disabled:opacity-45 sm:w-auto"
+            className="mt-5 h-13 w-full rounded-xl bg-plum px-6 py-3.5 font-semibold text-white transition-transform disabled:translate-y-0 disabled:opacity-45 sm:w-auto"
           >
             {t("add", { price: formatAmd(product.priceAmd, locale) })}
           </button>

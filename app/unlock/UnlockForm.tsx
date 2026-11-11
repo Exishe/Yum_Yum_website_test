@@ -27,7 +27,7 @@ export function UnlockForm({ next }: { next: string }) {
       <button
         type="submit"
         disabled={pending}
-        className="h-12 rounded-full bg-plum font-semibold text-white disabled:opacity-60"
+        className="h-12 rounded-xl bg-plum font-semibold text-white disabled:opacity-60"
       >
         {pending ? "…" : "Մուտք · Войти · Enter"}
       </button>

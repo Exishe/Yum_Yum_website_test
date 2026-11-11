@@ -43,7 +43,7 @@ function NavPill({
     <Link
       {...rest}
       className={cn(
-        "group relative h-11 items-center gap-2 overflow-hidden rounded-full border border-white/25 pr-4 pl-1.5 text-sm font-semibold text-white transition-colors duration-150 ease-out hover:border-magenta hover:bg-magenta",
+        "group relative h-11 items-center gap-2 overflow-hidden rounded-xl border border-white/25 pr-4 pl-1.5 text-sm font-semibold text-white transition-colors duration-150 ease-out hover:border-magenta hover:bg-magenta",
         className,
       )}
     >
@@ -178,7 +178,7 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
               setOpen((v) => !v);
             }}
             className={cn(
-              "group relative inline-flex h-11 items-center gap-2 overflow-hidden rounded-full border pr-3 pl-1.5 text-sm font-semibold transition-[color,background-color,border-color,scale] duration-150 ease-out active:scale-[0.97] sm:pr-4",
+              "group relative inline-flex h-11 items-center gap-2 overflow-hidden rounded-xl border pr-3 pl-1.5 text-sm font-semibold transition-[color,background-color,border-color,scale] duration-150 ease-out active:scale-[0.97] sm:pr-4",
               open
                 ? "border-magenta bg-magenta"
                 : "border-white/25 hover:border-magenta hover:bg-magenta",
@@ -341,7 +341,7 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
                 ) : null,
               )}
               {current ? (
-                <span className="absolute bottom-4 left-4 rounded-full bg-white px-4 py-2 font-hand text-xl text-plum">
+                <span className="absolute bottom-4 left-4 rounded-xl bg-white px-4 py-2 font-hand text-xl text-plum">
                   {current.name}
                 </span>
               ) : null}

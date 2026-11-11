@@ -82,7 +82,7 @@ export function Reviews({ reviews, ratings }: { reviews: PublicReview[]; ratings
         className="mt-10 flex flex-wrap justify-center gap-3 text-sm"
       >
         {ratings.yandex ? (
-          <li className="rounded-full bg-white px-4 py-2 shadow-card">
+          <li className="rounded-xl bg-white px-4 py-2 shadow-card">
             <strong className="mr-1 font-display text-lg">
               {ratings.yandex.rating.toFixed(1)}
             </strong>
@@ -90,7 +90,7 @@ export function Reviews({ reviews, ratings }: { reviews: PublicReview[]; ratings
           </li>
         ) : null}
         {ratings.buyam ? (
-          <li className="rounded-full bg-white px-4 py-2 shadow-card">
+          <li className="rounded-xl bg-white px-4 py-2 shadow-card">
             <strong className="mr-1 font-display text-lg">{ratings.buyam.rating.toFixed(1)}</strong>
             {t("buyam")}
           </li>

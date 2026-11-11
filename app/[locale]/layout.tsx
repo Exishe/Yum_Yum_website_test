@@ -132,7 +132,7 @@ export default async function LocaleLayout({
         <NextIntlClientProvider messages={clientMessages as typeof messages}>
           <a
             href="#main"
-            className="sr-only z-[100] rounded-full bg-sun px-5 py-3 font-semibold text-plum focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+            className="sr-only z-[100] rounded-xl bg-sun px-5 py-3 font-semibold text-plum focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
           >
             {tc("skip")}
           </a>

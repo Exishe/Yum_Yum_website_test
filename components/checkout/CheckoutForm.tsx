@@ -163,7 +163,7 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
         <p className="text-lg">{t("empty")}</p>
         <Link
           href="/menu"
-          className="mt-6 inline-flex h-12 items-center gap-2 rounded-full bg-plum px-6 font-semibold text-white"
+          className="mt-6 inline-flex h-12 items-center gap-2 rounded-xl bg-plum px-6 font-semibold text-white"
         >
           {tc("browse")} <ArrowRight size={18} weight="bold" aria-hidden />
         </Link>
@@ -612,7 +612,7 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
           <button
             type="submit"
             disabled={pending || !now || days.length === 0}
-            className="mt-5 flex h-14 w-full items-center justify-center gap-2 rounded-full bg-magenta text-lg font-bold text-white transition-transform duration-200 ease-out active:scale-[0.97] disabled:translate-y-0 disabled:opacity-60"
+            className="mt-5 flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-magenta text-lg font-bold text-white transition-transform duration-200 ease-out active:scale-[0.97] disabled:translate-y-0 disabled:opacity-60"
           >
             {pending ? t("submitting") : t("submit", { price: formatAmd(total, locale) })}
           </button>

@@ -23,7 +23,7 @@ export default async function NotFound() {
         <p className="mt-4 text-muted">{t("lead")}</p>
         <Link
           href="/"
-          className="mt-8 inline-flex h-12 items-center rounded-full bg-plum px-6 font-semibold text-white"
+          className="mt-8 inline-flex h-12 items-center rounded-xl bg-plum px-6 font-semibold text-white"
         >
           {t("home")}
         </Link>

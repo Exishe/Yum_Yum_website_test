@@ -89,7 +89,7 @@ function Body({ product, onDone }: { product: ClientProduct; onDone: () => void 
                 <label
                   key={o.id}
                   className={cn(
-                    "inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full border-2 px-4 text-sm font-semibold has-focus-visible:ring-3 has-focus-visible:ring-magenta",
+                    "inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-xl border-2 px-4 text-sm font-semibold has-focus-visible:ring-3 has-focus-visible:ring-magenta",
                     size === o.id ? "border-plum bg-plum text-white" : "border-line bg-white",
                   )}
                 >
@@ -122,7 +122,7 @@ function Body({ product, onDone }: { product: ClientProduct; onDone: () => void 
                   <label
                     key={o.id}
                     className={cn(
-                      "inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full border-2 px-4 text-sm font-semibold has-focus-visible:ring-3 has-focus-visible:ring-magenta",
+                      "inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-xl border-2 px-4 text-sm font-semibold has-focus-visible:ring-3 has-focus-visible:ring-magenta",
                       on ? "border-magenta bg-magenta-soft" : "border-line bg-white",
                     )}
                   >
@@ -167,7 +167,7 @@ function Body({ product, onDone }: { product: ClientProduct; onDone: () => void 
                 onChange={(e) => setText(e.target.value)}
                 placeholder={t("quick.messagePlaceholder")}
                 aria-describedby="qv-hint"
-                className="h-12 w-full rounded-full border-2 border-line bg-white px-4 focus:border-plum focus:outline-none"
+                className="h-12 w-full rounded-xl border-2 border-line bg-white px-4 focus:border-plum focus:outline-none"
               />
             )}
             <p
@@ -201,7 +201,7 @@ function Body({ product, onDone }: { product: ClientProduct; onDone: () => void 
           <Link
             href={{ pathname: "/gifts", hash: "box" }}
             onClick={onDone}
-            className="flex h-12 items-center justify-center rounded-full bg-plum font-semibold text-white"
+            className="flex h-12 items-center justify-center rounded-xl bg-plum font-semibold text-white"
           >
             {tg("box.title")}
           </Link>
@@ -248,7 +248,7 @@ function Body({ product, onDone }: { product: ClientProduct; onDone: () => void 
               announceAdd(e.currentTarget);
               onDone();
             }}
-            className="h-12 flex-1 rounded-full bg-plum px-5 font-semibold text-white transition-transform disabled:translate-y-0 disabled:opacity-50"
+            className="h-12 flex-1 rounded-xl bg-plum px-5 font-semibold text-white transition-transform disabled:translate-y-0 disabled:opacity-50"
           >
             {product.isAvailable
               ? t("quick.addToOrder", { price: formatAmd(unit * qty, locale) })

@@ -97,7 +97,7 @@ function Row({
               <span
                 key={b}
                 className={cn(
-                  "rounded-full px-2 py-0.5 text-xs font-bold tracking-wide uppercase",
+                  "rounded-xl px-2 py-0.5 text-xs font-bold tracking-wide uppercase",
                   b === "new" ? "bg-sun text-plum" : "bg-magenta-soft text-magenta-ink",
                 )}
               >
@@ -261,7 +261,7 @@ export function Catalog({
                 aria-controls="menu-panel"
                 onClick={() => selectTab(c.slug)}
                 className={cn(
-                  "h-12 shrink-0 rounded-full border-2 px-5 text-sm font-semibold transition-colors",
+                  "h-12 shrink-0 rounded-xl border-2 px-5 text-sm font-semibold transition-colors",
                   selected
                     ? "border-plum bg-plum text-white"
                     : "border-plum/80 bg-white hover:bg-plum/5",
@@ -288,7 +288,7 @@ export function Catalog({
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={t("searchPlaceholder")}
-              className="h-12 w-full rounded-full border-2 border-line bg-white pr-11 pl-11 focus:border-plum focus:outline-none"
+              className="h-12 w-full rounded-xl border-2 border-line bg-white pr-11 pl-11 focus:border-plum focus:outline-none"
             />
             {query ? (
               <button
@@ -316,7 +316,7 @@ export function Catalog({
                   aria-pressed={filter === f}
                   onClick={() => setFilter(f)}
                   className={cn(
-                    "h-11 shrink-0 rounded-full px-4 text-sm font-semibold transition-colors",
+                    "h-11 shrink-0 rounded-xl px-4 text-sm font-semibold transition-colors",
                     filter === f
                       ? "bg-magenta text-white"
                       : "bg-magenta-soft/70 text-plum hover:bg-magenta-soft",
@@ -404,7 +404,7 @@ export function Catalog({
                 onClick={(e) =>
                   needsDetails(spot) ? setOpen(spot) : addSimple(spot, e.currentTarget)
                 }
-                className="inline-flex h-11 shrink-0 items-center gap-1 rounded-full bg-magenta px-4 text-sm font-bold text-white transition-transform disabled:opacity-50"
+                className="inline-flex h-11 shrink-0 items-center gap-1 rounded-xl bg-magenta px-4 text-sm font-bold text-white transition-transform disabled:opacity-50"
               >
                 {t("addPrice", { price: formatAmd(spot.priceAmd, locale) })}
               </button>

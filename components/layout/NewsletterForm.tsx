@@ -43,7 +43,7 @@ export function NewsletterForm() {
       <label htmlFor="nl-email" className="sr-only">
         {t("email")}
       </label>
-      <div className="flex h-14 items-center rounded-full bg-white p-1.5 focus-within:ring-3 focus-within:ring-sun">
+      <div className="flex h-14 items-center rounded-xl bg-white p-1.5 focus-within:ring-3 focus-within:ring-sun">
         <input
           id="nl-email"
           name="email"
@@ -53,12 +53,12 @@ export function NewsletterForm() {
           placeholder={t("emailPlaceholder")}
           aria-invalid={!!error}
           aria-describedby={error ? "nl-error" : undefined}
-          className="h-full min-w-0 flex-1 rounded-full bg-transparent px-4 text-plum placeholder:text-muted focus:outline-none"
+          className="h-full min-w-0 flex-1 rounded-xl bg-transparent px-4 text-plum placeholder:text-muted focus:outline-none"
         />
         <button
           type="submit"
           disabled={pending}
-          className="inline-flex h-11 shrink-0 items-center gap-2 rounded-full bg-magenta px-5 text-sm font-semibold text-white disabled:opacity-60"
+          className="inline-flex h-11 shrink-0 items-center gap-2 rounded-xl bg-magenta px-5 text-sm font-semibold text-white disabled:opacity-60"
         >
           {t("subscribe")} <ArrowRight size={16} weight="bold" aria-hidden />
         </button>

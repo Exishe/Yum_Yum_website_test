@@ -121,7 +121,7 @@ export function CookieConsent({
     document.head.appendChild(s);
   }, [consent, analyticsSrc, analyticsDomain, nonce]);
 
-  const button = "h-11 w-full rounded-full bg-plum px-5 text-sm font-semibold text-white sm:w-auto";
+  const button = "h-11 w-full rounded-xl bg-plum px-5 text-sm font-semibold text-white sm:w-auto";
 
   return (
     <>
@@ -199,7 +199,7 @@ export function CookieConsent({
                 write(analytics ? "analytics" : "essential");
                 setSettingsOpen(false);
               }}
-              className="mt-6 h-12 w-full rounded-full bg-plum font-semibold text-white"
+              className="mt-6 h-12 w-full rounded-xl bg-plum font-semibold text-white"
             >
               {t("save")}
             </button>

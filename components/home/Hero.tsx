@@ -110,7 +110,7 @@ export function Hero({
 
       <div className="relative mx-auto grid max-w-[1440px] grid-cols-1 gap-8 px-4 pt-8 pb-10 sm:px-6 lg:grid-cols-[1fr_1.05fr] lg:gap-6 lg:px-8 lg:pt-14 lg:pb-16">
         <div className="hero-copy flex min-w-0 flex-col items-start lg:pt-6">
-          <p className="inline-flex items-center gap-2 rounded-full bg-white py-1.5 pr-4 pl-1.5 text-sm font-medium shadow-card">
+          <p className="inline-flex items-center gap-2 rounded-xl bg-white py-1.5 pr-4 pl-1.5 text-sm font-medium shadow-card">
             <span className="grid size-8 place-items-center rounded-full bg-sun-soft">
               <FreshDonutIcon size={22} />
             </span>
@@ -150,7 +150,7 @@ export function Hero({
                   aria-checked={selected}
                   onClick={() => choose(c.key)}
                   className={cn(
-                    "inline-flex h-12 shrink-0 items-center gap-2 rounded-full border-2 py-1 pr-4 pl-1 text-sm font-semibold transition-[color,background-color,border-color,scale] duration-150 ease-out active:scale-[0.97]",
+                    "inline-flex h-12 shrink-0 items-center gap-2 rounded-xl border-2 py-1 pr-4 pl-1 text-sm font-semibold transition-[color,background-color,border-color,scale] duration-150 ease-out active:scale-[0.97]",
                     selected
                       ? "border-plum bg-plum text-white"
                       : "border-line bg-white text-plum hover:border-plum/40",
@@ -168,7 +168,7 @@ export function Hero({
           <div className="mt-7 flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:items-center">
             <Link
               href={choice.href}
-              className="group inline-flex h-12 items-center justify-center gap-3 rounded-full bg-plum px-6 font-semibold whitespace-nowrap text-white transition-transform duration-200 ease-out active:scale-[0.97]"
+              className="group inline-flex h-12 items-center justify-center gap-3 rounded-xl bg-plum px-6 font-semibold whitespace-nowrap text-white transition-transform duration-200 ease-out active:scale-[0.97]"
             >
               <span key={active} className="animate-rise">
                 {t(`cta.${active}`)}

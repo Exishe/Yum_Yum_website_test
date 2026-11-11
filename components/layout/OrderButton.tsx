@@ -59,7 +59,7 @@ export function OrderButton() {
       ref={ref}
       type="button"
       onClick={openCart}
-      className="group inline-flex h-11 items-center gap-1 rounded-full bg-sun pr-1.5 pl-1.5 text-sm font-bold text-plum transition-transform duration-200 ease-out active:scale-[0.97] sm:gap-2 sm:pr-1.5"
+      className="group inline-flex h-11 items-center gap-1 rounded-xl bg-sun pr-1.5 pl-1.5 text-sm font-bold text-plum transition-transform duration-200 ease-out active:scale-[0.97] sm:gap-2 sm:pr-1.5"
     >
       <span className="grid size-7 place-items-center rounded-full bg-white transition-transform duration-300 sm:size-8">
         <BagIcon size={20} />
@@ -69,7 +69,7 @@ export function OrderButton() {
       <span
         key={bump}
         className={cn(
-          "grid h-7 min-w-7 place-items-center rounded-full bg-magenta px-2 text-xs text-white tabular-nums sm:h-8 sm:min-w-8",
+          "grid h-7 min-w-7 place-items-center rounded-xl bg-magenta px-2 text-xs text-white tabular-nums sm:h-8 sm:min-w-8",
           bump > 0 && "animate-pop",
         )}
       >

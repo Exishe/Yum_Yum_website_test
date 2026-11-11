@@ -45,7 +45,7 @@ export function LanguageMenu() {
         aria-label={`${t("label")}: ${t(`${current}Full`)}`}
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          "inline-flex h-11 items-center gap-0.5 rounded-full border px-1.5 text-xs font-bold transition-colors sm:gap-1 sm:px-2.5",
+          "inline-flex h-11 items-center gap-0.5 rounded-xl border px-1.5 text-xs font-bold transition-colors sm:gap-1 sm:px-2.5",
           open
             ? "border-white bg-white text-plum"
             : "border-white/30 text-white hover:border-white/60",
