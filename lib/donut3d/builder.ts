@@ -300,6 +300,8 @@ type Tune = {
   maxDpr: number;
   antialias: boolean;
   lite: boolean;
+  /** Sheen and the extra clearcoats (dough, drizzles, sprinkles, gift wrap, ribbon). The glaze always keeps its own. */
+  rich: boolean;
   sprinkles: number;
   nuts: number;
 };
@@ -307,17 +309,48 @@ type Tune = {
 function tune(quality: Quality, phone: boolean, deviceDpr: number): Tune {
   // Never above the screen itself; a phone at 2x looks as sharp as at 3x here.
   const cap = (n: number) => Math.min(deviceDpr, n);
+  // Phones: the GPU is the limit (measured: drawing ~300x more than the JS work), so no
+  // MSAA (dense screens hide jaggies), a lower pixel ratio, and gloss only on the glaze.
+  if (phone) {
+    if (quality === "high")
+      return {
+        maxDpr: cap(1.5),
+        antialias: false,
+        lite: false,
+        rich: false,
+        sprinkles: 170,
+        nuts: 90,
+      };
+    if (quality === "medium")
+      return {
+        maxDpr: cap(1.35),
+        antialias: false,
+        lite: false,
+        rich: false,
+        sprinkles: 150,
+        nuts: 80,
+      };
+    return {
+      maxDpr: cap(1.15),
+      antialias: false,
+      lite: true,
+      rich: false,
+      sprinkles: 110,
+      nuts: 60,
+    };
+  }
   if (quality === "high")
-    return { maxDpr: cap(2), antialias: true, lite: false, sprinkles: 230, nuts: 130 };
+    return { maxDpr: cap(2), antialias: true, lite: false, rich: true, sprinkles: 230, nuts: 130 };
   if (quality === "medium")
     return {
-      maxDpr: cap(phone ? 1.6 : 1.75),
+      maxDpr: cap(1.75),
       antialias: true,
       lite: false,
-      sprinkles: phone ? 170 : 200,
-      nuts: phone ? 90 : 110,
+      rich: true,
+      sprinkles: 200,
+      nuts: 110,
     };
-  return { maxDpr: cap(1.25), antialias: false, lite: true, sprinkles: 130, nuts: 70 };
+  return { maxDpr: cap(1.25), antialias: false, lite: true, rich: false, sprinkles: 130, nuts: 70 };
 }
 
 export type EngineStats = {
@@ -457,7 +490,7 @@ export class DonutBuilder {
         roughness: 0.82,
         bumpMap: lite ? null : poreTexture(),
         bumpScale: 0.6,
-        sheen: lite ? 0 : 0.7,
+        sheen: q.rich ? 0.7 : 0,
         sheenColor: new THREE.Color("#ffd7a3"),
         sheenRoughness: 0.55,
       }),
@@ -493,8 +526,8 @@ export class DonutBuilder {
     const drizzleMat = (color: string) =>
       new THREE.MeshPhysicalMaterial({
         color,
-        roughness: 0.28,
-        clearcoat: 0.8,
+        roughness: q.rich ? 0.28 : 0.24,
+        clearcoat: q.rich ? 0.8 : 0,
         clearcoatRoughness: 0.15,
       });
     this.drizzles = {
@@ -506,7 +539,7 @@ export class DonutBuilder {
     const sprinkles = scatter(q.sprinkles, 7, 2.1);
     const sprinkleMesh = new THREE.InstancedMesh(
       new THREE.CapsuleGeometry(0.065, 0.3, lite ? 2 : 4, lite ? 6 : 8),
-      new THREE.MeshPhysicalMaterial({ roughness: 0.42, clearcoat: 0.5 }),
+      new THREE.MeshPhysicalMaterial({ roughness: 0.42, clearcoat: q.rich ? 0.5 : 0 }),
       sprinkles.length,
     );
     const palette = ["#ffd84a", "#ffffff", "#5ec6e8", "#7ed957", "#ff7a59", "#b07cff"].map(
@@ -540,7 +573,9 @@ export class DonutBuilder {
     // Paper under the donut.
     this.paper = new THREE.Mesh(
       new THREE.PlaneGeometry(13, 13, 1, 1),
-      new THREE.MeshPhysicalMaterial({ color: "#ffffff", roughness: 0.9 }),
+      // Always "transparent": switching that flag swaps the shader program, which
+      // compiled in the middle of the box animation and made it stutter.
+      new THREE.MeshPhysicalMaterial({ color: "#ffffff", roughness: 0.9, transparent: true }),
     );
     this.paper.rotation.x = -Math.PI / 2;
     this.paper.rotation.z = 0.35;
@@ -558,7 +593,7 @@ export class DonutBuilder {
       emissive: new THREE.Color("#8a2350"),
       emissiveIntensity: 0.6,
       roughness: 0.45,
-      sheen: lite ? 0 : 0.5,
+      sheen: q.rich ? 0.5 : 0,
       sheenColor: new THREE.Color("#ffd3e4"),
     });
     const W = 11.5;
@@ -600,8 +635,8 @@ export class DonutBuilder {
       emissive: new THREE.Color("#a87a00"),
       emissiveIntensity: 0.55,
       roughness: 0.4,
-      sheen: lite ? 0 : 0.6,
-      clearcoat: 0.4,
+      sheen: q.rich ? 0.6 : 0,
+      clearcoat: q.rich ? 0.4 : 0,
     });
     const band = (w: number, d: number) => {
       const m = new THREE.Mesh(new THREE.BoxGeometry(w, H + T * 2 + 0.06, d), satin);
@@ -777,7 +812,8 @@ export class DonutBuilder {
     if (ms <= 0 || ms > 200) return; // first frame, or the tab was away
     this.frameTimes.push(ms);
     this.workTimes.push(workMs);
-    if (this.frameTimes.length < 30) return;
+    // Short windows: a struggling phone must not lag for seconds before it lightens up.
+    if (this.frameTimes.length < 12) return;
     const sorted = [...this.frameTimes].sort((a, b) => a - b);
     const median = sorted[sorted.length >> 1]!;
     const p90 = sorted[Math.floor(sorted.length * 0.9)]!;
@@ -790,7 +826,8 @@ export class DonutBuilder {
     const cappedAt30 = median > 31 && median < 36 && p90 < 40;
     let next = this.dpr;
     if (median > 25 && !cappedAt30 && this.dpr > this.minDpr) {
-      next = Math.max(this.minDpr, this.dpr - 0.25);
+      // Far too slow (under ~22 fps): a bigger step at once.
+      next = Math.max(this.minDpr, this.dpr - (median > 45 ? 0.5 : 0.25));
       this.stepsDown++;
       this.goodWindows = 0;
     } else if (median < 19 && this.dpr < this.maxDpr && this.stepsDown < 3) {
@@ -891,7 +928,6 @@ export class DonutBuilder {
     this.paper.visible = this.pack.paper > 0.01;
     this.paper.scale.setScalar(0.9 + 0.1 * ease(this.pack.paper));
     (this.paper.material as THREE.MeshPhysicalMaterial).opacity = this.pack.paper;
-    (this.paper.material as THREE.MeshPhysicalMaterial).transparent = this.pack.paper < 1;
 
     // The box rises into place under the donut, the donut settles in, the lid closes.
     this.box.visible = this.pack.box > 0.01;
