@@ -65,6 +65,7 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
         optionIds: l.optionIds,
         messages: l.messages,
         contents: l.contents,
+        build: l.build,
       })),
     [state.lines],
   );

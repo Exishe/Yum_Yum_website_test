@@ -3,6 +3,7 @@
  * Error messages are translation keys under "errors.*" in messages/*.json.
  */
 import { z } from "zod";
+import { buildSchema } from "./build";
 import { districtKeys } from "./districts";
 import { normalizePhone } from "./phone";
 
@@ -60,6 +61,8 @@ export const cartItemSchema = z.object({
     .default([]),
   /** Product IDs packed into a box. */
   contents: z.array(z.number().int().positive()).max(12).default([]),
+  /** Made in the 3D builder (lib/build.ts); priced as the closest menu donut. */
+  build: buildSchema.optional(),
 });
 export type CartItemInput = z.input<typeof cartItemSchema>;
 

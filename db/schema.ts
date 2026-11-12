@@ -182,6 +182,8 @@ export type OrderItemOptions = {
   messages?: string[];
   /** For boxes: the donuts packed inside. */
   contents?: Array<{ productId: number; name: string; priceAmd: number }>;
+  /** Made in the 3D builder: glaze, toppings and packaging the customer chose (lib/build.ts). */
+  build?: { flavour: string; toppings: string[]; pack: string };
 };
 
 export const orders = pgTable(

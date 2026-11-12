@@ -148,6 +148,7 @@ export async function createOrder(
                 priceAmd: c.priceAmd,
               }))
             : undefined,
+          build: l.build,
         },
       })),
     );
@@ -197,6 +198,7 @@ export async function orderNotification(publicId: string) {
       options: i.details?.options?.map((o) => bothNames(optionNames.get(o.id), o.name)),
       contents: i.details?.contents?.map((c) => bothNames(products.get(c.productId)?.name, c.name)),
       messages: i.details?.messages,
+      build: i.details?.build,
     })),
   });
   return { orderId: order.id, subject, text };

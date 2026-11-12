@@ -21,6 +21,7 @@ import { detectQuality } from "@/lib/donut3d/quality";
 import { formatAmd } from "@/lib/format";
 import { t as pick } from "@/lib/localized";
 import { cutout } from "@/lib/cutouts";
+import { buildLabel } from "@/lib/build";
 
 // Glazes that exist on the menu, with the menu donut each one leads to.
 const FLAVOURS = [
@@ -316,6 +317,9 @@ export function BuildDonut({ products }: { products: Record<string, ClientProduc
       name: match.name,
       unitPriceAmd: match.priceAmd,
       image: match.img?.src ?? null,
+      // What the customer made goes with the order: the shop sees it in the admin and the staff message.
+      build: { flavour, toppings, pack },
+      detail: { options: [buildLabel({ flavour, toppings, pack })] },
       leadTimeDays: match.leadTimeDays,
     });
     announceAdd(e.currentTarget);

@@ -36,6 +36,12 @@ import {
   updateOrderNoteAction,
   updateOrderStatusAction,
 } from "../../../actions";
+import { buildSchema, buildText } from "@/lib/build";
+
+function buildAdminText(b: { flavour: string; toppings: string[]; pack: string }) {
+  const ok = buildSchema.safeParse(b);
+  return ok.success ? buildText(ok.data, "hy") : [b.flavour, ...b.toppings, b.pack].join(", ");
+}
 
 export async function generateMetadata() {
   return { title: (await adminT())("Order") };
@@ -178,6 +184,11 @@ export default async function OrderDetail({
                       {i.details?.contents?.length ? (
                         <span className="block text-muted">
                           {t("Box")}: {i.details.contents.map((c) => c.name).join(", ")}
+                        </span>
+                      ) : null}
+                      {i.details?.build ? (
+                        <span className="block font-semibold text-magenta-ink">
+                          {t("Made in the builder")}: {buildAdminText(i.details.build)}
                         </span>
                       ) : null}
                     </td>

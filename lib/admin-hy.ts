@@ -222,6 +222,7 @@ export const hy: Record<string, string> = {
     "Լատինատառ, ստորակետով՝ glazed, chocolate, fruity, filled, kids, iced, hot, savoury, gifts",
   "Order days ahead": "Քանի օր առաջ պատվիրել",
   Box: "Տուփ",
+  "Made in the builder": "Հավաքված կայքում",
   "How many donuts fit (6, 12, 18 …). Leave empty for other products.":
     "Քանի դոնաթ է տեղավորվում տուփում (6, 12, 18…)։ Մյուս ապրանքների համար թողեք դատարկ։",
   "1 for bouquets and name donuts": "Փնջերի և անվանական դոնաթների համար՝ 1",

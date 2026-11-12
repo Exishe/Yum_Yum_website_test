@@ -3,8 +3,16 @@
  * to it, whatever language the customer ordered in. Pure functions, no I/O.
  */
 import type { Localized } from "@/db/schema";
+import { buildSchema, buildText } from "./build";
 
 /** "Armenian / English" for one label. */
+/** The 3D-builder choices, Armenian then English; unknown values are shown as stored. */
+function buildLine(b: { flavour: string; toppings: string[]; pack: string }) {
+  const ok = buildSchema.safeParse(b);
+  if (!ok.success) return `${L.build}: ${[b.flavour, ...b.toppings, b.pack].join(", ")}`;
+  return `${L.build}: ${buildText(ok.data, "hy")} / ${buildText(ok.data, "en")}`;
+}
+
 const L = {
   newOrder: "Նոր պատվեր / New order",
   pickup: "ԻՆՔՆԱՌԱՔՈՒՄ / PICKUP",
@@ -20,6 +28,7 @@ const L = {
   comment: "Մեկնաբանություն / Comment",
   admin: "Ադմին / Admin",
   box: "տուփ / box",
+  build: "հավաքված կայքում / built on the site",
   text: "գրություն / text",
   entrance: "մուտք",
   floor: "հարկ",
@@ -75,6 +84,7 @@ export type StaffOrder = {
     options?: string[];
     contents?: string[];
     messages?: string[];
+    build?: { flavour: string; toppings: string[]; pack: string };
   }>;
 };
 
@@ -104,6 +114,7 @@ export function orderMessage(o: StaffOrder): { subject: string; text: string } {
       i.options?.length ? i.options.join(", ") : "",
       i.contents?.length ? `${L.box}: ${i.contents.join(", ")}` : "",
       i.messages?.length ? `${L.text}: «${i.messages.join(" / ")}»` : "",
+      i.build ? buildLine(i.build) : "",
     ]
       .filter(Boolean)
       .join(" · ");

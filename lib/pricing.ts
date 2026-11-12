@@ -3,6 +3,7 @@
  * server to compute the real price. The server never trusts prices sent by
  * the browser: it calls these functions with fresh data from the database.
  */
+import type { DonutBuild } from "./build";
 import type { MenuProduct, PublicZone } from "./catalog";
 
 export type CartLineInput = {
@@ -11,6 +12,7 @@ export type CartLineInput = {
   optionIds?: number[];
   messages?: string[];
   contents?: number[];
+  build?: DonutBuild;
 };
 
 export type PricedLine = {
@@ -21,6 +23,7 @@ export type PricedLine = {
   options: MenuProduct["options"];
   messages: string[];
   contents: MenuProduct[];
+  build?: DonutBuild;
 };
 
 export type PricingError =
@@ -80,6 +83,8 @@ export function priceLine(
     options: chosen,
     messages,
     contents,
+    // The build changes nothing in the price: it is how the shop should make this donut.
+    build: input.build,
   };
 }
 

@@ -7,6 +7,7 @@
  */
 import { useSyncExternalStore } from "react";
 import type { Localized } from "@/db/schema";
+import type { DonutBuild } from "@/lib/build";
 
 export type CartLine = {
   key: string;
@@ -20,6 +21,8 @@ export type CartLine = {
   unitPriceAmd: number;
   image: string | null;
   detail?: { options?: Localized[]; contents?: Localized[] };
+  /** Made in the 3D builder: sent with the order so the shop makes it this way. */
+  build?: DonutBuild;
   leadTimeDays: number;
 };
 
@@ -89,7 +92,8 @@ function sameConfig(a: CartLine, b: Omit<CartLine, "key" | "quantity">) {
     a.productId === b.productId &&
     a.optionIds.join() === b.optionIds.join() &&
     a.messages.join("\n") === b.messages.join("\n") &&
-    a.contents.join() === b.contents.join()
+    a.contents.join() === b.contents.join() &&
+    JSON.stringify(a.build ?? null) === JSON.stringify(b.build ?? null)
   );
 }
 
