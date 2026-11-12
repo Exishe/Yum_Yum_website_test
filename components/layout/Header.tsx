@@ -1,10 +1,10 @@
 "use client";
 
-import { CaretDown, ArrowRight, Phone, Clock } from "@phosphor-icons/react/dist/ssr";
+import { CaretDown, ArrowRight, Clock } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
-import { DonutIcon, FlowerIcon, LogoIcon, PhoneIcon, PinIcon } from "@/components/icons/brand";
+import { DonutIcon, FlowerIcon, StoryIcon, PhoneIcon, PinIcon } from "@/components/icons/brand";
 import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
 import type { ImageInfo } from "@/lib/images";
@@ -200,7 +200,7 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
           <NavPill href="/gifts" icon={<FlowerIcon size={22} />} className="hidden lg:inline-flex">
             {t("bouquets")}
           </NavPill>
-          <NavPill href="/story" icon={<LogoIcon size={22} />} className="hidden lg:inline-flex">
+          <NavPill href="/story" icon={<StoryIcon size={22} />} className="hidden lg:inline-flex">
             {t("story")}
           </NavPill>
         </nav>
@@ -296,7 +296,7 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
                   <FlowerIcon size={20} /> {t("bouquets")}
                 </Link>
                 <a href={`tel:${phone}`} className="inline-flex items-center gap-2 hover:text-sun">
-                  <Phone aria-hidden size={18} /> {phoneDisplay}
+                  <PhoneIcon size={20} /> {phoneDisplay}
                 </a>
                 <span className="inline-flex items-center gap-2">
                   <Clock aria-hidden size={18} /> {tc("hoursDaily")}
@@ -382,7 +382,7 @@ export function Header({ categories, phone, phoneDisplay }: Props) {
               {[
                 { href: "/gifts" as const, label: t("bouquets"), icon: <FlowerIcon size={26} /> },
                 { href: "/shops" as const, label: t("findShop"), icon: <PinIcon size={26} /> },
-                { href: "/story" as const, label: t("story"), icon: <LogoIcon size={26} /> },
+                { href: "/story" as const, label: t("story"), icon: <StoryIcon size={26} /> },
               ].map((q) => (
                 <Link
                   key={q.href}

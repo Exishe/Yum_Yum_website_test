@@ -33,10 +33,10 @@ export const PinIcon = (p: Icon3DProps) => <Icon3D src="/images/icons/pin.webp" 
 export const BagIcon = (p: Icon3DProps) => <Icon3D src="/images/icons/bag.webp" {...p} />;
 export const FlowerIcon = (p: Icon3DProps) => <Icon3D src="/images/icons/bouquet.webp" {...p} />;
 export const GlobeIcon = (p: Icon3DProps) => <Icon3D src="/images/icons/globe.webp" {...p} />;
-/** "About us": the shop's own round logo, until the team adds a render for it. */
-export const LogoIcon = ({ size = 24, ...p }: Icon3DProps) => (
-  <Icon3D src="/images/brand/logo-240.png" size={Math.round(size * 0.92)} {...p} />
-);
+export const PhoneIcon = (p: Icon3DProps) => <Icon3D src="/images/icons/phone.webp" {...p} />;
+export const CardIcon = (p: Icon3DProps) => <Icon3D src="/images/icons/card.webp" {...p} />;
+/** "Our story": an open book with a donut (the shop's story since 1997). */
+export const StoryIcon = (p: Icon3DProps) => <Icon3D src="/images/icons/story.webp" {...p} />;
 
 const PLUM = "#2b0a24";
 const MAGENTA = "#de1281";
@@ -80,18 +80,6 @@ export function FreshDonutIcon(props: IconProps) {
   );
 }
 
-export function CardIcon(props: IconProps) {
-  return (
-    <Svg {...props}>
-      <rect x="3.5" y="8" width="21" height="15" rx="2.8" fill={SUN} />
-      <path d="M3.5 13h21" strokeWidth={3} />
-      <path d="M8 18.5h5" />
-      <circle cx="24.5" cy="9" r="4.6" fill={MAGENTA} />
-      <circle cx="24.5" cy="9" r="1.4" fill="#fff8f2" />
-    </Svg>
-  );
-}
-
 /** Heart with a donut hole: "our story". */
 export function HeartDonutIcon(props: IconProps) {
   return (
@@ -102,18 +90,6 @@ export function HeartDonutIcon(props: IconProps) {
       />
       <circle cx="16" cy="15.4" r="4.2" fill={SUN} />
       <circle cx="16" cy="15.4" r="1.6" fill="#fff8f2" />
-    </Svg>
-  );
-}
-
-export function PhoneIcon(props: IconProps) {
-  return (
-    <Svg {...props}>
-      <path
-        d="M8.4 4.5h3.2l2 5.3-2.6 1.8a15 15 0 0 0 9.4 9.4l1.8-2.6 5.3 2v3.2a3 3 0 0 1-3.2 3C14.4 25.9 6.1 17.6 5.4 7.7a3 3 0 0 1 3-3.2Z"
-        fill={SUN}
-      />
-      <path d="M19 5.5a8 8 0 0 1 7.5 7.5M19 9.5a4 4 0 0 1 3.5 3.5" stroke={MAGENTA} />
     </Svg>
   );
 }

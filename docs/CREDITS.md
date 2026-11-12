@@ -54,6 +54,6 @@ No code was copied from other companies' websites.
 - Guest quotes on the gifts page: the same real, verbatim reviews as on the home page (Yandex Maps, Tripadvisor), from the reviews table.
 - Hero headline "negative mask": after the free Jitter template "Design · Negative mask effect" (https://jitter.video/template/design-negative-mask-effect/), rebuilt in CSS in `components/home/NegativeTitle.tsx` as one continuous strip (inline background with `box-decoration-break: slice`, letters inverted by a moving `background-clip: text` gradient).
 - Hero photo "plate turn" spring: [Motion](https://motion.dev) by Matt Perry, MIT licence (`useAnimate` in `components/home/Hero.tsx`).
-- Menu icons (donut, bouquet, pin, globe, bag): 3D renders supplied by the WiyMood team for YUM-YUM, backgrounds removed with [rembg](https://github.com/danielgatis/rembg) (MIT); `public/images/icons/`.
+- Menu icons (donut, bouquet, pin, globe, bag, phone, story book, card): 3D renders supplied by the WiyMood team for YUM-YUM, backgrounds removed with [rembg](https://github.com/danielgatis/rembg) (MIT); `public/images/icons/`.
 - Dropdowns: `components/ui/Select.tsx`, written for this project after the WAI-ARIA Authoring Practices "Select-Only Combobox" pattern (https://www.w3.org/WAI/ARIA/apg/patterns/combobox/examples/combobox-select-only/).
 - Gift box picture `public/images/box/box-gift.webp`: supplied by the team on 11 Nov 2026 (client box artwork); background removed with rembg (isnet-general-use, MIT/Apache). `pack-paper.webp` is cut from the site's own 3D poster.

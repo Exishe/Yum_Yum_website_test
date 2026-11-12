@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpRight, Phone } from "@phosphor-icons/react/dist/ssr";
+import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
@@ -8,6 +8,7 @@ import type { Locale } from "@/i18n/routing";
 import { cart } from "@/lib/cart-store";
 import type { PublicShop } from "@/lib/catalog";
 import { cn } from "@/lib/cn";
+import { PhoneIcon } from "@/components/icons/brand";
 import { formatPhone } from "@/lib/format";
 import type { ImageInfo } from "@/lib/images";
 import { t as pick } from "@/lib/localized";
@@ -154,7 +155,7 @@ export function ShopPicker({
                     aria-label={`${t("call")}: ${formatPhone(shop.phone)}`}
                     className="grid size-11 place-items-center rounded-full border-2 border-plum/15 hover:border-plum"
                   >
-                    <Phone size={18} />
+                    <PhoneIcon size={22} />
                   </a>
                 ) : null}
                 {shop.googleMapsUrl ? (

@@ -1,11 +1,12 @@
 "use client";
 
-import { ArrowUpRight, Phone, WhatsappLogo } from "@phosphor-icons/react/dist/ssr";
+import { ArrowUpRight, WhatsappLogo } from "@phosphor-icons/react/dist/ssr";
 import { useLocale, useTranslations } from "next-intl";
 import { useSite } from "@/components/SiteContext";
 import type { Locale } from "@/i18n/routing";
 import { buyamLink } from "@/lib/buyam";
 import { cn } from "@/lib/cn";
+import { PhoneIcon } from "@/components/icons/brand";
 
 /** Call / WhatsApp buttons for an item whose price is on request. `item` pre-fills the message. */
 export function AskPrice({ item, className }: { item: string; className?: string }) {
@@ -21,7 +22,7 @@ export function AskPrice({ item, className }: { item: string; className?: string
           href={`tel:${phone}`}
           className="inline-flex h-12 flex-1 basis-40 items-center justify-center gap-2 rounded-xl bg-plum px-5 font-semibold whitespace-nowrap text-white transition-transform"
         >
-          <Phone size={18} weight="bold" aria-hidden /> {t("askCall")}
+          <PhoneIcon size={20} /> {t("askCall")}
         </a>
       ) : null}
       {wa ? (

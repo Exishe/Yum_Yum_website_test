@@ -7,6 +7,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useState, useTransition } from "react";
 import { Controller, useForm, type Resolver } from "react-hook-form";
 import { Select } from "@/components/ui/Select";
+import { CardIcon } from "@/components/icons/brand";
 import { Turnstile } from "@/components/ui/Turnstile";
 import { Link, useRouter } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
@@ -537,6 +538,7 @@ export function CheckoutForm({ shops, zones, rules }: Props) {
                     {...register("paymentMethod")}
                     className="size-5 accent-magenta"
                   />
+                  {m === "card_on_delivery" ? <CardIcon size={26} /> : null}
                   {m === "cash" ? t("cash") : t("cardOnDelivery")}
                 </label>
               ))}
