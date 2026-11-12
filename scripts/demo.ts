@@ -8,15 +8,18 @@ import { migrateDatabase } from "../db/migrate";
 import { seedDatabase } from "../db/seed";
 import { scriptDb } from "../db/script-client";
 
-const DEMO_PASSWORD = "yumyum-demo-2026";
+// Demo login shown to clients: demo / demo123. Never use it for the real shop.
+const DEMO_LOGIN = "demo";
+const DEMO_PASSWORD = "demo123";
 
 async function main() {
+  process.env.SEED_ADMIN_EMAIL ??= DEMO_LOGIN;
   const conn = scriptDb();
   await migrateDatabase(conn);
   await seedDatabase(conn, { demoPassword: DEMO_PASSWORD });
   await conn.close();
   const pw = process.env.SEED_ADMIN_PASSWORD || DEMO_PASSWORD;
-  const email = process.env.SEED_ADMIN_EMAIL ?? "director";
+  const email = process.env.SEED_ADMIN_EMAIL ?? DEMO_LOGIN;
   console.log(`
   ┌──────────────────────────────────────────────────────────┐
   │  YUM-YUM Donuts is starting…                              │

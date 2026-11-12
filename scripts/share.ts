@@ -32,9 +32,10 @@ async function main() {
   const { migrateDatabase } = await import("../db/migrate");
   const { seedDatabase } = await import("../db/seed");
   const { scriptDb } = await import("../db/script-client");
+  process.env.SEED_ADMIN_EMAIL ??= "demo";
   const conn = scriptDb();
   await migrateDatabase(conn);
-  await seedDatabase(conn, { demoPassword: "yumyum-demo-2026" });
+  await seedDatabase(conn, { demoPassword: "demo123" });
   await conn.close();
 
   console.log("\nBuilding the production version (takes 1–3 minutes)…\n");
